@@ -5,8 +5,8 @@
 
   <parent>
     <artifactId>camunda-bpm-quarkus-parent</artifactId>
-    <groupId>org.camunda.bpm.quarkus</groupId>
-    <version>7.24.0-SNAPSHOT</version>
+    <groupId>alurkerja.camunda.bpm.quarkus</groupId>
+    <version>${revision}</version>
   </parent>
 
   <artifactId>camunda-bpm-quarkus-engine-parent</artifactId>

@@ -9,9 +9,9 @@
     <relativePath />
   </parent>
 
-  <groupId>org.camunda.bpm</groupId>
+  <groupId>alurkerja.camunda.bpm</groupId>
   <artifactId>camunda-root</artifactId>
-  <version>7.24.0-SNAPSHOT</version>
+  <version>${revision}</version>
   <packaging>pom</packaging>
   <name>Camunda Platform - Root Pom</name>
   <inceptionYear>2013</inceptionYear>
@@ -23,6 +23,12 @@
   </description>
 
   <properties>
+    <!-- Alurkerja fork: THE single place to change the version of every module.
+         All poms use <version>${revision}</version>; flatten-maven-plugin (below) resolves it
+         in the installed/deployed poms. Keep webapps/frontend/package.json and
+         engine-rest/docs/package.json in sync by hand (npm needs a literal semver). -->
+    <revision>7.24.0</revision>
+
     <license.includeTransitiveDependencies>false</license.includeTransitiveDependencies>
 
     <!-- These properties are used in both the BOM as well as camunda-parent and subprojects -->
@@ -31,6 +37,21 @@
     <version.uuid-generator>4.3.0</version.uuid-generator>
     <version.feel-scala>1.19.3</version.feel-scala>
   </properties>
+
+  <!-- Alurkerja fork: publish to Javan Nexus instead of Camunda/Sonatype.
+       Credentials: <server><id>maven-snapshots</id> / maven-releases in ~/.m2/settings.xml -->
+  <distributionManagement>
+    <repository>
+      <id>maven-releases</id>
+      <name>Alurkerja Releases</name>
+      <url>https://maven.cloud.javan.co.id/repository/maven-releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>maven-snapshots</id>
+      <name>Alurkerja Snapshots</name>
+      <url>https://maven.cloud.javan.co.id/repository/maven-snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
 
   <build>
     <plugins>
@@ -42,6 +63,55 @@
           <acceptPomPackaging>true</acceptPomPackaging>
           <excludedScopes>test</excludedScopes>
         </configuration>
+      </plugin>
+      <!-- Alurkerja fork: resolve ${revision} (CI-friendly version) in the poms that get
+           installed/deployed, so consumers see a concrete version. -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>flatten-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <configuration>
+          <updatePomFile>true</updatePomFile>
+          <flattenMode>resolveCiFriendliesOnly</flattenMode>
+        </configuration>
+        <executions>
+          <execution>
+            <id>flatten</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>flatten</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>flatten-clean</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- Alurkerja fork: the central-sonatype-publish profile (camunda-release-parent) wires in
+           GPG signing and publishing to Sonatype Central. We only deploy to Nexus, so unbind both. -->
+      <plugin>
+        <groupId>org.sonatype.central</groupId>
+        <artifactId>central-publishing-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>central-deploy</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
@@ -295,6 +365,12 @@
         <module>test-utils/junit5-extension</module>
         <module>test-utils/junit5-extension-dmn</module>
         <module>test-utils/assert</module>
+        <!-- Alurkerja fork: test-scoped deps of engine/model-api/commons; must be in the reactor
+             because they are no longer resolvable from Camunda's Nexus for fork versions -->
+        <module>test-utils/archunit</module>
+        <module>test-utils/testcontainers</module>
+        <!-- Alurkerja fork: spring-boot-starter/starter-qa depends on the invoice example -->
+        <module>examples</module>
 
         <module>internal-dependencies</module>
         <module>database</module>

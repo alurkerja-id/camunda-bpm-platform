@@ -11,9 +11,9 @@
   <packaging>pom</packaging>
 
   <parent>
-    <groupId>org.camunda.bpm.tomcat</groupId>
+    <groupId>alurkerja.camunda.bpm.tomcat</groupId>
     <artifactId>camunda-tomcat</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>${revision}</version>
   </parent>
   
   <properties>
@@ -84,7 +84,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>alurkerja.camunda.bpm</groupId>
       <artifactId>camunda-engine</artifactId>
       <exclusions>
         <exclusion>
@@ -99,66 +99,66 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>alurkerja.camunda.bpm</groupId>
       <artifactId>camunda-engine-cdi-jakarta</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.identity</groupId>
+      <groupId>alurkerja.camunda.bpm.identity</groupId>
       <artifactId>camunda-identity-ldap</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.spin</groupId>
+      <groupId>alurkerja.camunda.spin</groupId>
       <artifactId>camunda-spin-core</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>alurkerja.camunda.bpm</groupId>
       <artifactId>camunda-engine-plugin-spin</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.spin</groupId>
+      <groupId>alurkerja.camunda.spin</groupId>
       <artifactId>camunda-spin-dataformat-all</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.connect</groupId>
+      <groupId>alurkerja.camunda.connect</groupId>
       <artifactId>camunda-connect-core</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>alurkerja.camunda.bpm</groupId>
       <artifactId>camunda-engine-plugin-connect</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.connect</groupId>
+      <groupId>alurkerja.camunda.connect</groupId>
       <artifactId>camunda-connect-connectors-all</artifactId>
       <exclusions>
         <exclusion>
-          <groupId>org.camunda.connect</groupId>
+          <groupId>alurkerja.camunda.connect</groupId>
           <artifactId>camunda-connect-http-client</artifactId>
         </exclusion>
         <exclusion>
-          <groupId>org.camunda.connect</groupId>
+          <groupId>alurkerja.camunda.connect</groupId>
           <artifactId>camunda-connect-soap-http-client</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>alurkerja.camunda.bpm</groupId>
       <artifactId>license-book</artifactId>
       <version>${project.version}</version>
       <type>zip</type>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.template-engines</groupId>
+      <groupId>alurkerja.camunda.template-engines</groupId>
       <artifactId>camunda-template-engines-freemarker</artifactId>
     </dependency>
 

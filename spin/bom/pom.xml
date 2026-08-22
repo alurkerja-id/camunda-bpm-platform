@@ -4,16 +4,16 @@
   <!-- HEADS-UP: Do not use camunda-parent as parent,
   it would introduce a cyclic dependency to this bom -->
   <parent>
-    <groupId>org.camunda.bpm</groupId>
+    <groupId>alurkerja.camunda.bpm</groupId>
     <artifactId>camunda-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>${revision}</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
-  <groupId>org.camunda.spin</groupId>
+  <groupId>alurkerja.camunda.spin</groupId>
   <artifactId>camunda-spin-bom</artifactId>
   <name>camunda spin - bom</name>
-  <version>7.24.0-SNAPSHOT</version>
+  <version>${revision}</version>
   <packaging>pom</packaging>
 
   <description>
@@ -24,30 +24,30 @@
     <dependencies>
 
       <dependency>
-        <groupId>org.camunda.spin</groupId>
+        <groupId>alurkerja.camunda.spin</groupId>
         <artifactId>camunda-spin-core</artifactId>
         <version>${project.version}</version>
       </dependency>
       
       <dependency>
-        <groupId>org.camunda.spin</groupId>
+        <groupId>alurkerja.camunda.spin</groupId>
         <artifactId>camunda-spin-core</artifactId>
         <type>test-jar</type>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>org.camunda.spin</groupId>
+        <groupId>alurkerja.camunda.spin</groupId>
         <artifactId>camunda-spin-dataformat-all</artifactId>
         <version>${project.version}</version>
         <!-- Excluding dependencies that are shaded in camunda-spin-dataformat-all -->
         <exclusions>
           <exclusion>
-            <groupId>org.camunda.spin</groupId>
+            <groupId>alurkerja.camunda.spin</groupId>
             <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
           </exclusion>
           <exclusion>
-            <groupId>org.camunda.spin</groupId>
+            <groupId>alurkerja.camunda.spin</groupId>
             <artifactId>camunda-spin-dataformat-xml-dom</artifactId>
           </exclusion>
           <exclusion>
@@ -62,19 +62,19 @@
       </dependency>
 
       <dependency>
-        <groupId>org.camunda.spin</groupId>
+        <groupId>alurkerja.camunda.spin</groupId>
         <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>org.camunda.spin</groupId>
+        <groupId>alurkerja.camunda.spin</groupId>
         <artifactId>camunda-spin-dataformat-xml-dom</artifactId>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>org.camunda.spin</groupId>
+        <groupId>alurkerja.camunda.spin</groupId>
         <artifactId>camunda-spin-dataformat-xml-dom-jakarta</artifactId>
         <version>${project.version}</version>
       </dependency>

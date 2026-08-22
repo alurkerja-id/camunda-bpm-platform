@@ -12,6 +12,7 @@ nbactions*.xml
 nb-configuration.xml
 /webapps/fox-platform-tasklist/server-work
 dependency-reduced-pom.xml
+.flattened-pom.xml
 faces-config.NavData
 *.iml
 *.sublime-project

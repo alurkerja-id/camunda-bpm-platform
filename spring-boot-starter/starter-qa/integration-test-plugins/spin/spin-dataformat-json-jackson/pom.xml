@@ -8,9 +8,9 @@
   </description>
 
   <parent>
-    <groupId>org.camunda.bpm.springboot.project</groupId>
+    <groupId>alurkerja.camunda.bpm.springboot.project</groupId>
     <artifactId>qa-plugins-spin</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>${revision}</version>
   </parent>
 
   <artifactId>qa-plugins-spin-dataformat-json-jackson</artifactId>
@@ -19,22 +19,22 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.camunda.bpm.springboot</groupId>
+      <groupId>alurkerja.camunda.bpm.springboot</groupId>
       <artifactId>camunda-bpm-spring-boot-starter</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.springboot</groupId>
+      <groupId>alurkerja.camunda.bpm.springboot</groupId>
       <artifactId>camunda-bpm-spring-boot-starter-test</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>alurkerja.camunda.bpm</groupId>
       <artifactId>camunda-engine-plugin-spin</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.spin</groupId>
+      <groupId>alurkerja.camunda.spin</groupId>
       <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
     </dependency>
 

@@ -12,9 +12,9 @@
   </description>
 
   <parent>
-    <groupId>org.camunda.bpm</groupId>
+    <groupId>alurkerja.camunda.bpm</groupId>
     <artifactId>camunda-external-task-client-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>${revision}</version>
   </parent>
 
   <properties>
@@ -22,7 +22,7 @@
     <tomcat.runtime>${engine.runtime}/server/apache-tomcat-${version.tomcat}</tomcat.runtime>
     <http.port>${tomcat.connector.http.port}</http.port>
 
-    <tomcat.connector.http.port>50080</tomcat.connector.http.port>
+    <tomcat.connector.http.port>50180</tomcat.connector.http.port>
     <tomcat.connector.http.redirectPort>50443</tomcat.connector.http.redirectPort>
     <tomcat.connector.ajp.port>50009</tomcat.connector.ajp.port>
     <tomcat.connector.ajp.redirectPort>50443</tomcat.connector.ajp.redirectPort>
@@ -35,7 +35,7 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
+        <groupId>alurkerja.camunda.bpm</groupId>
         <artifactId>camunda-core-internal-dependencies</artifactId>
         <version>${project.version}</version>
         <scope>import</scope>
@@ -55,12 +55,12 @@
 
     <!-- mandatory dependencies -->
     <dependency>
-      <groupId>org.camunda.commons</groupId>
+      <groupId>alurkerja.camunda.commons</groupId>
       <artifactId>camunda-commons-logging</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.commons</groupId>
+      <groupId>alurkerja.camunda.commons</groupId>
       <artifactId>camunda-commons-typed-values</artifactId>
     </dependency>
 
@@ -96,8 +96,21 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.model</groupId>
+      <groupId>alurkerja.camunda.bpm.model</groupId>
       <artifactId>camunda-bpmn-model</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Alurkerja fork: previously pulled in transitively via camunda-tomcat-assembly (now in
+         the it-runtime profile); tests compile against engine utils and spin-core -->
+    <dependency>
+      <groupId>alurkerja.camunda.bpm</groupId>
+      <artifactId>camunda-engine</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>alurkerja.camunda.spin</groupId>
+      <artifactId>camunda-spin-core</artifactId>
       <scope>test</scope>
     </dependency>
 
@@ -108,35 +121,24 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.spin</groupId>
+      <groupId>alurkerja.camunda.spin</groupId>
       <artifactId>camunda-spin-dataformat-all</artifactId>
       <scope>test</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.qa</groupId>
+      <groupId>alurkerja.camunda.bpm.qa</groupId>
       <artifactId>engine-variable-test</artifactId>
       <version>${project.version}</version>
       <classifier>classes</classifier>
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.camunda.bpm.tomcat</groupId>
-      <artifactId>camunda-tomcat-assembly</artifactId>
-      <version>${project.version}</version>
-      <type>tar.gz</type>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>slf4j-api</artifactId>
-          <groupId>org.slf4j</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
+    <!-- Alurkerja fork: camunda-tomcat-assembly (integration-test runtime) moved to the
+         "it-runtime" profile below, active only when tests are not skipped -->
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>alurkerja.camunda.bpm</groupId>
       <artifactId>camunda-engine-rest-jakarta</artifactId>
       <scope>test</scope>
       <type>war</type>
@@ -145,7 +147,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.qa</groupId>
+      <groupId>alurkerja.camunda.bpm.qa</groupId>
       <artifactId>engine-variable-test</artifactId>
       <scope>test</scope>
       <type>war</type>
@@ -210,7 +212,7 @@
               <skip>${skipTests}</skip>
               <artifactItems>
                 <artifactItem>
-                  <groupId>org.camunda.bpm.tomcat</groupId>
+                  <groupId>alurkerja.camunda.bpm.tomcat</groupId>
                   <artifactId>camunda-tomcat-assembly</artifactId>
                   <version>${project.version}</version>
                   <type>tar.gz</type>
@@ -287,7 +289,7 @@
           </configuration>
           <deployables>
             <deployable>
-              <groupId>org.camunda.bpm</groupId>
+              <groupId>alurkerja.camunda.bpm</groupId>
               <artifactId>camunda-engine-rest-jakarta</artifactId>
               <type>war</type>
               <classifier>tomcat</classifier>
@@ -300,7 +302,7 @@
               </properties>
             </deployable>
             <deployable>
-              <groupId>org.camunda.bpm.qa</groupId>
+              <groupId>alurkerja.camunda.bpm.qa</groupId>
               <artifactId>engine-variable-test</artifactId>
               <type>war</type>
             </deployable>
@@ -322,4 +324,31 @@
 
   </build>
 
+  <profiles>
+    <!-- Alurkerja fork: the Tomcat distro is not part of the publish reactor and cannot be
+         resolved from a remote for fork versions, so only require it when tests actually run -->
+    <profile>
+      <id>it-runtime</id>
+      <activation>
+        <property>
+          <name>!skipTests</name>
+        </property>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>alurkerja.camunda.bpm.tomcat</groupId>
+          <artifactId>camunda-tomcat-assembly</artifactId>
+          <version>${project.version}</version>
+          <type>tar.gz</type>
+          <scope>test</scope>
+          <exclusions>
+            <exclusion>
+              <artifactId>slf4j-api</artifactId>
+              <groupId>org.slf4j</groupId>
+            </exclusion>
+          </exclusions>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
 </project>

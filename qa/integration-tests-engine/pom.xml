@@ -9,9 +9,9 @@
   <name>Camunda Platform - QA Integration Tests - Engine</name>
 
   <parent>
-    <groupId>org.camunda.bpm.qa</groupId>
+    <groupId>alurkerja.camunda.bpm.qa</groupId>
     <artifactId>camunda-qa</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>${revision}</version>
   </parent>
 
   <properties>
@@ -108,32 +108,32 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.javaee</groupId>
+      <groupId>alurkerja.camunda.bpm.javaee</groupId>
       <artifactId>camunda-ejb-client</artifactId>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>alurkerja.camunda.bpm</groupId>
       <artifactId>camunda-engine-cdi</artifactId>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
           <artifactId>camunda-engine</artifactId>
-          <groupId>org.camunda.bpm</groupId>
+          <groupId>alurkerja.camunda.bpm</groupId>
         </exclusion>
       </exclusions>
     </dependency>
 
     <!-- camunda -->
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>alurkerja.camunda.bpm</groupId>
       <artifactId>camunda-engine</artifactId>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.dmn</groupId>
+      <groupId>alurkerja.camunda.bpm.dmn</groupId>
       <artifactId>camunda-engine-dmn</artifactId>
       <scope>provided</scope>
       <exclusions>
@@ -153,24 +153,24 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>alurkerja.camunda.bpm</groupId>
       <artifactId>camunda-engine-spring</artifactId>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
           <artifactId>camunda-engine</artifactId>
-          <groupId>org.camunda.bpm</groupId>
+          <groupId>alurkerja.camunda.bpm</groupId>
         </exclusion>
       </exclusions>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.spin</groupId>
+      <groupId>alurkerja.camunda.spin</groupId>
       <artifactId>camunda-spin-core</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.spin</groupId>
+      <groupId>alurkerja.camunda.spin</groupId>
       <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
     </dependency>
 
@@ -184,7 +184,7 @@
       BOM must be installed before this module is built
     -->
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>alurkerja.camunda.bpm</groupId>
       <artifactId>camunda-bom</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
@@ -192,7 +192,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>alurkerja.camunda.bpm</groupId>
       <artifactId>camunda-core-internal-dependencies</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
@@ -200,7 +200,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.connect</groupId>
+      <groupId>alurkerja.camunda.connect</groupId>
       <artifactId>camunda-connect-core</artifactId>
     </dependency>
 
@@ -296,7 +296,7 @@
       <dependencies>
         <dependency>
           <!-- make sure this comes after runtime in the reactor build -->
-          <groupId>org.camunda.bpm.qa</groupId>
+          <groupId>alurkerja.camunda.bpm.qa</groupId>
           <artifactId>camunda-qa-wildfly26-runtime</artifactId>
           <version>${project.version}</version>
           <scope>provided</scope>
@@ -375,7 +375,7 @@
       <dependencies>
         <dependency>
           <!-- make sure this comes after runtime in the reactor build -->
-          <groupId>org.camunda.bpm.qa</groupId>
+          <groupId>alurkerja.camunda.bpm.qa</groupId>
           <artifactId>camunda-qa-wildfly26-runtime</artifactId>
           <version>${project.version}</version>
           <scope>provided</scope>
@@ -493,7 +493,7 @@
         <dependencies>
           <!-- import internal dependencies before JBoss to preserve internal versions, e.g. for JUnit -->
           <dependency>
-            <groupId>org.camunda.bpm</groupId>
+            <groupId>alurkerja.camunda.bpm</groupId>
             <artifactId>camunda-core-internal-dependencies</artifactId>
             <version>${project.version}</version>
             <scope>import</scope>
@@ -511,7 +511,7 @@
       <dependencies>
         <dependency>
           <!-- make sure this comes after runtime in the reactor build -->
-          <groupId>org.camunda.bpm.qa</groupId>
+          <groupId>alurkerja.camunda.bpm.qa</groupId>
           <artifactId>camunda-qa-tomcat9-runtime</artifactId>
           <version>${project.version}</version>
           <scope>provided</scope>
@@ -671,7 +671,7 @@
       <id>clean-db</id>
       <dependencies>
         <dependency>
-          <groupId>org.camunda.bpm</groupId>
+          <groupId>alurkerja.camunda.bpm</groupId>
           <artifactId>camunda-engine</artifactId>
           <scope>test</scope>
         </dependency>
@@ -691,7 +691,7 @@
                 <configuration>
                   <artifactItems>
                     <artifactItem>
-                      <groupId>org.camunda.bpm</groupId>
+                      <groupId>alurkerja.camunda.bpm</groupId>
                       <artifactId>camunda-engine</artifactId>
                       <outputDirectory>${project.build.directory}/sql-scripts/engine</outputDirectory>
                       <overWrite>true</overWrite>

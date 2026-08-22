@@ -2,9 +2,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm</groupId>
+    <groupId>alurkerja.camunda.bpm</groupId>
     <artifactId>camunda-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>${revision}</version>
     <relativePath>../</relativePath>
   </parent>
 
@@ -124,7 +124,7 @@
     <dependencies>
 
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
+        <groupId>alurkerja.camunda.bpm</groupId>
         <artifactId>camunda-bom</artifactId>
         <version>${project.version}</version>
         <type>pom</type>
@@ -298,8 +298,8 @@
             <rules>
               <jakartaDefaults>true</jakartaDefaults>
               <renames>
-                <rename>jar:file:${org.camunda.bpm:camunda-engine:jar}!/META-INF/jakarta-renames.properties</rename>
-                <rename>jar:file:${org.camunda.bpm:camunda-engine:jar}!/META-INF/camunda-renames.properties</rename>
+                <rename>jar:file:${alurkerja.camunda.bpm:camunda-engine:jar}!/META-INF/jakarta-renames.properties</rename>
+                <rename>jar:file:${alurkerja.camunda.bpm:camunda-engine:jar}!/META-INF/camunda-renames.properties</rename>
               </renames>
             </rules>
             <classifier>jakarta</classifier>

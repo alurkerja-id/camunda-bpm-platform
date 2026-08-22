@@ -7,9 +7,9 @@
   </description>
 
   <parent>
-    <groupId>org.camunda.bpm.dmn</groupId>
+    <groupId>alurkerja.camunda.bpm.dmn</groupId>
     <artifactId>camunda-engine-dmn-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>${revision}</version>
   </parent>
 
   <artifactId>camunda-engine-feel-api</artifactId>
@@ -19,7 +19,7 @@
   </properties>
   <dependencies>
     <dependency>
-      <groupId>org.camunda.commons</groupId>
+      <groupId>alurkerja.camunda.commons</groupId>
       <artifactId>camunda-commons-typed-values</artifactId>
     </dependency>
   </dependencies>

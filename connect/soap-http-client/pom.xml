@@ -6,9 +6,9 @@
   </description>
 
   <parent>
-    <groupId>org.camunda.connect</groupId>
+    <groupId>alurkerja.camunda.connect</groupId>
     <artifactId>camunda-connect-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>${revision}</version>
   </parent>
 
   <artifactId>camunda-connect-soap-http-client</artifactId>
@@ -17,7 +17,7 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.camunda.connect</groupId>
+      <groupId>alurkerja.camunda.connect</groupId>
       <artifactId>camunda-connect-http-client</artifactId>
     </dependency>
 

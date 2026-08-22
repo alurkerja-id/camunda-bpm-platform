@@ -7,9 +7,9 @@
   </description>
 
   <parent>
-    <groupId>org.camunda.bpm.dmn</groupId>
+    <groupId>alurkerja.camunda.bpm.dmn</groupId>
     <artifactId>camunda-engine-dmn-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>${revision}</version>
   </parent>
 
   <artifactId>camunda-engine-dmn</artifactId>
@@ -22,32 +22,32 @@
   </properties>
   <dependencies>
     <dependency>
-      <groupId>org.camunda.commons</groupId>
+      <groupId>alurkerja.camunda.commons</groupId>
       <artifactId>camunda-commons-utils</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.commons</groupId>
+      <groupId>alurkerja.camunda.commons</groupId>
       <artifactId>camunda-commons-typed-values</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.model</groupId>
+      <groupId>alurkerja.camunda.bpm.model</groupId>
       <artifactId>camunda-dmn-model</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.dmn</groupId>
+      <groupId>alurkerja.camunda.bpm.dmn</groupId>
       <artifactId>camunda-engine-feel-api</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.dmn</groupId>
+      <groupId>alurkerja.camunda.bpm.dmn</groupId>
       <artifactId>camunda-engine-feel-juel</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.dmn</groupId>
+      <groupId>alurkerja.camunda.bpm.dmn</groupId>
       <artifactId>camunda-engine-feel-scala</artifactId>
     </dependency>
 
@@ -58,7 +58,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.juel</groupId>
+      <groupId>alurkerja.camunda.bpm.juel</groupId>
       <artifactId>camunda-juel</artifactId>
     </dependency>
 
@@ -111,7 +111,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>alurkerja.camunda.bpm</groupId>
       <artifactId>camunda-bpm-archunit</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
@@ -125,7 +125,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <dependenciesToScan>
-            <dependency>org.camunda.bpm:camunda-bpm-archunit</dependency>
+            <dependency>alurkerja.camunda.bpm:camunda-bpm-archunit</dependency>
           </dependenciesToScan>
         </configuration>
       </plugin>

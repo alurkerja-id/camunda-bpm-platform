@@ -10,17 +10,17 @@
   <artifactId>camunda-engine</artifactId>
 
   <parent>
-    <groupId>org.camunda.bpm</groupId>
+    <groupId>alurkerja.camunda.bpm</groupId>
     <artifactId>camunda-database-settings</artifactId>
     <relativePath>../database</relativePath>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>${revision}</version>
   </parent>
 
   <dependencyManagement>
     <dependencies>
 
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
+        <groupId>alurkerja.camunda.bpm</groupId>
         <artifactId>camunda-core-internal-dependencies</artifactId>
         <version>${project.version}</version>
         <scope>import</scope>
@@ -51,22 +51,22 @@
     <!-- camunda dependencies -->
 
     <dependency>
-      <groupId>org.camunda.bpm.model</groupId>
+      <groupId>alurkerja.camunda.bpm.model</groupId>
       <artifactId>camunda-bpmn-model</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.model</groupId>
+      <groupId>alurkerja.camunda.bpm.model</groupId>
       <artifactId>camunda-cmmn-model</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.juel</groupId>
+      <groupId>alurkerja.camunda.bpm.juel</groupId>
       <artifactId>camunda-juel</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.dmn</groupId>
+      <groupId>alurkerja.camunda.bpm.dmn</groupId>
       <artifactId>camunda-engine-dmn</artifactId>
       <exclusions>
         <!-- these exclusions are needed when building with Maven >= 3.3
@@ -91,12 +91,12 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.commons</groupId>
+      <groupId>alurkerja.camunda.commons</groupId>
       <artifactId>camunda-commons-logging</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.commons</groupId>
+      <groupId>alurkerja.camunda.commons</groupId>
       <artifactId>camunda-commons-typed-values</artifactId>
     </dependency>
 
@@ -252,13 +252,13 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.commons</groupId>
+      <groupId>alurkerja.camunda.commons</groupId>
       <artifactId>camunda-commons-testing</artifactId>
       <scope>test</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>alurkerja.camunda.bpm</groupId>
       <artifactId>camunda-test-utils-testcontainers</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
@@ -338,7 +338,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>alurkerja.camunda.bpm</groupId>
       <artifactId>camunda-bpm-archunit</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
@@ -444,7 +444,7 @@
             <exclude>%regex[.*(${test.excludes}).*Test.*.class]</exclude>
           </excludes>
           <dependenciesToScan>
-            <dependency>org.camunda.bpm:camunda-bpm-archunit</dependency>
+            <dependency>alurkerja.camunda.bpm:camunda-bpm-archunit</dependency>
           </dependenciesToScan>
         </configuration>
       </plugin>
@@ -488,10 +488,10 @@
           <keepDependenciesWithProvidedScope>true</keepDependenciesWithProvidedScope>
           <artifactSet>
             <excludes>
-              <exclude>org.camunda.bpm.model:*</exclude>
-              <exclude>org.camunda.bpm.dmn:*</exclude>
-              <exclude>org.camunda.bpm.juel:*</exclude>
-              <exclude>org.camunda.commons:*</exclude>
+              <exclude>alurkerja.camunda.bpm.model:*</exclude>
+              <exclude>alurkerja.camunda.bpm.dmn:*</exclude>
+              <exclude>alurkerja.camunda.bpm.juel:*</exclude>
+              <exclude>alurkerja.camunda.commons:*</exclude>
               <exclude>org.camunda.feel:*</exclude>
 
               <exclude>org.springframework:*</exclude>
@@ -767,27 +767,27 @@
       <id>check-plugins</id>
       <dependencies>
         <dependency>
-          <groupId>org.camunda.bpm</groupId>
+          <groupId>alurkerja.camunda.bpm</groupId>
           <artifactId>camunda-engine-plugin-spin</artifactId>
         </dependency>
         <dependency>
-          <groupId>org.camunda.spin</groupId>
+          <groupId>alurkerja.camunda.spin</groupId>
           <artifactId>camunda-spin-dataformat-all</artifactId>
         </dependency>
         <dependency>
-          <groupId>org.camunda.bpm</groupId>
+          <groupId>alurkerja.camunda.bpm</groupId>
           <artifactId>camunda-engine-plugin-connect</artifactId>
         </dependency>
         <dependency>
-          <groupId>org.camunda.connect</groupId>
+          <groupId>alurkerja.camunda.connect</groupId>
           <artifactId>camunda-connect-connectors-all</artifactId>
           <exclusions>
             <exclusion>
-              <groupId>org.camunda.connect</groupId>
+              <groupId>alurkerja.camunda.connect</groupId>
               <artifactId>camunda-connect-http-client</artifactId>
             </exclusion>
             <exclusion>
-              <groupId>org.camunda.connect</groupId>
+              <groupId>alurkerja.camunda.connect</groupId>
               <artifactId>camunda-connect-soap-http-client</artifactId>
             </exclusion>
           </exclusions>
