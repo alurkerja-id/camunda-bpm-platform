@@ -25,7 +25,11 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
 
-const {version} = require(path.resolve(__dirname, './package.json'));
+// Alurkerja fork: Maven passes the real version (root pom <revision>) as CAMUNDA_VERSION;
+// package.json only holds a placeholder for plain `npm run build` outside Maven.
+const version =
+  process.env.CAMUNDA_VERSION ||
+  require(path.resolve(__dirname, './package.json')).version;
 
 module.exports = (_env, argv = {}) => {
   const eeBuild = !!argv.eeBuild;

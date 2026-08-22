@@ -13,6 +13,187 @@ Camunda Platform 7 is a flexible framework for workflow and process automation. 
 - Issue Tracker: https://github.com/camunda/camunda-bpm-platform/issues
 - Contribution Guidelines: https://camunda.org/contribute/
 
+## Alurkerja fork — publishing to Javan Nexus
+
+This repository is the Alurkerja-maintained fork of Camunda 7 (upstream CE is EoL). Artifacts are
+**not** published to Maven Central anymore; they go to the Javan Nexus:
+
+| Repo | URL | Used for |
+|------|-----|----------|
+| `maven-snapshots` | https://maven.cloud.javan.co.id/repository/maven-snapshots | `*-SNAPSHOT` versions |
+| `maven-releases`  | https://maven.cloud.javan.co.id/repository/maven-releases  | release versions (immutable: a version can be uploaded only once) |
+
+Source of truth: GitLab `alurkerja/on-premises/camunda-bpm-platform` (GitHub `alurkerja-id/camunda-bpm-platform` is a mirror).
+The root `pom.xml` `<distributionManagement>` already points at both repositories — nothing to configure in the poms.
+
+What differs from upstream Camunda (all changes live in the root `pom.xml` unless noted):
+
+| Upstream | This fork |
+|----------|-----------|
+| groupIds `org.camunda.bpm`, `org.camunda.bpm.springboot`, `org.camunda.bpm.webapp`, `org.camunda.spin`, `org.camunda.connect`, `org.camunda.commons`, … | same, prefixed `alurkerja.` instead of `org.`: `alurkerja.camunda.bpm`, `alurkerja.camunda.bpm.springboot`, … (Java packages are **unchanged**, still `org.camunda.bpm.*`). Only `org.camunda:camunda-bpm-release-parent` and `org.camunda.feel` stay — they are external. QA upgrade fixtures under `qa/` keep `org.camunda.*` for the *old upstream versions* they test against. |
+| version hard-coded in 181 poms + 2 `package.json` | `<revision>` property in the root pom, every pom says `<version>${revision}</version>`; `flatten-maven-plugin` writes the concrete version into the deployed poms; the webapps/docs frontend builds get it as env `CAMUNDA_VERSION` (`webapps/pom.xml`, `engine-rest/docs/pom.xml` → `webpack.common.js`, `docs/build.js`), the `package.json` versions are a fixed placeholder |
+| publishes to Maven Central (GPG + `central-publishing-maven-plugin`) | both unbound in the root pom; only the Nexus deploy (via `nexus-staging-maven-plugin`, `skipStaging=true`) remains |
+| `central-sonatype-publish` profile module list | + `test-utils/archunit`, `test-utils/testcontainers`, `examples` (needed in the reactor because they can no longer be pulled from Camunda's Nexus) |
+| `clients/java/client` test-depends on the Tomcat distro (`camunda-tomcat-assembly:tar.gz`) | that dependency sits in profile `it-runtime` (active unless `-DskipTests`); `camunda-engine` and `camunda-spin-core` are explicit test deps instead |
+
+### Prerequisites
+
+- JDK 21, Maven wrapper (`./mvnw`), network access (the webapps build downloads Node 20 via `frontend-maven-plugin`).
+- Nexus credentials in `~/.m2/settings.xml`. The `<id>` must match the repository ids above:
+
+  ```xml
+  <settings>
+    <servers>
+      <server>
+        <id>maven-snapshots</id>
+        <username>NEXUS_USER</username>
+        <password>NEXUS_PASSWORD</password>
+      </server>
+      <server>
+        <id>maven-releases</id>
+        <username>NEXUS_USER</username>
+        <password>NEXUS_PASSWORD</password>
+      </server>
+    </servers>
+  </settings>
+  ```
+
+### Snapshot vs release — the one rule
+
+There is **one deploy command**. Maven decides *where* the artifacts go purely from the version string
+in `<revision>` (root `pom.xml`):
+
+| `<revision>` value | Maven treats it as | Uploaded to | Can be uploaded again? |
+|---|---|---|---|
+| ends with `-SNAPSHOT`, e.g. `7.24.1-SNAPSHOT` | snapshot | `maven-snapshots` (`<snapshotRepository>`) | yes — every deploy adds a new timestamped build (`7.24.1-20260822.161500-3.jar`); consumers get the newest with `mvn -U` |
+| anything else, e.g. `7.24.0` | release | `maven-releases` (`<repository>`) | **no** — Nexus rejects a second upload of the same version |
+
+So: to publish a snapshot the revision **must** end in `-SNAPSHOT` (exact spelling, upper case);
+to publish a release it **must not**. `master` normally carries a `-SNAPSHOT` revision; it is switched to a
+release number only for the release commit and bumped back right after.
+
+```bash
+# the deploy command, identical for snapshot and release
+./mvnw -B clean deploy -Pcentral-sonatype-publish -DskipTests -Dmaven.javadoc.skip=true
+```
+
+Takes ~20–25 min (webapps `npm ci` + webpack included).
+
+### Deploy a SNAPSHOT (day-to-day)
+
+1. Check the revision ends in `-SNAPSHOT`:
+   ```bash
+   grep -m1 "<revision>" pom.xml      # → <revision>7.24.1-SNAPSHOT</revision>
+   ```
+   If it does not (e.g. right after a release), set it in the root `pom.xml` `<revision>` and commit.
+2. Deploy:
+   ```bash
+   ./mvnw -B clean deploy -Pcentral-sonatype-publish -DskipTests -Dmaven.javadoc.skip=true
+   ```
+3. Check the upload (any module will do):
+   `https://maven.cloud.javan.co.id/repository/maven-snapshots/alurkerja/camunda/bpm/camunda-engine/7.24.1-SNAPSHOT/maven-metadata.xml`
+4. Consumers: depend on `7.24.1-SNAPSHOT` and build with `mvn -U …` to force-refresh the snapshot.
+
+Repeat step 2 as often as you like — same version, newer timestamp each time.
+
+### Deploy a RELEASE
+
+1. Make sure `master` is green (`./mvnw -B install -Pcentral-sonatype-publish -DskipTests -Dmaven.javadoc.skip=true`).
+2. Set the release version — **drop `-SNAPSHOT`**: root `pom.xml` `<revision>7.24.1</revision>`.
+3. Commit and tag:
+   ```bash
+   git commit -am "chore(release): set version to 7.24.1"
+   git tag 7.24.1
+   ```
+4. Deploy — same command:
+   ```bash
+   ./mvnw -B clean deploy -Pcentral-sonatype-publish -DskipTests -Dmaven.javadoc.skip=true
+   ```
+   Because the version has no `-SNAPSHOT`, Maven routes it to `maven-releases`
+   (`nexus-staging-maven-plugin` with `skipStaging=true` = plain deploy to `<distributionManagement><repository>`; Nexus 3 has no staging workflow).
+5. Check: `https://maven.cloud.javan.co.id/repository/maven-releases/alurkerja/camunda/bpm/camunda-engine/7.24.1/`
+6. Bump back to a snapshot for further work — `<revision>7.24.2-SNAPSHOT</revision>`, commit, push branch **and** tag:
+   ```bash
+   git commit -am "chore(release): prepare next development version 7.24.2-SNAPSHOT"
+   git push && git push --tags
+   ```
+
+`maven-releases` is immutable: if a release build fails **after** the upload started (rare — the upload is the
+very last step) or something is wrong with a published release, fix it and release the **next** number
+(`7.24.2`); never try to re-upload the same one.
+
+Released so far: `7.24.0` (2026-08-22).
+
+What the flags do:
+
+| Flag | Why |
+|------|-----|
+| `-Pcentral-sonatype-publish` | selects exactly the modules Camunda publishes to Central (engine, spring-boot starters, engine-rest, webapps + webjar, spin/connect/dmn/juel, external-task client, bom, parent) plus the three fork additions listed above. The `distro*` profiles (Tomcat/WildFly/Run distributions) are switched off automatically. |
+| `-DskipTests` | compiles test sources (some modules need test-jars) but runs nothing. |
+| `-Dmaven.javadoc.skip=true` | no javadoc jars; drop it if you want them published. |
+
+Notes:
+
+- Upload is **deferred**: `nexus-staging-maven-plugin` collects every artifact locally and bulk-uploads in the last reactor module. A failure halfway = nothing uploaded (verified: three failed runs left Nexus untouched). After fixing, **rerun the full command** — do not resume with `-rf :<module>` for a deploy, the deferred upload would then only contain the modules of that partial run.
+- `mvn validate` does not catch missing test-scoped dependencies; they surface at `test-compile` (~10 min into the build). To check the whole reactor before a release run `./mvnw -B install -Pcentral-sonatype-publish -DskipTests -Dmaven.javadoc.skip=true` first (same modules, no upload).
+- Do **not** add `-Dskip.frontend.build=true` (or `-PskipFrontendBuild`) for a deploy — the webapp webjar would be published without Cockpit/Tasklist/Admin UI.
+- Consumers pick up a new snapshot with `mvn -U ...`.
+
+### Changing the version
+
+One place: the `<revision>` property at the top of the root `pom.xml`.
+
+```xml
+<properties>
+  <revision>7.24.1-SNAPSHOT</revision>   <!-- -SNAPSHOT → maven-snapshots; 7.24.1 → maven-releases -->
+```
+
+Every module declares `<version>${revision}</version>` (also for its `<parent>`), and `flatten-maven-plugin`
+(`resolveCiFriendliesOnly`) replaces the placeholder in the poms that are installed/deployed, so consumers see
+the concrete version (`7.24.1-SNAPSHOT`, `7.24.1`, …). Do not commit the generated `.flattened-pom.xml` files (git-ignored).
+
+The two npm projects (`webapps/frontend`, `engine-rest/docs`) do **not** need an edit: Maven passes
+`${project.version}` to their builds as the `CAMUNDA_VERSION` environment variable (frontend-maven-plugin
+`<environmentVariables>` in `webapps/pom.xml` and `engine-rest/docs/pom.xml`), and `webpack.common.js` /
+`docs/build.js` read that first. Their `package.json` `"version"` is a fixed placeholder (`0.0.0-set-by-maven`)
+that is only used when someone runs `npm run build` by hand outside Maven.
+
+Checklist for every version change: **one file, one line** — `pom.xml` → `<revision>…</revision>`.
+
+Version rules: the version must start with digits (`7.24.0`, `7.24.1-SNAPSHOT`, `7.24.0-alurkerja`) — the
+OSGi `maven-bundle-plugin` rejects anything else (e.g. `alurkerja-7.24.0` fails with
+`Invalid syntax for version`). Because the groupIds are `alurkerja.camunda.*`, a plain `7.24.0` cannot clash
+with the upstream `org.camunda.bpm:*:7.24.0` on Maven Central.
+
+### Consuming the fork
+
+```xml
+<repositories>
+  <repository>
+    <id>maven-snapshots</id>
+    <name>Alurkerja Snapshot</name>
+    <url>https://maven.cloud.javan.co.id/repository/maven-snapshots</url>
+  </repository>
+  <repository>
+    <id>maven-releases</id>
+    <name>Alurkerja Releases</name>
+    <url>https://maven.cloud.javan.co.id/repository/maven-releases</url>
+  </repository>
+</repositories>
+
+<dependency>
+  <groupId>alurkerja.camunda.bpm.springboot</groupId>   <!-- NOT org.camunda.bpm.springboot -->
+  <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
+  <version>7.24.0</version>                             <!-- or 7.24.1-SNAPSHOT etc. -->
+</dependency>
+```
+
+Migrating an existing project from upstream Camunda: replace the groupId prefix `org.camunda.` with
+`alurkerja.camunda.` in your poms (dependencies and BOM import `alurkerja.camunda.bpm:camunda-bom`);
+imports in Java code stay `org.camunda.bpm.*`.
+
+A complete Spring Boot sample lives in `SaaS/Camunda-Fork/camunda-fork-sample`.
+
 ## Components
 
 Camunda Platform 7 provides a rich set of components centered around the BPM lifecycle.

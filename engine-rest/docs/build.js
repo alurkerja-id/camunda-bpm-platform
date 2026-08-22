@@ -30,7 +30,8 @@ async function generateDocs() {
 
     const state = await store.toJS()
 
-    const camundaVersion = require('./package.json').version;
+    // Alurkerja fork: Maven passes the real version (root pom <revision>) as CAMUNDA_VERSION
+    const camundaVersion = process.env.CAMUNDA_VERSION || require('./package.json').version;
 
     const page = `<!DOCTYPE html>
 <html>

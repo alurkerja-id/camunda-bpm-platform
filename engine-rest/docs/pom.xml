@@ -84,6 +84,10 @@
             <phase>generate-resources</phase>
             <configuration>
               <arguments>run build</arguments>
+              <!-- Alurkerja fork: version comes from the root pom (<revision>), not package.json -->
+              <environmentVariables>
+                <CAMUNDA_VERSION>${project.version}</CAMUNDA_VERSION>
+              </environmentVariables>
             </configuration>
           </execution>
         </executions>

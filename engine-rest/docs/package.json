@@ -1,6 +1,6 @@
 {
   "name": "docs",
-  "version": "7.24.0",
+  "version": "0.0.0-set-by-maven",
   "private": true,
   "scripts": {
     "build": "node build"

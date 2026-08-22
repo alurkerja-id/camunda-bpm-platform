@@ -25,9 +25,10 @@
   <properties>
     <!-- Alurkerja fork: THE single place to change the version of every module.
          All poms use <version>${revision}</version>; flatten-maven-plugin (below) resolves it
-         in the installed/deployed poms. Keep webapps/frontend/package.json and
-         engine-rest/docs/package.json in sync by hand (npm needs a literal semver). -->
-    <revision>7.24.0</revision>
+         in the installed/deployed poms. The webapps/docs frontend builds receive it as the
+         CAMUNDA_VERSION environment variable (webapps/pom.xml, engine-rest/docs/pom.xml), so
+         the package.json files need no edit. -->
+    <revision>7.24.1-SNAPSHOT</revision>
 
     <license.includeTransitiveDependencies>false</license.includeTransitiveDependencies>
 
