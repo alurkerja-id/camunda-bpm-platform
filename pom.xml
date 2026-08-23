@@ -28,7 +28,7 @@
          in the installed/deployed poms. The webapps/docs frontend builds receive it as the
          CAMUNDA_VERSION environment variable (webapps/pom.xml, engine-rest/docs/pom.xml), so
          the package.json files need no edit. -->
-    <revision>7.24.1-SNAPSHOT</revision>
+    <revision>7.24.1</revision>
 
     <license.includeTransitiveDependencies>false</license.includeTransitiveDependencies>
 
