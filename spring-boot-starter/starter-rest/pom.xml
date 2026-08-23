@@ -52,6 +52,12 @@
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
+    <!-- Spring Boot 4: TestRestTemplate moved to its own module -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-resttestclient</artifactId>
+      <scope>test</scope>
+    </dependency>
 
     <dependency>
       <groupId>com.h2database</groupId>

@@ -37,9 +37,10 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
     </dependency>
+    <!-- Spring Boot 4: DataSource/transaction auto-configuration moved out of spring-boot-autoconfigure into spring-boot-jdbc (brings spring-jdbc) -->
     <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-jdbc</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-jdbc</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
@@ -119,6 +120,12 @@
       <artifactId>camunda-bpm-spring-boot-starter-test</artifactId>
       <groupId>${project.groupId}</groupId>
       <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- Spring Boot 4: TestRestTemplate moved to its own module -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-resttestclient</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

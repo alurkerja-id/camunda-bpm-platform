@@ -35,6 +35,7 @@ What differs from upstream Camunda (all changes live in the root `pom.xml` unles
 | publishes to Maven Central (GPG + `central-publishing-maven-plugin`) | both unbound in the root pom; only the Nexus deploy (via `nexus-staging-maven-plugin`, `skipStaging=true`) remains |
 | `central-sonatype-publish` profile module list | + `test-utils/archunit`, `test-utils/testcontainers`, `examples` (needed in the reactor because they can no longer be pulled from Camunda's Nexus) |
 | `clients/java/client` test-depends on the Tomcat distro (`camunda-tomcat-assembly:tar.gz`) | that dependency sits in profile `it-runtime` (active unless `-DskipTests`); `camunda-engine` and `camunda-spin-core` are explicit test deps instead |
+| Spring Boot **3.5** (`version.spring-boot` in `parent/pom.xml`) | Spring Boot **4.0** (Spring Framework 7, Jersey 4; branch `feature/spring-boot-4.1` carries the same code on 4.1 until Camunda's own 4.1 support lands). `spring-boot-starter/**` and `distro/run/core` were adapted to the Spring Boot 4 module split: moved classes re-imported (`JerseyApplicationPath`, `DataSource*AutoConfiguration`, health `HealthIndicator`, `SecurityFilterProperties`, `TestRestTemplate` → `spring-boot-resttestclient`, `@MockBean` → `@MockitoBean`), `spring-boot-jdbc` is a direct dependency of the starter, `ClientsConfiguredCondition` (package-private in Boot 4) is copied into `starter-security`, `rest-assured` pinned in `distro/run/qa`. Consumers must be on Spring Boot 4.x — Spring Boot 3 apps stay on `7.24.0`. |
 
 ### Prerequisites
 
@@ -184,15 +185,20 @@ with the upstream `org.camunda.bpm:*:7.24.0` on Maven Central.
 <dependency>
   <groupId>alurkerja.camunda.bpm.springboot</groupId>   <!-- NOT org.camunda.bpm.springboot -->
   <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
-  <version>7.24.0</version>                             <!-- or 7.24.1-SNAPSHOT etc. -->
+  <version>7.24.1-SNAPSHOT</version>                    <!-- Spring Boot 4 apps; Spring Boot 3 apps use 7.24.0 -->
 </dependency>
 ```
+
+| Your app | Fork version |
+|----------|--------------|
+| Spring Boot 4.x (`spring-boot-starter-parent` 4.0+) | `7.24.1-SNAPSHOT` and later |
+| Spring Boot 3.5 | `7.24.0` (last Spring Boot 3 build) |
 
 Migrating an existing project from upstream Camunda: replace the groupId prefix `org.camunda.` with
 `alurkerja.camunda.` in your poms (dependencies and BOM import `alurkerja.camunda.bpm:camunda-bom`);
 imports in Java code stay `org.camunda.bpm.*`.
 
-A complete Spring Boot sample lives in `SaaS/Camunda-Fork/camunda-fork-sample`.
+A complete Spring Boot 4 sample lives in GitLab `alurkerja/on-premises/sample/camunda-fork-sample`.
 
 ## Components
 

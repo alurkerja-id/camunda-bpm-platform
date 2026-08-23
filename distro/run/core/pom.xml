@@ -117,6 +117,12 @@
         </exclusion>
       </exclusions>
     </dependency>
+    <!-- Spring Boot 4: TestRestTemplate moved to its own module -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-resttestclient</artifactId>
+      <scope>test</scope>
+    </dependency>
     
     <!-- Required to Run JUnit4 tests -->
     <dependency>
