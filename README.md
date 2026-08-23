@@ -84,7 +84,7 @@ Takes ~20–25 min (webapps `npm ci` + webpack included).
 
 1. Check the revision ends in `-SNAPSHOT`:
    ```bash
-   grep -m1 "<revision>" pom.xml      # → <revision>7.24.1-SNAPSHOT</revision>
+   grep -m1 "<revision>" pom.xml      # → <revision>7.24.2-SNAPSHOT</revision>
    ```
    If it does not (e.g. right after a release), set it in the root `pom.xml` `<revision>` and commit.
 2. Deploy:
@@ -92,8 +92,8 @@ Takes ~20–25 min (webapps `npm ci` + webpack included).
    ./mvnw -B clean deploy -Pcentral-sonatype-publish -DskipTests -Dmaven.javadoc.skip=true
    ```
 3. Check the upload (any module will do):
-   `https://maven.cloud.javan.co.id/repository/maven-snapshots/alurkerja/camunda/bpm/camunda-engine/7.24.1-SNAPSHOT/maven-metadata.xml`
-4. Consumers: depend on `7.24.1-SNAPSHOT` and build with `mvn -U …` to force-refresh the snapshot.
+   `https://maven.cloud.javan.co.id/repository/maven-snapshots/alurkerja/camunda/bpm/camunda-engine/7.24.2-SNAPSHOT/maven-metadata.xml`
+4. Consumers: depend on `7.24.2-SNAPSHOT` and build with `mvn -U …` to force-refresh the snapshot.
 
 Repeat step 2 as often as you like — same version, newer timestamp each time.
 
@@ -185,13 +185,13 @@ with the upstream `org.camunda.bpm:*:7.24.0` on Maven Central.
 <dependency>
   <groupId>alurkerja.camunda.bpm.springboot</groupId>   <!-- NOT org.camunda.bpm.springboot -->
   <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
-  <version>7.24.1-SNAPSHOT</version>                    <!-- Spring Boot 4 apps; Spring Boot 3 apps use 7.24.0 -->
+  <version>7.24.1</version>                             <!-- Spring Boot 4 apps (or 7.24.2-SNAPSHOT); Spring Boot 3 apps use 7.24.0 -->
 </dependency>
 ```
 
 | Your app | Fork version |
 |----------|--------------|
-| Spring Boot 4.x (`spring-boot-starter-parent` 4.0+) | `7.24.1-SNAPSHOT` and later |
+| Spring Boot 4.x (`spring-boot-starter-parent` 4.0+) | `7.24.1` and later (`7.24.2-SNAPSHOT` for the current development build) |
 | Spring Boot 3.5 | `7.24.0` (last Spring Boot 3 build) |
 
 Migrating an existing project from upstream Camunda: replace the groupId prefix `org.camunda.` with
