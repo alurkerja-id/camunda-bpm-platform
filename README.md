@@ -35,7 +35,7 @@ What differs from upstream Camunda (all changes live in the root `pom.xml` unles
 | publishes to Maven Central (GPG + `central-publishing-maven-plugin`) | both unbound in the root pom; only the Nexus deploy (via `nexus-staging-maven-plugin`, `skipStaging=true`) remains |
 | `central-sonatype-publish` profile module list | + `test-utils/archunit`, `test-utils/testcontainers`, `examples` (needed in the reactor because they can no longer be pulled from Camunda's Nexus) |
 | `clients/java/client` test-depends on the Tomcat distro (`camunda-tomcat-assembly:tar.gz`) | that dependency sits in profile `it-runtime` (active unless `-DskipTests`); `camunda-engine` and `camunda-spin-core` are explicit test deps instead |
-| Spring Boot **3.5** (`version.spring-boot` in `parent/pom.xml`) | Spring Boot **4.1** (Spring Framework 7, Jersey 4; `master` stays on 4.0 until Camunda ships its own 4.1 support, expected October 2026). `spring-boot-starter/**` and `distro/run/core` were adapted to the Spring Boot 4 module split: moved classes re-imported (`JerseyApplicationPath`, `DataSource*AutoConfiguration`, health `HealthIndicator`, `SecurityFilterProperties`, `TestRestTemplate` → `spring-boot-resttestclient`, `@MockBean` → `@MockitoBean`), `spring-boot-jdbc` is a direct dependency of the starter, `ClientsConfiguredCondition` (package-private in Boot 4) is copied into `starter-security`, `rest-assured` pinned in `distro/run/qa`. Consumers must be on Spring Boot 4.x — Spring Boot 3 apps stay on `7.24.0`. |
+| Spring Boot **3.5** (`version.spring-boot` in `parent/pom.xml`) | Spring Boot **4.1** (Spring Framework 7, Jersey 4; `7.24.1` was built with 4.0, `7.24.2`+ with 4.1 — the code is identical, only `version.spring-boot` differs). `spring-boot-starter/**` and `distro/run/core` were adapted to the Spring Boot 4 module split: moved classes re-imported (`JerseyApplicationPath`, `DataSource*AutoConfiguration`, health `HealthIndicator`, `SecurityFilterProperties`, `TestRestTemplate` → `spring-boot-resttestclient`, `@MockBean` → `@MockitoBean`), `spring-boot-jdbc` is a direct dependency of the starter, `ClientsConfiguredCondition` (package-private in Boot 4) is copied into `starter-security`, `rest-assured` pinned in `distro/run/qa`. Consumers must be on Spring Boot 4.x — Spring Boot 3 apps stay on `7.24.0`. |
 
 ### Prerequisites
 
@@ -84,7 +84,7 @@ Takes ~20–25 min (webapps `npm ci` + webpack included).
 
 1. Check the revision ends in `-SNAPSHOT`:
    ```bash
-   grep -m1 "<revision>" pom.xml      # → <revision>7.24.2-SNAPSHOT</revision>
+   grep -m1 "<revision>" pom.xml      # → <revision>7.24.3-SNAPSHOT</revision>
    ```
    If it does not (e.g. right after a release), set it in the root `pom.xml` `<revision>` and commit.
 2. Deploy:
@@ -92,8 +92,8 @@ Takes ~20–25 min (webapps `npm ci` + webpack included).
    ./mvnw -B clean deploy -Pcentral-sonatype-publish -DskipTests -Dmaven.javadoc.skip=true
    ```
 3. Check the upload (any module will do):
-   `https://maven.cloud.javan.co.id/repository/maven-snapshots/alurkerja/camunda/bpm/camunda-engine/7.24.2-SNAPSHOT/maven-metadata.xml`
-4. Consumers: depend on `7.24.2-SNAPSHOT` and build with `mvn -U …` to force-refresh the snapshot.
+   `https://maven.cloud.javan.co.id/repository/maven-snapshots/alurkerja/camunda/bpm/camunda-engine/7.24.3-SNAPSHOT/maven-metadata.xml`
+4. Consumers: depend on `7.24.3-SNAPSHOT` and build with `mvn -U …` to force-refresh the snapshot.
 
 Repeat step 2 as often as you like — same version, newer timestamp each time.
 
@@ -185,13 +185,14 @@ with the upstream `org.camunda.bpm:*:7.24.0` on Maven Central.
 <dependency>
   <groupId>alurkerja.camunda.bpm.springboot</groupId>   <!-- NOT org.camunda.bpm.springboot -->
   <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
-  <version>7.24.1</version>                             <!-- Spring Boot 4 apps (or 7.24.2-SNAPSHOT); Spring Boot 3 apps use 7.24.0 -->
+  <version>7.24.2</version>                             <!-- Spring Boot 4 apps (or 7.24.3-SNAPSHOT); Spring Boot 3 apps use 7.24.0 -->
 </dependency>
 ```
 
 | Your app | Fork version |
 |----------|--------------|
-| Spring Boot 4.x (`spring-boot-starter-parent` 4.0+) | `7.24.1` and later (`7.24.2-SNAPSHOT` for the current development build) |
+| Spring Boot 4.1 | `7.24.2` and later (`7.24.3-SNAPSHOT` for the current development build) |
+| Spring Boot 4.0 | `7.24.1` (built with Boot 4.0; `7.24.2`+ should also work, same code) |
 | Spring Boot 3.5 | `7.24.0` (last Spring Boot 3 build) |
 
 Migrating an existing project from upstream Camunda: replace the groupId prefix `org.camunda.` with
