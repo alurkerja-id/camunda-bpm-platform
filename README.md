@@ -15,6 +15,14 @@ Camunda Platform 7 is a flexible framework for workflow and process automation. 
 
 ## Alurkerja fork — publishing to Javan Nexus
 
+Scan Sonar
+
+`mvn clean install "-Dmaven.test.failure.ignore=true" org.sonarsource.scanner.maven:sonar-maven-plugin:sonar "-Dsonar.host.url=https://sonar.javan.co.id" "-Dsonar.token=<token>"`
+
+Scan Trivy
+
+`trivy fs . --scanners vuln --timeout 30m --format template --template "@html.tpl" -o trivy-result.html`
+
 This repository is the Alurkerja-maintained fork of Camunda 7 (upstream CE is EoL). Artifacts are
 **not** published to Maven Central anymore; they go to the Javan Nexus:
 
