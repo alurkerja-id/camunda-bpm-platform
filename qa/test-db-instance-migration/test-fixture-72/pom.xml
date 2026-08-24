@@ -39,7 +39,7 @@
     <!-- NOTE: this pulls transitive dependencies of version ${project.version} in unless
       you declare them to be ${camunda.version.current} here -->
     <dependency>
-      <groupId>alurkerja.camunda.bpm</groupId>
+      <groupId>org.camunda.bpm</groupId>
       <artifactId>camunda-engine</artifactId>
     </dependency>
 
