@@ -18,6 +18,7 @@ package org.camunda.bpm.model.xml.impl.util;
 
 import org.camunda.bpm.model.xml.instance.DomDocument;
 
+import javax.xml.XMLConstants;
 import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
@@ -123,6 +124,16 @@ public final class IoUtil {
    */
   public static void transformDocumentToXml(DomDocument document, StreamResult result) {
     TransformerFactory transformerFactory = TransformerFactory.newInstance();
+
+    // this transformer only serializes a model that is already in memory, so it never needs to
+    // reach for an external DTD or stylesheet; denying both keeps a crafted model from doing so
+    try {
+      transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+      transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+    } catch (IllegalArgumentException ignored) {
+      // the implementation does not know the property; nothing to deny
+    }
+
     try {
       Transformer transformer = transformerFactory.newTransformer();
       transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");

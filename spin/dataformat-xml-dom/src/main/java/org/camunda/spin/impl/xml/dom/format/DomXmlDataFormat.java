@@ -204,7 +204,26 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
   }
 
   public static TransformerFactory defaultTransformerFactory() {
-    return TransformerFactory.newInstance();
+    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+    disableExternalAccess(transformerFactory);
+    return transformerFactory;
+  }
+
+  /*
+   * Denies the transformer access to external DTDs and stylesheets, so a document being written
+   * cannot pull in a remote or local file. A formatting configuration that imports another
+   * stylesheet is rejected as a result; the built-in one is self-contained.
+   * If the implementation does not know a property, the failed property is ignored.
+   *
+   * @param transformerFactory The factory to configure.
+   */
+  protected static void disableExternalAccess(TransformerFactory transformerFactory) {
+    try {
+      transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+      transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+    } catch (IllegalArgumentException ignored) {
+      // ignored
+    }
   }
 
   public static DocumentBuilderFactory defaultDocumentBuilderFactory() {

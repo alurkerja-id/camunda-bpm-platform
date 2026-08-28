@@ -30,6 +30,7 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -266,7 +267,16 @@ public class DomXmlDataFormat implements DataFormat {
   }
 
   public static TransformerFactory defaultTransformerFactory() {
-    return TransformerFactory.newInstance();
+    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+
+    try {
+      transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+      transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+    } catch (IllegalArgumentException ignored) {
+      // the implementation does not know the property; nothing to deny
+    }
+
+    return transformerFactory;
   }
 
   public static DocumentBuilderFactory defaultDocumentBuilderFactory() {
@@ -284,7 +294,34 @@ public class DomXmlDataFormat implements DataFormat {
     documentBuilderFactory.setIgnoringElementContentWhitespace(false);
     LOG.documentBuilderFactoryConfiguration("ignoringElementContentWhitespace", "false");
 
+    disableXxeProcessing(documentBuilderFactory);
+
     return documentBuilderFactory;
+  }
+
+  /*
+   * Configures the DocumentBuilderFactory so that it is protected against XML External Entity
+   * attacks, matching what the process engine does by default (enableXxeProcessing is false there).
+   * Variables reaching the client are XML the engine accepted, so a document type declaration is
+   * refused here as well. If the implementing parser does not know a feature, that feature is
+   * ignored and the parser might not be protected.
+   *
+   * @see <a href="https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html">OWASP XXE Prevention</a>
+   *
+   * @param dbf The factory to configure.
+   */
+  protected static void disableXxeProcessing(DocumentBuilderFactory dbf) {
+    try {
+      dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+      dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+      dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+      dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+      dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+    } catch (ParserConfigurationException ignored) {
+      // ignored
+    }
+    dbf.setXIncludeAware(false);
+    dbf.setExpandEntityReferences(false);
   }
 
   public static Class<?> loadClass(String classname, DataFormat dataFormat) {
