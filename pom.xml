@@ -114,6 +114,40 @@
           </execution>
         </executions>
       </plugin>
+      <!-- Alurkerja fork: SonarQube analysis. All settings live in sonar-project.properties at
+           the repo root; this plugin loads that file into the build so the scan needs no
+           -Dsonar.* flags on the command line except the token:
+
+             mvn clean install -Dmaven.test.failure.ignore=true sonar:sonar -Dsonar.login=<token>
+
+           inherited=false on both plugins: the properties file only exists at the repo root, and
+           sonar:sonar is an aggregator goal that runs once here for the whole reactor. -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>properties-maven-plugin</artifactId>
+        <version>1.2.1</version>
+        <inherited>false</inherited>
+        <executions>
+          <execution>
+            <id>read-sonar-properties</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>read-project-properties</goal>
+            </goals>
+            <configuration>
+              <files>
+                <file>${project.basedir}/sonar-project.properties</file>
+              </files>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.sonarsource.scanner.maven</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+        <version>5.2.0.4988</version>
+        <inherited>false</inherited>
+      </plugin>
     </plugins>
   </build>
 
