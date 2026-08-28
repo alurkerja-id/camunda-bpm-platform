@@ -29,6 +29,15 @@
         <scope>import</scope>
         <type>pom</type>
       </dependency>
+      <!-- Alurkerja fork: hibernate-core 7.4.5 compiles against Jakarta Persistence 3.2 and calls
+           jakarta.persistence.FindOption, which does not exist in 3.1. The 3.1 API was winning the
+           mediation here, so building an EntityManagerFactory died with NoClassDefFoundError. It
+           went unnoticed because surefire could not start this module's tests at all. -->
+      <dependency>
+        <groupId>jakarta.persistence</groupId>
+        <artifactId>jakarta.persistence-api</artifactId>
+        <version>3.2.0</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   
@@ -139,6 +148,17 @@
             <redirectTestOutputToFile>true</redirectTestOutputToFile>
             <trimStackTrace>false</trimStackTrace>
           </configuration>
+        </plugin>
+        <!-- Alurkerja fork: surefire 2.22.2 from camunda-parent calls
+             org.junit.platform.commons.util.PreconditionViolationException, a class removed in
+             JUnit Platform 6 - which spring-boot-starter-test drags in here. The fork died with
+             NoClassDefFoundError and every module below reported "Tests run: 0", so their tests
+             had stopped running altogether and the coverage read 0%. Surefire 3 speaks to the
+             platform through the Launcher API and runs them again. -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${plugin.version.surefire-junit-platform}</version>
         </plugin>
       </plugins>
     </pluginManagement>

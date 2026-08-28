@@ -135,6 +135,14 @@
 
   <build>
     <plugins>
+      <!-- Alurkerja fork: same reason as spring-boot-starter/pom.xml - JUnit Platform 6 arrives
+           with spring-boot-starter-test and surefire 2.22.2 cannot launch it, so this module was
+           silently running no tests at all. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${plugin.version.surefire-junit-platform}</version>
+      </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>

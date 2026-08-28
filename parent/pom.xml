@@ -126,6 +126,12 @@
     <plugin.version.jacoco>0.8.13</plugin.version.jacoco>
     <argLine />
 
+    <!-- Alurkerja fork: for the modules that pull JUnit Platform 6 through
+         spring-boot-starter-test. Surefire 2.22.2 cannot launch that platform - see the comment in
+         spring-boot-starter/pom.xml. Only those modules override the version; everything else
+         stays on 2.22.2, which runs their JUnit 4 suites fine. -->
+    <plugin.version.surefire-junit-platform>3.5.2</plugin.version.surefire-junit-platform>
+
     <!-- Two reports, and SonarQube takes the union of their hits: the module's own, plus the
          reactor-wide aggregate from coverage-report/. The aggregate is what gives a module like
          camunda-juel - no tests of its own, but exercised all over the engine suite - its real
