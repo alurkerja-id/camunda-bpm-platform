@@ -18,6 +18,12 @@
 
   <name>Camunda Platform - Wildfly 26</name>
 
+  <properties>
+    <!-- Alurkerja fork: see distro/wildfly/pom.xml - the WildFly integration is out of the
+         SonarQube analysis because this fork deploys nothing onto an application server. -->
+    <sonar.skip>true</sonar.skip>
+  </properties>
+
   <dependencyManagement>
     <dependencies>
       <dependency>

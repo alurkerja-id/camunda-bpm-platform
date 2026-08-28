@@ -6,6 +6,13 @@
   <name>Camunda Platform - Client</name>
   <packaging>jar</packaging>
 
+  <properties>
+    <!-- Alurkerja fork: Java EE integration only works inside an application server container.
+         This fork ships libraries and deploys nothing onto one, so it is out of the SonarQube
+         analysis - same reasoning as distro/wildfly. -->
+    <sonar.skip>true</sonar.skip>
+  </properties>
+
   <description>
     Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
   </description>
