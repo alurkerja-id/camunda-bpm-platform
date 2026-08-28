@@ -269,10 +269,21 @@ public class DomXmlDataFormat implements DataFormat {
   public static TransformerFactory defaultTransformerFactory() {
     TransformerFactory transformerFactory = TransformerFactory.newInstance();
 
-    // this transformer only serializes a document that is already in memory, so it never needs an
-    // external DTD or stylesheet; both properties are mandated by JAXP 1.5
-    transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-    transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+    // This transformer only serializes a document that is already in memory, so it never needs an
+    // external DTD or stylesheet. Every control is best effort on purpose: the two JAXP 1.5
+    // attributes are unknown to Xalan 2.7 and it throws for them, so a rejected control must not
+    // take the writer down with it.
+    try {
+      transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+    } catch (TransformerConfigurationException | IllegalArgumentException ignored) {
+      // not supported by this implementation
+    }
+    try {
+      transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+      transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+    } catch (IllegalArgumentException ignored) {
+      // not supported by this implementation, e.g. Xalan 2.7
+    }
 
     return transformerFactory;
   }

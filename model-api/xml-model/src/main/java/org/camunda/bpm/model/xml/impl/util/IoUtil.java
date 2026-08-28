@@ -125,11 +125,7 @@ public final class IoUtil {
   public static void transformDocumentToXml(DomDocument document, StreamResult result) {
     TransformerFactory transformerFactory = TransformerFactory.newInstance();
 
-    // this transformer only serializes a model that is already in memory, so it never needs to
-    // reach for an external DTD or stylesheet; denying both keeps a crafted model from doing so.
-    // Both properties are mandated by JAXP 1.5.
-    transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-    transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+    denyExternalAccess(transformerFactory);
 
     try {
       Transformer transformer = transformerFactory.newTransformer();
@@ -144,6 +140,30 @@ public final class IoUtil {
       throw new ModelIoException("Unable to create a transformer for the model", e);
     } catch (TransformerException e) {
       throw new ModelIoException("Unable to transform model to xml", e);
+    }
+  }
+
+  /**
+   * Keeps the transformer from reaching for an external DTD or stylesheet. Serializing a model that
+   * is already in memory never needs either, so a crafted model cannot make the writer fetch a
+   * remote or local file.
+   *
+   * <p>Every control is best effort on purpose. The two JAXP 1.5 attributes are unknown to Xalan
+   * 2.7, which sits on the classpath of the process engine and throws for them, and secure
+   * processing is unknown to some other implementations - so a rejected control must not take the
+   * writer down with it.
+   */
+  public static void denyExternalAccess(TransformerFactory transformerFactory) {
+    try {
+      transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+    } catch (TransformerConfigurationException | IllegalArgumentException ignored) {
+      // not supported by this implementation
+    }
+    try {
+      transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+      transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+    } catch (IllegalArgumentException ignored) {
+      // not supported by this implementation, e.g. Xalan 2.7
     }
   }
 
