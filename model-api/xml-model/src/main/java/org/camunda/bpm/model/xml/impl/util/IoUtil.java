@@ -126,13 +126,10 @@ public final class IoUtil {
     TransformerFactory transformerFactory = TransformerFactory.newInstance();
 
     // this transformer only serializes a model that is already in memory, so it never needs to
-    // reach for an external DTD or stylesheet; denying both keeps a crafted model from doing so
-    try {
-      transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-      transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
-    } catch (IllegalArgumentException ignored) {
-      // the implementation does not know the property; nothing to deny
-    }
+    // reach for an external DTD or stylesheet; denying both keeps a crafted model from doing so.
+    // Both properties are mandated by JAXP 1.5.
+    transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+    transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
 
     try {
       Transformer transformer = transformerFactory.newTransformer();

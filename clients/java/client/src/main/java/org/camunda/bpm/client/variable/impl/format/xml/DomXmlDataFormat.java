@@ -269,12 +269,10 @@ public class DomXmlDataFormat implements DataFormat {
   public static TransformerFactory defaultTransformerFactory() {
     TransformerFactory transformerFactory = TransformerFactory.newInstance();
 
-    try {
-      transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-      transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
-    } catch (IllegalArgumentException ignored) {
-      // the implementation does not know the property; nothing to deny
-    }
+    // this transformer only serializes a document that is already in memory, so it never needs an
+    // external DTD or stylesheet; both properties are mandated by JAXP 1.5
+    transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+    transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
 
     return transformerFactory;
   }
@@ -294,34 +292,24 @@ public class DomXmlDataFormat implements DataFormat {
     documentBuilderFactory.setIgnoringElementContentWhitespace(false);
     LOG.documentBuilderFactoryConfiguration("ignoringElementContentWhitespace", "false");
 
-    disableXxeProcessing(documentBuilderFactory);
-
-    return documentBuilderFactory;
-  }
-
-  /*
-   * Configures the DocumentBuilderFactory so that it is protected against XML External Entity
-   * attacks, matching what the process engine does by default (enableXxeProcessing is false there).
-   * Variables reaching the client are XML the engine accepted, so a document type declaration is
-   * refused here as well. If the implementing parser does not know a feature, that feature is
-   * ignored and the parser might not be protected.
-   *
-   * @see <a href="https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html">OWASP XXE Prevention</a>
-   *
-   * @param dbf The factory to configure.
-   */
-  protected static void disableXxeProcessing(DocumentBuilderFactory dbf) {
+    // Protect against XML External Entity attacks, matching what the process engine does by
+    // default (enableXxeProcessing is false there). Variables reaching the client are XML the
+    // engine accepted, so a document type declaration is refused here as well. A parser that does
+    // not know a feature leaves that feature unset and might not be protected.
+    // https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
     try {
-      dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
-      dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-      dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-      dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-      dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+      documentBuilderFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+      documentBuilderFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+      documentBuilderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+      documentBuilderFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+      documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
     } catch (ParserConfigurationException ignored) {
       // ignored
     }
-    dbf.setXIncludeAware(false);
-    dbf.setExpandEntityReferences(false);
+    documentBuilderFactory.setXIncludeAware(false);
+    documentBuilderFactory.setExpandEntityReferences(false);
+
+    return documentBuilderFactory;
   }
 
   public static Class<?> loadClass(String classname, DataFormat dataFormat) {

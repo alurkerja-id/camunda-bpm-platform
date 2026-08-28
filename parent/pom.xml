@@ -125,6 +125,13 @@
          configurations valid when the agent does not run (-Djacoco.skip=true). -->
     <plugin.version.jacoco>0.8.13</plugin.version.jacoco>
     <argLine />
+
+    <!-- Two reports, and SonarQube takes the union of their hits: the module's own, plus the
+         reactor-wide aggregate from coverage-report/. The aggregate is what gives a module like
+         camunda-juel - no tests of its own, but exercised all over the engine suite - its real
+         number instead of 0%. Maven interpolates both into absolute paths per module, which the
+         aggregate one needs; that is why this is not in /sonar-project.properties. -->
+    <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml,${maven.multiModuleProjectDirectory}/coverage-report/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
   </properties>
 
   <dependencyManagement>

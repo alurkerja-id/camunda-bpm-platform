@@ -212,6 +212,10 @@
         <module>database</module>
         <module>parent</module>
         <module>bom</module>
+
+        <!-- Alurkerja fork: depends on every module it reports on, so Maven schedules it last,
+             when all jacoco.exec files exist. -->
+        <module>coverage-report</module>
       </modules>
     </profile>
 
