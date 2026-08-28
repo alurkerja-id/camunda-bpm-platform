@@ -17,6 +17,7 @@
 package org.camunda.bpm.run;
 
 import org.apache.commons.lang3.StringUtils;
+import org.camunda.bpm.run.utils.CamundaBpmRunLogger;
 import org.camunda.bpm.spring.boot.starter.configuration.impl.DefaultDeploymentConfiguration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -33,6 +34,8 @@ import java.util.stream.Stream;
 
 public class CamundaBpmRunDeploymentConfiguration extends DefaultDeploymentConfiguration {
 
+  protected static final CamundaBpmRunLogger LOG = CamundaBpmRunLogger.LOG;
+
   private final String deploymentDir;
 
   public CamundaBpmRunDeploymentConfiguration(String deploymentDir) {
@@ -47,7 +50,7 @@ public class CamundaBpmRunDeploymentConfiguration extends DefaultDeploymentConfi
       try (Stream<Path> stream = Files.walk(resourceDir)) {
         return stream.filter(file -> !Files.isDirectory(file)).map(FileSystemResource::new).collect(Collectors.toSet());
       } catch (IOException e) {
-        e.printStackTrace();
+        LOG.failedToReadDeploymentDir(deploymentDir, e);
       }
     }
     return Collections.emptySet();
