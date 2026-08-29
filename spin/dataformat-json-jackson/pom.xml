@@ -184,8 +184,11 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
+              <!-- @{argLine} = JaCoCo agent, see parent/pom.xml. This profile activates on any
+                   JDK from 16, so without it the whole module runs its tests without recording
+                   coverage. -->
               <argLine>
-                -XX:MetaspaceSize=128m
+                @{argLine} -XX:MetaspaceSize=128m
               </argLine>
               <excludes combine.children="append">
                 <exclude>**/nashorn/**</exclude>
