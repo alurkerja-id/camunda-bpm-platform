@@ -90,6 +90,14 @@
         <module>starter-security</module>
         <module>starter-client/spring-boot</module>
         <module>starter-webapp-core</module>
+
+        <!-- Alurkerja fork: activating this profile switches off the distro and distro-ce profiles
+             below, because they are active-by-default in this same pom. The three modules they
+             contribute have no integration tests of their own, but leaving them out drops them
+             from the reactor - and with them their coverage in the Sonar report. -->
+        <module>starter-test</module>
+        <module>starter-client/spring</module>
+        <module>starter-webapp</module>
       </modules>
       <build>
         <plugins>

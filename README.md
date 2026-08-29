@@ -18,22 +18,27 @@ Camunda Platform 7 is a flexible framework for workflow and process automation. 
 ### Scan Sonar
 
 ```
-mvn clean install "-Pdistro,distro-ce,integration-test-spring-boot-starter" "-Dmaven.test.failure.ignore=true" sonar:sonar "-Dsonar.login=<token>"
+mvn clean install "-Pintegration-test-spring-boot-starter" "-Dmaven.test.failure.ignore=true" sonar:sonar "-Dsonar.login=<token>"
 ```
 
 Host URL, project key and every exclusion live in `sonar-project.properties`, which the build reads
 during `initialize` — nothing has to be passed on the command line except the token.
 
-The three profiles are what make the coverage number honest:
+Exactly one profile, and it has to be that one. The six `distro*` profiles in the root pom are
+active by default, so a plain build already contains every module including `distro/run` and the
+`coverage-report` aggregator. Naming any of them on the command line makes things worse, not
+better, in two ways:
 
-| Profile | Adds |
-|---------|------|
-| `distro` | the distribution modules, among them `distro/run/core` and the `coverage-report` aggregator |
-| `distro-ce` | the community-edition distributions |
-| `integration-test-spring-boot-starter` | the Spring Boot Starter integration tests (Failsafe), worth roughly 60 percentage points of line coverage in `starter-security` alone |
+- Maven switches off the active-by-default profiles of a pom as soon as another profile in that
+  same pom is activated. `-Pdistro,distro-ce` therefore drops `distro-tomcat`, `distro-wildfly`,
+  `distro-webjar` and `distro-run`.
+- A `-P` id matches in *every* pom that declares it, not only the root. `engine-rest` has its own
+  `distro` profile that sets `skipTests=true`, so `-Pdistro` silently skips the whole engine-rest
+  test suite — worth about 14,000 covered lines, or 12 points of overall coverage.
 
-Leaving the profiles out still produces a report, only a poorer one: the aggregator never runs, so
-Sonar sees per-module JaCoCo files only, and the starter integration tests never execute.
+`integration-test-spring-boot-starter` is safe because the root pom does not declare that id. It
+adds the Spring Boot Starter integration tests, worth roughly 60 percentage points of line coverage
+in `starter-security` alone.
 
 `-Dmaven.test.failure.ignore=true` keeps a failing test from stopping the reactor before the
 analysis is sent. Check the test results anyway — a green quality gate on a build that skipped half
