@@ -21,11 +21,6 @@ Camunda Platform 7 is a flexible framework for workflow and process automation. 
 mvn clean install "-Pdistro,distro-ce,integration-test-spring-boot-starter" "-Dmaven.test.failure.ignore=true" sonar:sonar "-Dsonar.login=<token>"
 ```
 
-The quotes are there for PowerShell, which otherwise reads `-Pdistro` as a parameter name and the
-comma after it as the start of an array (`ParserError: Missing argument in parameter list`), and
-splits `-Dmaven.test.failure.ignore=true` at the first dot. Bash needs neither, and the quotes do
-no harm there.
-
 Host URL, project key and every exclusion live in `sonar-project.properties`, which the build reads
 during `initialize` — nothing has to be passed on the command line except the token.
 
