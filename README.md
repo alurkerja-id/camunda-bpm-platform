@@ -15,11 +15,31 @@ Camunda Platform 7 is a flexible framework for workflow and process automation. 
 
 ## Alurkerja fork — publishing to Javan Nexus
 
-Scan Sonar
+### Scan Sonar
 
-`mvn clean install "-Dmaven.test.failure.ignore=true" org.sonarsource.scanner.maven:sonar-maven-plugin:sonar "-Dsonar.host.url=https://sonar.javan.co.id" "-Dsonar.token=<token>"`
+```
+mvn clean install -Pdistro,distro-ce,integration-test-spring-boot-starter "-Dmaven.test.failure.ignore=true" sonar:sonar "-Dsonar.login=<token>"
+```
 
-Scan Trivy
+Host URL, project key and every exclusion live in `sonar-project.properties`, which the build reads
+during `initialize` — nothing has to be passed on the command line except the token.
+
+The three profiles are what make the coverage number honest:
+
+| Profile | Adds |
+|---------|------|
+| `distro` | the distribution modules, among them `distro/run/core` and the `coverage-report` aggregator |
+| `distro-ce` | the community-edition distributions |
+| `integration-test-spring-boot-starter` | the Spring Boot Starter integration tests (Failsafe), worth roughly 60 percentage points of line coverage in `starter-security` alone |
+
+Leaving the profiles out still produces a report, only a poorer one: the aggregator never runs, so
+Sonar sees per-module JaCoCo files only, and the starter integration tests never execute.
+
+`-Dmaven.test.failure.ignore=true` keeps a failing test from stopping the reactor before the
+analysis is sent. Check the test results anyway — a green quality gate on a build that skipped half
+its modules means nothing.
+
+### Scan Trivy
 
 `trivy fs . --scanners vuln --timeout 30m --format template --template "@html.tpl" -o trivy-result.html`
 
