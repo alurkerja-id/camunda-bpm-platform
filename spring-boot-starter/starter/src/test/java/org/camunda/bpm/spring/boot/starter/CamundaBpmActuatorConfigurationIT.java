@@ -16,8 +16,10 @@
  */
 package org.camunda.bpm.spring.boot.starter;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.camunda.bpm.spring.boot.starter.test.nonpa.TestApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,15 +39,26 @@ public class CamundaBpmActuatorConfigurationIT extends AbstractCamundaAutoConfig
   private TestRestTemplate testRestTemplate;
 
   @Test
-  public void jobExecutorHealthIndicatorTest() {
+  public void jobExecutorHealthIndicatorTest() throws Exception {
     final String body = getHealthBody();
-    assertTrue("wrong body " + body, body.contains("jobExecutor\":{\"status\":\"UP\""));
+    assertEquals("wrong body " + body, "UP", component(body, "jobExecutor").path("status").asText());
   }
 
   @Test
-  public void processEngineHealthIndicatorTest() {
+  public void processEngineHealthIndicatorTest() throws Exception {
     final String body = getHealthBody();
-    assertTrue("wrong body " + body, body.contains("processEngine\":{\"status\":\"UP\",\"details\":{\"name\":\"testEngine\"}}"));
+    final JsonNode processEngine = component(body, "processEngine");
+    assertEquals("wrong body " + body, "UP", processEngine.path("status").asText());
+    assertEquals("wrong body " + body, "testEngine", processEngine.path("details").path("name").asText());
+  }
+
+  /**
+   * The health response used to be matched as a substring, which broke as soon as the actuator
+   * started writing "details" before "status". Reading the component out of the parsed document
+   * asserts the same thing without depending on how the fields happen to be ordered.
+   */
+  private JsonNode component(String body, String name) throws Exception {
+    return new ObjectMapper().readTree(body).path("components").path(name);
   }
 
   private String getHealthBody() {

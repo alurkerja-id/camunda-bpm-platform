@@ -59,7 +59,11 @@ public class CamundaBpmRunDeploymentConfiguration extends DefaultDeploymentConfi
   protected String getNormalizedDeploymentDir() {
     String result = deploymentDir;
 
-    if(File.separator.equals("\\")) {
+    // Alurkerja fork: the null check matters only on Windows. With no deployment directory
+    // configured, result is null and the replace threw a NullPointerException, so the process
+    // engine bean could not be built at all. On a platform whose separator is "/" the branch is
+    // skipped, which is why this never showed up on Linux.
+    if(result != null && File.separator.equals("\\")) {
       result = result.replace("\\", "/");
     }
     return result;

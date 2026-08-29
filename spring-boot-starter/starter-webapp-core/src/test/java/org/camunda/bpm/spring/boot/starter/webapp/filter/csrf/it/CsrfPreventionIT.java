@@ -35,7 +35,9 @@ import static org.assertj.core.api.Assertions.fail;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { FilterTestApp.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    properties = {"server.error.include-message=always"})
+    // server.error.include-message was removed in Spring Boot 4.0; without the new name the error
+    // page drops the "message" attribute and the reason the filter rejected the request is lost.
+    properties = {"spring.web.error.include-message=always"})
 @DirtiesContext
 public class CsrfPreventionIT {
 

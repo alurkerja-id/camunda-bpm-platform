@@ -30,7 +30,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { FilterTestApp.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    properties = {"server.error.include-message=always"})
+    // renamed in Spring Boot 4.0, see CsrfPreventionIT
+    properties = {"spring.web.error.include-message=always"})
 @DirtiesContext
 public class SessionCookieIT {
 

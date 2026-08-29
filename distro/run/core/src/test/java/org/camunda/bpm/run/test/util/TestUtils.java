@@ -20,6 +20,7 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 
+import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -41,5 +42,12 @@ public class TestUtils {
     };
     ctx.init(null, new TrustManager[] { tm }, null);
     SSLContext.setDefault(ctx);
+
+    // Alurkerja fork: TestRestTemplate reaches the self-signed endpoint through
+    // HttpsURLConnection, and that keeps its own default socket factory - cached the first time
+    // any HTTPS call is made. Setting only the default SSLContext therefore came too late and the
+    // handshake failed with "PKIX path building failed". Both defaults are set here.
+    HttpsURLConnection.setDefaultSSLSocketFactory(ctx.getSocketFactory());
+    HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
   }
 }
