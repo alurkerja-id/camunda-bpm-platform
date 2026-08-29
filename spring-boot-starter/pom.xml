@@ -144,9 +144,16 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-failsafe-plugin</artifactId>
+          <!-- Alurkerja fork: modules like starter-security keep all of their tests as *IT, so
+               failsafe runs them, not surefire. The failsafe configuration in camunda-parent sets
+               a plain -Xmx968m argLine without @{argLine}, so the JaCoCo agent never attached and
+               those modules reported no coverage at all. The version has to move with it: the
+               @{...} late replacement only exists from failsafe 2.17 onwards. -->
+          <version>${plugin.version.surefire-junit-platform}</version>
           <configuration>
             <redirectTestOutputToFile>true</redirectTestOutputToFile>
             <trimStackTrace>false</trimStackTrace>
+            <argLine>@{argLine} -Xmx968m</argLine>
           </configuration>
         </plugin>
         <!-- Alurkerja fork: surefire 2.22.2 from camunda-parent calls
