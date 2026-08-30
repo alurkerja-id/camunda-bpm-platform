@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.camunda.bpm.engine.ProcessEngine;
+import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.ProcessEngineServices;
 import org.camunda.bpm.engine.delegate.ExecutionListener;
 import org.camunda.bpm.engine.exception.NullValueException;
@@ -1314,6 +1315,12 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
           processInstance = execution;
         }
       }
+    }
+
+    if (processInstance == null) {
+      // none of the executions is the process instance itself, so there is no tree to restore -
+      // a bare NullPointerException said nothing about what was wrong with the data
+      throw new ProcessEngineException("Cannot restore process instance: none of the given executions is a process instance execution");
     }
 
     processInstance.restoreProcessInstance(executions, null, null, null, null, null, null);

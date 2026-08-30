@@ -241,7 +241,8 @@ public class TypeConverterImpl implements TypeConverter {
       }
     }
     if (value instanceof Character) {
-      return Short.valueOf((short) ((Character) value).charValue()).byteValue();
+      // boxing into a Short only to unbox it again as a byte; the cast does the same thing
+      return (byte) ((Character) value).charValue();
     }
     throw new ELException(LocalMessages.get("error.coerce.type", value.getClass(), Byte.class));
   }

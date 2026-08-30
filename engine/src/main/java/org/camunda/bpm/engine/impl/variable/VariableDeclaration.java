@@ -68,7 +68,11 @@ public class VariableDeclaration implements Serializable {
       }
     }
 
-    if (linkExpression!=null) {
+    // guarded on linkExpression but reading sourceExpression, which has its own setter and may
+    // well be null here. Kept as it is - reading the link expression instead would change what
+    // the declaration evaluates - but a missing source expression no longer throws
+    // NullPointerException.
+    if (linkExpression!=null && sourceExpression!=null) {
       Object value = sourceExpression.getValue(outerScopeInstance);
       innerScopeInstance.setVariable(destinationVariableName, value);
     }

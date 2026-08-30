@@ -55,7 +55,9 @@ public class PvmAtomicOperationDeleteCascade implements PvmAtomicOperation {
 
       PvmExecutionImpl subProcessInstance = nextLeaf.getSubProcessInstance();
       if (subProcessInstance != null) {
-        if (deleteRoot.isSkipSubprocesses()) {
+        // deleteRoot is checked for null a few lines up; without the same check here a cascade
+        // started outside a delete root fails with a NullPointerException
+        if (deleteRoot != null && deleteRoot.isSkipSubprocesses()) {
           subProcessInstance.setSuperExecution(null);
         } else {
           subProcessInstance.deleteCascade(execution.getDeleteReason(), nextLeaf.isSkipCustomListeners(), nextLeaf.isSkipIoMappings(),

@@ -1161,7 +1161,11 @@ public class DefaultHistoryEventProducer implements HistoryEventProducer {
     else if (HistoryEventTypes.JOB_DELETE.equals(eventType)) {
       state = JobState.DELETED;
     }
-    evt.setState(state.getStateCode());
+    // an event type outside the four above leaves the state unset rather than failing with a
+    // NullPointerException while writing history
+    if (state != null) {
+      evt.setState(state.getStateCode());
+    }
   }
 
   @Override

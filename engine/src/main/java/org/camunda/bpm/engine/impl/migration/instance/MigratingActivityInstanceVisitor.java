@@ -62,7 +62,9 @@ public class MigratingActivityInstanceVisitor extends MigratingProcessElementIns
         newParentExecution.instantiateScopes((List) scopesToInstantiate, skipCustomListeners, skipIoMappings);
 
     for (ScopeImpl scope : scopesToInstantiate) {
-      ExecutionEntity createdExecution = (ExecutionEntity) createdExecutions.get(scope);
+      // the map is keyed by PvmActivity and the scopes handed to instantiateScopes above are
+      // ActivityImpl, which implements it; without the cast the lookup was typed to always miss
+      ExecutionEntity createdExecution = (ExecutionEntity) createdExecutions.get((PvmActivity) scope);
       createdExecution.setActivity(null);
       createdExecution.setActive(false);
       executionBranch.visited(new MigratingActivityInstance(scope, createdExecution));

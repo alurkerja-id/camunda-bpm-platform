@@ -121,18 +121,33 @@ public class MBeanServiceContainer implements PlatformServiceContainer {
 
     ensureNotNull("Cannot stop service " + serviceName + ": no such service registered", "service", service);
 
+    // the stop failure is held rather than left to a finally block: throwing from inside finally
+    // discarded whatever service.stop() had thrown, so a service that failed to stop reported
+    // only the unregistration problem, if any
+    RuntimeException stopFailure = null;
     try {
       // call the service-provided stop behavior
       service.stop(this);
-    } finally {
-      // always unregister, even if the stop method throws an exception.
-      try {
-        mBeanServer.unregisterMBean(serviceName);
-        servicesByName.remove(serviceName);
+    }
+    catch (RuntimeException e) {
+      stopFailure = e;
+    }
+
+    // always unregister, even if the stop method threw an exception.
+    try {
+      mBeanServer.unregisterMBean(serviceName);
+      servicesByName.remove(serviceName);
+    }
+    catch (Throwable t) {
+      ProcessEngineException unregisterFailure = LOG.exceptionWhileUnregisteringService(serviceName.getCanonicalName(), t);
+      if (stopFailure != null) {
+        unregisterFailure.addSuppressed(stopFailure);
       }
-      catch (Throwable t) {
-        throw LOG.exceptionWhileUnregisteringService(serviceName.getCanonicalName(), t);
-      }
+      throw unregisterFailure;
+    }
+
+    if (stopFailure != null) {
+      throw stopFailure;
     }
 
   }

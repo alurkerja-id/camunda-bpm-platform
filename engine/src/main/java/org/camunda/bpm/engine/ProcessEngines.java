@@ -164,7 +164,11 @@ public abstract class ProcessEngines {
   }
 
   private static ProcessEngineInfo initProcessEngineFromResource(URL resourceUrl) {
-    ProcessEngineInfo processEngineInfo = processEngineInfosByResourceUrl.get(resourceUrl);
+    String resourceUrlString = resourceUrl.toString();
+    // the map is keyed by the url as a string, see the put at the end of this method; looking it
+    // up with the URL object never matched, so the cleanup below never ran and re-initialising the
+    // same resource kept piling up stale entries in processEngineInfos
+    ProcessEngineInfo processEngineInfo = processEngineInfosByResourceUrl.get(resourceUrlString);
     // if there is an existing process engine info
     if (processEngineInfo!=null) {
       // remove that process engine from the member fields
@@ -177,7 +181,6 @@ public abstract class ProcessEngines {
       processEngineInfosByResourceUrl.remove(processEngineInfo.getResourceUrl());
     }
 
-    String resourceUrlString = resourceUrl.toString();
     try {
       LOG.initializingProcessEngineForResource(resourceUrl);
       ProcessEngine processEngine = buildProcessEngine(resourceUrl);

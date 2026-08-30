@@ -67,10 +67,10 @@ public class CookieConfigurator {
 
     } else if (!ServletFilterUtil.isEmpty(sameSiteCookieOption)) {
 
-      if (SameSiteOption.LAX.compareTo(sameSiteCookieOption)) {
+      if (SameSiteOption.LAX.matches(sameSiteCookieOption)) {
         this.sameSiteCookieValue = SameSiteOption.LAX.getValue();
 
-      } else if (SameSiteOption.STRICT.compareTo(sameSiteCookieOption)) {
+      } else if (SameSiteOption.STRICT.matches(sameSiteCookieOption)) {
         this.sameSiteCookieValue = SameSiteOption.STRICT.getValue();
 
       } else {
@@ -136,7 +136,9 @@ public class CookieConfigurator {
       return this.name();
     }
 
-    public boolean compareTo(String value) {
+    // named matches, not compareTo: an overload of Comparable#compareTo taking a String and
+    // returning a boolean reads like the ordering method but is not one
+    public boolean matches(String value) {
       return this.value.equalsIgnoreCase(value);
     }
 

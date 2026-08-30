@@ -117,10 +117,12 @@ public class DefaultFormHandler implements FormHandler {
       bpmnParse.addError("attribute id must be set for FormFieldGroup and must have a non-empty value", formField);
     } else {
       formFieldHandler.setId(id);
-    }
 
-    if (id.equals(businessKeyFieldId)) {
-      formFieldHandler.setBusinessKey(true);
+      // addError only records the problem and parsing continues, so comparing the id here used to
+      // throw a NullPointerException over the error message meant to explain the missing id
+      if (id.equals(businessKeyFieldId)) {
+        formFieldHandler.setBusinessKey(true);
+      }
     }
 
     // parse name

@@ -192,7 +192,9 @@ public class DbEntityManager implements Session, EntityLoadListener {
 
   @SuppressWarnings("unchecked")
   public boolean selectBoolean(String statement, Object parameter) {
-    List<String> result = (List<String>) persistenceSession.selectList(statement, parameter);
+    // the statements behind this one declare resultType="integer", so the list holds Integers;
+    // declaring it as List<String> only hid that from the reader and from contains()
+    List<Integer> result = (List<Integer>) persistenceSession.selectList(statement, parameter);
     if(result != null) {
       return result.contains(1);
     }
