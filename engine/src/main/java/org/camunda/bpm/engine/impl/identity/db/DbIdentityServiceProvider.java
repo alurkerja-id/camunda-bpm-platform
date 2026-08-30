@@ -156,7 +156,7 @@ public class DbIdentityServiceProvider extends DbReadOnlyIdentityServiceProvider
     int factor = processEngineConfiguration.getLoginDelayFactor();
     int attempts = user.getAttempts() + 1;
 
-    long delay = (long) (baseTime * Math.pow(factor, attempts - 1));
+    long delay = (long) (baseTime * Math.pow(factor, attempts - 1.0));
     delay = Math.min(delay, max) * 1000;
 
     long currentTime = ClockUtil.getCurrentTime().getTime();

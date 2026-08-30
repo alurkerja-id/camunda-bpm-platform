@@ -37,7 +37,7 @@ public class DbMetricsReporter {
   protected String reporterId;
 
   // log every 15 minutes...
-  protected long reportingIntervalInSeconds = 60 * 15;
+  protected long reportingIntervalInSeconds = 60L * 15;
 
   protected MetricsCollectionTask metricsCollectionTask;
   private Timer timer;

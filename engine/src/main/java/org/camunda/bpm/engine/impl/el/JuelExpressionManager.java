@@ -19,6 +19,7 @@ package org.camunda.bpm.engine.impl.el;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import org.camunda.bpm.dmn.engine.impl.spi.el.ElProvider;
 import org.camunda.bpm.engine.delegate.VariableScope;
 import org.camunda.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
@@ -54,7 +55,7 @@ public class JuelExpressionManager implements ExpressionManager, ElProviderCompa
   protected FunctionMapper functionMapper;
   // Default implementation (does nothing)
   protected ELContext parsingElContext;
-  protected volatile ElProvider elProvider;
+  protected final AtomicReference<ElProvider> elProvider = new AtomicReference<>();
 
   public JuelExpressionManager() {
     this(null);
@@ -179,14 +180,16 @@ public class JuelExpressionManager implements ExpressionManager, ElProviderCompa
 
   @Override
   public ElProvider toElProvider() {
-    if (elProvider == null) {
-      synchronized (this) {
-        if (elProvider == null) {
-          elProvider = createElProvider();
-        }
+    ElProvider provider = elProvider.get();
+    if (provider == null) {
+      // two threads arriving together may both build one, but only the first is published and
+      // every caller gets that same instance back
+      provider = createElProvider();
+      if (!elProvider.compareAndSet(null, provider)) {
+        provider = elProvider.get();
       }
     }
-    return elProvider;
+    return provider;
   }
 
   protected ElProvider createElProvider() {

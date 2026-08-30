@@ -48,7 +48,8 @@ public class MBeanServiceContainer implements PlatformServiceContainer {
 
   private final static ContainerIntegrationLogger LOG = ProcessEngineLogger.CONTAINER_INTEGRATION_LOGGER;
 
-  protected MBeanServer mBeanServer;
+  // volatile: lazily initialized under double-checked locking
+  protected volatile MBeanServer mBeanServer;
 
   protected Map<ObjectName, PlatformService<?>> servicesByName = new ConcurrentHashMap<ObjectName, PlatformService<?>>();
 

@@ -48,7 +48,9 @@ public class ActivitiStateHandlerRegistry extends ReceiveTaskActivityBehavior im
 
 	private BeanFactory beanFactory;
 
-	private volatile ConcurrentHashMap<String, ActivitiStateHandlerRegistration> registrations = new ConcurrentHashMap<String, ActivitiStateHandlerRegistration>();
+	// the map is never replaced, and ConcurrentHashMap already handles concurrent access, so
+	// volatile on the reference bought nothing
+	private final ConcurrentHashMap<String, ActivitiStateHandlerRegistration> registrations = new ConcurrentHashMap<>();
 
 	private ProcessEngine processEngine;
 

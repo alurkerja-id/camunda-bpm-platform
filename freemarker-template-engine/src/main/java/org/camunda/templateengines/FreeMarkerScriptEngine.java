@@ -33,8 +33,9 @@ import javax.script.*;
  */
 public class FreeMarkerScriptEngine extends AbstractScriptEngine implements Compilable {
 
-  protected ScriptEngineFactory scriptEngineFactory;
-  protected Configuration configuration;
+  // volatile: both are lazily initialized under double-checked locking
+  protected volatile ScriptEngineFactory scriptEngineFactory;
+  protected volatile Configuration configuration;
 
   public FreeMarkerScriptEngine() {
     this(null);

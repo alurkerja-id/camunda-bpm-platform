@@ -50,7 +50,9 @@ public class ProcessStartAnnotationBeanPostProcessor extends ProxyConfig impleme
 
 	private ProcessStartingPointcutAdvisor advisor;
 
-	private volatile ClassLoader beanClassLoader = ClassUtils.getDefaultClassLoader();
+	// set by the container while the bean is created and never touched again, see the same field in
+	// ActivitiStateAnnotationBeanPostProcessor
+	private ClassLoader beanClassLoader = ClassUtils.getDefaultClassLoader();
 
 	public void setProcessEngine(ProcessEngine processEngine) {
 		this.processEngine = processEngine;

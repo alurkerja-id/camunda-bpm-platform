@@ -132,7 +132,9 @@ public class BackoffJobAcquisitionStrategy implements JobAcquisitionStrategy {
     if (baseIdleWaitTime > 0 && maxIdleWaitTime > 0 && idleIncreaseFactor > 0 && maxIdleWaitTime >= baseIdleWaitTime) {
       // the maximum level that produces an idle time <= maxIdleTime:
       // see class docs for an explanation
-      maxIdleLevel = (int) log(idleIncreaseFactor, maxIdleWaitTime / baseIdleWaitTime) + 1;
+      // the class docs define this as log(factor, maxTime / baseTime); integer division truncated
+      // the ratio and could put the level one step off whenever it was not a whole number
+      maxIdleLevel = (int) log(idleIncreaseFactor, (double) maxIdleWaitTime / baseIdleWaitTime) + 1;
 
       // + 1 to get the minimum level that produces an idle time > maxIdleTime
       maxIdleLevel += 1;
@@ -145,7 +147,7 @@ public class BackoffJobAcquisitionStrategy implements JobAcquisitionStrategy {
         && maxBackoffWaitTime >= baseBackoffWaitTime) {
       // the maximum level that produces a backoff time < maxBackoffTime:
       // see class docs for an explanation
-      maxBackoffLevel = (int) log(backoffIncreaseFactor, maxBackoffWaitTime / baseBackoffWaitTime) + 1;
+      maxBackoffLevel = (int) log(backoffIncreaseFactor, (double) maxBackoffWaitTime / baseBackoffWaitTime) + 1;
 
       // + 1 to get the minimum level that produces a backoff time > maxBackoffTime
       maxBackoffLevel += 1;
@@ -273,7 +275,7 @@ public class BackoffJobAcquisitionStrategy implements JobAcquisitionStrategy {
       return maxIdleWaitTime;
     }
     else {
-      return (long) (baseIdleWaitTime * Math.pow(idleIncreaseFactor, idleLevel - 1));
+      return (long) (baseIdleWaitTime * Math.pow(idleIncreaseFactor, idleLevel - 1.0));
     }
   }
 
@@ -286,13 +288,13 @@ public class BackoffJobAcquisitionStrategy implements JobAcquisitionStrategy {
       backoffTime = maxBackoffWaitTime;
     }
     else {
-      backoffTime = (long) (baseBackoffWaitTime * Math.pow(backoffIncreaseFactor, backoffLevel - 1));
+      backoffTime = (long) (baseBackoffWaitTime * Math.pow(backoffIncreaseFactor, backoffLevel - 1.0));
     }
 
     if (applyJitter) {
       // add a bounded random jitter to avoid multiple job acquisitions getting exactly the same
       // polling interval
-      backoffTime += Math.random() * (backoffTime / 2);
+      backoffTime += Math.random() * (backoffTime / 2.0);
     }
 
     return backoffTime;

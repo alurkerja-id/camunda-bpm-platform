@@ -47,9 +47,11 @@ public abstract class AbstractProcessApplication implements ProcessApplicationIn
 
   private static ProcessApplicationLogger LOG = ProcessEngineLogger.PROCESS_APPLICATION_LOGGER;
 
-  protected ELResolver processApplicationElResolver;
-  protected BeanELResolver processApplicationBeanElResolver;
-  protected ProcessApplicationScriptEnvironment processApplicationScriptEnvironment;
+  // volatile: these three are lazily initialized under double-checked locking, which without it
+  // can hand a second thread a reference to an object whose construction it cannot see finished
+  protected volatile ELResolver processApplicationElResolver;
+  protected volatile BeanELResolver processApplicationBeanElResolver;
+  protected volatile ProcessApplicationScriptEnvironment processApplicationScriptEnvironment;
 
   protected VariableSerializers variableSerializers;
 

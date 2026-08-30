@@ -35,7 +35,7 @@ import org.camunda.bpm.engine.management.MetricIntervalValue;
 public class MetricsQueryImpl extends ListQueryParameterObject implements Serializable, Command<Object>, MetricsQuery {
 
   public static final int DEFAULT_LIMIT_SELECT_INTERVAL = 200;
-  public static final long DEFAULT_SELECT_INTERVAL = 15 * 60;
+  public static final long DEFAULT_SELECT_INTERVAL = 15L * 60;
 
   private static final long serialVersionUID = 1L;
 

@@ -51,13 +51,16 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("unused") // registered through XML
 public class ActivitiStateAnnotationBeanPostProcessor implements BeanPostProcessor, BeanClassLoaderAware, BeanFactoryAware, InitializingBean, Ordered {
 
-	private volatile ActivitiStateHandlerRegistry registry;
+	// no volatile on the object fields: volatile publishes the reference but says nothing about the
+	// state of what it points at. All three are handed in by the container while the bean is being
+	// created and never touched again, so the container's own publication of the bean covers them.
+	private ActivitiStateHandlerRegistry registry;
 
 	private volatile int order = Ordered.LOWEST_PRECEDENCE;
 
-	private volatile BeanFactory beanFactory;
+	private BeanFactory beanFactory;
 
-	private volatile ClassLoader beanClassLoader = ClassUtils.getDefaultClassLoader();
+	private ClassLoader beanClassLoader = ClassUtils.getDefaultClassLoader();
 
 	public void setBeanFactory(BeanFactory beanFactory) {
 		this.beanFactory = beanFactory;
