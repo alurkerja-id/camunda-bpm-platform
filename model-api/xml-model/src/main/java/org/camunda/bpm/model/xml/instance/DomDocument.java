@@ -81,6 +81,20 @@ public interface DomDocument {
   DOMSource getDomSource();
 
   /**
+   * Returns the object guarding this document's DOM tree. Synchronize on it around any work that
+   * touches the DOM directly, a {@link DOMSource} in particular.
+   *
+   * <p>Every method in this package that reads or writes the tree locks the underlying
+   * {@link Document}. Callers outside it could only lock this wrapper, which is a different
+   * monitor, so their synchronized blocks excluded nothing. This hands them the right one.
+   *
+   * @return the monitor guarding the underlying document
+   */
+  default Object getDomLock() {
+    return this;
+  }
+
+  /**
    * Registers a new namespace with a generic prefix.
    *
    * @param namespaceUri  the namespaceUri of the new namespace

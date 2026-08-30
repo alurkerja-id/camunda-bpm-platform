@@ -161,7 +161,8 @@ public abstract class AbstractModelParser {
 
     Validator validator = schema.newValidator();
     try {
-      synchronized(document) {
+      // the wrapper is not the monitor the rest of the module locks, see DomDocument#getDomLock
+      synchronized(document.getDomLock()) {
         validator.validate(document.getDomSource());
       }
     } catch (IOException e) {

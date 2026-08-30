@@ -133,7 +133,8 @@ public final class IoUtil {
       transformer.setOutputProperty(OutputKeys.INDENT, "yes");
       transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 
-      synchronized(document) {
+      // the wrapper is not the monitor the rest of the module locks, see DomDocument#getDomLock
+      synchronized(document.getDomLock()) {
         transformer.transform(document.getDomSource(), result);
       }
     } catch (TransformerConfigurationException e) {

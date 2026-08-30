@@ -16,6 +16,8 @@
  */
 package org.camunda.bpm.dmn.engine.impl;
 
+import java.util.function.Supplier;
+
 import org.camunda.bpm.dmn.engine.impl.spi.el.ElExpression;
 
 /**
@@ -27,5 +29,24 @@ public interface CachedExpressionSupport {
   void setCachedExpression(ElExpression expression);
 
   ElExpression getCachedExpression();
+
+  /**
+   * Returns the cached expression, creating and caching it on first use. The lock lives here rather
+   * than at the call site: callers used to synchronize on the support object they were handed as a
+   * method parameter, which puts the lock in the hands of whoever passes it.
+   */
+  default ElExpression getOrCacheExpression(Supplier<ElExpression> supplier) {
+    ElExpression expression = getCachedExpression();
+    if (expression == null) {
+      synchronized (this) {
+        expression = getCachedExpression();
+        if (expression == null) {
+          expression = supplier.get();
+          setCachedExpression(expression);
+        }
+      }
+    }
+    return expression;
+  }
 
 }
