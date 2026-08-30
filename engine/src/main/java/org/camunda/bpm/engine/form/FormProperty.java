@@ -23,6 +23,8 @@ import org.camunda.bpm.engine.FormService;
  * Represents a single property on a form.
  *
  * @author Tom Baeyens
+ *
+ * @deprecated form properties were replaced by form fields; use {@link FormField}
  */
 @Deprecated
 public interface FormProperty {

@@ -25,6 +25,7 @@ import org.camunda.bpm.engine.delegate.DelegateTask;
  * 
  * @author Tom Baeyens
  */
+@Deprecated
 public interface TaskListener {
 
   String EVENTNAME_CREATE = "create";

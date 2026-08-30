@@ -43,10 +43,13 @@ public class AuthorizationException extends ProcessEngineException {
   // these properties have been replaced by the list of missingAuthorizations
   // and are only left because this is a public API package and users might
   // have subclasses relying on these fields
+  /** @deprecated use {@link #getMissingAuthorizations()} */
   @Deprecated
   protected String resourceType;
+  /** @deprecated use {@link #getMissingAuthorizations()} */
   @Deprecated
   protected String permissionName;
+  /** @deprecated use {@link #getMissingAuthorizations()} */
   @Deprecated
   protected String resourceId;
 

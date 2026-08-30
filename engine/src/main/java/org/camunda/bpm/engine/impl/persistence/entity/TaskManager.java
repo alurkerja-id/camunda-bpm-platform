@@ -125,6 +125,10 @@ public class TaskManager extends AbstractManager {
   }
 
 
+  /**
+   * @deprecated set the page on the query itself and call
+   *             {@link #findTasksByQueryCriteria(TaskQueryImpl)}
+   */
   @Deprecated
   public List<Task> findTasksByQueryCriteria(TaskQueryImpl taskQuery, Page page) {
     taskQuery.setFirstResult(page.getFirstResult());

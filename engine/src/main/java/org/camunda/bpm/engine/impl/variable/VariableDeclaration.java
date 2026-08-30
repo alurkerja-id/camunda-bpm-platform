@@ -25,6 +25,9 @@ import org.camunda.bpm.engine.delegate.VariableScope;
 
 /**
  * @author Tom Baeyens
+ *
+ * @deprecated variable declarations are no longer part of the process definition; map variables
+ *             with input and output parameters instead
  */
 @Deprecated
 public class VariableDeclaration implements Serializable {

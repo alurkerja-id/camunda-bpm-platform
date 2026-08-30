@@ -200,22 +200,35 @@ public abstract class ScopeImpl extends CoreActivity implements PvmScope {
 
   // event listeners //////////////////////////////////////////////////////////
 
+  /**
+   * @deprecated listeners are no longer typed to executions; use {@link #getListeners(String)}
+   */
   @SuppressWarnings("unchecked")
   @Deprecated
   public List<ExecutionListener> getExecutionListeners(String eventName) {
     return (List) super.getListeners(eventName);
   }
 
+  /**
+   * @deprecated listeners are no longer typed to executions; use addListener instead
+   */
   @Deprecated
   public void addExecutionListener(String eventName, ExecutionListener executionListener) {
     super.addListener(eventName, executionListener);
   }
 
+  /**
+   * @deprecated listeners are no longer typed to executions; use the addListener overload taking
+   *             an index
+   */
   @Deprecated
   public void addExecutionListener(String eventName, ExecutionListener executionListener, int index) {
     super.addListener(eventName, executionListener, index);
   }
 
+  /**
+   * @deprecated listeners are no longer typed to executions; use {@link #getListeners()}
+   */
   @SuppressWarnings({ "rawtypes", "unchecked" })
   @Deprecated
   public Map<String, List<ExecutionListener>> getExecutionListeners() {

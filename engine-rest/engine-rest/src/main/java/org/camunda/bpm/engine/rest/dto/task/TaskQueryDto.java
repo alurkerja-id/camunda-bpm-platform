@@ -539,6 +539,9 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
     this.dueDate = dueDate;
   }
 
+  /**
+   * @deprecated the query parameter was renamed; use {@link #setDueDate(Date)}
+   */
   @Deprecated
   @CamundaQueryParam(value = "due", converter = DateConverter.class)
   public void setDue(Date dueDate) {
@@ -590,6 +593,9 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
     this.followUpDate = followUpDate;
   }
 
+  /**
+   * @deprecated the query parameter was renamed; use {@link #setFollowUpDate(Date)}
+   */
   @Deprecated
   @CamundaQueryParam(value = "followUp", converter = DateConverter.class)
   public void setFollowUp(Date followUpDate) {
@@ -626,6 +632,9 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
     this.createdOn = createdOn;
   }
 
+  /**
+   * @deprecated the query parameter was renamed; use {@link #setCreatedOn(Date)}
+   */
   @Deprecated
   @CamundaQueryParam(value = "created", converter = DateConverter.class)
   public void setCreated(Date createdOn) {

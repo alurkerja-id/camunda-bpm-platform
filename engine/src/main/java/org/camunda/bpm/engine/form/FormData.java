@@ -53,7 +53,8 @@ public interface FormData {
    *  */
   String getDeploymentId();
 
-  /** Properties containing the dynamic information that needs to be displayed in the form. */
+  /** Properties containing the dynamic information that needs to be displayed in the form.
+   * @deprecated form properties were replaced by form fields; use {@link #getFormFields()} */
   @Deprecated
   List<FormProperty> getFormProperties();
 

@@ -249,6 +249,10 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
     }
   }
 
+  /**
+   * @deprecated the interval is chosen internally; use
+   *             {@link #waitForJobExecutorToProcessAllJobs(long)}
+   */
   @Deprecated
   public void waitForJobExecutorToProcessAllJobs(long maxMillisToWait, long intervalMillis) {
     waitForJobExecutorToProcessAllJobs(maxMillisToWait);
@@ -293,6 +297,10 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
     }
   }
 
+  /**
+   * @deprecated the interval is chosen internally; use
+   *             {@link #waitForJobExecutorOnCondition(long, Callable)}
+   */
   @Deprecated
   public void waitForJobExecutorOnCondition(long maxMillisToWait, long intervalMillis, Callable<Boolean> condition) {
     waitForJobExecutorOnCondition(maxMillisToWait, condition);
@@ -407,6 +415,10 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
     }
   }
 
+  /**
+   * @deprecated the method name is misspelt; use
+   *             {@link #getInstancesForActivityId(ActivityInstance, String)}
+   */
   @Deprecated
   protected List<ActivityInstance> getInstancesForActivitiyId(ActivityInstance activityInstance, String activityId) {
     return getInstancesForActivityId(activityInstance, activityId);

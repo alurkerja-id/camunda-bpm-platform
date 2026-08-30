@@ -95,7 +95,9 @@ public interface ProcessApplicationDeploymentBuilder extends DeploymentBuilder {
   @Override
   ProcessApplicationDeploymentBuilder source(String source);
 
-  /* {@inheritDoc} */
+  /**
+   * @deprecated use {@link #enableDuplicateFiltering(boolean)}
+   */
   @Deprecated
   @Override
   ProcessApplicationDeploymentBuilder enableDuplicateFiltering();

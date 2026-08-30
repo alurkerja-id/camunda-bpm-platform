@@ -757,6 +757,9 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
   protected Date finishDateOnBegin;
   protected Date finishDateOnEnd;
 
+  /**
+   * @deprecated the whole-day granularity is gone; use {@link #startedBefore(Date)}
+   */
   @Deprecated
   @Override
   public HistoricProcessInstanceQuery startDateBy(Date date) {
@@ -764,6 +767,10 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return this;
   }
 
+  /**
+   * @deprecated the whole-day granularity is gone; use {@link #startedAfter(Date)} together with
+   *             {@link #startedBefore(Date)}
+   */
   @Deprecated
   @Override
   public HistoricProcessInstanceQuery startDateOn(Date date) {
@@ -773,6 +780,9 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return this;
   }
 
+  /**
+   * @deprecated the whole-day granularity is gone; use {@link #finishedBefore(Date)}
+   */
   @Deprecated
   @Override
   public HistoricProcessInstanceQuery finishDateBy(Date date) {
@@ -780,6 +790,10 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return this;
   }
 
+  /**
+   * @deprecated the whole-day granularity is gone; use {@link #finishedAfter(Date)} together with
+   *             {@link #finishedBefore(Date)}
+   */
   @Deprecated
   @Override
   public HistoricProcessInstanceQuery finishDateOn(Date date) {
@@ -789,6 +803,9 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return this;
   }
 
+  /**
+   * @deprecated only used by the whole-day query methods above, which are deprecated themselves
+   */
   @Deprecated
   private Date calculateBeforeMidnight(Date date){
     Calendar cal = Calendar.getInstance();
@@ -798,6 +815,9 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return cal.getTime();
   }
 
+  /**
+   * @deprecated only used by the whole-day query methods above, which are deprecated themselves
+   */
   @Deprecated
   private Date calculateMidnight(Date date){
     Calendar cal = Calendar.getInstance();

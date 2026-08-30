@@ -844,6 +844,7 @@ public class Base64 {
      * @return The data, less whitespace (see RFC 2045).
      * @deprecated This method is no longer needed
      */
+    @Deprecated
     static byte[] discardWhitespace(byte[] data) {
         byte groomedData[] = new byte[data.length];
         int bytesCopied = 0;

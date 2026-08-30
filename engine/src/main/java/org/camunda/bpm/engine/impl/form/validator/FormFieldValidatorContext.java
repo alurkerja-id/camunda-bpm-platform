@@ -33,7 +33,7 @@ public interface FormFieldValidatorContext {
   public FormFieldHandler getFormFieldHandler();
 
   /** @return the execution
-   * Deprecated, use {@link #getVariableScope()} */
+   * @deprecated use {@link #getVariableScope()} */
   @Deprecated
   public DelegateExecution getExecution();
 

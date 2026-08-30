@@ -76,6 +76,7 @@ public class ProcessEngineTestCase extends TestCase {
   protected RepositoryService repositoryService;
   protected RuntimeService runtimeService;
   protected TaskService taskService;
+  /** @deprecated use {@link #historyService} */
   @Deprecated protected HistoryService historicDataService;
   protected HistoryService historyService;
   protected IdentityService identityService;

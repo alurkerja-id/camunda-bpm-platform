@@ -136,8 +136,9 @@ public abstract class JobExecutor {
   public abstract void executeJobs(List<String> jobIds, ProcessEngineImpl processEngine);
 
   /**
-   * Deprecated: use {@link #executeJobs(List, ProcessEngineImpl)} instead
    * @param jobIds
+   *
+   * @deprecated use {@link #executeJobs(List, ProcessEngineImpl)} instead
    */
   @Deprecated
   public void executeJobs(List<String> jobIds) {
@@ -232,7 +233,7 @@ public abstract class JobExecutor {
   }
 
   /**
-   * Deprecated: use {@link #getProcessEngines()} instead
+   * @deprecated use {@link #getProcessEngines()} instead
    */
   @Deprecated
   public CommandExecutor getCommandExecutor() {
@@ -244,8 +245,9 @@ public abstract class JobExecutor {
   }
 
   /**
-   * Deprecated: use {@link #registerProcessEngine(ProcessEngineImpl)} instead
    * @param commandExecutorTxRequired
+   *
+   * @deprecated use {@link #registerProcessEngine(ProcessEngineImpl)} instead
    */
   @Deprecated
   public void setCommandExecutor(CommandExecutor commandExecutorTxRequired) {
