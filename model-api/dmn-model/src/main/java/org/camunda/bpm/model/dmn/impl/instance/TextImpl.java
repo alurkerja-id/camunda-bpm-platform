@@ -23,7 +23,6 @@ import org.camunda.bpm.model.dmn.instance.Text;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class TextImpl extends DmnModelElementInstanceImpl implements Text {
 
@@ -34,11 +33,7 @@ public class TextImpl extends DmnModelElementInstanceImpl implements Text {
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Text.class, DMN_ELEMENT_TEXT)
       .namespaceUri(LATEST_DMN_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<Text>() {
-        public Text newInstance(ModelTypeInstanceContext instanceContext) {
-          return new TextImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new TextImpl(instanceContext));
 
     typeBuilder.build();
   }

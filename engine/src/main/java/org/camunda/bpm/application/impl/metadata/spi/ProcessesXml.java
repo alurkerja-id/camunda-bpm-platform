@@ -48,10 +48,12 @@ public interface ProcessesXml {
    */
   public final static ProcessesXml EMPTY_PROCESSES_XML = new ProcessesXml() {
 
+    @Override
     public List<ProcessEngineXml> getProcessEngines() {
       return Collections.emptyList();
     }
 
+    @Override
     public List<ProcessArchiveXml> getProcessArchives() {
       List<ProcessArchiveXml> processArchives = new ArrayList<ProcessArchiveXml>();
 

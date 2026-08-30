@@ -23,7 +23,6 @@ import org.camunda.bpm.model.cmmn.instance.Source;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * @author Roman Smirnov
@@ -34,11 +33,7 @@ public class SourceImpl extends CmmnModelElementInstanceImpl implements Source {
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Source.class, CMMN_ELEMENT_SOURCE)
       .namespaceUri(CMMN11_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<Source>() {
-        public Source newInstance(ModelTypeInstanceContext instanceContext) {
-          return new SourceImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new SourceImpl(instanceContext));
 
     typeBuilder.build();
   }

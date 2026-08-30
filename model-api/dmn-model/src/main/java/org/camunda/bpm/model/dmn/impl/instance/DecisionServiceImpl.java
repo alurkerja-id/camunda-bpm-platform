@@ -32,7 +32,6 @@ import org.camunda.bpm.model.dmn.instance.OutputDecisionReference;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import org.camunda.bpm.model.xml.type.reference.ElementReferenceCollection;
 
@@ -47,18 +46,22 @@ public class DecisionServiceImpl extends NamedElementImpl implements DecisionSer
     super(instanceContext);
   }
 
+  @Override
   public Collection<Decision> getOutputDecisions() {
     return outputDecisionRefCollection.getReferenceTargetElements(this);
   }
 
+  @Override
   public Collection<Decision> getEncapsulatedDecisions() {
     return encapsulatedDecisionRefCollection.getReferenceTargetElements(this);
   }
 
+  @Override
   public Collection<Decision> getInputDecisions() {
     return inputDecisionRefCollection.getReferenceTargetElements(this);
   }
 
+  @Override
   public Collection<InputData> getInputData() {
     return inputDataRefCollection.getReferenceTargetElements(this);
   }
@@ -67,11 +70,7 @@ public class DecisionServiceImpl extends NamedElementImpl implements DecisionSer
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(DecisionService.class, DMN_ELEMENT_DECISION_SERVICE)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(NamedElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<DecisionService>() {
-        public DecisionService newInstance(ModelTypeInstanceContext instanceContext) {
-          return new DecisionServiceImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new DecisionServiceImpl(instanceContext));
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

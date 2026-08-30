@@ -26,7 +26,6 @@ import org.camunda.bpm.model.cmmn.instance.TimerExpression;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 
@@ -43,18 +42,22 @@ public class TimerEventListenerImpl extends EventListenerImpl implements TimerEv
     super(instanceContext);
   }
 
+  @Override
   public TimerExpression getTimerExpression() {
     return timerExpressionChild.getChild(this);
   }
 
+  @Override
   public void setTimerExpression(TimerExpression timerExpression) {
     timerExpressionChild.setChild(this, timerExpression);
   }
 
+  @Override
   public StartTrigger getTimerStart() {
     return timerStartChild.getChild(this);
   }
 
+  @Override
   public void setTimerStart(StartTrigger timerStart) {
     timerStartChild.setChild(this, timerStart);
   }
@@ -63,11 +66,7 @@ public class TimerEventListenerImpl extends EventListenerImpl implements TimerEv
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(TimerEventListener.class, CMMN_ELEMENT_TIMER_EVENT_LISTENER)
         .namespaceUri(CMMN11_NS)
         .extendsType(EventListener.class)
-        .instanceProvider(new ModelTypeInstanceProvider<TimerEventListener>() {
-          public TimerEventListener newInstance(ModelTypeInstanceContext instanceContext) {
-            return new TimerEventListenerImpl(instanceContext);
-          }
-        });
+        .instanceProvider(instanceContext -> new TimerEventListenerImpl(instanceContext));
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

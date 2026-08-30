@@ -28,7 +28,6 @@ import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN messageFlow element
@@ -46,11 +45,7 @@ public class MessageFlowImpl extends BaseElementImpl implements MessageFlow {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(MessageFlow.class, BPMN_ELEMENT_MESSAGE_FLOW)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<MessageFlow>() {
-        public MessageFlow newInstance(ModelTypeInstanceContext instanceContext) {
-          return new MessageFlowImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new MessageFlowImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_NAME)
       .build();
@@ -76,38 +71,47 @@ public class MessageFlowImpl extends BaseElementImpl implements MessageFlow {
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public InteractionNode getSource() {
     return sourceRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setSource(InteractionNode source) {
     sourceRefAttribute.setReferenceTargetElement(this, source);
   }
 
+  @Override
   public InteractionNode getTarget() {
     return targetRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setTarget(InteractionNode target) {
     targetRefAttribute.setReferenceTargetElement(this, target);
   }
 
+  @Override
   public Message getMessage() {
     return messageRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setMessage(Message message) {
     messageRefAttribute.setReferenceTargetElement(this, message);
   }
 
+  @Override
   public BpmnEdge getDiagramElement() {
     return (BpmnEdge) super.getDiagramElement();
   }

@@ -16,7 +16,6 @@
 package org.camunda.bpm.engine.spring.components.aop;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,23 +61,28 @@ public class ActivitiStateAnnotationBeanPostProcessor implements BeanPostProcess
 
 	private ClassLoader beanClassLoader = ClassUtils.getDefaultClassLoader();
 
+	@Override
 	public void setBeanFactory(BeanFactory beanFactory) {
 		this.beanFactory = beanFactory;
 	}
 
+	@Override
 	public void setBeanClassLoader(ClassLoader classLoader) {
 		this.beanClassLoader = classLoader;
 	}
 
+	@Override
 	public int getOrder() {
 		return this.order;
 	}
 
+	@Override
 	public void afterPropertiesSet() {
 		Assert.notNull(this.beanClassLoader, "beanClassLoader must not be null");
 		Assert.notNull(this.beanFactory, "beanFactory must not be null");
 	}
 
+	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 		return bean;
 	}
@@ -87,6 +91,7 @@ public class ActivitiStateAnnotationBeanPostProcessor implements BeanPostProcess
 		this.registry = registry;
 	}
 
+	@Override
 	public Object postProcessAfterInitialization(final Object bean,
 																							 final String beanName) throws BeansException {
 		// first sift through and get all the methods
@@ -96,66 +101,59 @@ public class ActivitiStateAnnotationBeanPostProcessor implements BeanPostProcess
 		final org.camunda.bpm.engine.spring.annotations.ProcessEngineComponent component = targetClass.getAnnotation(org.camunda.bpm.engine.spring.annotations.ProcessEngineComponent.class);
 
 		ReflectionUtils.doWithMethods(targetClass,
-				new ReflectionUtils.MethodCallback() {
-					@SuppressWarnings("unchecked")
-					public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
+				method -> {
 
-						State state = AnnotationUtils.getAnnotation(method, State.class);
-						if (state == null) {
-							// the MethodFilter below already keeps annotated methods only, so this
-							// cannot happen - but nothing in the code says so until now
-							return;
-						}
+					State state = AnnotationUtils.getAnnotation(method, State.class);
+					if (state == null) {
+						// the MethodFilter below already keeps annotated methods only, so this
+						// cannot happen - but nothing in the code says so until now
+						return;
+					}
 
-						String processName = component.processKey();
+					String processName = component.processKey();
 
-						if (StringUtils.hasText(state.process())) {
-							processName = state.process();
-						}
+					if (StringUtils.hasText(state.process())) {
+						processName = state.process();
+					}
 
-						String stateName = state.state();
+					String stateName = state.state();
 
-						if (!StringUtils.hasText(stateName)) {
-							stateName = state.value();
-						}
+					if (!StringUtils.hasText(stateName)) {
+						stateName = state.value();
+					}
 
-						Assert.notNull(stateName, "You must provide a stateName!");
+					Assert.notNull(stateName, "You must provide a stateName!");
 
-						Map<Integer, String> vars = new HashMap<Integer, String>();
-						Annotation[][] paramAnnotationsArray = method.getParameterAnnotations();
+					Map<Integer, String> vars = new HashMap<Integer, String>();
+					Annotation[][] paramAnnotationsArray = method.getParameterAnnotations();
 
-						int ctr = 0;
-						int pvMapIndex = -1;
-						int procIdIndex = -1;
+					int ctr = 0;
+					int pvMapIndex = -1;
+					int procIdIndex = -1;
 
-						for (Annotation[] paramAnnotations : paramAnnotationsArray) {
-							ctr += 1;
+					for (Annotation[] paramAnnotations : paramAnnotationsArray) {
+						ctr += 1;
 
-							for (Annotation pa : paramAnnotations) {
-								if (pa instanceof ProcessVariable) {
-									ProcessVariable pv = (ProcessVariable) pa;
-									String pvName = pv.value();
-									vars.put(ctr, pvName);
-								} else if (pa instanceof ProcessVariables) {
-									pvMapIndex = ctr;
-								} else if (pa instanceof ProcessId  ) {
-									procIdIndex = ctr;
-								}
+						for (Annotation pa : paramAnnotations) {
+							if (pa instanceof ProcessVariable) {
+								ProcessVariable pv = (ProcessVariable) pa;
+								String pvName = pv.value();
+								vars.put(ctr, pvName);
+							} else if (pa instanceof ProcessVariables) {
+								pvMapIndex = ctr;
+							} else if (pa instanceof ProcessId) {
+								procIdIndex = ctr;
 							}
 						}
+					}
 
-						ActivitiStateHandlerRegistration registration = new ActivitiStateHandlerRegistration(vars,
-								method, bean, stateName, beanName, pvMapIndex,
-								procIdIndex, processName);
-						registry.registerActivitiStateHandler(registration);
-					}
+					ActivitiStateHandlerRegistration registration = new ActivitiStateHandlerRegistration(vars,
+							method, bean, stateName, beanName, pvMapIndex,
+							procIdIndex, processName);
+					registry.registerActivitiStateHandler(registration);
 				},
-				new ReflectionUtils.MethodFilter() {
-					public boolean matches(Method method) {
-						return null != AnnotationUtils.getAnnotation(method,
-								State.class);
-					}
-				});
+				method -> null != AnnotationUtils.getAnnotation(method,
+						State.class));
 
 		return bean;
 	}

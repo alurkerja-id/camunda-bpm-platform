@@ -31,7 +31,6 @@ import org.camunda.bpm.model.xml.type.reference.ElementReferenceCollection;
 import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN operation element
@@ -50,11 +49,7 @@ public class OperationImpl extends BaseElementImpl implements Operation {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Operation.class, BPMN_ELEMENT_OPERATION)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Operation>() {
-        public Operation newInstance(ModelTypeInstanceContext instanceContext) {
-          return new OperationImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new OperationImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_NAME)
       .required()
@@ -85,38 +80,47 @@ public class OperationImpl extends BaseElementImpl implements Operation {
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public String getImplementationRef() {
     return implementationRefAttribute.getValue(this);
   }
 
+  @Override
   public void setImplementationRef(String implementationRef) {
     implementationRefAttribute.setValue(this, implementationRef);
   }
 
+  @Override
   public Message getInMessage() {
     return inMessageRefChild.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setInMessage(Message message) {
     inMessageRefChild.setReferenceTargetElement(this, message);
   }
 
+  @Override
   public Message getOutMessage() {
     return outMessageRefChild.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setOutMessage(Message message) {
     outMessageRefChild.setReferenceTargetElement(this, message);
   }
 
+  @Override
   public Collection<Error> getErrors() {
     return errorRefCollection.getReferenceTargetElements(this);
   }

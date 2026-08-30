@@ -20,8 +20,6 @@ import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
 import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
 
 import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
@@ -51,16 +49,12 @@ public class DbSchemaExecuteFile {
     ProcessEngineConfigurationImpl configuration = (ProcessEngineConfigurationImpl) ProcessEngineConfiguration.createProcessEngineConfigurationFromResource(configurationFileResourceName);
     ProcessEngine processEngine = configuration.buildProcessEngine();
 
-    configuration.getCommandExecutorTxRequired().execute(new Command<Void>() {
+    configuration.getCommandExecutorTxRequired().execute(commandContext -> {
 
-      public Void execute(CommandContext commandContext) {
-
-        commandContext.getDbSqlSession()
+      commandContext.getDbSqlSession()
           .executeSchemaResource(schemaFileResourceName);
 
-        return null;
-      }
-
+      return null;
     });
 
     processEngine.close();

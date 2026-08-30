@@ -22,6 +22,7 @@ package org.camunda.bpm.engine.impl.cmmn.transformer;
  */
 public class DefaultCmmnTransformFactory implements CmmnTransformFactory {
 
+  @Override
   public CmmnTransform createTransform(CmmnTransformer cmmnTransformer) {
     return new CmmnTransform(cmmnTransformer);
   }

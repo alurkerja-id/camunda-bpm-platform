@@ -16,7 +16,6 @@
  */
 package org.camunda.bpm.engine.impl.jobexecutor;
 
-import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
 import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
@@ -48,6 +47,7 @@ public class ExecuteJobsRunnable implements Runnable {
     this.jobExecutor = processEngine.getProcessEngineConfiguration().getJobExecutor();
   }
 
+  @Override
   public void run() {
     final JobExecutorContext jobExecutorContext = new JobExecutorContext();
 

@@ -76,7 +76,6 @@ import org.camunda.bpm.engine.impl.pvm.runtime.AtomicOperation;
 import org.camunda.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
 import org.camunda.bpm.engine.impl.pvm.runtime.operation.PvmAtomicOperation;
 import org.camunda.bpm.engine.impl.tree.ExecutionTopDownWalker;
-import org.camunda.bpm.engine.impl.tree.TreeVisitor;
 import org.camunda.bpm.engine.impl.util.BitMaskUtil;
 import org.camunda.bpm.engine.impl.util.CollectionUtil;
 import org.camunda.bpm.engine.impl.util.EnsureUtil;
@@ -1747,14 +1746,11 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
   @Override
   public void dispatchEvent(VariableEvent variableEvent) {
     final List<ExecutionEntity> execs = new ArrayList<>();
-    new ExecutionTopDownWalker(this).addPreVisitor(new TreeVisitor<ExecutionEntity>() {
-      @Override
-      public void visit(ExecutionEntity obj) {
-        if (!obj.getEventSubscriptions().isEmpty() &&
+    new ExecutionTopDownWalker(this).addPreVisitor(obj -> {
+      if (!obj.getEventSubscriptions().isEmpty() &&
 
           (obj.isInState(ActivityInstanceState.DEFAULT) || (!obj.getActivity().isScope()))) { // state is default or tree is compacted
-          execs.add(obj);
-        }
+        execs.add(obj);
       }
     }).walkUntil();
     for (ExecutionEntity execution : execs) {

@@ -29,7 +29,6 @@ import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN relationship element
@@ -47,11 +46,7 @@ public class RelationshipImpl extends BaseElementImpl implements Relationship {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Relationship.class, BPMN_ELEMENT_RELATIONSHIP)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Relationship>() {
-        public Relationship newInstance(ModelTypeInstanceContext instanceContext) {
-          return new RelationshipImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new RelationshipImpl(instanceContext));
 
     typeAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_TYPE)
       .required()
@@ -77,26 +72,32 @@ public class RelationshipImpl extends BaseElementImpl implements Relationship {
     super(instanceContext);
   }
 
+  @Override
   public String getType() {
     return typeAttribute.getValue(this);
   }
 
+  @Override
   public void setType(String type) {
     typeAttribute.setValue(this, type);
   }
 
+  @Override
   public RelationshipDirection getDirection() {
     return directionAttribute.getValue(this);
   }
 
+  @Override
   public void setDirection(RelationshipDirection direction) {
     directionAttribute.setValue(this, direction);
   }
 
+  @Override
   public Collection<Source> getSources() {
     return sourceCollection.get(this);
   }
 
+  @Override
   public Collection<Target> getTargets() {
     return targetCollection.get(this);
   }

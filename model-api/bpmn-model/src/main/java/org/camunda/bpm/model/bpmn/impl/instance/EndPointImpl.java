@@ -24,7 +24,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_END_POINT;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN endPoint element
@@ -37,11 +36,7 @@ public class EndPointImpl extends RootElementImpl implements EndPoint {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(EndPoint.class, BPMN_ELEMENT_END_POINT)
       .namespaceUri(BPMN20_NS)
       .extendsType(RootElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<EndPoint>() {
-        public EndPoint newInstance(ModelTypeInstanceContext instanceContext) {
-          return new EndPointImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new EndPointImpl(instanceContext));
 
     typeBuilder.build();
   }

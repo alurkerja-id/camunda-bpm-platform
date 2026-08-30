@@ -29,7 +29,6 @@ import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN receiveTask element
@@ -47,11 +46,7 @@ public class ReceiveTaskImpl extends TaskImpl implements ReceiveTask {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ReceiveTask.class, BPMN_ELEMENT_RECEIVE_TASK)
       .namespaceUri(BPMN20_NS)
       .extendsType(Task.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ReceiveTask>() {
-        public ReceiveTask newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ReceiveTaskImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new ReceiveTaskImpl(instanceContext));
 
     implementationAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_IMPLEMENTATION)
       .defaultValue("##WebService")
@@ -76,38 +71,47 @@ public class ReceiveTaskImpl extends TaskImpl implements ReceiveTask {
     super(context);
   }
 
+  @Override
   public ReceiveTaskBuilder builder() {
     return new ReceiveTaskBuilder((BpmnModelInstance) modelInstance, this);
   }
 
+  @Override
   public String getImplementation() {
     return implementationAttribute.getValue(this);
   }
 
+  @Override
   public void setImplementation(String implementation) {
     implementationAttribute.setValue(this, implementation);
   }
 
+  @Override
   public boolean instantiate() {
     return instantiateAttribute.getValue(this);
   }
 
+  @Override
   public void setInstantiate(boolean instantiate) {
     instantiateAttribute.setValue(this, instantiate);
   }
 
+  @Override
   public Message getMessage() {
     return messageRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setMessage(Message message) {
     messageRefAttribute.setReferenceTargetElement(this, message);
   }
 
+  @Override
   public Operation getOperation() {
     return operationRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setOperation(Operation operation) {
     operationRefAttribute.setReferenceTargetElement(this, operation);
   }

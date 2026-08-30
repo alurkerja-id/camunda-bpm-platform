@@ -62,11 +62,9 @@ public class ServiceTaskDelegateExpressionActivityBehavior extends TaskActivityB
   public void signal(final ActivityExecution execution, final String signalName, final Object signalData) throws Exception {
     ProcessApplicationReference targetProcessApplication = ProcessApplicationContextUtil.getTargetProcessApplication((ExecutionEntity) execution);
     if(ProcessApplicationContextUtil.requiresContextSwitch(targetProcessApplication)) {
-      Context.executeWithinProcessApplication(new Callable<Void>() {
-        public Void call() throws Exception {
-          signal(execution, signalName, signalData);
-          return null;
-        }
+      Context.executeWithinProcessApplication(() -> {
+        signal(execution, signalName, signalData);
+        return null;
       }, targetProcessApplication, new InvocationContext(execution));
     }
     else {
@@ -88,41 +86,35 @@ public class ServiceTaskDelegateExpressionActivityBehavior extends TaskActivityB
         return;
       }
     }
-    executeWithErrorPropagation(execution, new Callable<Void>() {
-      @Override
-      public Void call() throws Exception {
-        ((SignallableActivityBehavior) activityBehaviorInstance).signal(execution, signalName, signalData);
-        return null;
-      }
+    executeWithErrorPropagation(execution, () -> {
+      ((SignallableActivityBehavior) activityBehaviorInstance).signal(execution, signalName, signalData);
+      return null;
     });
   }
 
 	@Override
   public void performExecution(final ActivityExecution execution) throws Exception {
-	  Callable<Void> callable = new Callable<Void>() {
-      @Override
-      public Void call() throws Exception {
-        // Note: we can't cache the result of the expression, because the
-        // execution can change: eg. delegateExpression='${mySpringBeanFactory.randomSpringBean()}'
-        Object delegate = expression.getValue(execution);
-        applyFieldDeclaration(fieldDeclarations, delegate);
+	  Callable<Void> callable = () -> {
+      // Note: we can't cache the result of the expression, because the
+      // execution can change: eg. delegateExpression='${mySpringBeanFactory.randomSpringBean()}'
+      Object delegate = expression.getValue(execution);
+      applyFieldDeclaration(fieldDeclarations, delegate);
 
-        if (delegate instanceof ActivityBehavior) {
-          Context.getProcessEngineConfiguration()
+      if (delegate instanceof ActivityBehavior) {
+        Context.getProcessEngineConfiguration()
             .getDelegateInterceptor()
             .handleInvocation(new ActivityBehaviorInvocation((ActivityBehavior) delegate, execution));
 
-        } else if (delegate instanceof JavaDelegate) {
-          Context.getProcessEngineConfiguration()
+      } else if (delegate instanceof JavaDelegate) {
+        Context.getProcessEngineConfiguration()
             .getDelegateInterceptor()
             .handleInvocation(new JavaDelegateInvocation((JavaDelegate) delegate, execution));
-          leave(execution);
+        leave(execution);
 
-        } else {
-          throw LOG.resolveDelegateExpressionException(expression, ActivityBehavior.class, JavaDelegate.class);
-        }
-        return null;
+      } else {
+        throw LOG.resolveDelegateExpressionException(expression, ActivityBehavior.class, JavaDelegate.class);
       }
+      return null;
     };
     executeWithErrorPropagation(execution, callable);
   }

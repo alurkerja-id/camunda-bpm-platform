@@ -21,7 +21,6 @@ import java.util.Date;
 import org.camunda.bpm.engine.BadUserRequestException;
 import org.camunda.bpm.engine.form.CamundaFormRef;
 import org.camunda.bpm.engine.rest.dto.converter.DelegationStateConverter;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.DelegationState;
 import org.camunda.bpm.engine.task.Task;
 

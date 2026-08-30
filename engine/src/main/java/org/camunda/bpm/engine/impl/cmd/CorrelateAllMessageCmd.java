@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import org.camunda.bpm.engine.history.UserOperationLogEntry;
 import org.camunda.bpm.engine.impl.MessageCorrelationBuilderImpl;
 import org.camunda.bpm.engine.impl.context.Context;
@@ -53,6 +52,7 @@ public class CorrelateAllMessageCmd extends AbstractCorrelateMessageCmd implemen
     super(messageCorrelationBuilderImpl, collectVariables, deserializeVariableValues);
   }
 
+  @Override
   public List<MessageCorrelationResultImpl> execute(final CommandContext commandContext) {
     ensureAtLeastOneNotNull(
         "At least one of the following correlation criteria has to be present: " + "messageName, businessKey, correlationKeys, processInstanceId", messageName,
@@ -60,11 +60,7 @@ public class CorrelateAllMessageCmd extends AbstractCorrelateMessageCmd implemen
 
     final CorrelationHandler correlationHandler = Context.getProcessEngineConfiguration().getCorrelationHandler();
     final CorrelationSet correlationSet = new CorrelationSet(builder);
-    List<CorrelationHandlerResult> correlationResults = commandContext.runWithoutAuthorization(new Callable<List<CorrelationHandlerResult>>() {
-      public List<CorrelationHandlerResult> call() throws Exception {
-        return correlationHandler.correlateMessages(commandContext, messageName, correlationSet);
-      }
-    });
+    List<CorrelationHandlerResult> correlationResults = commandContext.runWithoutAuthorization(() -> correlationHandler.correlateMessages(commandContext, messageName, correlationSet));
 
     // check authorization
     for (CorrelationHandlerResult correlationResult : correlationResults) {

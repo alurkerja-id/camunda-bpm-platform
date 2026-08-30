@@ -24,7 +24,6 @@ import org.camunda.bpm.model.bpmn.instance.camunda.CamundaEntry;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
 /**
@@ -37,11 +36,7 @@ public class CamundaEntryImpl extends CamundaGenericValueElementImpl implements 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaEntry.class, CAMUNDA_ELEMENT_ENTRY)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<CamundaEntry>() {
-        public CamundaEntry newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CamundaEntryImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new CamundaEntryImpl(instanceContext));
 
     camundaKeyAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_KEY)
       .namespace(CAMUNDA_NS)
@@ -55,10 +50,12 @@ public class CamundaEntryImpl extends CamundaGenericValueElementImpl implements 
     super(instanceContext);
   }
 
+  @Override
   public String getCamundaKey() {
     return camundaKeyAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaKey(String camundaKey) {
     camundaKeyAttribute.setValue(this, camundaKey);
   }

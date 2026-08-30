@@ -28,7 +28,6 @@ import org.camunda.bpm.model.cmmn.instance.TransformationExpression;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
@@ -48,26 +47,32 @@ public class ParameterMappingImpl extends CmmnElementImpl implements ParameterMa
     super(instanceContext);
   }
 
+  @Override
   public Parameter getSource() {
     return sourceRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setSource(Parameter parameter) {
     sourceRefAttribute.setReferenceTargetElement(this, parameter);
   }
 
+  @Override
   public Parameter getTarget() {
     return targetRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setTarget(Parameter parameter) {
     targetRefAttribute.setReferenceTargetElement(this, parameter);
   }
 
+  @Override
   public TransformationExpression getTransformation() {
     return transformationChild.getChild(this);
   }
 
+  @Override
   public void setTransformation(TransformationExpression transformationExpression) {
     transformationChild.setChild(this, transformationExpression);
   }
@@ -76,11 +81,7 @@ public class ParameterMappingImpl extends CmmnElementImpl implements ParameterMa
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ParameterMapping.class, CMMN_ELEMENT_PARAMETER_MAPPING)
         .extendsType(CmmnElement.class)
         .namespaceUri(CMMN11_NS)
-        .instanceProvider(new ModelTypeInstanceProvider<ParameterMapping>() {
-          public ParameterMapping newInstance(ModelTypeInstanceContext instanceContext) {
-            return new ParameterMappingImpl(instanceContext);
-          }
-        });
+        .instanceProvider(instanceContext -> new ParameterMappingImpl(instanceContext));
 
     sourceRefAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_SOURCE_REF)
         .idAttributeReference(Parameter.class)

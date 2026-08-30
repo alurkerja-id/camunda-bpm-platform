@@ -24,5 +24,6 @@ import org.camunda.bpm.engine.impl.core.delegate.CoreActivityBehavior;
  */
 public interface ActivityBehavior extends CoreActivityBehavior<ActivityExecution> {
 
+  @Override
   void execute(ActivityExecution execution) throws Exception;
 }

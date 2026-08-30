@@ -26,7 +26,6 @@ import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 
 import java.io.InputStream;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 /**
  * @author: Johannes Heinemann
@@ -55,13 +54,9 @@ public class BpmnModelInstanceCache extends ModelInstanceCache<BpmnModelInstance
   @Override
   protected List<ProcessDefinition> getAllDefinitionsForDeployment(final String deploymentId) {
     final CommandContext commandContext = Context.getCommandContext();
-    List<ProcessDefinition> allDefinitionsForDeployment = commandContext.runWithoutAuthorization(new Callable<List<ProcessDefinition>>() {
-      public List<ProcessDefinition> call() throws Exception {
-        return new ProcessDefinitionQueryImpl()
-            .deploymentId(deploymentId)
-            .list();
-      }
-    });
+    List<ProcessDefinition> allDefinitionsForDeployment = commandContext.runWithoutAuthorization(() -> new ProcessDefinitionQueryImpl()
+        .deploymentId(deploymentId)
+        .list());
     return allDefinitionsForDeployment;
   }
 }

@@ -38,11 +38,7 @@ public class CasePlanModel extends StageImpl implements org.camunda.bpm.model.cm
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(org.camunda.bpm.model.cmmn.instance.CasePlanModel.class, CMMN_ELEMENT_CASE_PLAN_MODEL)
       .namespaceUri(CMMN11_NS)
       .extendsType(Stage.class)
-      .instanceProvider(new ModelElementTypeBuilder.ModelTypeInstanceProvider<CasePlanModel>() {
-        public CasePlanModel newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CasePlanModel(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new CasePlanModel(instanceContext));
 
     typeBuilder.build();
   }

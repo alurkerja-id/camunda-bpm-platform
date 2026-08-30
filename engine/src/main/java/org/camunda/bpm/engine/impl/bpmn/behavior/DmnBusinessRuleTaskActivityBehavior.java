@@ -18,11 +18,8 @@ package org.camunda.bpm.engine.impl.bpmn.behavior;
 
 import static org.camunda.bpm.engine.impl.util.DecisionEvaluationUtil.evaluateDecision;
 
-import java.util.concurrent.Callable;
-
 import org.camunda.bpm.engine.delegate.VariableScope;
 import org.camunda.bpm.engine.impl.core.model.BaseCallableElement;
-import org.camunda.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
 import org.camunda.bpm.engine.impl.dmn.result.DecisionResultMapper;
 import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.camunda.bpm.engine.impl.pvm.delegate.ActivityExecution;
@@ -51,20 +48,16 @@ public class DmnBusinessRuleTaskActivityBehavior extends AbstractBpmnActivityBeh
 
   @Override
   public void execute(final ActivityExecution execution) throws Exception {
-    executeWithErrorPropagation(execution, new Callable<Void>() {
+    executeWithErrorPropagation(execution, () -> {
+      ExecutionEntity executionEntity = (ExecutionEntity) execution;
 
-      public Void call() throws Exception {
-        ExecutionEntity executionEntity = (ExecutionEntity) execution;
-
-        evaluateDecision(executionEntity,
-            executionEntity.getProcessDefinitionTenantId(),
-            callableElement,
-            resultVariable,
-            decisionResultMapper);
-        leave(execution);
-        return null;
-      }
-
+      evaluateDecision(executionEntity,
+          executionEntity.getProcessDefinitionTenantId(),
+          callableElement,
+          resultVariable,
+          decisionResultMapper);
+      leave(execution);
+      return null;
     });
   }
 

@@ -22,7 +22,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_MESSAGE_FLOW_REF;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN messageFlowRef element of the BPMN tConversationNode type
@@ -34,11 +33,7 @@ public class MessageFlowRef extends BpmnModelElementInstanceImpl {
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(MessageFlowRef.class, BPMN_ELEMENT_MESSAGE_FLOW_REF)
       .namespaceUri(BPMN20_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<MessageFlowRef>() {
-        public MessageFlowRef newInstance(ModelTypeInstanceContext instanceContext) {
-          return new MessageFlowRef(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new MessageFlowRef(instanceContext));
 
     typeBuilder.build();
   }

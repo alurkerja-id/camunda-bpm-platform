@@ -31,7 +31,6 @@ import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_CO
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_VARIABLE_NAME;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 import org.camunda.bpm.model.xml.impl.util.StringUtil;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_VARIABLE_EVENTS;
 
@@ -50,13 +49,7 @@ public class ConditionalEventDefinitionImpl extends EventDefinitionImpl implemen
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ConditionalEventDefinition.class, BPMN_ELEMENT_CONDITIONAL_EVENT_DEFINITION)
       .namespaceUri(BPMN20_NS)
       .extendsType(EventDefinition.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ConditionalEventDefinition>() {
-        
-        @Override
-        public ConditionalEventDefinition newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ConditionalEventDefinitionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new ConditionalEventDefinitionImpl(instanceContext));
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

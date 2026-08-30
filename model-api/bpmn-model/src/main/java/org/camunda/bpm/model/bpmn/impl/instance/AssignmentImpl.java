@@ -26,7 +26,6 @@ import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_ASSIGNMENT;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN assignment element
@@ -42,11 +41,7 @@ public class AssignmentImpl extends BaseElementImpl implements Assignment {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Assignment.class, BPMN_ELEMENT_ASSIGNMENT)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Assignment>() {
-        public Assignment newInstance(ModelTypeInstanceContext instanceContext) {
-          return new AssignmentImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new AssignmentImpl(instanceContext));
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 
@@ -65,18 +60,22 @@ public class AssignmentImpl extends BaseElementImpl implements Assignment {
     super(instanceContext);
   }
 
+  @Override
   public From getFrom() {
     return fromChild.getChild(this);
   }
 
+  @Override
   public void setFrom(From from) {
     fromChild.setChild(this, from);
   }
 
+  @Override
   public To getTo() {
     return toChild.getChild(this);
   }
 
+  @Override
   public void setTo(To to) {
     toChild.setChild(this, to);
   }

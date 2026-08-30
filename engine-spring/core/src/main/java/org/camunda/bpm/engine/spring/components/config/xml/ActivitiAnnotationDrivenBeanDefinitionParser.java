@@ -44,6 +44,7 @@ public class ActivitiAnnotationDrivenBeanDefinitionParser implements BeanDefinit
 
 	private final String processEngineAttribute = "process-engine";
 
+	@Override
 	public BeanDefinition parse(Element element, ParserContext parserContext) {
 		registerProcessScope(element, parserContext);
 		registerStateHandlerAnnotationBeanFactoryPostProcessor(element, parserContext);

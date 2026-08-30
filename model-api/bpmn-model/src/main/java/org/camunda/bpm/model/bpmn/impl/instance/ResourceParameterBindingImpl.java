@@ -28,7 +28,6 @@ import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN resourceParameterBinding element
@@ -44,11 +43,7 @@ public class ResourceParameterBindingImpl extends BaseElementImpl implements Res
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ResourceParameterBinding.class, BPMN_ELEMENT_RESOURCE_PARAMETER_BINDING)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ResourceParameterBinding>() {
-        public ResourceParameterBinding newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ResourceParameterBindingImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new ResourceParameterBindingImpl(instanceContext));
 
     parameterRefAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_PARAMETER_REF)
       .required()
@@ -68,18 +63,22 @@ public class ResourceParameterBindingImpl extends BaseElementImpl implements Res
     super(instanceContext);
   }
 
+  @Override
   public ResourceParameter getParameter() {
     return parameterRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setParameter(ResourceParameter parameter) {
     parameterRefAttribute.setReferenceTargetElement(this, parameter);
   }
 
+  @Override
   public Expression getExpression() {
     return expressionChild.getChild(this);
   }
 
+  @Override
   public void setExpression(Expression expression) {
     expressionChild.setChild(this, expression);
   }

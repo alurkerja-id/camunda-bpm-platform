@@ -28,7 +28,6 @@ import org.camunda.bpm.model.dmn.instance.InputValues;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
@@ -45,29 +44,35 @@ public class InputClauseImpl extends DmnElementImpl implements InputClause {
     super(instanceContext);
   }
 
+  @Override
   public InputExpression getInputExpression() {
     return inputExpressionChild.getChild(this);
   }
 
+  @Override
   public void setInputExpression(InputExpression inputExpression) {
     inputExpressionChild.setChild(this, inputExpression);
   }
 
+  @Override
   public InputValues getInputValues() {
     return inputValuesChild.getChild(this);
   }
 
+  @Override
   public void setInputValues(InputValues inputValues) {
     inputValuesChild.setChild(this, inputValues);
   }
 
   // camunda extensions
 
+  @Override
   public String getCamundaInputVariable() {
     return camundaInputVariableAttribute.getValue(this);
   }
 
 
+  @Override
   public void setCamundaInputVariable(String inputVariable) {
     camundaInputVariableAttribute.setValue(this, inputVariable);
   }
@@ -76,11 +81,7 @@ public class InputClauseImpl extends DmnElementImpl implements InputClause {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(InputClause.class, DMN_ELEMENT_INPUT_CLAUSE)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(DmnElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<InputClause>() {
-        public InputClause newInstance(ModelTypeInstanceContext instanceContext) {
-          return new InputClauseImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new InputClauseImpl(instanceContext));
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

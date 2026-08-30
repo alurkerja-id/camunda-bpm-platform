@@ -24,7 +24,6 @@ import org.camunda.bpm.model.dmn.instance.DrgElementReference;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class DrgElementReferenceImpl extends DmnElementReferenceImpl implements DrgElementReference {
 
@@ -36,11 +35,7 @@ public class DrgElementReferenceImpl extends DmnElementReferenceImpl implements 
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(DrgElementReference.class, DMN_ELEMENT_DRG_ELEMENT_REFERENCE)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(DmnElementReference.class)
-      .instanceProvider(new ModelTypeInstanceProvider<DrgElementReference>() {
-        public DrgElementReference newInstance(ModelTypeInstanceContext instanceContext) {
-          return new DrgElementReferenceImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new DrgElementReferenceImpl(instanceContext));
 
     typeBuilder.build();
   }

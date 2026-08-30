@@ -29,7 +29,6 @@ import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN interface element
@@ -46,11 +45,7 @@ public class InterfaceImpl extends RootElementImpl implements Interface {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Interface.class, BPMN_ELEMENT_INTERFACE)
       .namespaceUri(BPMN20_NS)
       .extendsType(RootElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Interface>() {
-        public Interface newInstance(ModelTypeInstanceContext instanceContext) {
-          return new InterfaceImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new InterfaceImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_NAME)
       .required()
@@ -72,22 +67,27 @@ public class InterfaceImpl extends RootElementImpl implements Interface {
     super(context);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public String getImplementationRef() {
     return implementationRefAttribute.getValue(this);
   }
 
+  @Override
   public void setImplementationRef(String implementationRef) {
     implementationRefAttribute.setValue(this, implementationRef);
   }
 
+  @Override
   public Collection<Operation> getOperations() {
     return operationCollection.get(this);
   }

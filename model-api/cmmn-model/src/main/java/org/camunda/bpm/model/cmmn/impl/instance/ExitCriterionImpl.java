@@ -24,7 +24,6 @@ import org.camunda.bpm.model.cmmn.instance.ExitCriterion;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * @author Roman Smirnov
@@ -40,11 +39,7 @@ public class ExitCriterionImpl extends CriterionImpl implements ExitCriterion {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ExitCriterion.class, CMMN_ELEMENT_EXIT_CRITERION)
         .extendsType(Criterion.class)
         .namespaceUri(CMMN11_NS)
-        .instanceProvider(new ModelTypeInstanceProvider<ExitCriterion>() {
-          public ExitCriterion newInstance(ModelTypeInstanceContext instanceContext) {
-            return new ExitCriterionImpl(instanceContext);
-          }
-        });
+        .instanceProvider(instanceContext -> new ExitCriterionImpl(instanceContext));
 
     typeBuilder.build();
   }

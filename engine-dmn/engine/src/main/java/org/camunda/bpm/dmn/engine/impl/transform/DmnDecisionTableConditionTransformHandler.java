@@ -26,6 +26,7 @@ import org.camunda.bpm.model.dmn.instance.InputEntry;
 
 public class DmnDecisionTableConditionTransformHandler implements DmnElementTransformHandler<InputEntry, DmnExpressionImpl> {
 
+  @Override
   public DmnExpressionImpl handleElement(DmnElementTransformContext context, InputEntry inputEntry) {
     return createFromInputEntry(context, inputEntry);
   }

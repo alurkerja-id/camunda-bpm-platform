@@ -26,7 +26,6 @@ import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN escalation element
@@ -43,11 +42,7 @@ public class EscalationImpl extends RootElementImpl implements Escalation {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Escalation.class, BPMN_ELEMENT_ESCALATION)
       .namespaceUri(BPMN20_NS)
       .extendsType(RootElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Escalation>() {
-        public Escalation newInstance(ModelTypeInstanceContext instanceContext) {
-          return new EscalationImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new EscalationImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_NAME)
       .build();
@@ -66,26 +61,32 @@ public class EscalationImpl extends RootElementImpl implements Escalation {
     super(context);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public String getEscalationCode() {
     return escalationCodeAttribute.getValue(this);
   }
 
+  @Override
   public void setEscalationCode(String escalationCode) {
     escalationCodeAttribute.setValue(this, escalationCode);
   }
 
+  @Override
   public ItemDefinition getStructure() {
     return structureRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setStructure(ItemDefinition structure) {
     structureRefAttribute.setReferenceTargetElement(this, structure);
   }

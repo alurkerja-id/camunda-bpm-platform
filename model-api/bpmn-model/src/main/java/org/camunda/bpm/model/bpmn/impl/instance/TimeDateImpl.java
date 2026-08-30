@@ -24,7 +24,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_TIME_DATE;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN timeDate element of the BPMN tTimerEventDefinition type
@@ -37,11 +36,7 @@ public class TimeDateImpl extends ExpressionImpl implements TimeDate {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(TimeDate.class, BPMN_ELEMENT_TIME_DATE)
       .namespaceUri(BPMN20_NS)
       .extendsType(Expression.class)
-      .instanceProvider(new ModelTypeInstanceProvider<TimeDate>() {
-        public TimeDate newInstance(ModelTypeInstanceContext instanceContext) {
-          return new TimeDateImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new TimeDateImpl(instanceContext));
 
     typeBuilder.build();
   }

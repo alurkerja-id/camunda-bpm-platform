@@ -19,11 +19,12 @@ package org.camunda.bpm.model.dmn.impl.instance;
 import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.LATEST_DMN_NS;
 import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_ELEMENT_BINDING;
 
-import org.camunda.bpm.model.dmn.instance.*;
+import org.camunda.bpm.model.dmn.instance.Binding;
+import org.camunda.bpm.model.dmn.instance.Expression;
+import org.camunda.bpm.model.dmn.instance.Parameter;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 
@@ -36,18 +37,22 @@ public class BindingImpl extends DmnModelElementInstanceImpl implements Binding 
     super(instanceContext);
   }
 
+  @Override
   public Parameter getParameter() {
     return parameterChild.getChild(this);
   }
 
+  @Override
   public void setParameter(Parameter parameter) {
     parameterChild.setChild(this, parameter);
   }
 
+  @Override
   public Expression getExpression() {
     return expressionChild.getChild(this);
   }
 
+  @Override
   public void setExpression(Expression expression) {
     expressionChild.setChild(this, expression);
   }
@@ -55,11 +60,7 @@ public class BindingImpl extends DmnModelElementInstanceImpl implements Binding 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Binding.class, DMN_ELEMENT_BINDING)
       .namespaceUri(LATEST_DMN_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<Binding>() {
-        public Binding newInstance(ModelTypeInstanceContext instanceContext) {
-          return new BindingImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new BindingImpl(instanceContext));
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

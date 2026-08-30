@@ -32,7 +32,6 @@ import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ATTRIBUTE_DEFAULT;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_COMPLEX_GATEWAY;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN complexGateway element
@@ -48,11 +47,7 @@ public class ComplexGatewayImpl extends GatewayImpl implements ComplexGateway {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ComplexGateway.class, BPMN_ELEMENT_COMPLEX_GATEWAY)
       .namespaceUri(BPMN20_NS)
       .extendsType(Gateway.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ComplexGateway>() {
-        public ComplexGateway newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ComplexGatewayImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new ComplexGatewayImpl(instanceContext));
 
     defaultAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_DEFAULT)
       .idAttributeReference(SequenceFlow.class)
@@ -75,18 +70,22 @@ public class ComplexGatewayImpl extends GatewayImpl implements ComplexGateway {
     return new ComplexGatewayBuilder((BpmnModelInstance) modelInstance, this);
   }
 
+  @Override
   public SequenceFlow getDefault() {
     return defaultAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setDefault(SequenceFlow defaultFlow) {
     defaultAttribute.setReferenceTargetElement(this, defaultFlow);
   }
 
+  @Override
   public ActivationCondition getActivationCondition() {
     return activationConditionChild.getChild(this);
   }
 
+  @Override
   public void setActivationCondition(ActivationCondition activationCondition) {
     activationConditionChild.setChild(this, activationCondition);
   }

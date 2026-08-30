@@ -17,7 +17,6 @@
 package org.camunda.bpm.engine.rest.impl.history;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
@@ -44,11 +43,13 @@ public class HistoryCleanupRestServiceImpl implements HistoryCleanupRestService 
     this.processEngine = processEngine;
 	}
 
+  @Override
   public JobDto cleanupAsync(boolean immediatelyDue) {
     Job job = processEngine.getHistoryService().cleanUpHistoryAsync(immediatelyDue);
     return JobDto.fromJob(job);
   }
 
+  @Override
   public JobDto findCleanupJob() {
     Job job = processEngine.getHistoryService().findHistoryCleanupJob();
     if (job == null) {
@@ -57,6 +58,7 @@ public class HistoryCleanupRestServiceImpl implements HistoryCleanupRestService 
     return JobDto.fromJob(job);
   }
 
+  @Override
   public List<JobDto> findCleanupJobs() {
     List<Job> jobs = processEngine.getHistoryService().findHistoryCleanupJobs();
     if (jobs == null || jobs.isEmpty()) {
@@ -70,6 +72,7 @@ public class HistoryCleanupRestServiceImpl implements HistoryCleanupRestService 
     return dtos;
   }
 
+  @Override
   public HistoryCleanupConfigurationDto getHistoryCleanupConfiguration() {
 	  ProcessEngineConfigurationImpl engineConfiguration =
         (ProcessEngineConfigurationImpl) processEngine.getProcessEngineConfiguration();

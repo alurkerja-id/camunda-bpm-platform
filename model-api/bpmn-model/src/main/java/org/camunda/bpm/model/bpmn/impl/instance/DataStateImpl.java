@@ -26,7 +26,6 @@ import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ATTRIBUTE_NAME;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_DATA_STATE;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * @author Sebastian Menski
@@ -39,11 +38,7 @@ public class DataStateImpl extends BaseElementImpl implements DataState {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(DataState.class, BPMN_ELEMENT_DATA_STATE)
       .namespaceUri(BpmnModelConstants.BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<DataState>() {
-        public DataState newInstance(ModelTypeInstanceContext instanceContext) {
-          return new DataStateImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new DataStateImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_NAME)
       .build();
@@ -55,10 +50,12 @@ public class DataStateImpl extends BaseElementImpl implements DataState {
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }

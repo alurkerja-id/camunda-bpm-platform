@@ -26,7 +26,6 @@ import org.camunda.bpm.model.bpmn.instance.Transaction;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
 /**
@@ -41,11 +40,7 @@ public class TransactionImpl extends SubProcessImpl implements Transaction {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Transaction.class, BPMN_ELEMENT_TRANSACTION)
       .namespaceUri(BPMN20_NS)
       .extendsType(SubProcess.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Transaction>() {
-        public Transaction newInstance(ModelTypeInstanceContext instanceContext) {
-          return new TransactionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new TransactionImpl(instanceContext));
 
     methodAttribute = typeBuilder.namedEnumAttribute(BPMN_ATTRIBUTE_METHOD, TransactionMethod.class)
       .defaultValue(TransactionMethod.Compensate)

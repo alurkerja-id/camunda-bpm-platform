@@ -28,6 +28,7 @@ import org.camunda.bpm.model.bpmn.builder.UserTaskBuilder;
  */
 public interface UserTask extends Task {
 
+  @Override
   UserTaskBuilder builder();
 
   String getImplementation();

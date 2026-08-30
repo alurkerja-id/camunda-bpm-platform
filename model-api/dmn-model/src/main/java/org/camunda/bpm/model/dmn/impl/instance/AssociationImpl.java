@@ -29,7 +29,6 @@ import org.camunda.bpm.model.dmn.instance.TargetRef;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import org.camunda.bpm.model.xml.type.reference.ElementReference;
@@ -45,26 +44,32 @@ public class AssociationImpl extends ArtifactImpl implements Association {
     super(instanceContext);
   }
 
+  @Override
   public AssociationDirection getAssociationDirection() {
     return associationDirectionAttribute.getValue(this);
   }
 
+  @Override
   public void setAssociationDirection(AssociationDirection associationDirection) {
     associationDirectionAttribute.setValue(this, associationDirection);
   }
 
+  @Override
   public DmnElement getSource() {
     return sourceRef.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setSource(DmnElement source) {
     sourceRef.setReferenceTargetElement(this, source);
   }
 
+  @Override
   public DmnElement getTarget() {
     return targetRef.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setTarget(DmnElement target) {
     targetRef.setReferenceTargetElement(this, target);
   }
@@ -73,11 +78,7 @@ public class AssociationImpl extends ArtifactImpl implements Association {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Association.class, DMN_ELEMENT_ASSOCIATION)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(Artifact.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Association>() {
-        public Association newInstance(ModelTypeInstanceContext instanceContext) {
-          return new AssociationImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new AssociationImpl(instanceContext));
 
     associationDirectionAttribute = typeBuilder.enumAttribute(DMN_ATTRIBUTE_ASSOCIATION_DIRECTION, AssociationDirection.class)
       .defaultValue(AssociationDirection.None)

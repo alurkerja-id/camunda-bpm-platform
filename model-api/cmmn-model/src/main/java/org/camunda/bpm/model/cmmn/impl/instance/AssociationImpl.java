@@ -29,7 +29,6 @@ import org.camunda.bpm.model.cmmn.instance.CmmnElement;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
@@ -47,26 +46,32 @@ public class AssociationImpl extends ArtifactImpl implements Association {
     super(instanceContext);
   }
 
+  @Override
   public CmmnElement getSource() {
     return sourceRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setSource(CmmnElement source) {
     sourceRefAttribute.setReferenceTargetElement(this, source);
   }
 
+  @Override
   public CmmnElement getTarget() {
     return targetRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setTarget(CmmnElement target) {
     targetRefAttribute.setReferenceTargetElement(this, target);
   }
 
+  @Override
   public AssociationDirection getAssociationDirection() {
     return associationDirectionAttribute.getValue(this);
   }
 
+  @Override
   public void setAssociationDirection(AssociationDirection associationDirection) {
     associationDirectionAttribute.setValue(this, associationDirection);
   }
@@ -75,11 +80,7 @@ public class AssociationImpl extends ArtifactImpl implements Association {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Association.class, CMMN_ELEMENT_ASSOCIATION)
       .namespaceUri(CMMN11_NS)
       .extendsType(Artifact.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Association>() {
-        public Association newInstance(ModelTypeInstanceContext instanceContext) {
-          return new AssociationImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new AssociationImpl(instanceContext));
 
     sourceRefAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_SOURCE_REF)
       .idAttributeReference(CmmnElement.class)

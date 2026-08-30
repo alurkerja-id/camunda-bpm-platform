@@ -16,8 +16,6 @@
  */
 package org.camunda.bpm.engine.impl.persistence;
 
-import java.util.concurrent.Callable;
-
 import org.camunda.bpm.engine.authorization.Permission;
 import org.camunda.bpm.engine.authorization.Resource;
 import org.camunda.bpm.engine.impl.AbstractQuery;
@@ -243,9 +241,11 @@ public abstract class AbstractManager implements Session {
     return getSession(TenantManager.class);
   }
 
+  @Override
   public void close() {
   }
 
+  @Override
   public void flush() {
   }
 
@@ -294,34 +294,30 @@ public abstract class AbstractManager implements Session {
 
   public void saveDefaultAuthorizations(final AuthorizationEntity[] authorizations) {
     if(authorizations != null && authorizations.length > 0) {
-      Context.getCommandContext().runWithoutAuthorization(new Callable<Void>() {
-        public Void call() {
-          AuthorizationManager authorizationManager = getAuthorizationManager();
-          for (AuthorizationEntity authorization : authorizations) {
+      Context.getCommandContext().runWithoutAuthorization(() -> {
+        AuthorizationManager authorizationManager = getAuthorizationManager();
+        for (AuthorizationEntity authorization : authorizations) {
 
-            if(authorization.getId() == null) {
-              authorizationManager.insert(authorization);
-            } else {
-              authorizationManager.update(authorization);
-            }
-
+          if (authorization.getId() == null) {
+            authorizationManager.insert(authorization);
+          } else {
+            authorizationManager.update(authorization);
           }
-          return null;
+
         }
+        return null;
       });
     }
   }
 
   public void deleteDefaultAuthorizations(final AuthorizationEntity[] authorizations) {
     if(authorizations != null && authorizations.length > 0) {
-      Context.getCommandContext().runWithoutAuthorization(new Callable<Void>() {
-        public Void call() {
-          AuthorizationManager authorizationManager = getAuthorizationManager();
-          for (AuthorizationEntity authorization : authorizations) {
-            authorizationManager.delete(authorization);
-          }
-          return null;
+      Context.getCommandContext().runWithoutAuthorization(() -> {
+        AuthorizationManager authorizationManager = getAuthorizationManager();
+        for (AuthorizationEntity authorization : authorizations) {
+          authorizationManager.delete(authorization);
         }
+        return null;
       });
     }
   }

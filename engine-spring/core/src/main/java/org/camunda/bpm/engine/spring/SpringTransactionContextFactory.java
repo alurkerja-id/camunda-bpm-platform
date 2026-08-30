@@ -33,7 +33,8 @@ public class SpringTransactionContextFactory implements TransactionContextFactor
     this.transactionManager = transactionManager;
   }
 
-  public TransactionContext openTransactionContext(CommandContext commandContext) {
+	@Override
+	public TransactionContext openTransactionContext(CommandContext commandContext) {
     return new SpringTransactionContext(transactionManager, commandContext);
   }
 

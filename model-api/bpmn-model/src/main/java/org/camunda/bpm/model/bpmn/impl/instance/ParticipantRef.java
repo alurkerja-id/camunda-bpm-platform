@@ -22,7 +22,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_PARTICIPANT_REF;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN participantRef element of the BPMN tConversationNode type
@@ -34,11 +33,7 @@ public class ParticipantRef extends BpmnModelElementInstanceImpl {
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ParticipantRef.class, BPMN_ELEMENT_PARTICIPANT_REF)
       .namespaceUri(BPMN20_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<ParticipantRef>() {
-        public ParticipantRef newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ParticipantRef(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new ParticipantRef(instanceContext));
 
     typeBuilder.build();
   }

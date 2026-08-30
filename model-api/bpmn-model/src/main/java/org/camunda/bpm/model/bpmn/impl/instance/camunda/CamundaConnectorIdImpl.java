@@ -24,7 +24,6 @@ import org.camunda.bpm.model.bpmn.instance.camunda.CamundaConnectorId;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN connectorId camunda extension element
@@ -36,11 +35,7 @@ public class CamundaConnectorIdImpl extends BpmnModelElementInstanceImpl impleme
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaConnectorId.class, CAMUNDA_ELEMENT_CONNECTOR_ID)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<CamundaConnectorId>() {
-        public CamundaConnectorId newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CamundaConnectorIdImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new CamundaConnectorIdImpl(instanceContext));
 
     typeBuilder.build();
   }

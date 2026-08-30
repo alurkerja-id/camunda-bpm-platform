@@ -34,6 +34,7 @@ public class GetProcessApplicationForDeploymentCmd implements Command<String> {
     this.deploymentId = deploymentId;
   }
 
+  @Override
   public String execute(CommandContext commandContext) {
     commandContext.getAuthorizationManager().checkCamundaAdminOrPermission(CommandChecker::checkReadProcessApplicationForDeployment);
 

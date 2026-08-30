@@ -24,7 +24,6 @@ import org.camunda.bpm.model.dmn.instance.DmnElementReference;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class DecisionOwnedReferenceImpl extends DmnElementReferenceImpl implements DecisionOwnedReference {
 
@@ -36,11 +35,7 @@ public class DecisionOwnedReferenceImpl extends DmnElementReferenceImpl implemen
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(DecisionOwnedReference.class, DMN_ELEMENT_DECISION_OWNED)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(DmnElementReference.class)
-      .instanceProvider(new ModelTypeInstanceProvider<DecisionOwnedReference>() {
-        public DecisionOwnedReference newInstance(ModelTypeInstanceContext instanceContext) {
-          return new DecisionOwnedReferenceImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new DecisionOwnedReferenceImpl(instanceContext));
 
     typeBuilder.build();
   }

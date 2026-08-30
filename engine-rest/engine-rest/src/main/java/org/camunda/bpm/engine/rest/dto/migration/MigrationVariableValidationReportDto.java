@@ -19,7 +19,6 @@ package org.camunda.bpm.engine.rest.dto.migration;
 import org.camunda.bpm.engine.migration.MigrationVariableValidationReport;
 import org.camunda.bpm.engine.rest.dto.VariableValueDto;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

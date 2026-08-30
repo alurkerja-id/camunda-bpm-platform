@@ -24,7 +24,6 @@ import org.camunda.bpm.model.cmmn.instance.UserEvent;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * @author Roman Smirnov
@@ -40,11 +39,7 @@ public class UserEventImpl extends EventImpl implements UserEvent {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(UserEvent.class, CMMN_ELEMENT_USER_EVENT)
         .namespaceUri(CMMN10_NS)
         .extendsType(Event.class)
-        .instanceProvider(new ModelTypeInstanceProvider<UserEvent>() {
-          public UserEvent newInstance(ModelTypeInstanceContext instanceContext) {
-            return new UserEventImpl(instanceContext);
-          }
-        });
+        .instanceProvider(instanceContext -> new UserEventImpl(instanceContext));
 
     typeBuilder.build();
   }

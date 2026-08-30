@@ -22,6 +22,7 @@ package org.camunda.bpm.engine.impl.form.validator;
  */
 public class MinValidator extends AbstractNumericValidator {
 
+  @Override
   protected boolean validate(Integer submittedValue, Integer configuration) {
     return submittedValue >= configuration;
   }

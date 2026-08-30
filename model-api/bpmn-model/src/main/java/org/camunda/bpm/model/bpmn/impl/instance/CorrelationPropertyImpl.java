@@ -31,7 +31,6 @@ import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN correlationProperty element
@@ -49,11 +48,7 @@ public class CorrelationPropertyImpl extends RootElementImpl implements Correlat
     typeBuilder = modelBuilder.defineType(CorrelationProperty.class, BPMN_ELEMENT_CORRELATION_PROPERTY)
       .namespaceUri(BPMN20_NS)
       .extendsType(RootElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<CorrelationProperty>() {
-        public CorrelationProperty newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CorrelationPropertyImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new CorrelationPropertyImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_NAME)
       .build();
@@ -76,22 +71,27 @@ public class CorrelationPropertyImpl extends RootElementImpl implements Correlat
     super(context);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public ItemDefinition getType() {
     return typeAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setType(ItemDefinition type) {
     typeAttribute.setReferenceTargetElement(this, type);
   }
 
+  @Override
   public Collection<CorrelationPropertyRetrievalExpression> getCorrelationPropertyRetrievalExpressions() {
     return correlationPropertyRetrievalExpressionCollection.get(this);
   }

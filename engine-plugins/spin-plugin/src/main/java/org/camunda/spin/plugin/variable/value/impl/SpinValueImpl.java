@@ -53,6 +53,7 @@ public abstract class SpinValueImpl extends AbstractTypedValue<Spin<?>> implemen
     this.isTransient = isTransient;
   }
 
+  @Override
   public Spin<?> getValue() {
     if(isDeserialized) {
       return super.getValue();
@@ -69,14 +70,17 @@ public abstract class SpinValueImpl extends AbstractTypedValue<Spin<?>> implemen
     }
   }
 
+  @Override
   public SpinValueType getType() {
     return (SpinValueType) super.getType();
   }
 
+  @Override
   public boolean isDeserialized() {
     return isDeserialized;
   }
 
+  @Override
   public String getValueSerialized() {
     return serializedValue;
   }
@@ -85,6 +89,7 @@ public abstract class SpinValueImpl extends AbstractTypedValue<Spin<?>> implemen
     this.serializedValue = serializedValue;
   }
 
+  @Override
   public String getSerializationDataFormat() {
     return dataFormatName;
   }
@@ -93,6 +98,7 @@ public abstract class SpinValueImpl extends AbstractTypedValue<Spin<?>> implemen
     this.dataFormatName = serializationDataFormat;
   }
 
+  @Override
   public DataFormat<? extends Spin<?>> getDataFormat() {
     if(isDeserialized) {
       return DataFormats.getDataFormat(dataFormatName);

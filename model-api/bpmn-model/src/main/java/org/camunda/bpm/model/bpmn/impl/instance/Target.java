@@ -22,7 +22,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_TARGET;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN target element of the BPMN tRelationship type
@@ -34,11 +33,7 @@ public class Target extends BpmnModelElementInstanceImpl {
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Target.class, BPMN_ELEMENT_TARGET)
       .namespaceUri(BPMN20_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<Target>() {
-        public Target newInstance(ModelTypeInstanceContext instanceContext) {
-          return new Target(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new Target(instanceContext));
 
     typeBuilder.build();
   }

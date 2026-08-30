@@ -36,7 +36,6 @@ import org.camunda.bpm.model.cmmn.instance.Stage;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
@@ -64,18 +63,22 @@ public class StageImpl extends PlanFragmentImpl implements Stage {
     super(instanceContext);
   }
 
+  @Override
   public boolean isAutoComplete() {
     return autoCompleteAttribute.getValue(this);
   }
 
+  @Override
   public void setAutoComplete(boolean autoComplete) {
     autoCompleteAttribute.setValue(this, autoComplete);
   }
 
+  @Override
   public Collection<Sentry> getExitCriterias() {
     return exitCriteriaRefCollection.getReferenceTargetElements(this);
   }
 
+  @Override
   public Collection<Sentry> getExitCriteria() {
     if (!isCmmn11()) {
       return Collections.unmodifiableCollection(getExitCriterias());
@@ -93,18 +96,22 @@ public class StageImpl extends PlanFragmentImpl implements Stage {
     }
   }
 
+  @Override
   public Collection<ExitCriterion> getExitCriterions() {
     return exitCriterionCollection.get(this);
   }
 
+  @Override
   public PlanningTable getPlanningTable() {
     return planningTableChild.getChild(this);
   }
 
+  @Override
   public void setPlanningTable(PlanningTable planningTable) {
     planningTableChild.setChild(this, planningTable);
   }
 
+  @Override
   public Collection<PlanItemDefinition> getPlanItemDefinitions() {
     return planItemDefinitionCollection.get(this);
   }
@@ -113,11 +120,7 @@ public class StageImpl extends PlanFragmentImpl implements Stage {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Stage.class, CMMN_ELEMENT_STAGE)
         .namespaceUri(CMMN11_NS)
         .extendsType(PlanFragment.class)
-        .instanceProvider(new ModelTypeInstanceProvider<Stage>() {
-          public Stage newInstance(ModelTypeInstanceContext instanceContext) {
-            return new StageImpl(instanceContext);
-          }
-        });
+        .instanceProvider(instanceContext -> new StageImpl(instanceContext));
 
     autoCompleteAttribute = typeBuilder.booleanAttribute(CMMN_ATTRIBUTE_AUTO_COMPLETE)
         .defaultValue(false)

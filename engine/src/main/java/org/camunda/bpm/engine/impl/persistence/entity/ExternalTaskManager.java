@@ -29,13 +29,11 @@ import org.camunda.bpm.engine.externaltask.ExternalTask;
 import org.camunda.bpm.engine.impl.ExternalTaskQueryImpl;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
 import org.camunda.bpm.engine.impl.QueryOrderingProperty;
-import org.camunda.bpm.engine.impl.cfg.TransactionListener;
 import org.camunda.bpm.engine.impl.cfg.TransactionState;
 import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.db.ListQueryParameterObject;
 import org.camunda.bpm.engine.impl.db.entitymanager.DbEntityManager;
 import org.camunda.bpm.engine.impl.externaltask.TopicFetchInstruction;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
 import org.camunda.bpm.engine.impl.persistence.AbstractManager;
 import org.camunda.bpm.engine.impl.util.ClockUtil;
 import org.camunda.bpm.engine.impl.util.ImmutablePair;
@@ -183,12 +181,8 @@ public class ExternalTaskManager extends AbstractManager {
   public void fireExternalTaskAvailableEvent() {
     Context.getCommandContext()
         .getTransactionContext()
-        .addTransactionListener(TransactionState.COMMITTED, new TransactionListener() {
-          @Override
-          public void execute(CommandContext commandContext) {
-            ProcessEngineImpl.EXT_TASK_CONDITIONS.signalAll();
-          }
-        });
+        .addTransactionListener(TransactionState.COMMITTED, commandContext ->
+        ProcessEngineImpl.EXT_TASK_CONDITIONS.signalAll());
   }
 }
 

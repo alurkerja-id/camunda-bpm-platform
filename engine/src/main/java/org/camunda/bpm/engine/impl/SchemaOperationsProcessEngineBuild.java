@@ -23,7 +23,6 @@ import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.db.EnginePersistenceLogger;
 import org.camunda.bpm.engine.impl.db.PersistenceSession;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.entity.PropertyEntity;
 
 /**
  * @author Tom Baeyens
@@ -35,6 +34,7 @@ public class SchemaOperationsProcessEngineBuild implements SchemaOperationsComma
 
   private final static EnginePersistenceLogger LOG = ProcessEngineLogger.PERSISTENCE_LOGGER;
 
+  @Override
   public Void execute(CommandContext commandContext) {
     String databaseSchemaUpdate = Context.getProcessEngineConfiguration().getDatabaseSchemaUpdate();
     PersistenceSession persistenceSession = commandContext.getSession(PersistenceSession.class);

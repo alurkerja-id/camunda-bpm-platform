@@ -31,7 +31,6 @@ import org.camunda.bpm.model.dmn.instance.Type;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
@@ -50,30 +49,37 @@ public class KnowledgeSourceImpl extends DrgElementImpl implements KnowledgeSour
     super(instanceContext);
   }
 
+  @Override
   public String getLocationUri() {
     return locationUriAttribute.getValue(this);
   }
 
+  @Override
   public void setLocationUri(String locationUri) {
     locationUriAttribute.setValue(this, locationUri);
   }
 
+  @Override
   public Collection<AuthorityRequirement> getAuthorityRequirement() {
     return authorityRequirementCollection.get(this);
   }
 
+  @Override
   public Type getType() {
     return typeChild.getChild(this);
   }
 
+  @Override
   public void setType(Type type) {
     typeChild.setChild(this, type);
   }
 
+  @Override
   public OrganizationUnit getOwner() {
     return ownerRef.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setOwner(OrganizationUnit owner) {
     ownerRef.setReferenceTargetElement(this, owner);
   }
@@ -82,11 +88,7 @@ public class KnowledgeSourceImpl extends DrgElementImpl implements KnowledgeSour
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(KnowledgeSource.class, DMN_ELEMENT_KNOWLEDGE_SOURCE)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(DrgElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<KnowledgeSource>() {
-        public KnowledgeSource newInstance(ModelTypeInstanceContext instanceContext) {
-          return new KnowledgeSourceImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new KnowledgeSourceImpl(instanceContext));
 
     locationUriAttribute = typeBuilder.stringAttribute(DMN_ATTRIBUTE_LOCATION_URI)
       .build();

@@ -33,7 +33,6 @@ import org.camunda.bpm.engine.impl.persistence.entity.ActivityInstanceImpl;
 import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.IncidentEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.TransitionInstanceImpl;
-import org.camunda.bpm.engine.impl.pvm.PvmActivity;
 import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
 import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
 import org.camunda.bpm.engine.impl.pvm.runtime.CompensationBehavior;
@@ -72,6 +71,7 @@ public class GetActivityInstanceCmd implements Command<ActivityInstance> {
     this.processInstanceId = processInstanceId;
   }
 
+  @Override
   public ActivityInstance execute(CommandContext commandContext) {
 
     ensureNotNull("processInstanceId", processInstanceId);

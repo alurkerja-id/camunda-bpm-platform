@@ -31,7 +31,6 @@ import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMNDI BPMNShape element
@@ -53,11 +52,7 @@ public class BpmnShapeImpl extends LabeledShapeImpl implements BpmnShape {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(BpmnShape.class, BPMNDI_ELEMENT_BPMN_SHAPE)
       .namespaceUri(BPMNDI_NS)
       .extendsType(LabeledShape.class)
-      .instanceProvider(new ModelTypeInstanceProvider<BpmnShape>() {
-        public BpmnShape newInstance(ModelTypeInstanceContext instanceContext) {
-          return new BpmnShapeImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new BpmnShapeImpl(instanceContext));
 
     bpmnElementAttribute = typeBuilder.stringAttribute(BPMNDI_ATTRIBUTE_BPMN_ELEMENT)
       .qNameAttributeReference(BaseElement.class)
@@ -94,66 +89,82 @@ public class BpmnShapeImpl extends LabeledShapeImpl implements BpmnShape {
     super(instanceContext);
   }
 
+  @Override
   public BaseElement getBpmnElement() {
     return bpmnElementAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setBpmnElement(BaseElement bpmnElement) {
     bpmnElementAttribute.setReferenceTargetElement(this, bpmnElement);
   }
 
+  @Override
   public boolean isHorizontal() {
     return isHorizontalAttribute.getValue(this);
   }
 
+  @Override
   public void setHorizontal(boolean isHorizontal) {
     isHorizontalAttribute.setValue(this, isHorizontal);
   }
 
+  @Override
   public boolean isExpanded() {
     return isExpandedAttribute.getValue(this);
   }
 
+  @Override
   public void setExpanded(boolean isExpanded) {
     isExpandedAttribute.setValue(this, isExpanded);
   }
 
+  @Override
   public boolean isMarkerVisible() {
     return isMarkerVisibleAttribute.getValue(this);
   }
 
+  @Override
   public void setMarkerVisible(boolean isMarkerVisible) {
     isMarkerVisibleAttribute.setValue(this, isMarkerVisible);
   }
 
+  @Override
   public boolean isMessageVisible() {
     return isMessageVisibleAttribute.getValue(this);
   }
 
+  @Override
   public void setMessageVisible(boolean isMessageVisible) {
     isMessageVisibleAttribute.setValue(this, isMessageVisible);
   }
 
+  @Override
   public ParticipantBandKind getParticipantBandKind() {
     return participantBandKindAttribute.getValue(this);
   }
 
+  @Override
   public void setParticipantBandKind(ParticipantBandKind participantBandKind) {
     participantBandKindAttribute.setValue(this, participantBandKind);
   }
 
+  @Override
   public BpmnShape getChoreographyActivityShape() {
     return choreographyActivityShapeAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setChoreographyActivityShape(BpmnShape choreographyActivityShape) {
     choreographyActivityShapeAttribute.setReferenceTargetElement(this, choreographyActivityShape);
   }
 
+  @Override
   public BpmnLabel getBpmnLabel() {
     return bpmnLabelChild.getChild(this);
   }
 
+  @Override
   public void setBpmnLabel(BpmnLabel bpmnLabel) {
     bpmnLabelChild.setChild(this, bpmnLabel);
   }

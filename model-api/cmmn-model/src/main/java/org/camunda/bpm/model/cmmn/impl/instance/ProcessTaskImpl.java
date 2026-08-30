@@ -33,7 +33,6 @@ import org.camunda.bpm.model.cmmn.instance.Task;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
@@ -57,46 +56,57 @@ public class ProcessTaskImpl extends TaskImpl implements ProcessTask {
     super(instanceContext);
   }
 
+  @Override
   public String getProcess() {
     return processRefAttribute.getValue(this);
   }
 
+  @Override
   public void setProcess(String process) {
     processRefAttribute.setValue(this, process);
   }
 
+  @Override
   public ProcessRefExpression getProcessExpression() {
     return processRefExpressionChild.getChild(this);
   }
 
+  @Override
   public void setProcessExpression(ProcessRefExpression processExpression) {
     processRefExpressionChild.setChild(this, processExpression);
   }
 
+  @Override
   public Collection<ParameterMapping> getParameterMappings() {
     return parameterMappingCollection.get(this);
   }
 
+  @Override
   public String getCamundaProcessBinding() {
     return camundaProcessBindingAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaProcessBinding(String camundaProcessBinding) {
     camundaProcessBindingAttribute.setValue(this, camundaProcessBinding);
   }
 
+  @Override
   public String getCamundaProcessVersion() {
     return camundaProcessVersionAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaProcessVersion(String camundaProcessVersion) {
     camundaProcessVersionAttribute.setValue(this, camundaProcessVersion);
   }
 
+  @Override
   public String getCamundaProcessTenantId() {
     return camundaProcessTenantIdAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaProcessTenantId(String camundaProcessTenantId) {
     camundaProcessTenantIdAttribute.setValue(this, camundaProcessTenantId);
   }
@@ -105,11 +115,7 @@ public class ProcessTaskImpl extends TaskImpl implements ProcessTask {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ProcessTask.class, CMMN_ELEMENT_PROCESS_TASK)
         .namespaceUri(CMMN11_NS)
         .extendsType(Task.class)
-        .instanceProvider(new ModelTypeInstanceProvider<ProcessTask>() {
-          public ProcessTask newInstance(ModelTypeInstanceContext instanceContext) {
-            return new ProcessTaskImpl(instanceContext);
-          }
-        });
+        .instanceProvider(instanceContext -> new ProcessTaskImpl(instanceContext));
 
     processRefAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_PROCESS_REF)
         .build();

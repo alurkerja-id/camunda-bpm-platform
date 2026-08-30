@@ -16,7 +16,10 @@
  */
 package org.camunda.bpm.model.bpmn.impl.instance;
 
-import org.camunda.bpm.model.bpmn.instance.*;
+import org.camunda.bpm.model.bpmn.instance.BaseElement;
+import org.camunda.bpm.model.bpmn.instance.DataOutput;
+import org.camunda.bpm.model.bpmn.instance.InputSet;
+import org.camunda.bpm.model.bpmn.instance.OutputSet;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
@@ -27,7 +30,6 @@ import org.camunda.bpm.model.xml.type.reference.ElementReferenceCollection;
 import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN outputSet element
@@ -46,11 +48,7 @@ public class OutputSetImpl extends BaseElementImpl implements OutputSet {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OutputSet.class, BPMN_ELEMENT_OUTPUT_SET)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<OutputSet>() {
-        public OutputSet newInstance(ModelTypeInstanceContext instanceContext) {
-          return new OutputSetImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new OutputSetImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_NAME)
       .build();
@@ -80,26 +78,32 @@ public class OutputSetImpl extends BaseElementImpl implements OutputSet {
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public Collection<DataOutput> getDataOutputRefs() {
     return dataOutputRefsCollection.getReferenceTargetElements(this);
   }
 
+  @Override
   public Collection<DataOutput> getOptionalOutputRefs() {
     return optionalOutputRefsCollection.getReferenceTargetElements(this);
   }
 
+  @Override
   public Collection<DataOutput> getWhileExecutingOutputRefs() {
     return whileExecutingOutputRefsCollection.getReferenceTargetElements(this);
   }
 
+  @Override
   public Collection<InputSet> getInputSetRefs() {
     return inputSetInputSetRefsCollection.getReferenceTargetElements(this);
   }

@@ -18,8 +18,6 @@ package org.camunda.bpm.engine.migration;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.migration.MigrationInstruction;
-
 /**
  * Collects the validation failures for a single migration
  * instruction.

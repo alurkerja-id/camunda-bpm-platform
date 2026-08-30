@@ -62,6 +62,7 @@ public class StateHandlerAnnotationBeanFactoryPostProcessor implements BeanFacto
 		}
 	}
 
+	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
 		if (beanFactory instanceof BeanDefinitionRegistry) {
 			BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;

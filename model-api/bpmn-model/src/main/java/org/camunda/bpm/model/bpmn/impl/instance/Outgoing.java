@@ -22,7 +22,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_OUTGOING;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN outgoing element of the BPMN tFlowNode type
@@ -34,11 +33,7 @@ public class Outgoing extends BpmnModelElementInstanceImpl {
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Outgoing.class, BPMN_ELEMENT_OUTGOING)
       .namespaceUri(BPMN20_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<Outgoing>() {
-        public Outgoing newInstance(ModelTypeInstanceContext instanceContext) {
-          return new Outgoing(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new Outgoing(instanceContext));
 
     typeBuilder.build();
   }

@@ -29,7 +29,6 @@ import org.camunda.bpm.model.xml.type.reference.ElementReferenceCollection;
 import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN linkEventDefinition element
@@ -46,11 +45,7 @@ public class LinkEventDefinitionImpl extends EventDefinitionImpl implements Link
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(LinkEventDefinition.class, BPMN_ELEMENT_LINK_EVENT_DEFINITION)
       .namespaceUri(BPMN20_NS)
       .extendsType(EventDefinition.class)
-      .instanceProvider(new ModelTypeInstanceProvider<LinkEventDefinition>() {
-        public LinkEventDefinition newInstance(ModelTypeInstanceContext instanceContext) {
-          return new LinkEventDefinitionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new LinkEventDefinitionImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_NAME)
       .required()
@@ -73,22 +68,27 @@ public class LinkEventDefinitionImpl extends EventDefinitionImpl implements Link
     super(context);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public Collection<LinkEventDefinition> getSources() {
     return sourceCollection.getReferenceTargetElements(this);
   }
 
+  @Override
   public LinkEventDefinition getTarget() {
     return targetChild.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setTarget(LinkEventDefinition target) {
     targetChild.setReferenceTargetElement(this, target);
   }

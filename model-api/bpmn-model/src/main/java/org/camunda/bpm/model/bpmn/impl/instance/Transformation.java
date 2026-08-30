@@ -23,7 +23,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_TRANSFORMATION;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN transformation element of the BPMN tDataAssociation type
@@ -36,11 +35,7 @@ public class Transformation extends FormalExpressionImpl {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Transformation.class, BPMN_ELEMENT_TRANSFORMATION)
       .namespaceUri(BPMN20_NS)
       .extendsType(FormalExpression.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Transformation>() {
-        public Transformation newInstance(ModelTypeInstanceContext instanceContext) {
-          return new Transformation(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new Transformation(instanceContext));
 
     typeBuilder.build();
   }

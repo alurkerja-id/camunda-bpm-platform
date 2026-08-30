@@ -31,7 +31,6 @@ import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_INPUT_SET;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN inputSet element
@@ -50,11 +49,7 @@ public class InputSetImpl extends BaseElementImpl implements InputSet {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(InputSet.class, BPMN_ELEMENT_INPUT_SET)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<InputSet>() {
-        public InputSet newInstance(ModelTypeInstanceContext instanceContext) {
-          return new InputSetImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new InputSetImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute("name")
       .build();
@@ -84,26 +79,32 @@ public class InputSetImpl extends BaseElementImpl implements InputSet {
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public Collection<DataInput> getDataInputs() {
     return dataInputDataInputRefsCollection.getReferenceTargetElements(this);
   }
 
+  @Override
   public Collection<DataInput> getOptionalInputs() {
     return optionalInputRefsCollection.getReferenceTargetElements(this);
   }
 
+  @Override
   public Collection<DataInput> getWhileExecutingInput() {
     return whileExecutingInputRefsCollection.getReferenceTargetElements(this);
   }
 
+  @Override
   public Collection<OutputSet> getOutputSets() {
     return outputSetOutputSetRefsCollection.getReferenceTargetElements(this);
   }

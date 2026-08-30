@@ -31,7 +31,6 @@ import org.camunda.bpm.model.cmmn.instance.Task;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
@@ -58,26 +57,32 @@ public class TaskImpl extends PlanItemDefinitionImpl implements Task {
     super(instanceContext);
   }
 
+  @Override
   public boolean isBlocking() {
     return isBlockingAttribute.getValue(this);
   }
 
+  @Override
   public void setIsBlocking(boolean isBlocking) {
     isBlockingAttribute.setValue(this, isBlocking);
   }
 
+  @Override
   public Collection<InputsCaseParameter> getInputs() {
     return inputsCollection.get(this);
   }
 
+  @Override
   public Collection<OutputsCaseParameter> getOutputs() {
     return outputsCollection.get(this);
   }
 
+  @Override
   public Collection<InputCaseParameter> getInputParameters() {
     return inputParameterCollection.get(this);
   }
 
+  @Override
   public Collection<OutputCaseParameter> getOutputParameters() {
     return outputParameterCollection.get(this);
   }
@@ -86,11 +91,7 @@ public class TaskImpl extends PlanItemDefinitionImpl implements Task {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Task.class, CMMN_ELEMENT_TASK)
         .namespaceUri(CMMN11_NS)
         .extendsType(PlanItemDefinition.class)
-        .instanceProvider(new ModelTypeInstanceProvider<Task>() {
-          public Task newInstance(ModelTypeInstanceContext instanceContext) {
-            return new TaskImpl(instanceContext);
-          }
-        });
+        .instanceProvider(instanceContext -> new TaskImpl(instanceContext));
 
     isBlockingAttribute = typeBuilder.booleanAttribute(CMMN_ATTRIBUTE_IS_BLOCKING)
         .defaultValue(true)

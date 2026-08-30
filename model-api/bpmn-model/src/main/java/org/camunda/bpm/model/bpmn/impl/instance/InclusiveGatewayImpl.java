@@ -27,7 +27,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN inclusiveGateway element
@@ -42,11 +41,7 @@ public class InclusiveGatewayImpl extends GatewayImpl implements InclusiveGatewa
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(InclusiveGateway.class, BPMN_ELEMENT_INCLUSIVE_GATEWAY)
       .namespaceUri(BPMN20_NS)
       .extendsType(Gateway.class)
-      .instanceProvider(new ModelTypeInstanceProvider<InclusiveGateway>() {
-        public InclusiveGateway newInstance(ModelTypeInstanceContext instanceContext) {
-          return new InclusiveGatewayImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new InclusiveGatewayImpl(instanceContext));
 
     defaultAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_DEFAULT)
       .idAttributeReference(SequenceFlow.class)
@@ -64,10 +59,12 @@ public class InclusiveGatewayImpl extends GatewayImpl implements InclusiveGatewa
     return new InclusiveGatewayBuilder((BpmnModelInstance) modelInstance, this);
   }
 
+  @Override
   public SequenceFlow getDefault() {
     return defaultAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setDefault(SequenceFlow defaultFlow) {
     defaultAttribute.setReferenceTargetElement(this, defaultFlow);
   }

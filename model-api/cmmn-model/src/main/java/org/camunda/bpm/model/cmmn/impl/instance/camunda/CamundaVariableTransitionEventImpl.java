@@ -25,7 +25,6 @@ import org.camunda.bpm.model.cmmn.instance.camunda.CamundaVariableTransitionEven
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class CamundaVariableTransitionEventImpl  extends CmmnModelElementInstanceImpl implements CamundaVariableTransitionEvent {
 
@@ -36,20 +35,18 @@ public class CamundaVariableTransitionEventImpl  extends CmmnModelElementInstanc
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaVariableTransitionEvent.class, CAMUNDA_ELEMENT_VARIABLE_EVENT)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<CamundaVariableTransitionEvent>() {
-        public CamundaVariableTransitionEvent newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CamundaVariableTransitionEventImpl(instanceContext);
-      }
-    });
+      .instanceProvider(instanceContext -> new CamundaVariableTransitionEventImpl(instanceContext));
 
     typeBuilder.build();
   }
 
+  @Override
   public VariableTransition getValue() {
     String variableEvent = getTextContent().trim();
     return Enum.valueOf(VariableTransition.class, variableEvent);
   }
 
+  @Override
   public void setValue(VariableTransition value) {
     setTextContent(value.toString());
   }

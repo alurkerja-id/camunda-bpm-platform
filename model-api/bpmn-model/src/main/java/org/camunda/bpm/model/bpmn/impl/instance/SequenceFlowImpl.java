@@ -32,7 +32,6 @@ import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN sequenceFlow element
@@ -50,11 +49,7 @@ public class SequenceFlowImpl extends FlowElementImpl implements SequenceFlow {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(SequenceFlow.class, BPMN_ELEMENT_SEQUENCE_FLOW)
       .namespaceUri(BPMN20_NS)
       .extendsType(FlowElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<SequenceFlow>() {
-        public SequenceFlow newInstance(ModelTypeInstanceContext instanceContext) {
-          return new SequenceFlowImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new SequenceFlowImpl(instanceContext));
 
     sourceRefAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_SOURCE_REF)
       .required()
@@ -86,42 +81,52 @@ public class SequenceFlowImpl extends FlowElementImpl implements SequenceFlow {
     return new SequenceFlowBuilder((BpmnModelInstance) modelInstance, this);
   }
 
+  @Override
   public FlowNode getSource() {
     return sourceRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setSource(FlowNode source) {
     sourceRefAttribute.setReferenceTargetElement(this, source);
   }
 
+  @Override
   public FlowNode getTarget() {
     return targetRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setTarget(FlowNode target) {
     targetRefAttribute.setReferenceTargetElement(this, target);
   }
 
+  @Override
   public boolean isImmediate() {
     return isImmediateAttribute.getValue(this);
   }
 
+  @Override
   public void setImmediate(boolean isImmediate) {
     isImmediateAttribute.setValue(this, isImmediate);
   }
 
+  @Override
   public ConditionExpression getConditionExpression() {
     return conditionExpressionCollection.getChild(this);
   }
 
+  @Override
   public void setConditionExpression(ConditionExpression conditionExpression) {
     conditionExpressionCollection.setChild(this, conditionExpression);
   }
 
+  @Override
   public void removeConditionExpression() {
     conditionExpressionCollection.removeChild(this);
   }
 
+  @Override
   public BpmnEdge getDiagramElement() {
     return (BpmnEdge) super.getDiagramElement();
   }

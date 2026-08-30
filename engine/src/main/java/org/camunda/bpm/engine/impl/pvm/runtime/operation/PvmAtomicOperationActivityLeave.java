@@ -33,10 +33,12 @@ public class PvmAtomicOperationActivityLeave implements PvmAtomicOperation {
 
   private final static PvmLogger LOG = PvmLogger.PVM_LOGGER;
 
+  @Override
   public boolean isAsync(PvmExecutionImpl execution) {
     return false;
   }
 
+  @Override
   public void execute(PvmExecutionImpl execution) {
 
     execution.activityInstanceDone();
@@ -64,10 +66,12 @@ public class PvmAtomicOperationActivityLeave implements PvmAtomicOperation {
     }
   }
 
+  @Override
   public String getCanonicalName() {
     return "activity-leave";
   }
 
+  @Override
   public boolean isAsyncCapable() {
     return false;
   }

@@ -19,7 +19,6 @@ package org.camunda.bpm.model.bpmn.impl.instance;
 import org.camunda.bpm.model.bpmn.instance.*;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
@@ -30,7 +29,6 @@ import org.camunda.bpm.model.xml.type.reference.ElementReferenceCollection;
 import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN callableElement element
@@ -49,11 +47,7 @@ public class CallableElementImpl extends RootElementImpl implements CallableElem
     ModelElementTypeBuilder typeBuilder = bpmnModelBuilder.defineType(CallableElement.class, BPMN_ELEMENT_CALLABLE_ELEMENT)
       .namespaceUri(BPMN20_NS)
       .extendsType(RootElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ModelElementInstance>() {
-        public ModelElementInstance newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CallableElementImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new CallableElementImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_NAME)
       .build();
@@ -77,26 +71,32 @@ public class CallableElementImpl extends RootElementImpl implements CallableElem
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public Collection<Interface> getSupportedInterfaces() {
     return supportedInterfaceRefCollection.getReferenceTargetElements(this);
   }
 
+  @Override
   public IoSpecification getIoSpecification() {
     return ioSpecificationChild.getChild(this);
   }
 
+  @Override
   public void setIoSpecification(IoSpecification ioSpecification) {
     ioSpecificationChild.setChild(this, ioSpecification);
   }
 
+  @Override
   public Collection<IoBinding> getIoBindings() {
     return ioBindingCollection.get(this);
   }

@@ -26,6 +26,7 @@ import org.camunda.bpm.engine.impl.interceptor.CommandContext;
  */
 public class StandaloneTransactionContextFactory implements TransactionContextFactory {
 
+  @Override
   public TransactionContext openTransactionContext(CommandContext commandContext) {
     return new StandaloneTransactionContext(commandContext);
   }

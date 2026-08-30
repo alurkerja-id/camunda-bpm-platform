@@ -17,7 +17,6 @@
 package org.camunda.bpm.engine.impl.repository;
 
 import org.camunda.bpm.engine.impl.persistence.entity.DeploymentEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.ResourceEntity;
 import org.camunda.bpm.engine.repository.CandidateDeployment;
 import org.camunda.bpm.engine.repository.Resource;
 

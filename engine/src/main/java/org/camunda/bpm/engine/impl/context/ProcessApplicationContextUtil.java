@@ -29,8 +29,6 @@ import org.camunda.bpm.engine.impl.persistence.entity.TaskEntity;
 import org.camunda.bpm.engine.impl.repository.ResourceDefinitionEntity;
 import org.camunda.bpm.engine.impl.util.ClassLoaderUtil;
 
-import java.util.concurrent.Callable;
-
 public class ProcessApplicationContextUtil {
 
   private final static ProcessApplicationLogger LOG = ProcessApplicationLogger.PROCESS_APPLICATION_LOGGER;
@@ -177,13 +175,9 @@ public class ProcessApplicationContextUtil {
   public static void doContextSwitch(final Runnable runnable, ProcessDefinitionEntity contextDefinition) {
     ProcessApplicationReference processApplication = getTargetProcessApplication(contextDefinition);
     if (requiresContextSwitch(processApplication)) {
-      Context.executeWithinProcessApplication(new Callable<Void>() {
-
-        @Override
-        public Void call() throws Exception {
-          runnable.run();
-          return null;
-        }
+      Context.executeWithinProcessApplication(() -> {
+        runnable.run();
+        return null;
       }, processApplication);
     }
     else {

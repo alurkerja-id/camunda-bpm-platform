@@ -27,7 +27,6 @@ import org.camunda.bpm.model.dmn.instance.Expression;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 
@@ -39,6 +38,7 @@ public class ContextImpl extends ExpressionImpl implements Context {
     super(instanceContext);
   }
 
+  @Override
   public Collection<ContextEntry> getContextEntries() {
     return contextEntryCollection.get(this);
   }
@@ -47,11 +47,7 @@ public class ContextImpl extends ExpressionImpl implements Context {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Context.class, DMN_ELEMENT_CONTEXT)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(Expression.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Context>() {
-        public Context newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ContextImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new ContextImpl(instanceContext));
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

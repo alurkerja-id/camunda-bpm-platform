@@ -60,18 +60,21 @@ public class SpringTransactionContext implements TransactionContext {
       }
     });
   }
-  
-  public void commit() {
+
+	@Override
+	public void commit() {
     // Do nothing, transaction is managed by spring
   }
 
-  public void rollback() {
+	@Override
+	public void rollback() {
     // Just in case the rollback isn't triggered by an
     // exception, we mark the current transaction rollBackOnly.
     transactionManager.getTransaction(null).setRollbackOnly();
   }
 
-  public void addTransactionListener(final TransactionState transactionState, final TransactionListener transactionListener) {
+	@Override
+	public void addTransactionListener(final TransactionState transactionState, final TransactionListener transactionListener) {
     if (transactionState.equals(TransactionState.COMMITTING)) {
       
       TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
@@ -114,7 +117,8 @@ public class SpringTransactionContext implements TransactionContext {
     
   }
 
-  public boolean isTransactionActive() {
+	@Override
+	public boolean isTransactionActive() {
     return TransactionSynchronizationManager.isActualTransactionActive() &&
            !TransactionState.ROLLED_BACK.equals(lastTransactionState) &&
            !TransactionState.ROLLINGBACK.equals(lastTransactionState);
@@ -122,25 +126,32 @@ public class SpringTransactionContext implements TransactionContext {
   
   protected abstract class TransactionSynchronizationAdapter implements TransactionSynchronization {
 
-    public void suspend() {
+		@Override
+		public void suspend() {
     }
 
-    public void resume() {
+		@Override
+		public void resume() {
     }
 
-    public void flush() {
+		@Override
+		public void flush() {
     }
 
-    public void beforeCommit(boolean readOnly) {
+		@Override
+		public void beforeCommit(boolean readOnly) {
     }
 
-    public void beforeCompletion() {
+		@Override
+		public void beforeCompletion() {
     }
 
-    public void afterCommit() {
+		@Override
+		public void afterCommit() {
     }
 
-    public void afterCompletion(int status) {
+		@Override
+		public void afterCompletion(int status) {
     }
     
   }

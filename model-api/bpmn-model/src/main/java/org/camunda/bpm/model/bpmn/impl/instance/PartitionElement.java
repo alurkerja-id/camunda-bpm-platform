@@ -23,7 +23,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_PARTITION_ELEMENT;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN partitionElement of the BPMN tLane type
@@ -36,11 +35,7 @@ public class PartitionElement extends BaseElementImpl {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(PartitionElement.class, BPMN_ELEMENT_PARTITION_ELEMENT)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<PartitionElement>() {
-        public PartitionElement newInstance(ModelTypeInstanceContext instanceContext) {
-          return new PartitionElement(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new PartitionElement(instanceContext));
 
     typeBuilder.build();
   }

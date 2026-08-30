@@ -28,7 +28,6 @@ import org.camunda.bpm.model.cmmn.instance.ConditionExpression;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
@@ -50,26 +49,32 @@ public class ApplicabilityRuleImpl extends CmmnElementImpl implements Applicabil
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public CaseFileItem getContext() {
     return contextRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setContext(CaseFileItem context) {
     contextRefAttribute.setReferenceTargetElement(this, context);
   }
 
+  @Override
   public ConditionExpression getCondition() {
     return conditionChild.getChild(this);
   }
 
+  @Override
   public void setCondition(ConditionExpression expression) {
     conditionChild.setChild(this, expression);
   }
@@ -78,11 +83,7 @@ public class ApplicabilityRuleImpl extends CmmnElementImpl implements Applicabil
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ApplicabilityRule.class, CMMN_ELEMENT_APPLICABILITY_RULE)
         .namespaceUri(CMMN11_NS)
         .extendsType(CmmnElement.class)
-        .instanceProvider(new ModelTypeInstanceProvider<ApplicabilityRule>() {
-          public ApplicabilityRule newInstance(ModelTypeInstanceContext instanceContext) {
-            return new ApplicabilityRuleImpl(instanceContext);
-          }
-        });
+        .instanceProvider(instanceContext -> new ApplicabilityRuleImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_NAME)
         .build();

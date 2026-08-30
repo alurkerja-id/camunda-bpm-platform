@@ -22,7 +22,6 @@ import org.camunda.bpm.model.bpmn.instance.ExtensionElements;
 import org.camunda.bpm.model.bpmn.instance.di.DiagramElement;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
-import org.camunda.bpm.model.xml.impl.util.ModelUtil;
 import org.camunda.bpm.model.xml.instance.ModelElementInstance;
 import org.camunda.bpm.model.xml.type.ModelElementType;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
@@ -73,26 +72,32 @@ public abstract class BaseElementImpl extends BpmnModelElementInstanceImpl imple
     super(instanceContext);
   }
 
+  @Override
   public String getId() {
     return idAttribute.getValue(this);
   }
 
+  @Override
   public void setId(String id) {
     idAttribute.setValue(this, id);
   }
 
+  @Override
   public Collection<Documentation> getDocumentations() {
     return documentationCollection.get(this);
   }
 
+  @Override
   public ExtensionElements getExtensionElements() {
     return extensionElementsChild.getChild(this);
   }
 
+  @Override
   public void setExtensionElements(ExtensionElements extensionElements) {
     extensionElementsChild.setChild(this, extensionElements);
   }
 
+  @Override
   @SuppressWarnings("rawtypes")
   public DiagramElement getDiagramElement() {
     Collection<Reference> incomingReferences = getIncomingReferencesByType(DiagramElement.class);

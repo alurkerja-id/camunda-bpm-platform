@@ -24,7 +24,6 @@ import org.camunda.bpm.model.dmn.instance.InformationItem;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class ColumnImpl extends InformationItemImpl implements Column {
 
@@ -36,11 +35,7 @@ public class ColumnImpl extends InformationItemImpl implements Column {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Column.class, DMN_ELEMENT_COLUMN)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(InformationItem.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Column>() {
-        public Column newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ColumnImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new ColumnImpl(instanceContext));
 
     typeBuilder.build();
   }

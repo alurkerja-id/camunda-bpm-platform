@@ -25,7 +25,6 @@ import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_TIMER_EVENT_DEFINITION;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN timerEventDefinition element
@@ -42,11 +41,7 @@ public class TimerEventDefinitionImpl extends EventDefinitionImpl implements Tim
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(TimerEventDefinition.class, BPMN_ELEMENT_TIMER_EVENT_DEFINITION)
       .namespaceUri(BPMN20_NS)
       .extendsType(EventDefinition.class)
-      .instanceProvider(new ModelTypeInstanceProvider<TimerEventDefinition>() {
-        public TimerEventDefinition newInstance(ModelTypeInstanceContext instanceContext) {
-          return new TimerEventDefinitionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new TimerEventDefinitionImpl(instanceContext));
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 
@@ -66,26 +61,32 @@ public class TimerEventDefinitionImpl extends EventDefinitionImpl implements Tim
     super(context);
   }
 
+  @Override
   public TimeDate getTimeDate() {
     return timeDateChild.getChild(this);
   }
 
+  @Override
   public void setTimeDate(TimeDate timeDate) {
     timeDateChild.setChild(this, timeDate);
   }
 
+  @Override
   public TimeDuration getTimeDuration() {
     return timeDurationChild.getChild(this);
   }
 
+  @Override
   public void setTimeDuration(TimeDuration timeDuration) {
     timeDurationChild.setChild(this, timeDuration);
   }
 
+  @Override
   public TimeCycle getTimeCycle() {
     return timeCycleChild.getChild(this);
   }
 
+  @Override
   public void setTimeCycle(TimeCycle timeCycle) {
     timeCycleChild.setChild(this, timeCycle);
   }

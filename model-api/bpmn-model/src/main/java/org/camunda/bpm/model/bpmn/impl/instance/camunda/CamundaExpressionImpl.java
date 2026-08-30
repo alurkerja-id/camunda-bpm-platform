@@ -24,7 +24,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_EXPRESSION;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN expression camunda extension element
@@ -36,11 +35,7 @@ public class CamundaExpressionImpl extends BpmnModelElementInstanceImpl implemen
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaExpression.class, CAMUNDA_ELEMENT_EXPRESSION)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<CamundaExpression>() {
-        public CamundaExpression newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CamundaExpressionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new CamundaExpressionImpl(instanceContext));
 
     typeBuilder.build();
   }

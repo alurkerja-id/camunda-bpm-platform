@@ -25,7 +25,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * @author Sebastian Menski
@@ -39,11 +38,7 @@ public class DataOutputImpl extends ItemAwareElementImpl implements DataOutput {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(DataOutput.class,BpmnModelConstants.BPMN_ELEMENT_DATA_OUTPUT)
       .namespaceUri(BPMN20_NS)
       .extendsType(ItemAwareElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<DataOutput>() {
-        public DataOutput newInstance(ModelTypeInstanceContext instanceContext) {
-          return new DataOutputImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new DataOutputImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_NAME)
       .build();
@@ -59,18 +54,22 @@ public class DataOutputImpl extends ItemAwareElementImpl implements DataOutput {
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public boolean isCollection() {
     return isCollectionAttribute.getValue(this);
   }
 
+  @Override
   public void setCollection(boolean isCollection) {
     isCollectionAttribute.setValue(this, isCollection);
   }

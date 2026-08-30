@@ -28,7 +28,6 @@ import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN extension element
@@ -44,11 +43,7 @@ public class ExtensionImpl extends BpmnModelElementInstanceImpl implements Exten
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Extension.class, BPMN_ELEMENT_EXTENSION)
       .namespaceUri(BPMN20_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<Extension>() {
-        public Extension newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ExtensionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new ExtensionImpl(instanceContext));
 
     // TODO: qname reference extension definition
     definitionAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_DEFINITION)
@@ -70,22 +65,27 @@ public class ExtensionImpl extends BpmnModelElementInstanceImpl implements Exten
     super(instanceContext);
   }
 
+  @Override
   public String getDefinition() {
     return definitionAttribute.getValue(this);
   }
 
+  @Override
   public void setDefinition(String Definition) {
     definitionAttribute.setValue(this, Definition);
   }
 
+  @Override
   public boolean mustUnderstand() {
     return mustUnderstandAttribute.getValue(this);
   }
 
+  @Override
   public void setMustUnderstand(boolean mustUnderstand) {
     mustUnderstandAttribute.setValue(this, mustUnderstand);
   }
 
+  @Override
   public Collection<Documentation> getDocumentations() {
     return documentationCollection.get(this);
   }

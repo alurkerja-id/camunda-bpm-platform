@@ -88,40 +88,47 @@ public class HistoricVariableInstanceQueryImpl extends AbstractQuery<HistoricVar
     return variableIdAfter;
   }
 
+  @Override
   public HistoricVariableInstanceQuery createdAfter(Date date) {
     createdAfter = date;
     return this;
   }
 
+  @Override
   public HistoricVariableInstanceQuery variableNameIn(String... names) {
     ensureNotNull("Variable names", (Object[]) names);
     variableNameIn = Arrays.asList(names);
     return this;
   }
 
+  @Override
   public HistoricVariableInstanceQuery variableId(String id) {
     ensureNotNull("variableId", id);
     this.variableId = id;
     return this;
   }
 
+  @Override
   public HistoricVariableInstanceQueryImpl processInstanceId(String processInstanceId) {
     ensureNotNull("processInstanceId", processInstanceId);
     this.processInstanceId = processInstanceId;
     return this;
   }
 
+  @Override
   public HistoricVariableInstanceQuery processDefinitionId(String processDefinitionId) {
     ensureNotNull("processDefinitionId", processDefinitionId);
     this.processDefinitionId = processDefinitionId;
     return this;
   }
 
+  @Override
   public HistoricVariableInstanceQuery processDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
     return this;
   }
 
+  @Override
   public HistoricVariableInstanceQuery caseInstanceId(String caseInstanceId) {
     ensureNotNull("caseInstanceId", caseInstanceId);
     this.caseInstanceId = caseInstanceId;
@@ -161,48 +168,56 @@ public class HistoricVariableInstanceQueryImpl extends AbstractQuery<HistoricVar
   }
 
   /** Only select historic process variables with the given process instance ids. */
+  @Override
   public HistoricVariableInstanceQuery processInstanceIdIn(String... processInstanceIds) {
     ensureNotNull("Process Instance Ids", (Object[]) processInstanceIds);
     this.processInstanceIds = processInstanceIds;
     return this;
   }
 
+  @Override
   public HistoricVariableInstanceQuery taskIdIn(String... taskIds) {
     ensureNotNull("Task Ids", (Object[]) taskIds);
     this.taskIds = taskIds;
     return this;
   }
 
+  @Override
   public HistoricVariableInstanceQuery executionIdIn(String... executionIds) {
     ensureNotNull("Execution Ids", (Object[]) executionIds);
     this.executionIds = executionIds;
     return this;
   }
 
+  @Override
   public HistoricVariableInstanceQuery caseExecutionIdIn(String... caseExecutionIds) {
     ensureNotNull("Case execution ids", (Object[]) caseExecutionIds);
     this.caseExecutionIds = caseExecutionIds;
     return this;
   }
 
+  @Override
   public HistoricVariableInstanceQuery caseActivityIdIn(String... caseActivityIds) {
     ensureNotNull("Case activity ids", (Object[]) caseActivityIds);
     this.caseActivityIds = caseActivityIds;
     return this;
   }
 
+  @Override
   public HistoricVariableInstanceQuery activityInstanceIdIn(String... activityInstanceIds) {
     ensureNotNull("Activity Instance Ids", (Object[]) activityInstanceIds);
     this.activityInstanceIds = activityInstanceIds;
     return this;
   }
 
+  @Override
   public HistoricVariableInstanceQuery variableName(String variableName) {
     ensureNotNull("variableName", variableName);
     this.variableName = variableName;
     return this;
   }
 
+  @Override
   public HistoricVariableInstanceQuery variableValueEquals(String variableName, Object variableValue) {
     ensureNotNull("variableName", variableName);
     ensureNotNull("variableValue", variableValue);
@@ -211,6 +226,7 @@ public class HistoricVariableInstanceQueryImpl extends AbstractQuery<HistoricVar
     return this;
   }
 
+  @Override
   public HistoricVariableInstanceQuery variableNameLike(String variableNameLike) {
     ensureNotNull("variableNameLike", variableNameLike);
     this.variableNameLike = variableNameLike;
@@ -226,16 +242,19 @@ public class HistoricVariableInstanceQueryImpl extends AbstractQuery<HistoricVar
     }
   }
 
+  @Override
   public HistoricVariableInstanceQuery disableBinaryFetching() {
     isByteArrayFetchingEnabled = false;
     return this;
   }
 
+  @Override
   public HistoricVariableInstanceQuery disableCustomObjectDeserialization() {
     this.isCustomObjectDeserializationEnabled = false;
     return this;
   }
 
+  @Override
   public HistoricVariableInstanceQuery tenantIdIn(String... tenantIds) {
     ensureNotNull("tenantIds", (Object[]) tenantIds);
     this.tenantIds = tenantIds;
@@ -250,12 +269,14 @@ public class HistoricVariableInstanceQueryImpl extends AbstractQuery<HistoricVar
     return this;
   }
 
+  @Override
   public long executeCount(CommandContext commandContext) {
     checkQueryOk();
     ensureVariablesInitialized();
     return commandContext.getHistoricVariableInstanceManager().findHistoricVariableInstanceCountByQueryCriteria(this);
   }
 
+  @Override
   public List<HistoricVariableInstance> executeList(CommandContext commandContext, Page page) {
     checkQueryOk();
     ensureVariablesInitialized();
@@ -290,26 +311,31 @@ public class HistoricVariableInstanceQueryImpl extends AbstractQuery<HistoricVar
 
   // order by /////////////////////////////////////////////////////////////////
 
+  @Override
   public HistoricVariableInstanceQuery orderByProcessInstanceId() {
     orderBy(HistoricVariableInstanceQueryProperty.PROCESS_INSTANCE_ID);
     return this;
   }
 
+  @Override
   public HistoricVariableInstanceQuery orderByVariableName() {
     orderBy(HistoricVariableInstanceQueryProperty.VARIABLE_NAME);
     return this;
   }
 
+  @Override
   public HistoricVariableInstanceQuery orderByTenantId() {
     orderBy(HistoricVariableInstanceQueryProperty.TENANT_ID);
     return this;
   }
 
+  @Override
   public HistoricVariableInstanceQuery orderByVariableId() {
     orderBy(HistoricVariableInstanceQueryProperty.VARIABLE_ID);
     return this;
   }
 
+  @Override
   public HistoricVariableInstanceQuery orderByCreationTime() {
     orderBy(HistoricVariableInstanceQueryProperty.CREATE_TIME);
     return this;

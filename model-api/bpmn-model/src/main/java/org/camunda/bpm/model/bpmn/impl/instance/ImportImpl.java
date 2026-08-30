@@ -20,7 +20,6 @@ import org.camunda.bpm.model.bpmn.instance.Import;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
@@ -40,11 +39,7 @@ public class ImportImpl extends BpmnModelElementInstanceImpl implements Import {
   public static void registerType(ModelBuilder bpmnModelBuilder) {
     ModelElementTypeBuilder typeBuilder = bpmnModelBuilder.defineType(Import.class, BPMN_ELEMENT_IMPORT)
       .namespaceUri(BPMN20_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<Import>() {
-        public Import newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ImportImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new ImportImpl(instanceContext));
 
     namespaceAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_NAMESPACE)
       .required()
@@ -65,26 +60,32 @@ public class ImportImpl extends BpmnModelElementInstanceImpl implements Import {
     super(context);
   }
 
+  @Override
   public String getNamespace() {
     return namespaceAttribute.getValue(this);
   }
 
+  @Override
   public void setNamespace(String namespace) {
     namespaceAttribute.setValue(this, namespace);
   }
 
+  @Override
   public String getLocation() {
     return locationAttribute.getValue(this);
   }
 
+  @Override
   public void setLocation(String location) {
     locationAttribute.setValue(this, location);
   }
 
+  @Override
   public String getImportType() {
     return importTypeAttribute.getValue(this);
   }
 
+  @Override
   public void setImportType(String importType) {
     importTypeAttribute.setValue(this, importType);
   }

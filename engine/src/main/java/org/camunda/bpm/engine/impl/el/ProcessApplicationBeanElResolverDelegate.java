@@ -37,6 +37,7 @@ import org.camunda.bpm.impl.juel.jakarta.el.ELResolver;
  */
 public class ProcessApplicationBeanElResolverDelegate extends AbstractElResolverDelegate {
 
+  @Override
   protected ELResolver getElResolverDelegate() {
 
     ProcessApplicationReference processApplicationReference = Context.getCurrentProcessApplication();

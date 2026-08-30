@@ -24,7 +24,6 @@ import org.camunda.bpm.model.cmmn.instance.InputDecisionParameter;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * @author Roman Smirnov
@@ -40,11 +39,7 @@ public class InputDecisionParameterImpl extends DecisionParameterImpl implements
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(InputDecisionParameter.class, CMMN_ELEMENT_INPUT)
         .namespaceUri(CMMN11_NS)
         .extendsType(DecisionParameter.class)
-        .instanceProvider(new ModelTypeInstanceProvider<InputDecisionParameter>() {
-          public InputDecisionParameter newInstance(ModelTypeInstanceContext instanceContext) {
-            return new InputDecisionParameterImpl(instanceContext);
-          }
-        });
+        .instanceProvider(instanceContext -> new InputDecisionParameterImpl(instanceContext));
 
     typeBuilder.build();
   }

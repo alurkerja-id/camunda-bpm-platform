@@ -24,7 +24,6 @@ import org.camunda.bpm.model.dmn.instance.TargetRef;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class TargetRefImpl extends DmnElementReferenceImpl implements TargetRef {
 
@@ -36,11 +35,7 @@ public class TargetRefImpl extends DmnElementReferenceImpl implements TargetRef 
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(TargetRef.class, DMN_ELEMENT_TARGET_REF)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(DmnElementReference.class)
-      .instanceProvider(new ModelTypeInstanceProvider<TargetRef>() {
-        public TargetRef newInstance(ModelTypeInstanceContext instanceContext) {
-          return new TargetRefImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new TargetRefImpl(instanceContext));
 
     typeBuilder.build();
   }

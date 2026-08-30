@@ -24,7 +24,6 @@ import org.camunda.bpm.model.cmmn.instance.EntryCriterion;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * @author Roman Smirnov
@@ -40,11 +39,7 @@ public class EntryCriterionImpl extends CriterionImpl implements EntryCriterion 
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(EntryCriterion.class, CMMN_ELEMENT_ENTRY_CRITERION)
         .extendsType(Criterion.class)
         .namespaceUri(CMMN11_NS)
-        .instanceProvider(new ModelTypeInstanceProvider<EntryCriterion>() {
-          public EntryCriterion newInstance(ModelTypeInstanceContext instanceContext) {
-            return new EntryCriterionImpl(instanceContext);
-          }
-        });
+        .instanceProvider(instanceContext -> new EntryCriterionImpl(instanceContext));
 
     typeBuilder.build();
   }

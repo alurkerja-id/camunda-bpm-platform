@@ -25,7 +25,6 @@ import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_EXPRESSION;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_ERROR_EVENT_DEFINITION;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class CamundaErrorEventDefinitionImpl extends ErrorEventDefinitionImpl implements CamundaErrorEventDefinition {
 
@@ -34,11 +33,7 @@ public class CamundaErrorEventDefinitionImpl extends ErrorEventDefinitionImpl im
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaErrorEventDefinition.class, CAMUNDA_ELEMENT_ERROR_EVENT_DEFINITION)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<CamundaErrorEventDefinition>() {
-        public CamundaErrorEventDefinition newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CamundaErrorEventDefinitionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new CamundaErrorEventDefinitionImpl(instanceContext));
 
     camundaExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EXPRESSION)
         .namespace(CAMUNDA_NS)
@@ -51,10 +46,12 @@ public class CamundaErrorEventDefinitionImpl extends ErrorEventDefinitionImpl im
     super(instanceContext);
   }
 
+  @Override
   public String getCamundaExpression() {
     return camundaExpressionAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaExpression(String camundaExpression) {
     camundaExpressionAttribute.setValue(this, camundaExpression);
   }

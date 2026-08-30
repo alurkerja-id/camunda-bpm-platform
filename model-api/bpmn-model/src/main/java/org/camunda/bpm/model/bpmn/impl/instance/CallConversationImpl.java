@@ -30,7 +30,6 @@ import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN callConversation element
@@ -46,11 +45,7 @@ public class CallConversationImpl extends ConversationNodeImpl implements CallCo
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CallConversation.class, BPMN_ELEMENT_CALL_CONVERSATION)
       .namespaceUri(BPMN20_NS)
       .extendsType(ConversationNode.class)
-      .instanceProvider(new ModelTypeInstanceProvider<CallConversation>() {
-        public CallConversation newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CallConversationImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new CallConversationImpl(instanceContext));
 
     calledCollaborationRefAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_CALLED_COLLABORATION_REF)
       .qNameAttributeReference(GlobalConversation.class)
@@ -68,14 +63,17 @@ public class CallConversationImpl extends ConversationNodeImpl implements CallCo
     super(instanceContext);
   }
 
+  @Override
   public GlobalConversation getCalledCollaboration() {
     return calledCollaborationRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setCalledCollaboration(GlobalConversation calledCollaboration) {
     calledCollaborationRefAttribute.setReferenceTargetElement(this, calledCollaboration);
   }
 
+  @Override
   public Collection<ParticipantAssociation> getParticipantAssociations() {
     return participantAssociationCollection.get(this);
   }

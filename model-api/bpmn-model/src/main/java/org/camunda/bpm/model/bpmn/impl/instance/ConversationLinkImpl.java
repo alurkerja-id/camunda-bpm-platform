@@ -26,7 +26,6 @@ import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN conversationLink element
@@ -43,11 +42,7 @@ public class ConversationLinkImpl extends BaseElementImpl implements Conversatio
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ConversationLink.class, BPMN_ELEMENT_CONVERSATION_LINK)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ConversationLink>() {
-        public ConversationLink newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ConversationLinkImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new ConversationLinkImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_NAME)
       .build();
@@ -69,26 +64,32 @@ public class ConversationLinkImpl extends BaseElementImpl implements Conversatio
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public InteractionNode getSource() {
     return sourceRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setSource(InteractionNode source) {
     sourceRefAttribute.setReferenceTargetElement(this, source);
   }
 
+  @Override
   public InteractionNode getTarget() {
     return targetRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setTarget(InteractionNode target) {
     targetRefAttribute.setReferenceTargetElement(this, target);
   }

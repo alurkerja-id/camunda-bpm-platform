@@ -44,7 +44,8 @@ public class DeployBarTask extends Task {
   String processEngineName = ProcessEngines.NAME_DEFAULT;
   File file;
   List<FileSet> fileSets;
-  
+
+  @Override
   public void execute() throws BuildException {
     List<File> files = new ArrayList<File>();
     if (file!=null) {

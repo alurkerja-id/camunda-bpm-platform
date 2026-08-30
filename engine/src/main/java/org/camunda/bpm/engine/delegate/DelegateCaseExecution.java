@@ -22,10 +22,12 @@ package org.camunda.bpm.engine.delegate;
  */
 public interface DelegateCaseExecution extends BaseDelegateExecution, ProcessEngineServicesAware, CmmnModelExecutionContext {
 
+  @Override
   String getId();
 
   String getCaseInstanceId();
 
+  @Override
   String getEventName();
 
   String getCaseBusinessKey();

@@ -39,7 +39,6 @@ import org.camunda.bpm.model.bpmn.instance.CallActivity;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
 /**
@@ -71,11 +70,7 @@ public class CallActivityImpl extends ActivityImpl implements CallActivity {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CallActivity.class, BPMN_ELEMENT_CALL_ACTIVITY)
       .namespaceUri(BPMN20_NS)
       .extendsType(Activity.class)
-      .instanceProvider(new ModelTypeInstanceProvider<CallActivity>() {
-        public CallActivity newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CallActivityImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new CallActivityImpl(instanceContext));
 
     calledElementAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_CALLED_ELEMENT)
       .build();
@@ -140,10 +135,12 @@ public class CallActivityImpl extends ActivityImpl implements CallActivity {
     return new CallActivityBuilder((BpmnModelInstance) modelInstance, this);
   }
 
+  @Override
   public String getCalledElement() {
     return calledElementAttribute.getValue(this);
   }
 
+  @Override
   public void setCalledElement(String calledElement) {
     calledElementAttribute.setValue(this, calledElement);
   }
@@ -152,6 +149,7 @@ public class CallActivityImpl extends ActivityImpl implements CallActivity {
    * @deprecated use isCamundaAsyncBefore() instead.
    */
   @Deprecated
+  @Override
   public boolean isCamundaAsync() {
     return camundaAsyncAttribute.getValue(this);
   }
@@ -160,70 +158,87 @@ public class CallActivityImpl extends ActivityImpl implements CallActivity {
    * @deprecated use setCamundaAsyncBefore() instead.
    */
   @Deprecated
+  @Override
   public void setCamundaAsync(boolean isCamundaAsync) {
     camundaAsyncAttribute.setValue(this, isCamundaAsync);
   }
 
+  @Override
   public String getCamundaCalledElementBinding() {
     return camundaCalledElementBindingAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaCalledElementBinding(String camundaCalledElementBinding) {
     camundaCalledElementBindingAttribute.setValue(this, camundaCalledElementBinding);
   }
 
+  @Override
   public String getCamundaCalledElementVersion() {
     return camundaCalledElementVersionAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaCalledElementVersion(String camundaCalledElementVersion) {
     camundaCalledElementVersionAttribute.setValue(this, camundaCalledElementVersion);
   }
 
+  @Override
   public String getCamundaCalledElementVersionTag() {
     return camundaCalledElementVersionTagAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaCalledElementVersionTag(String camundaCalledElementVersionTag) {
     camundaCalledElementVersionTagAttribute.setValue(this, camundaCalledElementVersionTag);
   }
 
+  @Override
   public String getCamundaCaseRef() {
     return camundaCaseRefAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaCaseRef(String camundaCaseRef) {
     camundaCaseRefAttribute.setValue(this, camundaCaseRef);
   }
 
+  @Override
   public String getCamundaCaseBinding() {
     return camundaCaseBindingAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaCaseBinding(String camundaCaseBinding) {
     camundaCaseBindingAttribute.setValue(this, camundaCaseBinding);
   }
 
+  @Override
   public String getCamundaCaseVersion() {
     return camundaCaseVersionAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaCaseVersion(String camundaCaseVersion) {
     camundaCaseVersionAttribute.setValue(this, camundaCaseVersion);
   }
 
+  @Override
   public String getCamundaCalledElementTenantId() {
     return camundaCalledElementTenantIdAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaCalledElementTenantId(String tenantId) {
     camundaCalledElementTenantIdAttribute.setValue(this, tenantId);
   }
 
+  @Override
   public String getCamundaCaseTenantId() {
     return camundaCaseTenantIdAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaCaseTenantId(String tenantId) {
     camundaCaseTenantIdAttribute.setValue(this, tenantId);
   }

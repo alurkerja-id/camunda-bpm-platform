@@ -19,7 +19,6 @@ package org.camunda.bpm.engine.impl.jobexecutor;
 import java.util.Iterator;
 import java.util.List;
 
-import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
 import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
@@ -55,6 +54,7 @@ public class SequentialJobAcquisitionRunnable extends AcquireJobsRunnable {
     acquisitionContext = initializeAcquisitionContext();
   }
 
+  @Override
   public synchronized void run() {
     LOG.startingToAcquireJobs(jobExecutor.getName());
 

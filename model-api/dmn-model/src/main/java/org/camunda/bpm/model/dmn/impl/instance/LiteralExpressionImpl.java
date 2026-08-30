@@ -27,7 +27,6 @@ import org.camunda.bpm.model.dmn.instance.Text;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
@@ -43,26 +42,32 @@ public class LiteralExpressionImpl extends ExpressionImpl implements LiteralExpr
     super(instanceContext);
   }
 
+  @Override
   public String getExpressionLanguage() {
     return expressionLanguageAttribute.getValue(this);
   }
 
+  @Override
   public void setExpressionLanguage(String expressionLanguage) {
     expressionLanguageAttribute.setValue(this, expressionLanguage);
   }
 
+  @Override
   public Text getText() {
     return textChild.getChild(this);
   }
 
+  @Override
   public void setText(Text text) {
     textChild.setChild(this, text);
   }
 
+  @Override
   public ImportedValues getImportValues() {
     return importedValuesChild.getChild(this);
   }
 
+  @Override
   public void setImportValues(ImportedValues importedValues) {
     importedValuesChild.setChild(this, importedValues);
   }
@@ -71,11 +76,7 @@ public class LiteralExpressionImpl extends ExpressionImpl implements LiteralExpr
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(LiteralExpression.class, DMN_ELEMENT_LITERAL_EXPRESSION)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(Expression.class)
-      .instanceProvider(new ModelTypeInstanceProvider<LiteralExpression>() {
-        public LiteralExpression newInstance(ModelTypeInstanceContext instanceContext) {
-          return new LiteralExpressionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new LiteralExpressionImpl(instanceContext));
 
     expressionLanguageAttribute = typeBuilder.stringAttribute(DMN_ATTRIBUTE_EXPRESSION_LANGUAGE)
       .build();

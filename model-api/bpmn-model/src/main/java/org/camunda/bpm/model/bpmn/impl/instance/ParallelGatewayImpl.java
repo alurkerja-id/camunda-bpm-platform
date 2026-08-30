@@ -28,9 +28,7 @@ import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_PARALLEL_GATEWAY;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_ASYNC;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_EXCLUSIVE;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN parallelGateway element
@@ -45,11 +43,7 @@ public class ParallelGatewayImpl extends GatewayImpl implements ParallelGateway 
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ParallelGateway.class, BPMN_ELEMENT_PARALLEL_GATEWAY)
       .namespaceUri(BPMN20_NS)
       .extendsType(Gateway.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ParallelGateway>() {
-        public ParallelGateway newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ParallelGatewayImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new ParallelGatewayImpl(instanceContext));
 
     /** camunda extensions */
 
@@ -72,6 +66,7 @@ public class ParallelGatewayImpl extends GatewayImpl implements ParallelGateway 
    * @deprecated use isCamundaAsyncBefore() instead.
    */
   @Deprecated
+  @Override
   public boolean isCamundaAsync() {
     return camundaAsyncAttribute.getValue(this);
   }
@@ -80,6 +75,7 @@ public class ParallelGatewayImpl extends GatewayImpl implements ParallelGateway 
    * @deprecated use setCamundaAsyncBefore(isCamundaAsyncBefore) instead.
    */
   @Deprecated
+  @Override
   public void setCamundaAsync(boolean isCamundaAsync) {
     camundaAsyncAttribute.setValue(this, isCamundaAsync);
   }

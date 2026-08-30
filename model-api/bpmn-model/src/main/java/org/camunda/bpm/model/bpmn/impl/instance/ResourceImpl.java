@@ -29,7 +29,6 @@ import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN resource element
@@ -45,11 +44,7 @@ public class ResourceImpl extends RootElementImpl implements Resource {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Resource.class, BPMN_ELEMENT_RESOURCE)
       .namespaceUri(BPMN20_NS)
       .extendsType(RootElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Resource>() {
-        public Resource newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ResourceImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new ResourceImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_NAME)
       .required()
@@ -67,14 +62,17 @@ public class ResourceImpl extends RootElementImpl implements Resource {
     super(context);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public Collection<ResourceParameter> getResourceParameters() {
     return resourceParameterCollection.get(this);
   }

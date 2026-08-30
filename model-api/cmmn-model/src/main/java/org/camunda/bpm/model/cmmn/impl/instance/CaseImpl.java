@@ -31,7 +31,6 @@ import org.camunda.bpm.model.cmmn.instance.OutputCaseParameter;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
@@ -62,50 +61,62 @@ public class CaseImpl extends CmmnElementImpl implements Case {
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public Collection<CaseRole> getCaseRoles() {
     return caseRolesCollection.get(this);
   }
 
+  @Override
   public CaseRoles getRoles() {
     return caseRolesChild.getChild(this);
   }
 
+  @Override
   public void setRoles(CaseRoles caseRole) {
     caseRolesChild.setChild(this, caseRole);
   }
 
+  @Override
   public Collection<InputCaseParameter> getInputs() {
     return inputCollection.get(this);
   }
 
+  @Override
   public Collection<OutputCaseParameter> getOutputs() {
     return outputCollection.get(this);
   }
 
+  @Override
   public CasePlanModel getCasePlanModel() {
     return casePlanModelChild.getChild(this);
   }
 
+  @Override
   public void setCasePlanModel(CasePlanModel casePlanModel) {
     casePlanModelChild.setChild(this, casePlanModel);
   }
 
+  @Override
   public CaseFileModel getCaseFileModel() {
     return caseFileModelChild.getChild(this);
   }
 
+  @Override
   public void setCaseFileModel(CaseFileModel caseFileModel) {
     caseFileModelChild.setChild(this, caseFileModel);
   }
 
+  @Override
   public Integer getCamundaHistoryTimeToLive() {
     String ttl = getCamundaHistoryTimeToLiveString();
     if (ttl != null) {
@@ -114,6 +125,7 @@ public class CaseImpl extends CmmnElementImpl implements Case {
     return null;
   }
 
+  @Override
   public void setCamundaHistoryTimeToLive(Integer historyTimeToLive) {
     setCamundaHistoryTimeToLiveString(String.valueOf(historyTimeToLive));
   }
@@ -122,11 +134,7 @@ public class CaseImpl extends CmmnElementImpl implements Case {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Case.class, CMMN_ELEMENT_CASE)
         .extendsType(CmmnElement.class)
         .namespaceUri(CMMN11_NS)
-        .instanceProvider(new ModelTypeInstanceProvider<Case>() {
-          public Case newInstance(ModelTypeInstanceContext instanceContext) {
-            return new CaseImpl(instanceContext);
-          }
-        });
+        .instanceProvider(instanceContext -> new CaseImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_NAME)
         .build();

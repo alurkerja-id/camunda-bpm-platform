@@ -30,10 +30,12 @@ public class ProcessEventJobHandler implements JobHandler<EventSubscriptionJobCo
 
   public final static String TYPE = "event";
 
+  @Override
   public String getType() {
     return TYPE;
   }
 
+  @Override
   public void execute(EventSubscriptionJobConfiguration configuration, ExecutionEntity execution, CommandContext commandContext, String tenantId) {
     // lookup subscription:
     String eventSubscriptionId = configuration.getEventSubscriptionId();
@@ -71,6 +73,7 @@ public class ProcessEventJobHandler implements JobHandler<EventSubscriptionJobCo
 
   }
 
+  @Override
   public void onDelete(EventSubscriptionJobConfiguration configuration, JobEntity jobEntity) {
     // do nothing
   }

@@ -36,7 +36,6 @@ import org.camunda.bpm.model.dmn.instance.Rule;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
@@ -56,46 +55,57 @@ public class DecisionTableImpl extends ExpressionImpl implements DecisionTable {
     super(instanceContext);
   }
 
+  @Override
   public HitPolicy getHitPolicy() {
     return hitPolicyAttribute.getValue(this);
   }
 
+  @Override
   public void setHitPolicy(HitPolicy hitPolicy) {
     hitPolicyAttribute.setValue(this, hitPolicy);
   }
 
+  @Override
   public BuiltinAggregator getAggregation() {
     return aggregationAttribute.getValue(this);
   }
 
+  @Override
   public void setAggregation(BuiltinAggregator aggregation) {
     aggregationAttribute.setValue(this, aggregation);
   }
 
+  @Override
   public DecisionTableOrientation getPreferredOrientation() {
     return preferredOrientationAttribute.getValue(this);
   }
 
+  @Override
   public void setPreferredOrientation(DecisionTableOrientation preferredOrientation) {
     preferredOrientationAttribute.setValue(this, preferredOrientation);
   }
 
+  @Override
   public String getOutputLabel() {
     return outputLabelAttribute.getValue(this);
   }
 
+  @Override
   public void setOutputLabel(String outputLabel) {
     outputLabelAttribute.setValue(this, outputLabel);
   }
 
+  @Override
   public Collection<Input> getInputs() {
     return inputCollection.get(this);
   }
 
+  @Override
   public Collection<Output> getOutputs() {
     return outputCollection.get(this);
   }
 
+  @Override
   public Collection<Rule> getRules() {
     return ruleCollection.get(this);
   }
@@ -104,11 +114,7 @@ public class DecisionTableImpl extends ExpressionImpl implements DecisionTable {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(DecisionTable.class, DMN_ELEMENT_DECISION_TABLE)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(Expression.class)
-      .instanceProvider(new ModelTypeInstanceProvider<DecisionTable>() {
-        public DecisionTable newInstance(ModelTypeInstanceContext instanceContext) {
-          return new DecisionTableImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new DecisionTableImpl(instanceContext));
 
     hitPolicyAttribute = typeBuilder.namedEnumAttribute(DMN_ATTRIBUTE_HIT_POLICY, HitPolicy.class)
       .defaultValue(HitPolicy.UNIQUE)

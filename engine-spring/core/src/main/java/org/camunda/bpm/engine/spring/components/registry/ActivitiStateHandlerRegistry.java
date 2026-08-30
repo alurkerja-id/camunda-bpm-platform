@@ -153,14 +153,17 @@ public class ActivitiStateHandlerRegistry extends ReceiveTaskActivityBehavior im
 		return r;
 	}
 
+	@Override
 	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
 		this.beanFactory = beanFactory;
 	}
 
+	@Override
 	public void setBeanName(String name) {
 		this.beanName = name;
 	}
 
+	@Override
 	public void afterPropertiesSet() throws Exception {
 		Assert.notNull(this.processEngine, "the 'processEngine' can't be null");
 		logger.info( "this bean contains a processEngine reference. "+ this.processEngine);

@@ -28,7 +28,6 @@ import org.camunda.bpm.model.dmn.instance.NamedElement;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import org.camunda.bpm.model.xml.type.reference.ElementReferenceCollection;
 
@@ -40,6 +39,7 @@ public class ElementCollectionImpl extends NamedElementImpl implements ElementCo
     super(instanceContext);
   }
 
+  @Override
   public Collection<DrgElement> getDrgElements() {
     return drgElementRefCollection.getReferenceTargetElements(this);
   }
@@ -48,11 +48,7 @@ public class ElementCollectionImpl extends NamedElementImpl implements ElementCo
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ElementCollection.class, DMN_ELEMENT_ELEMENT_COLLECTION)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(NamedElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ElementCollection>() {
-        public ElementCollection newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ElementCollectionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new ElementCollectionImpl(instanceContext));
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

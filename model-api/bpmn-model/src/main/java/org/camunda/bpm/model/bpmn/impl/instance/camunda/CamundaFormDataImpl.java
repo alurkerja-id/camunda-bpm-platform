@@ -29,7 +29,6 @@ import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_FORM_DATA;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN formData camunda extension element
@@ -43,11 +42,7 @@ public class CamundaFormDataImpl extends BpmnModelElementInstanceImpl implements
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaFormData.class, CAMUNDA_ELEMENT_FORM_DATA)
       .namespaceUri(BpmnModelConstants.CAMUNDA_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<CamundaFormData>() {
-        public CamundaFormData newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CamundaFormDataImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new CamundaFormDataImpl(instanceContext));
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 
@@ -61,6 +56,7 @@ public class CamundaFormDataImpl extends BpmnModelElementInstanceImpl implements
     super(instanceContext);
   }
 
+  @Override
   public Collection<CamundaFormField> getCamundaFormFields() {
     return camundaFormFieldCollection.get(this);
   }

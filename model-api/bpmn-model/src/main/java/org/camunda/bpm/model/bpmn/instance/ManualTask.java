@@ -25,6 +25,7 @@ import org.camunda.bpm.model.bpmn.builder.ManualTaskBuilder;
  */
 public interface ManualTask extends Task {
 
+  @Override
   ManualTaskBuilder builder();
 
 }

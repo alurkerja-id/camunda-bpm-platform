@@ -24,7 +24,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_TIME_DURATION;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN timeDuration element of the BPMN tTimerEventDefinition type
@@ -37,11 +36,7 @@ public class TimeDurationImpl extends ExpressionImpl implements TimeDuration {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(TimeDuration.class, BPMN_ELEMENT_TIME_DURATION)
       .namespaceUri(BPMN20_NS)
       .extendsType(Expression.class)
-      .instanceProvider(new ModelTypeInstanceProvider<TimeDuration>() {
-        public TimeDuration newInstance(ModelTypeInstanceContext instanceContext) {
-          return new TimeDurationImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new TimeDurationImpl(instanceContext));
 
     typeBuilder.build();
   }

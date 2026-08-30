@@ -24,7 +24,6 @@ import org.camunda.bpm.model.dmn.instance.UnaryTests;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class InputEntryImpl extends UnaryTestsImpl implements InputEntry {
 
@@ -36,11 +35,7 @@ public class InputEntryImpl extends UnaryTestsImpl implements InputEntry {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(InputEntry.class, DMN_ELEMENT_INPUT_ENTRY)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(UnaryTests.class)
-      .instanceProvider(new ModelTypeInstanceProvider<InputEntry>() {
-        public InputEntry newInstance(ModelTypeInstanceContext instanceContext) {
-          return new InputEntryImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new InputEntryImpl(instanceContext));
 
     typeBuilder.build();
   }

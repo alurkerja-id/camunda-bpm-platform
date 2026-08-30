@@ -31,7 +31,6 @@ import org.camunda.bpm.model.xml.type.reference.ElementReferenceCollection;
 import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN lane element
@@ -50,11 +49,7 @@ public class LaneImpl extends BaseElementImpl implements Lane {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Lane.class, BPMN_ELEMENT_LANE)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Lane>() {
-        public Lane newInstance(ModelTypeInstanceContext instanceContext) {
-          return new LaneImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new LaneImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_NAME)
       .build();
@@ -84,38 +79,47 @@ public class LaneImpl extends BaseElementImpl implements Lane {
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public PartitionElement getPartitionElement() {
     return partitionElementRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setPartitionElement(PartitionElement partitionElement) {
     partitionElementRefAttribute.setReferenceTargetElement(this, partitionElement);
   }
 
+  @Override
   public PartitionElement getPartitionElementChild() {
     return partitionElementChild.getChild(this);
   }
 
+  @Override
   public void setPartitionElementChild(PartitionElement partitionElement) {
     partitionElementChild.setChild(this, partitionElement);
   }
 
+  @Override
   public Collection<FlowNode> getFlowNodeRefs() {
     return flowNodeRefCollection.getReferenceTargetElements(this);
   }
 
+  @Override
   public ChildLaneSet getChildLaneSet() {
     return childLaneSetChild.getChild(this);
   }
 
+  @Override
   public void setChildLaneSet(ChildLaneSet childLaneSet) {
     childLaneSetChild.setChild(this, childLaneSet);
   }

@@ -16,8 +16,6 @@
  */
 package org.camunda.bpm.engine.impl.form.validator;
 
-import java.util.concurrent.Callable;
-
 import org.camunda.bpm.application.InvocationContext;
 import org.camunda.bpm.application.ProcessApplicationReference;
 import org.camunda.bpm.engine.ProcessEngineException;
@@ -59,11 +57,7 @@ public class DelegateFormFieldValidator implements FormFieldValidator {
     if(shouldPerformPaContextSwitch(validatorContext.getExecution())) {
       ProcessApplicationReference processApplicationReference = ProcessApplicationContextUtil.getTargetProcessApplication((ExecutionEntity) execution);
 
-      return Context.executeWithinProcessApplication(new Callable<Boolean>() {
-        public Boolean call() throws Exception {
-          return doValidate(submittedValue, validatorContext);
-        }
-      }, processApplicationReference, new InvocationContext(execution));
+      return Context.executeWithinProcessApplication(() -> doValidate(submittedValue, validatorContext), processApplicationReference, new InvocationContext(execution));
 
     } else {
       return doValidate(submittedValue, validatorContext);

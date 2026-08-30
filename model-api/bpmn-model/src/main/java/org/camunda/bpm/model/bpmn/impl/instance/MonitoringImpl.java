@@ -24,7 +24,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_MONITORING;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN monitoring element
@@ -37,11 +36,7 @@ public class MonitoringImpl extends BaseElementImpl implements Monitoring {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Monitoring.class, BPMN_ELEMENT_MONITORING)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Monitoring>() {
-        public Monitoring newInstance(ModelTypeInstanceContext instanceContext) {
-          return new MonitoringImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new MonitoringImpl(instanceContext));
 
     typeBuilder.build();
   }

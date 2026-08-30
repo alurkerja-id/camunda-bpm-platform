@@ -22,7 +22,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_OUTPUT_SET_REFS;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN outputSetRefs element of the BPMN tInputSet type
@@ -34,11 +33,7 @@ public class OutputSetRefs extends BpmnModelElementInstanceImpl {
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OutputSetRefs.class, BPMN_ELEMENT_OUTPUT_SET_REFS)
       .namespaceUri(BPMN20_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<OutputSetRefs>() {
-        public OutputSetRefs newInstance(ModelTypeInstanceContext instanceContext) {
-          return new OutputSetRefs(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new OutputSetRefs(instanceContext));
 
     typeBuilder.build();
   }

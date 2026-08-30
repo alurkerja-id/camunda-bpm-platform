@@ -27,7 +27,6 @@ import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_RESOURCE_ASSIGNMENT_EXPRESSION;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN resourceAssignmentExpression element
@@ -42,11 +41,7 @@ public class ResourceAssignmentExpressionImpl extends BaseElementImpl implements
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ResourceAssignmentExpression.class, BPMN_ELEMENT_RESOURCE_ASSIGNMENT_EXPRESSION)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ResourceAssignmentExpression>() {
-        public ResourceAssignmentExpression newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ResourceAssignmentExpressionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new ResourceAssignmentExpressionImpl(instanceContext));
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 
@@ -61,10 +56,12 @@ public class ResourceAssignmentExpressionImpl extends BaseElementImpl implements
     super(instanceContext);
   }
 
+  @Override
   public Expression getExpression() {
     return expressionChild.getChild(this);
   }
 
+  @Override
   public void setExpression(Expression expression) {
     expressionChild.setChild(this, expression);
   }

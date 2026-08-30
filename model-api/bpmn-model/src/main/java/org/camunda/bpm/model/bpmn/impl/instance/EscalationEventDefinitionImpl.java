@@ -25,7 +25,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN escalationEventDefinition element
@@ -40,11 +39,7 @@ public class EscalationEventDefinitionImpl extends EventDefinitionImpl implement
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(EscalationEventDefinition.class, BPMN_ELEMENT_ESCALATION_EVENT_DEFINITION)
       .namespaceUri(BPMN20_NS)
       .extendsType(EventDefinition.class)
-      .instanceProvider(new ModelTypeInstanceProvider<EscalationEventDefinition>() {
-        public EscalationEventDefinition newInstance(ModelTypeInstanceContext instanceContext) {
-          return new EscalationEventDefinitionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new EscalationEventDefinitionImpl(instanceContext));
 
     escalationRefAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_ESCALATION_REF)
       .qNameAttributeReference(Escalation.class)
@@ -57,10 +52,12 @@ public class EscalationEventDefinitionImpl extends EventDefinitionImpl implement
     super(context);
   }
 
+  @Override
   public Escalation getEscalation() {
     return escalationRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setEscalation(Escalation escalation) {
     escalationRefAttribute.setReferenceTargetElement(this, escalation);
   }

@@ -27,7 +27,6 @@ import org.camunda.bpm.model.dmn.instance.Invocation;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
@@ -41,14 +40,17 @@ public class InvocationImpl extends ExpressionImpl implements Invocation {
     super(instanceContext);
   }
 
+  @Override
   public Expression getExpression() {
     return expressionChild.getChild(this);
   }
 
+  @Override
   public void setExpression(Expression expression) {
     expressionChild.setChild(this, expression);
   }
 
+  @Override
   public Collection<Binding> getBindings() {
     return bindingCollection.get(this);
   }
@@ -57,11 +59,7 @@ public class InvocationImpl extends ExpressionImpl implements Invocation {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Invocation.class, DMN_ELEMENT_INVOCATION)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(Expression.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Invocation>() {
-        public Invocation newInstance(ModelTypeInstanceContext instanceContext) {
-          return new InvocationImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new InvocationImpl(instanceContext));
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

@@ -17,13 +17,7 @@
 package org.camunda.bpm.model.bpmn.builder;
 
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.ExtensionElements;
 import org.camunda.bpm.model.bpmn.instance.Task;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaExecutionListener;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaInputOutput;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaInputParameter;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaOutputParameter;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaTaskListener;
 
 /**
  * @author Sebastian Menski

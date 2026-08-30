@@ -25,7 +25,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN conversationAssociation element
@@ -41,11 +40,7 @@ public class ConversationAssociationImpl extends BaseElementImpl implements Conv
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ConversationAssociation.class, BPMN_ELEMENT_CONVERSATION_ASSOCIATION)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ConversationAssociation>() {
-        public ConversationAssociation newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ConversationAssociationImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new ConversationAssociationImpl(instanceContext));
 
     innerConversationNodeRefAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_INNER_CONVERSATION_NODE_REF)
       .required()
@@ -64,18 +59,22 @@ public class ConversationAssociationImpl extends BaseElementImpl implements Conv
     super(instanceContext);
   }
 
+  @Override
   public ConversationNode getInnerConversationNode() {
     return innerConversationNodeRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setInnerConversationNode(ConversationNode innerConversationNode) {
     innerConversationNodeRefAttribute.setReferenceTargetElement(this, innerConversationNode);
   }
 
+  @Override
   public ConversationNode getOuterConversationNode() {
     return outerConversationNodeRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setOuterConversationNode(ConversationNode outerConversationNode) {
     outerConversationNodeRefAttribute.setReferenceTargetElement(this, outerConversationNode);
   }

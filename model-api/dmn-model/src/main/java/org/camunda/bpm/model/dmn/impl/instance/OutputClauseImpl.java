@@ -28,7 +28,6 @@ import org.camunda.bpm.model.dmn.instance.OutputValues;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
@@ -45,34 +44,42 @@ public class OutputClauseImpl extends DmnElementImpl implements OutputClause {
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public String getTypeRef() {
     return typeRefAttribute.getValue(this);
   }
 
+  @Override
   public void setTypeRef(String typeRef) {
     typeRefAttribute.setValue(this, typeRef);
   }
 
+  @Override
   public OutputValues getOutputValues() {
     return outputValuesChild.getChild(this);
   }
 
+  @Override
   public void setOutputValues(OutputValues outputValues) {
     outputValuesChild.setChild(this, outputValues);
   }
 
+  @Override
   public DefaultOutputEntry getDefaultOutputEntry() {
     return defaultOutputEntryChild.getChild(this);
   }
 
+  @Override
   public void setDefaultOutputEntry(DefaultOutputEntry defaultOutputEntry) {
     defaultOutputEntryChild.setChild(this, defaultOutputEntry);
   }
@@ -81,11 +88,7 @@ public class OutputClauseImpl extends DmnElementImpl implements OutputClause {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OutputClause.class, DMN_ELEMENT_OUTPUT_CLAUSE)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(DmnElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<OutputClause>() {
-        public OutputClause newInstance(ModelTypeInstanceContext instanceContext) {
-          return new OutputClauseImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new OutputClauseImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute(DMN_ATTRIBUTE_NAME)
       .build();

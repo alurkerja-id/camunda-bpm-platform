@@ -31,6 +31,7 @@ import org.camunda.bpm.engine.variable.VariableMap;
  */
 public class DefaultStartFormHandler extends DefaultFormHandler implements StartFormHandler {
 
+  @Override
   public StartFormData createStartFormData(ProcessDefinitionEntity processDefinition) {
     StartFormDataImpl startFormData = new StartFormDataImpl();
 

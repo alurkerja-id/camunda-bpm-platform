@@ -36,7 +36,6 @@ import org.camunda.bpm.model.cmmn.instance.CmmnElement;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
@@ -68,50 +67,62 @@ public class CaseFileItemImpl extends CmmnElementImpl implements CaseFileItem {
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public MultiplicityEnum getMultiplicity() {
     return multiplicityAttribute.getValue(this);
   }
 
+  @Override
   public void setMultiplicity(MultiplicityEnum multiplicity) {
     multiplicityAttribute.setValue(this, multiplicity);
   }
 
+  @Override
   public CaseFileItemDefinition getDefinitionRef() {
     return definitionRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setDefinitionRef(CaseFileItemDefinition caseFileItemDefinition) {
     definitionRefAttribute.setReferenceTargetElement(this, caseFileItemDefinition);
   }
 
+  @Override
   public CaseFileItem getSourceRef() {
     return sourceRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setSourceRef(CaseFileItem sourceRef) {
     sourceRefAttribute.setReferenceTargetElement(this, sourceRef);
   }
 
+  @Override
   public Collection<CaseFileItem> getSourceRefs() {
     return sourceRefCollection.getReferenceTargetElements(this);
   }
 
+  @Override
   public Collection<CaseFileItem> getTargetRefs() {
     return targetRefCollection.getReferenceTargetElements(this);
   }
 
+  @Override
   public Children getChildren() {
     return childrenChild.getChild(this);
   }
 
+  @Override
   public void setChildren(Children children) {
     childrenChild.setChild(this, children);
   }
@@ -121,11 +132,7 @@ public class CaseFileItemImpl extends CmmnElementImpl implements CaseFileItem {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CaseFileItem.class, CMMN_ELEMENT_CASE_FILE_ITEM)
         .namespaceUri(CMMN11_NS)
         .extendsType(CmmnElement.class)
-        .instanceProvider(new ModelTypeInstanceProvider<CaseFileItem>() {
-          public CaseFileItem newInstance(ModelTypeInstanceContext instanceContext) {
-            return new CaseFileItemImpl(instanceContext);
-          }
-        });
+        .instanceProvider(instanceContext -> new CaseFileItemImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_NAME)
         .build();

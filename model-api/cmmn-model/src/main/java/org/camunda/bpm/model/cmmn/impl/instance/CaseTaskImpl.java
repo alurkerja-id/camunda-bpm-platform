@@ -33,7 +33,6 @@ import org.camunda.bpm.model.cmmn.instance.Task;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
@@ -59,46 +58,57 @@ public class CaseTaskImpl extends TaskImpl implements CaseTask {
     super(instanceContext);
   }
 
+  @Override
   public String getCase() {
     return caseRefAttribute.getValue(this);
   }
 
+  @Override
   public void setCase(String caseInstance) {
     caseRefAttribute.setValue(this, caseInstance);
   }
 
+  @Override
   public CaseRefExpression getCaseExpression() {
     return caseRefExpressionChild.getChild(this);
   }
 
+  @Override
   public void setCaseExpression(CaseRefExpression caseExpression) {
     caseRefExpressionChild.setChild(this, caseExpression);
   }
 
+  @Override
   public Collection<ParameterMapping> getParameterMappings() {
     return parameterMappingCollection.get(this);
   }
 
+  @Override
   public String getCamundaCaseBinding() {
     return camundaCaseBindingAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaCaseBinding(String camundaCaseBinding) {
     camundaCaseBindingAttribute.setValue(this, camundaCaseBinding);
   }
 
+  @Override
   public String getCamundaCaseVersion() {
     return camundaCaseVersionAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaCaseVersion(String camundaCaseVersion) {
     camundaCaseVersionAttribute.setValue(this, camundaCaseVersion);
   }
 
+  @Override
   public String getCamundaCaseTenantId() {
     return camundaCaseTenantIdAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaCaseTenantId(String camundaCaseTenantId) {
     camundaCaseTenantIdAttribute.setValue(this, camundaCaseTenantId);
   }
@@ -107,11 +117,7 @@ public class CaseTaskImpl extends TaskImpl implements CaseTask {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CaseTask.class, CMMN_ELEMENT_CASE_TASK)
         .extendsType(Task.class)
         .namespaceUri(CMMN11_NS)
-        .instanceProvider(new ModelTypeInstanceProvider<CaseTask>() {
-          public CaseTask newInstance(ModelTypeInstanceContext instanceContext) {
-            return new CaseTaskImpl(instanceContext);
-          }
-        });
+        .instanceProvider(instanceContext -> new CaseTaskImpl(instanceContext));
 
     caseRefAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_CASE_REF)
         .build();

@@ -40,7 +40,8 @@ public class SpringServletProcessApplication extends SpringProcessApplication im
 
   protected ServletContext servletContext;
 
-  public void setServletContext(ServletContext servletContext) {
+	@Override
+	public void setServletContext(ServletContext servletContext) {
     this.servletContext = servletContext;
   }
 

@@ -54,26 +54,24 @@ public class ProcessApplicationEventListenerDelegate implements ExecutionListene
 
   private static ProcessApplicationLogger LOG = ProcessApplicationLogger.PROCESS_APPLICATION_LOGGER;
 
+  @Override
   public void notify(final DelegateExecution execution) throws Exception {
-    Callable<Void> notification = new Callable<Void>() {
-      public Void call() throws Exception {
-        notifyExecutionListener(execution);
-        return null;
-      }
+    Callable<Void> notification = () -> {
+      notifyExecutionListener(execution);
+      return null;
     };
     performNotification(execution, notification);
   }
 
+  @Override
   public void notify(final DelegateTask delegateTask){
     if(delegateTask.getExecution() == null) {
       LOG.taskNotRelatedToExecution(delegateTask);
     } else {
       final DelegateExecution execution = delegateTask.getExecution();
-      Callable<Void> notification = new Callable<Void>() {
-        public Void call() throws Exception {
-          notifyTaskListener(delegateTask);
-          return null;
-        }
+      Callable<Void> notification = () -> {
+        notifyTaskListener(delegateTask);
+        return null;
       };
       try {
         performNotification(execution, notification);

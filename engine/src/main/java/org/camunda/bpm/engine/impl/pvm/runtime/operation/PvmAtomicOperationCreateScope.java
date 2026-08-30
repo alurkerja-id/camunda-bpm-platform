@@ -28,6 +28,7 @@ public abstract class PvmAtomicOperationCreateScope implements PvmAtomicOperatio
 
   private final static PvmLogger LOG = PvmLogger.PVM_LOGGER;
 
+  @Override
   public void execute(PvmExecutionImpl execution) {
 
     // reset activity instance id before creating the scope

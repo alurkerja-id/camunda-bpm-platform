@@ -25,6 +25,7 @@ import org.camunda.bpm.model.bpmn.builder.SendTaskBuilder;
  */
 public interface SendTask extends Task {
 
+  @Override
   SendTaskBuilder builder();
 
   String getImplementation();

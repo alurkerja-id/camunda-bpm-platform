@@ -342,6 +342,7 @@ public class FetchAndLockHandlerImpl implements Runnable, FetchAndLockHandler {
     }
   }
 
+  @Override
   public void contextInitialized(ServletContextEvent servletContextEvent) {
     ServletContext servletContext;
     int queueCapacity = DEFAULT_BLOCKING_QUEUE_CAPACITY;

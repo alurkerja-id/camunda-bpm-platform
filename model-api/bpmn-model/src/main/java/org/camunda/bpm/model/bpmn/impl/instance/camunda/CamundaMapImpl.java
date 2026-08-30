@@ -27,7 +27,6 @@ import org.camunda.bpm.model.bpmn.instance.camunda.CamundaMap;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 
@@ -43,11 +42,7 @@ public class CamundaMapImpl extends BpmnModelElementInstanceImpl implements Camu
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaMap.class, BpmnModelConstants.CAMUNDA_ELEMENT_MAP)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<CamundaMap>() {
-        public CamundaMap newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CamundaMapImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new CamundaMapImpl(instanceContext));
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 
@@ -61,6 +56,7 @@ public class CamundaMapImpl extends BpmnModelElementInstanceImpl implements Camu
     super(instanceContext);
   }
 
+  @Override
   public Collection<CamundaEntry> getCamundaEntries() {
     return camundaEntryCollection.get(this);
   }

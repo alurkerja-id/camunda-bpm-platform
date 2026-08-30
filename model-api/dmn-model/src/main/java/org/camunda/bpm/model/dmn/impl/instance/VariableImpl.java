@@ -24,7 +24,6 @@ import org.camunda.bpm.model.dmn.instance.Variable;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class VariableImpl extends InformationItemImpl implements Variable {
 
@@ -36,11 +35,7 @@ public class VariableImpl extends InformationItemImpl implements Variable {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Variable.class, DMN_ELEMENT_VARIABLE)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(InformationItem.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Variable>() {
-        public Variable newInstance(ModelTypeInstanceContext instanceContext) {
-          return new VariableImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new VariableImpl(instanceContext));
 
     typeBuilder.build();
   }

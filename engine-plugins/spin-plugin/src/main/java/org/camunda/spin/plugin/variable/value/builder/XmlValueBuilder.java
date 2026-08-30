@@ -25,8 +25,10 @@ import org.camunda.spin.plugin.variable.value.XmlValue;
  */
 public interface XmlValueBuilder extends SpinValueBuilder<XmlValue> {
 
+  @Override
   XmlValueBuilder serializationDataFormat(String dataFormatName);
 
+  @Override
   XmlValueBuilder serializationDataFormat(SerializationDataFormat dataFormat);
 
 }

@@ -16,9 +16,6 @@
  */
 package org.camunda.bpm.engine.runtime;
 
-import java.util.List;
-import org.camunda.bpm.engine.history.HistoricProcessInstanceQuery;
-
 /**
  * Fluent builder to update the suspension state of process instances.
  */

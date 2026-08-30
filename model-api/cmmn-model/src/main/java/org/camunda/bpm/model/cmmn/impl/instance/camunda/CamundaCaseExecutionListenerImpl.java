@@ -32,7 +32,6 @@ import org.camunda.bpm.model.cmmn.instance.camunda.CamundaScript;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
@@ -54,11 +53,7 @@ public class CamundaCaseExecutionListenerImpl extends CmmnModelElementInstanceIm
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaCaseExecutionListener.class, CAMUNDA_ELEMENT_CASE_EXECUTION_LISTENER)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<CamundaCaseExecutionListener>() {
-        public CamundaCaseExecutionListener newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CamundaCaseExecutionListenerImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new CamundaCaseExecutionListenerImpl(instanceContext));
 
     camundaEventAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EVENT)
       .namespace(CAMUNDA_NS)
@@ -91,46 +86,57 @@ public class CamundaCaseExecutionListenerImpl extends CmmnModelElementInstanceIm
     super(instanceContext);
   }
 
+  @Override
   public String getCamundaEvent() {
     return camundaEventAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaEvent(String camundaEvent) {
     camundaEventAttribute.setValue(this, camundaEvent);
   }
 
+  @Override
   public String getCamundaClass() {
     return camundaClassAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaClass(String camundaClass) {
     camundaClassAttribute.setValue(this, camundaClass);
   }
 
+  @Override
   public String getCamundaExpression() {
     return camundaExpressionAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaExpression(String camundaExpression) {
     camundaExpressionAttribute.setValue(this, camundaExpression);
   }
 
+  @Override
   public String getCamundaDelegateExpression() {
     return camundaDelegateExpressionAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaDelegateExpression(String camundaDelegateExpression) {
     camundaDelegateExpressionAttribute.setValue(this, camundaDelegateExpression);
   }
 
+  @Override
   public CamundaScript getCamundaScript() {
     return camundaScriptChild.getChild(this);
   }
 
+  @Override
   public void setCamundaScript(CamundaScript camundaScript) {
     camundaScriptChild.setChild(this, camundaScript);
   }
 
+  @Override
   public Collection<CamundaField> getCamundaFields() {
     return camundaFieldCollection.get(this);
   }

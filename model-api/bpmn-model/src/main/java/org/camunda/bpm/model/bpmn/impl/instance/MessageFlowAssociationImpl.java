@@ -25,7 +25,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN messageFlowAssociation element
@@ -41,11 +40,7 @@ public class MessageFlowAssociationImpl extends BaseElementImpl implements Messa
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(MessageFlowAssociation.class, BPMN_ELEMENT_MESSAGE_FLOW_ASSOCIATION)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<MessageFlowAssociation>() {
-        public MessageFlowAssociation newInstance(ModelTypeInstanceContext instanceContext) {
-          return new MessageFlowAssociationImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new MessageFlowAssociationImpl(instanceContext));
 
     innerMessageFlowRefAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_INNER_MESSAGE_FLOW_REF)
       .required()
@@ -64,18 +59,22 @@ public class MessageFlowAssociationImpl extends BaseElementImpl implements Messa
     super(instanceContext);
   }
 
+  @Override
   public MessageFlow getInnerMessageFlow() {
     return innerMessageFlowRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setInnerMessageFlow(MessageFlow innerMessageFlow) {
     innerMessageFlowRefAttribute.setReferenceTargetElement(this, innerMessageFlow);
   }
 
+  @Override
   public MessageFlow getOuterMessageFlow() {
     return outerMessageFlowRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setOuterMessageFlow(MessageFlow outerMessageFlow) {
     outerMessageFlowRefAttribute.setReferenceTargetElement(this, outerMessageFlow);
   }

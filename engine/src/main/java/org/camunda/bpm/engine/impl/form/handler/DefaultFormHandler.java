@@ -31,7 +31,6 @@ import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.el.ExpressionManager;
 import org.camunda.bpm.engine.impl.form.FormDataImpl;
-import org.camunda.bpm.engine.impl.form.FormDefinition;
 import org.camunda.bpm.engine.impl.form.type.AbstractFormFieldType;
 import org.camunda.bpm.engine.impl.form.type.FormTypes;
 import org.camunda.bpm.engine.impl.form.validator.FormFieldValidator;
@@ -73,6 +72,7 @@ public class DefaultFormHandler implements FormHandler {
 
   protected List<FormFieldHandler> formFieldHandlers = new ArrayList<>();
 
+  @Override
   public void parseConfiguration(Element activityElement, DeploymentEntity deployment, ProcessDefinitionEntity processDefinition, BpmnParse bpmnParse) {
     this.deploymentId = deployment.getId();
 
@@ -289,6 +289,7 @@ public class DefaultFormHandler implements FormHandler {
     }
   }
 
+  @Override
   public void submitFormVariables(VariableMap properties, VariableScope variableScope) {
     boolean userOperationLogEnabled = Context.getCommandContext().isUserOperationLogEnabled();
     Context.getCommandContext().enableUserOperationLog();

@@ -24,7 +24,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_DATA_OUTPUT_ASSOCIATION;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN dataOutputAssociation element
@@ -37,11 +36,7 @@ public class DataOutputAssociationImpl extends DataAssociationImpl implements Da
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(DataOutputAssociation.class, BPMN_ELEMENT_DATA_OUTPUT_ASSOCIATION)
       .namespaceUri(BPMN20_NS)
       .extendsType(DataAssociation.class)
-      .instanceProvider(new ModelTypeInstanceProvider<DataOutputAssociation>() {
-        public DataOutputAssociation newInstance(ModelTypeInstanceContext instanceContext) {
-          return new DataOutputAssociationImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new DataOutputAssociationImpl(instanceContext));
   
     typeBuilder.build();
   }

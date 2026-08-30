@@ -69,10 +69,8 @@ import org.camunda.bpm.engine.impl.pvm.runtime.operation.PvmAtomicOperation;
 import org.camunda.bpm.engine.impl.tree.ExecutionWalker;
 import org.camunda.bpm.engine.impl.tree.FlowScopeWalker;
 import org.camunda.bpm.engine.impl.tree.LeafActivityInstanceExecutionCollector;
-import org.camunda.bpm.engine.impl.tree.ReferenceWalker;
 import org.camunda.bpm.engine.impl.tree.ScopeCollector;
 import org.camunda.bpm.engine.impl.tree.ScopeExecutionCollector;
-import org.camunda.bpm.engine.impl.tree.TreeVisitor;
 import org.camunda.bpm.engine.impl.util.EnsureUtil;
 import org.camunda.bpm.engine.runtime.Incident;
 import org.camunda.bpm.engine.variable.VariableMap;
@@ -1119,6 +1117,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
 
   public abstract List<? extends PvmExecutionImpl> getExecutionsAsCopy();
 
+  @Override
   public List<? extends PvmExecutionImpl> getNonEventScopeExecutions() {
     List<? extends PvmExecutionImpl> children = getExecutions();
     List<PvmExecutionImpl> result = new ArrayList<>();
@@ -1389,6 +1388,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
     }
   }
 
+  @Override
   public boolean hasChildren() {
     return !getExecutions().isEmpty();
   }
@@ -1623,22 +1623,14 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
     ScopeExecutionCollector scopeExecutionCollector = new ScopeExecutionCollector();
     new ExecutionWalker(this)
       .addPreVisitor(scopeExecutionCollector)
-      .walkWhile(new ReferenceWalker.WalkCondition<PvmExecutionImpl>() {
-        public boolean isFulfilled(PvmExecutionImpl element) {
-          return element == null || mapping.containsValue(element);
-        }
-      });
+      .walkWhile(element -> element == null || mapping.containsValue(element));
     final List<PvmExecutionImpl> scopeExecutions = scopeExecutionCollector.getScopeExecutions();
 
     // collect all ancestor scopes unless one is encountered that is already in "mapping"
     ScopeCollector scopeCollector = new ScopeCollector();
     new FlowScopeWalker(currentScope)
       .addPreVisitor(scopeCollector)
-      .walkWhile(new ReferenceWalker.WalkCondition<ScopeImpl>() {
-        public boolean isFulfilled(ScopeImpl element) {
-          return element == null || mapping.containsKey(element);
-        }
-      });
+      .walkWhile(element -> element == null || mapping.containsKey(element));
 
     final List<ScopeImpl> scopes = scopeCollector.getScopes();
 
@@ -1646,14 +1638,12 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
     // and correspond to ancestors of the topmost previously collected scope
     ScopeImpl topMostScope = scopes.get(scopes.size() - 1);
     new FlowScopeWalker(topMostScope.getFlowScope())
-      .addPreVisitor(new TreeVisitor<ScopeImpl>() {
-        public void visit(ScopeImpl obj) {
-          scopes.add(obj);
-          PvmExecutionImpl priorMappingExecution = mapping.get(obj);
+      .addPreVisitor(obj -> {
+        scopes.add(obj);
+        PvmExecutionImpl priorMappingExecution = mapping.get(obj);
 
-          if (priorMappingExecution != null && !scopeExecutions.contains(priorMappingExecution)) {
-            scopeExecutions.add(priorMappingExecution);
-          }
+        if (priorMappingExecution != null && !scopeExecutions.contains(priorMappingExecution)) {
+          scopeExecutions.add(priorMappingExecution);
         }
       })
       .walkWhile();
@@ -1701,6 +1691,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setVariable(String variableName, Object value, String targetActivityId) {
     String activityId = getActivityId();
     if (activityId != null && activityId.equals(targetActivityId)) {
@@ -1724,14 +1715,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
     EnsureUtil.ensureNotNull("activity of current execution", currentActivity);
 
     FlowScopeWalker walker = new FlowScopeWalker(currentActivity);
-    ScopeImpl targetFlowScope = walker.walkUntil(new ReferenceWalker.WalkCondition<ScopeImpl>() {
-
-      @Override
-      public boolean isFulfilled(ScopeImpl scope) {
-        return scope == null || scope.getId().equals(targetScopeId);
-      }
-
-    });
+    ScopeImpl targetFlowScope = walker.walkUntil(scope -> scope == null || scope.getId().equals(targetScopeId));
 
     if (targetFlowScope == null) {
       throw LOG.scopeNotFoundException(targetScopeId, this.getId());
@@ -1829,6 +1813,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
     this.isActive = isActive;
   }
 
+  @Override
   public void setEnded(boolean isEnded) {
     this.isEnded = isEnded;
   }
@@ -2042,12 +2027,9 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
    * @param atomicOperation the atomic operation which should be executed
    */
   public void dispatchDelayedEventsAndPerformOperation(final PvmAtomicOperation atomicOperation) {
-    dispatchDelayedEventsAndPerformOperation(new Callback<PvmExecutionImpl, Void>() {
-      @Override
-      public Void callback(PvmExecutionImpl param) {
-        param.performOperation(atomicOperation);
-        return null;
-      }
+    dispatchDelayedEventsAndPerformOperation(param -> {
+      param.performOperation(atomicOperation);
+      return null;
     });
   }
 
@@ -2277,6 +2259,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
     return createIncident(incidentType, configuration, null);
   }
 
+  @Override
   public Incident createIncident(String incidentType, String configuration, String message) {
     IncidentContext incidentContext = createIncidentContext(configuration);
 

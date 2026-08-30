@@ -27,7 +27,6 @@ import org.camunda.bpm.model.cmmn.instance.RequiredRule;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 
@@ -45,26 +44,32 @@ public class PlanItemControlImpl extends CmmnElementImpl implements PlanItemCont
     super(instanceContext);
   }
 
+  @Override
   public RepetitionRule getRepetitionRule() {
     return repetitionRuleChild.getChild(this);
   }
 
+  @Override
   public void setRepetitionRule(RepetitionRule repetitionRule) {
     repetitionRuleChild.setChild(this, repetitionRule);
   }
 
+  @Override
   public RequiredRule getRequiredRule() {
     return requiredRuleChild.getChild(this);
   }
 
+  @Override
   public void setRequiredRule(RequiredRule requiredRule) {
     requiredRuleChild.setChild(this, requiredRule);
   }
 
+  @Override
   public ManualActivationRule getManualActivationRule() {
     return manualActivationRuleChild.getChild(this);
   }
 
+  @Override
   public void setManualActivationRule(ManualActivationRule manualActivationRule) {
     manualActivationRuleChild.setChild(this, manualActivationRule);
   }
@@ -73,11 +78,7 @@ public class PlanItemControlImpl extends CmmnElementImpl implements PlanItemCont
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(PlanItemControl.class, CMMN_ELEMENT_PLAN_ITEM_CONTROL)
         .namespaceUri(CMMN11_NS)
         .extendsType(CmmnElement.class)
-        .instanceProvider(new ModelTypeInstanceProvider<PlanItemControl>() {
-          public PlanItemControl newInstance(ModelTypeInstanceContext instanceContext) {
-            return new PlanItemControlImpl(instanceContext);
-          }
-        });
+        .instanceProvider(instanceContext -> new PlanItemControlImpl(instanceContext));
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

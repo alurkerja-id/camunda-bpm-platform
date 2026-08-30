@@ -48,6 +48,7 @@ public class ActivityInstanceImpl extends ProcessElementInstanceImpl implements 
   protected String[] incidentIds = NO_IDS;
   protected Incident[] incidents = new Incident[0];
 
+  @Override
   public ActivityInstance[] getChildActivityInstances() {
     return childActivityInstances;
   }
@@ -64,6 +65,7 @@ public class ActivityInstanceImpl extends ProcessElementInstanceImpl implements 
     this.businessKey = businessKey;
   }
 
+  @Override
   public String getActivityId() {
     return activityId;
   }
@@ -72,6 +74,7 @@ public class ActivityInstanceImpl extends ProcessElementInstanceImpl implements 
     this.activityId = activityId;
   }
 
+  @Override
   public String[] getExecutionIds() {
     return executionIds;
   }
@@ -80,6 +83,7 @@ public class ActivityInstanceImpl extends ProcessElementInstanceImpl implements 
     this.executionIds = executionIds;
   }
 
+  @Override
   public TransitionInstance[] getChildTransitionInstances() {
     return childTransitionInstances;
   }
@@ -88,6 +92,7 @@ public class ActivityInstanceImpl extends ProcessElementInstanceImpl implements 
     this.childTransitionInstances = childTransitionInstances;
   }
 
+  @Override
   public String getActivityType() {
     return activityType;
   }
@@ -96,6 +101,7 @@ public class ActivityInstanceImpl extends ProcessElementInstanceImpl implements 
     this.activityType = activityType;
   }
 
+  @Override
   public String getActivityName() {
     return activityName;
   }
@@ -104,6 +110,7 @@ public class ActivityInstanceImpl extends ProcessElementInstanceImpl implements 
     this.activityName = activityName;
   }
 
+  @Override
   public String[] getIncidentIds() {
     return incidentIds;
   }
@@ -112,6 +119,7 @@ public class ActivityInstanceImpl extends ProcessElementInstanceImpl implements 
     this.incidentIds = incidentIds;
   }
 
+  @Override
   public Incident[] getIncidents() {
     return incidents;
   }
@@ -154,12 +162,14 @@ public class ActivityInstanceImpl extends ProcessElementInstanceImpl implements 
     writer.append("transition to/from " + transition.getActivityId() + ":" + transition.getId() + "\n");
   }
 
+  @Override
   public String toString() {
     StringWriter writer = new StringWriter();
     writeTree(writer, "", true);
     return writer.toString();
   }
 
+  @Override
   public ActivityInstance[] getActivityInstances(String activityId) {
     EnsureUtil.ensureNotNull("activityId", activityId);
 
@@ -180,6 +190,7 @@ public class ActivityInstanceImpl extends ProcessElementInstanceImpl implements 
     }
   }
 
+  @Override
   public TransitionInstance[] getTransitionInstances(String activityId) {
     EnsureUtil.ensureNotNull("activityId", activityId);
 

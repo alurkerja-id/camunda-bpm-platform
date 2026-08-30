@@ -37,7 +37,8 @@ import org.camunda.bpm.engine.runtime.Incident;
  */
 public class CacheAwareHistoryEventProducer extends DefaultHistoryEventProducer {
 
-   protected HistoricActivityInstanceEventEntity loadActivityInstanceEventEntity(ExecutionEntity execution) {
+  @Override
+  protected HistoricActivityInstanceEventEntity loadActivityInstanceEventEntity(ExecutionEntity execution) {
     final String activityInstanceId = execution.getActivityInstanceId();
 
     HistoricActivityInstanceEventEntity cachedEntity = findInCache(HistoricActivityInstanceEventEntity.class, activityInstanceId);
@@ -52,6 +53,7 @@ public class CacheAwareHistoryEventProducer extends DefaultHistoryEventProducer 
 
   }
 
+  @Override
   protected HistoricProcessInstanceEventEntity loadProcessInstanceEventEntity(ExecutionEntity execution) {
     final String processInstanceId = execution.getProcessInstanceId();
 
@@ -67,6 +69,7 @@ public class CacheAwareHistoryEventProducer extends DefaultHistoryEventProducer 
 
   }
 
+  @Override
   protected HistoricTaskInstanceEventEntity loadTaskInstanceEvent(DelegateTask task) {
     final String taskId = task.getId();
 
@@ -81,6 +84,7 @@ public class CacheAwareHistoryEventProducer extends DefaultHistoryEventProducer 
     }
   }
 
+  @Override
   protected HistoricIncidentEventEntity loadIncidentEvent(Incident incident) {
     String incidentId = incident.getId();
 
@@ -95,6 +99,7 @@ public class CacheAwareHistoryEventProducer extends DefaultHistoryEventProducer 
     }
   }
 
+  @Override
   protected HistoricBatchEntity loadBatchEntity(BatchEntity batch) {
     String batchId = batch.getId();
 

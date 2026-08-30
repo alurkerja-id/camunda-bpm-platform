@@ -24,7 +24,6 @@ import org.camunda.bpm.model.dmn.instance.OutputClause;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class OutputImpl extends OutputClauseImpl implements Output {
 
@@ -36,11 +35,7 @@ public class OutputImpl extends OutputClauseImpl implements Output {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Output.class, DMN_ELEMENT_OUTPUT)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(OutputClause.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Output>() {
-        public Output newInstance(ModelTypeInstanceContext instanceContext) {
-          return new OutputImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new OutputImpl(instanceContext));
 
     typeBuilder.build();
   }

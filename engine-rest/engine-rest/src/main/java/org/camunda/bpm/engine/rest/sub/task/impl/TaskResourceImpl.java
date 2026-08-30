@@ -23,7 +23,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 import javax.ws.rs.core.MediaType;
@@ -304,6 +303,7 @@ public class TaskResourceImpl implements TaskResource {
 
   }
 
+  @Override
   public void setAssignee(UserIdDto dto) {
     TaskService taskService = engine.getTaskService();
     taskService.setAssignee(taskId, dto.getUserId());
@@ -352,22 +352,27 @@ public class TaskResourceImpl implements TaskResource {
 
   }
 
+  @Override
   public TaskCommentResource getTaskCommentResource() {
     return new TaskCommentResourceImpl(engine, taskId, rootResourcePath);
   }
 
+  @Override
   public TaskAttachmentResource getAttachmentResource() {
     return new TaskAttachmentResourceImpl(engine, taskId, rootResourcePath);
   }
 
+  @Override
   public VariableResource getLocalVariables() {
     return new LocalTaskVariablesResource(engine, taskId, objectMapper);
   }
 
+  @Override
   public VariableResource getVariables() {
     return new TaskVariablesResource(engine, taskId, objectMapper);
   }
 
+  @Override
   public Map<String, VariableValueDto> getFormVariables(String variableNames, boolean deserializeValues) {
 
     final FormService formService = engine.getFormService();
@@ -383,6 +388,7 @@ public class TaskResourceImpl implements TaskResource {
     return VariableValueDto.fromMap(startFormVariables);
   }
 
+  @Override
   public void updateTask(TaskDto taskDto) {
     TaskService taskService = engine.getTaskService();
 

@@ -41,8 +41,6 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
 import org.camunda.bpm.engine.impl.jobexecutor.JobExecutor;
 import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
 import org.camunda.bpm.engine.impl.util.ClockUtil;
@@ -162,11 +160,9 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
   protected void deleteHistoryCleanupJobs() {
     final List<Job> jobs = historyService.findHistoryCleanupJobs();
     for (final Job job: jobs) {
-      processEngineConfiguration.getCommandExecutorTxRequired().execute(new Command<Void>() {
-        public Void execute(CommandContext commandContext) {
-            commandContext.getJobManager().deleteJob((JobEntity) job);
-          return null;
-        }
+      processEngineConfiguration.getCommandExecutorTxRequired().execute(commandContext -> {
+        commandContext.getJobManager().deleteJob((JobEntity) job);
+        return null;
       });
     }
   }

@@ -33,7 +33,6 @@ import org.camunda.bpm.model.cmmn.instance.Sentry;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
@@ -58,35 +57,43 @@ public class PlanItemOnPartImpl extends OnPartImpl implements PlanItemOnPart {
     super(instanceContext);
   }
 
+  @Override
   public Sentry getSentry() {
     return sentryRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setSentry(Sentry sentry) {
     sentryRefAttribute.setReferenceTargetElement(this, sentry);
   }
 
+  @Override
   public ExitCriterion getExitCriterion() {
     return exitCriterionRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setExitCriterion(ExitCriterion exitCriterion) {
     exitCriterionRefAttribute.setReferenceTargetElement(this, exitCriterion);
   }
 
+  @Override
   public PlanItem getSource() {
     return sourceRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setSource(PlanItem source) {
     sourceRefAttribute.setReferenceTargetElement(this, source);
   }
 
+  @Override
   public PlanItemTransition getStandardEvent() {
     PlanItemTransitionStandardEvent child = standardEventChild.getChild(this);
     return child.getValue();
   }
 
+  @Override
   public void setStandardEvent(PlanItemTransition standardEvent) {
     PlanItemTransitionStandardEvent child = standardEventChild.getChild(this);
     child.setValue(standardEvent);
@@ -96,11 +103,7 @@ public class PlanItemOnPartImpl extends OnPartImpl implements PlanItemOnPart {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(PlanItemOnPart.class, CMMN_ELEMENT_PLAN_ITEM_ON_PART)
         .extendsType(OnPart.class)
         .namespaceUri(CMMN11_NS)
-        .instanceProvider(new ModelTypeInstanceProvider<PlanItemOnPart>() {
-          public PlanItemOnPart newInstance(ModelTypeInstanceContext instanceContext) {
-            return new PlanItemOnPartImpl(instanceContext);
-          }
-        });
+        .instanceProvider(instanceContext -> new PlanItemOnPartImpl(instanceContext));
 
     sourceRefAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_SOURCE_REF)
         .idAttributeReference(PlanItem.class)

@@ -75,6 +75,7 @@ public class TimerDeclarationImpl extends JobDeclaration<ExecutionEntity, TimerE
     return eventScopeActivityId;
   }
 
+  @Override
   protected TimerEntity newJobInstance(ExecutionEntity execution) {
 
     TimerEntity timer = new TimerEntity(this);
@@ -157,6 +158,7 @@ public class TimerDeclarationImpl extends JobDeclaration<ExecutionEntity, TimerE
     return dueDateString;
   }
 
+  @Override
   protected void postInitialize(ExecutionEntity execution, TimerEntity timer) {
     initializeConfiguration(execution, timer);
   }
@@ -196,6 +198,7 @@ public class TimerDeclarationImpl extends JobDeclaration<ExecutionEntity, TimerE
       .schedule(timer);
   }
 
+  @Override
   protected ExecutionEntity resolveExecution(ExecutionEntity context) {
     return context;
   }

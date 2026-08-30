@@ -28,6 +28,7 @@ import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbBulkOperation;
  */
 public class DbBulkOperationComparator implements Comparator<DbBulkOperation> {
 
+  @Override
   public int compare(DbBulkOperation firstOperation, DbBulkOperation secondOperation) {
 
     if(firstOperation.equals(secondOperation)) {

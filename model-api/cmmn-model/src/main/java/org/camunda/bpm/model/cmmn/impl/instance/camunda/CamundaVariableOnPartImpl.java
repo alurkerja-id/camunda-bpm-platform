@@ -27,7 +27,6 @@ import org.camunda.bpm.model.cmmn.instance.camunda.CamundaVariableTransitionEven
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
@@ -45,11 +44,7 @@ public class CamundaVariableOnPartImpl extends CmmnModelElementInstanceImpl impl
 
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaVariableOnPart.class, CAMUNDA_ELEMENT_VARIABLE_ON_PART)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<CamundaVariableOnPart>() {
-        public CamundaVariableOnPart newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CamundaVariableOnPartImpl(instanceContext);
-      }
-    });
+      .instanceProvider(instanceContext -> new CamundaVariableOnPartImpl(instanceContext));
 
     camundaVariableNameAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_VARIABLE_NAME)
       .namespace(CAMUNDA_NS)
@@ -63,20 +58,24 @@ public class CamundaVariableOnPartImpl extends CmmnModelElementInstanceImpl impl
     typeBuilder.build();
   }
 
+  @Override
   public String getVariableName() {
     return camundaVariableNameAttribute.getValue(this);
   }
 
+  @Override
   public void setVariableName(String name) {
     camundaVariableNameAttribute.setValue(this, name);
   }
 
 
+  @Override
   public VariableTransition getVariableEvent() {
     CamundaVariableTransitionEvent child = camundaVariableEventChild.getChild(this);
     return child.getValue();
   }
 
+  @Override
   public void setVariableEvent(VariableTransition variableTransition) {
     CamundaVariableTransitionEvent child = camundaVariableEventChild.getChild(this);
     child.setValue(variableTransition);

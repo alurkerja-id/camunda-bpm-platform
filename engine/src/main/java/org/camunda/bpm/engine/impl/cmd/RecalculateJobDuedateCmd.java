@@ -65,6 +65,7 @@ public class RecalculateJobDuedateCmd implements Command<Void>, Serializable {
     this.creationDateBased = creationDateBased;
   }
 
+  @Override
   public Void execute(final CommandContext commandContext) {
     final JobEntity job = commandContext.getJobManager().findJobById(jobId);
     ensureNotNull(NotFoundException.class, "No job found with id '" + jobId + "'", "job", job);
@@ -80,12 +81,8 @@ public class RecalculateJobDuedateCmd implements Command<Void>, Serializable {
     final TimerDeclarationImpl timerDeclaration = findTimerDeclaration(commandContext, job);
     final TimerEntity timer = (TimerEntity) job;
     Date oldDuedate = job.getDuedate();
-    Runnable runnable = new Runnable() {
-      @Override
-      public void run() {
+    Runnable runnable = () ->
         timerDeclaration.resolveAndSetDuedate(timer.getExecution(), timer, creationDateBased);
-      }
-    };
 
     // run recalculation in correct context
     ProcessDefinitionEntity contextDefinition = commandContext

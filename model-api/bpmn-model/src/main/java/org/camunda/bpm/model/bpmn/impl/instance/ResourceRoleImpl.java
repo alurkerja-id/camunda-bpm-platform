@@ -29,7 +29,6 @@ import org.camunda.bpm.model.xml.type.reference.ElementReference;
 import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN resourceRole element
@@ -47,11 +46,7 @@ public class ResourceRoleImpl extends BaseElementImpl implements ResourceRole {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ResourceRole.class, BPMN_ELEMENT_RESOURCE_ROLE)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ResourceRole>() {
-        public ResourceRole newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ResourceRoleImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new ResourceRoleImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_NAME)
       .build();
@@ -75,26 +70,32 @@ public class ResourceRoleImpl extends BaseElementImpl implements ResourceRole {
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public Resource getResource() {
     return resourceRefChild.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setResource(Resource resource) {
     resourceRefChild.setReferenceTargetElement(this, resource);
   }
 
+  @Override
   public Collection<ResourceParameterBinding> getResourceParameterBinding() {
     return resourceParameterBindingCollection.get(this);
   }
 
+  @Override
   public ResourceAssignmentExpression getResourceAssignmentExpression() {
     return resourceAssignmentExpressionChild.getChild(this);
   }

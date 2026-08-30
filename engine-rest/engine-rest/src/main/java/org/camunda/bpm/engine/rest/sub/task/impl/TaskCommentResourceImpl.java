@@ -50,6 +50,7 @@ public class TaskCommentResourceImpl implements TaskCommentResource {
     this.rootResourcePath = rootResourcePath;
   }
 
+  @Override
   public List<CommentDto> getComments() {
     if (!isHistoryEnabled()) {
       return Collections.emptyList();
@@ -67,6 +68,7 @@ public class TaskCommentResourceImpl implements TaskCommentResource {
     return comments;
   }
 
+  @Override
   public CommentDto getComment(String commentId) {
     ensureHistoryEnabled(Status.NOT_FOUND);
 
@@ -78,6 +80,7 @@ public class TaskCommentResourceImpl implements TaskCommentResource {
     return CommentDto.fromComment(comment);
   }
 
+  @Override
   public void deleteComment(String commentId) {
     ensureHistoryEnabled(Status.FORBIDDEN);
     ensureTaskExists(Status.NOT_FOUND);
@@ -92,6 +95,7 @@ public class TaskCommentResourceImpl implements TaskCommentResource {
     }
   }
 
+  @Override
   public void updateComment(CommentDto comment) {
     ensureHistoryEnabled(Status.FORBIDDEN);
     ensureTaskExists(Status.NOT_FOUND);
@@ -105,6 +109,7 @@ public class TaskCommentResourceImpl implements TaskCommentResource {
     }
   }
 
+  @Override
   public void deleteComments() {
     ensureHistoryEnabled(Status.FORBIDDEN);
     ensureTaskExists(Status.NOT_FOUND);
@@ -119,6 +124,7 @@ public class TaskCommentResourceImpl implements TaskCommentResource {
     }
   }
 
+  @Override
   public CommentDto createComment(UriInfo uriInfo, CommentDto commentDto) {
     ensureHistoryEnabled(Status.FORBIDDEN);
     ensureTaskExists(Status.BAD_REQUEST);

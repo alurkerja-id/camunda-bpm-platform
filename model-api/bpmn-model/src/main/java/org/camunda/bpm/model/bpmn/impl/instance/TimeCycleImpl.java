@@ -24,7 +24,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_TIME_CYCLE;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN timeDuration element of the BPMN tTimerEventDefinition type
@@ -37,11 +36,7 @@ public class TimeCycleImpl extends ExpressionImpl implements TimeCycle {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(TimeCycle.class, BPMN_ELEMENT_TIME_CYCLE)
       .namespaceUri(BPMN20_NS)
       .extendsType(Expression.class)
-      .instanceProvider(new ModelTypeInstanceProvider<TimeCycle>() {
-        public TimeCycle newInstance(ModelTypeInstanceContext instanceContext) {
-          return new TimeCycleImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new TimeCycleImpl(instanceContext));
 
     typeBuilder.build();
   }

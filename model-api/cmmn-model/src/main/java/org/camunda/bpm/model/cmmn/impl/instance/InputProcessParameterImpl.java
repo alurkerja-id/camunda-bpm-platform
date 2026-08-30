@@ -39,11 +39,7 @@ public class InputProcessParameterImpl extends ProcessParameterImpl implements I
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(InputProcessParameter.class, CMMN_ELEMENT_INPUT)
       .namespaceUri(CMMN11_NS)
       .extendsType(ProcessParameter.class)
-      .instanceProvider(new ModelElementTypeBuilder.ModelTypeInstanceProvider<InputProcessParameter>() {
-        public InputProcessParameter newInstance(ModelTypeInstanceContext instanceContext) {
-          return new InputProcessParameterImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new InputProcessParameterImpl(instanceContext));
 
     typeBuilder.build();
   }

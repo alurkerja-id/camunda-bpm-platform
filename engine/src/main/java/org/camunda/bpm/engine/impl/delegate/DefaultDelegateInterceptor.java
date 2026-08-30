@@ -16,8 +16,6 @@
  */
 package org.camunda.bpm.engine.impl.delegate;
 
-import java.util.concurrent.Callable;
-
 import org.camunda.bpm.application.InvocationContext;
 import org.camunda.bpm.application.ProcessApplicationReference;
 import org.camunda.bpm.engine.delegate.BaseDelegateExecution;
@@ -46,17 +44,15 @@ import org.camunda.bpm.engine.impl.repository.ResourceDefinitionEntity;
  */
 public class DefaultDelegateInterceptor implements DelegateInterceptor {
 
+  @Override
   public void handleInvocation(final DelegateInvocation invocation) throws Exception {
 
     final ProcessApplicationReference processApplication = getProcessApplicationForInvocation(invocation);
 
     if (processApplication != null && ProcessApplicationContextUtil.requiresContextSwitch(processApplication)) {
-      Context.executeWithinProcessApplication(new Callable<Void>() {
-        @Override
-        public Void call() throws Exception {
-          handleInvocation(invocation);
-          return null;
-        }
+      Context.executeWithinProcessApplication(() -> {
+        handleInvocation(invocation);
+        return null;
       }, processApplication, new InvocationContext(invocation.getContextExecution()));
     }
     else {

@@ -24,7 +24,6 @@ import org.camunda.bpm.model.dmn.instance.SupportedObjectiveReference;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class SupportedObjectiveReferenceImpl extends DmnElementReferenceImpl implements SupportedObjectiveReference {
 
@@ -36,11 +35,7 @@ public class SupportedObjectiveReferenceImpl extends DmnElementReferenceImpl imp
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(SupportedObjectiveReference.class, DMN_ELEMENT_SUPPORTED_OBJECT)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(DmnElementReference.class)
-      .instanceProvider(new ModelTypeInstanceProvider<SupportedObjectiveReference>() {
-        public SupportedObjectiveReference newInstance(ModelTypeInstanceContext instanceContext) {
-          return new SupportedObjectiveReferenceImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new SupportedObjectiveReferenceImpl(instanceContext));
 
     typeBuilder.build();
   }

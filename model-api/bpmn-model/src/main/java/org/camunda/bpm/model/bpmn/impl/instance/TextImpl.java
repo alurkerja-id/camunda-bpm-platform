@@ -23,7 +23,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_TEXT;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN 2.0 text element from the tTextAnnotation complex type
@@ -35,11 +34,7 @@ public class TextImpl extends BpmnModelElementInstanceImpl implements Text {
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Text.class, BPMN_ELEMENT_TEXT)
       .namespaceUri(BPMN20_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<Text>() {
-        public Text newInstance(ModelTypeInstanceContext instanceContext) {
-          return new TextImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new TextImpl(instanceContext));
 
     typeBuilder.build();
   }

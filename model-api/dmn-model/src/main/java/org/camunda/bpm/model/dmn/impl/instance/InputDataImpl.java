@@ -25,7 +25,6 @@ import org.camunda.bpm.model.dmn.instance.InputData;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 
@@ -37,10 +36,12 @@ public class InputDataImpl extends DrgElementImpl implements InputData {
     super(instanceContext);
   }
 
+  @Override
   public InformationItem getInformationItem() {
     return informationItemChild.getChild(this);
   }
 
+  @Override
   public void setInformationItem(InformationItem informationItem) {
     informationItemChild.setChild(this, informationItem);
   }
@@ -49,11 +50,7 @@ public class InputDataImpl extends DrgElementImpl implements InputData {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(InputData.class, DMN_ELEMENT_INPUT_DATA)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(DrgElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<InputData>() {
-        public InputData newInstance(ModelTypeInstanceContext instanceContext) {
-          return new InputDataImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new InputDataImpl(instanceContext));
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

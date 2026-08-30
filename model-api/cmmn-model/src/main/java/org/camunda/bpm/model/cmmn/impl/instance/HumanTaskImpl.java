@@ -39,7 +39,6 @@ import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.impl.util.StringUtil;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
@@ -74,100 +73,123 @@ public class HumanTaskImpl extends TaskImpl implements HumanTask {
     super(instanceContext);
   }
 
+  @Override
   public Role getPerformer() {
     return performerRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setPerformer(Role performer) {
     performerRefAttribute.setReferenceTargetElement(this, performer);
   }
 
+  @Override
   public Collection<PlanningTable> getPlanningTables() {
     return planningTableCollection.get(this);
   }
 
+  @Override
   public PlanningTable getPlanningTable() {
     return planningTableChild.getChild(this);
   }
 
+  @Override
   public void setPlanningTable(PlanningTable planningTable) {
     planningTableChild.setChild(this, planningTable);
   }
 
   /** camunda extensions */
 
+  @Override
   public String getCamundaAssignee() {
     return camundaAssigneeAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaAssignee(String camundaAssignee) {
     camundaAssigneeAttribute.setValue(this, camundaAssignee);
   }
 
+  @Override
   public String getCamundaCandidateGroups() {
     return camundaCandidateGroupsAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaCandidateGroups(String camundaCandidateGroups) {
     camundaCandidateGroupsAttribute.setValue(this, camundaCandidateGroups);
   }
 
+  @Override
   public List<String> getCamundaCandidateGroupsList() {
     String candidateGroups = camundaCandidateGroupsAttribute.getValue(this);
     return StringUtil.splitCommaSeparatedList(candidateGroups);
   }
 
+  @Override
   public void setCamundaCandidateGroupsList(List<String> camundaCandidateGroupsList) {
     String candidateGroups = StringUtil.joinCommaSeparatedList(camundaCandidateGroupsList);
     camundaCandidateGroupsAttribute.setValue(this, candidateGroups);
   }
 
+  @Override
   public String getCamundaCandidateUsers() {
     return camundaCandidateUsersAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaCandidateUsers(String camundaCandidateUsers) {
     camundaCandidateUsersAttribute.setValue(this, camundaCandidateUsers);
   }
 
+  @Override
   public List<String> getCamundaCandidateUsersList() {
     String candidateUsers = camundaCandidateUsersAttribute.getValue(this);
     return StringUtil.splitCommaSeparatedList(candidateUsers);
   }
 
+  @Override
   public void setCamundaCandidateUsersList(List<String> camundaCandidateUsersList) {
     String candidateUsers = StringUtil.joinCommaSeparatedList(camundaCandidateUsersList);
     camundaCandidateUsersAttribute.setValue(this, candidateUsers);
   }
 
+  @Override
   public String getCamundaDueDate() {
     return camundaDueDateAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaDueDate(String camundaDueDate) {
     camundaDueDateAttribute.setValue(this, camundaDueDate);
   }
 
+  @Override
   public String getCamundaFollowUpDate() {
     return camundaFollowUpDateAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaFollowUpDate(String camundaFollowUpDate) {
     camundaFollowUpDateAttribute.setValue(this, camundaFollowUpDate);
   }
 
+  @Override
   public String getCamundaFormKey() {
     return camundaFormKeyAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaFormKey(String camundaFormKey) {
     camundaFormKeyAttribute.setValue(this, camundaFormKey);
   }
 
+  @Override
   public String getCamundaPriority() {
     return camundaPriorityAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaPriority(String camundaPriority) {
     camundaPriorityAttribute.setValue(this, camundaPriority);
   }
@@ -176,11 +198,7 @@ public class HumanTaskImpl extends TaskImpl implements HumanTask {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(HumanTask.class, CMMN_ELEMENT_HUMAN_TASK)
         .namespaceUri(CMMN11_NS)
         .extendsType(Task.class)
-        .instanceProvider(new ModelTypeInstanceProvider<HumanTask>() {
-          public HumanTask newInstance(ModelTypeInstanceContext instanceContext) {
-            return new HumanTaskImpl(instanceContext);
-          }
-        });
+        .instanceProvider(instanceContext -> new HumanTaskImpl(instanceContext));
 
     performerRefAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_PERFORMER_REF)
         .idAttributeReference(Role.class)

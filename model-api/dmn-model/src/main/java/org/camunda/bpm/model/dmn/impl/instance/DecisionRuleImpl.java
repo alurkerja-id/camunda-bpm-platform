@@ -28,7 +28,6 @@ import org.camunda.bpm.model.dmn.instance.OutputEntry;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 
@@ -41,10 +40,12 @@ public class DecisionRuleImpl extends DmnElementImpl implements DecisionRule {
     super(instanceContext);
   }
 
+  @Override
   public Collection<InputEntry> getInputEntries() {
     return inputEntryCollection.get(this);
   }
 
+  @Override
   public Collection<OutputEntry> getOutputEntries() {
     return outputEntryCollection.get(this);
   }
@@ -53,11 +54,7 @@ public class DecisionRuleImpl extends DmnElementImpl implements DecisionRule {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(DecisionRule.class, DMN_ELEMENT_DECISION_RULE)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(DmnElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<DecisionRule>() {
-        public DecisionRule newInstance(ModelTypeInstanceContext instanceContext) {
-          return new DecisionRuleImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new DecisionRuleImpl(instanceContext));
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

@@ -1708,15 +1708,10 @@ public class BpmnParse extends Parse {
         }
         if (scopeElement.findActivityAtLevelOfSubprocess(activityRef) == null) {
           final String scopeId = scopeElement.getId();
-          scopeElement.addToBacklog(activityRef, new ScopeImpl.BacklogErrorCallback() {
-
-            @Override
-            public void callback() {
+          scopeElement.addToBacklog(activityRef, () ->
               addError("Invalid attribute value for 'activityRef': no activity with id '" + activityRef + "' in scope '" + scopeId + "'",
-              compensateEventDefinitionElement,
-              parentElementId);
-            }
-          });
+                  compensateEventDefinitionElement,
+                  parentElementId));
         }
       }
     }
@@ -1930,25 +1925,19 @@ public class BpmnParse extends Parse {
    * @param activity the activity which gets the delegates
    */
   protected void setActivityAsyncDelegates(final ActivityImpl activity) {
-    activity.setDelegateAsyncAfterUpdate(new ActivityImpl.AsyncAfterUpdate() {
-      @Override
-      public void updateAsyncAfter(boolean asyncAfter, boolean exclusive) {
-        if (asyncAfter) {
-          addMessageJobDeclaration(new AsyncAfterMessageJobDeclaration(), activity, exclusive);
-        } else {
-          removeMessageJobDeclarationWithJobConfiguration(activity, MessageJobDeclaration.ASYNC_AFTER);
-        }
+    activity.setDelegateAsyncAfterUpdate((asyncAfter, exclusive) -> {
+      if (asyncAfter) {
+        addMessageJobDeclaration(new AsyncAfterMessageJobDeclaration(), activity, exclusive);
+      } else {
+        removeMessageJobDeclarationWithJobConfiguration(activity, MessageJobDeclaration.ASYNC_AFTER);
       }
     });
 
-    activity.setDelegateAsyncBeforeUpdate(new ActivityImpl.AsyncBeforeUpdate() {
-      @Override
-      public void updateAsyncBefore(boolean asyncBefore, boolean exclusive) {
-        if (asyncBefore) {
-          addMessageJobDeclaration(new AsyncBeforeMessageJobDeclaration(), activity, exclusive);
-        } else {
-          removeMessageJobDeclarationWithJobConfiguration(activity, MessageJobDeclaration.ASYNC_BEFORE);
-        }
+    activity.setDelegateAsyncBeforeUpdate((asyncBefore, exclusive) -> {
+      if (asyncBefore) {
+        addMessageJobDeclaration(new AsyncBeforeMessageJobDeclaration(), activity, exclusive);
+      } else {
+        removeMessageJobDeclarationWithJobConfiguration(activity, MessageJobDeclaration.ASYNC_BEFORE);
       }
     });
   }

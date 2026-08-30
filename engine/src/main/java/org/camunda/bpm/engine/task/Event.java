@@ -19,7 +19,6 @@ package org.camunda.bpm.engine.task;
 import java.util.Date;
 import java.util.List;
 
-import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.history.UserOperationLogEntry;
 import org.camunda.bpm.engine.history.UserOperationLogQuery;
 

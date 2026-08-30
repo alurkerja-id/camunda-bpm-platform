@@ -24,7 +24,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The DC font element
@@ -43,11 +42,7 @@ public class FontImpl extends BpmnModelElementInstanceImpl implements Font {
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Font.class, DC_ELEMENT_FONT)
       .namespaceUri(DC_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<Font>() {
-        public Font newInstance(ModelTypeInstanceContext instanceContext) {
-          return new FontImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new FontImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute(DC_ATTRIBUTE_NAME)
       .build();
@@ -74,50 +69,62 @@ public class FontImpl extends BpmnModelElementInstanceImpl implements Font {
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public Double getSize() {
     return sizeAttribute.getValue(this);
   }
 
+  @Override
   public void setSize(Double size) {
     sizeAttribute.setValue(this, size);
   }
 
+  @Override
   public Boolean isBold() {
     return isBoldAttribute.getValue(this);
   }
 
+  @Override
   public void setBold(boolean isBold) {
     isBoldAttribute.setValue(this, isBold);
   }
 
+  @Override
   public Boolean isItalic() {
     return isItalicAttribute.getValue(this);
   }
 
+  @Override
   public void setItalic(boolean isItalic) {
     isItalicAttribute.setValue(this, isItalic);
   }
 
+  @Override
   public Boolean isUnderline() {
     return isUnderlineAttribute.getValue(this);
   }
 
+  @Override
   public void SetUnderline(boolean isUnderline) {
     isUnderlineAttribute.setValue(this, isUnderline);
   }
 
+  @Override
   public Boolean isStrikeThrough() {
     return isStrikeTroughAttribute.getValue(this);
   }
 
+  @Override
   public void setStrikeTrough(boolean isStrikeTrough) {
     isStrikeTroughAttribute.setValue(this, isStrikeTrough);
   }

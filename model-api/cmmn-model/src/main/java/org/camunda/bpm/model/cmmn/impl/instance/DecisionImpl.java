@@ -30,7 +30,6 @@ import org.camunda.bpm.model.cmmn.instance.OutputDecisionParameter;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
@@ -51,26 +50,32 @@ public class DecisionImpl extends CmmnElementImpl implements Decision {
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public String getImplementationType() {
     return implementationTypeAttribute.getValue(this);
   }
 
+  @Override
   public void setImplementationType(String implementationType) {
     implementationTypeAttribute.setValue(this, implementationType);
   }
 
+  @Override
   public Collection<InputDecisionParameter> getInputs() {
     return inputCollection.get(this);
   }
 
+  @Override
   public Collection<OutputDecisionParameter> getOutputs() {
     return outputCollection.get(this);
   }
@@ -79,11 +84,7 @@ public class DecisionImpl extends CmmnElementImpl implements Decision {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Decision.class, CMMN_ELEMENT_DECISION)
         .extendsType(CmmnElement.class)
         .namespaceUri(CMMN11_NS)
-        .instanceProvider(new ModelTypeInstanceProvider<Decision>() {
-          public Decision newInstance(ModelTypeInstanceContext instanceContext) {
-            return new DecisionImpl(instanceContext);
-          }
-        });
+        .instanceProvider(instanceContext -> new DecisionImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_NAME)
         .build();

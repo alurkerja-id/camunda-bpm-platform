@@ -22,7 +22,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_OPTIONAL_INPUT_REFS;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN optionalInputRefs element of the BPMN tInputSet type
@@ -34,11 +33,7 @@ public class OptionalInputRefs extends BpmnModelElementInstanceImpl {
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OptionalInputRefs.class, BPMN_ELEMENT_OPTIONAL_INPUT_REFS)
       .namespaceUri(BPMN20_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<OptionalInputRefs>() {
-        public OptionalInputRefs newInstance(ModelTypeInstanceContext instanceContext) {
-          return new OptionalInputRefs(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new OptionalInputRefs(instanceContext));
 
     typeBuilder.build();
   }

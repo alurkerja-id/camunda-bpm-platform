@@ -29,7 +29,6 @@ import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBU
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.XSI_ATTRIBUTE_TYPE;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.XSI_NS;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN conditionExpression element of the BPMN tSequenceFlow type
@@ -45,11 +44,7 @@ public class ConditionExpressionImpl extends FormalExpressionImpl implements Con
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ConditionExpression.class, BPMN_ELEMENT_CONDITION_EXPRESSION)
       .namespaceUri(BPMN20_NS)
       .extendsType(FormalExpression.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ConditionExpression>() {
-        public ConditionExpression newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ConditionExpressionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new ConditionExpressionImpl(instanceContext));
 
     typeAttribute = typeBuilder.stringAttribute(XSI_ATTRIBUTE_TYPE)
       .namespace(XSI_NS)
@@ -67,18 +62,22 @@ public class ConditionExpressionImpl extends FormalExpressionImpl implements Con
     super(instanceContext);
   }
 
+  @Override
   public String getType() {
     return typeAttribute.getValue(this);
   }
 
+  @Override
   public void setType(String type) {
     typeAttribute.setValue(this, type);
   }
 
+  @Override
   public String getCamundaResource() {
     return camundaResourceAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaResource(String camundaResource) {
     camundaResourceAttribute.setValue(this, camundaResource);
   }

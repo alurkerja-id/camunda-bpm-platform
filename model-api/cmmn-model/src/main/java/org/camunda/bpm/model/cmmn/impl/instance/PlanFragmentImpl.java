@@ -28,7 +28,6 @@ import org.camunda.bpm.model.cmmn.instance.Sentry;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 
@@ -45,10 +44,12 @@ public class PlanFragmentImpl extends PlanItemDefinitionImpl implements PlanFrag
     super(instanceContext);
   }
 
+  @Override
   public Collection<PlanItem> getPlanItems() {
     return planItemCollection.get(this);
   }
 
+  @Override
   public Collection<Sentry> getSentrys() {
     return sentryCollection.get(this);
   }
@@ -57,11 +58,7 @@ public class PlanFragmentImpl extends PlanItemDefinitionImpl implements PlanFrag
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(PlanFragment.class, CMMN_ELEMENT_PLAN_FRAGMENT)
         .namespaceUri(CMMN11_NS)
         .extendsType(PlanItemDefinition.class)
-        .instanceProvider(new ModelTypeInstanceProvider<PlanFragment>() {
-          public PlanFragment newInstance(ModelTypeInstanceContext instanceContext) {
-            return new PlanFragmentImpl(instanceContext);
-          }
-        });
+        .instanceProvider(instanceContext -> new PlanFragmentImpl(instanceContext));
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

@@ -29,7 +29,6 @@ import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_PROPERTIES;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN properties camunda extension element
@@ -43,11 +42,7 @@ public class CamundaPropertiesImpl extends BpmnModelElementInstanceImpl implemen
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaProperties.class, CAMUNDA_ELEMENT_PROPERTIES)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<CamundaProperties>() {
-        public CamundaProperties newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CamundaPropertiesImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new CamundaPropertiesImpl(instanceContext));
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 
@@ -61,6 +56,7 @@ public class CamundaPropertiesImpl extends BpmnModelElementInstanceImpl implemen
     super(instanceContext);
   }
 
+  @Override
   public Collection<CamundaProperty> getCamundaProperties() {
     return camundaPropertyCollection.get(this);
   }

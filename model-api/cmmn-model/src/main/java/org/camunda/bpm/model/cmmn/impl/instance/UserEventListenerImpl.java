@@ -28,7 +28,6 @@ import org.camunda.bpm.model.cmmn.instance.UserEventListener;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.reference.AttributeReferenceCollection;
 
 /**
@@ -43,6 +42,7 @@ public class UserEventListenerImpl extends EventListenerImpl implements UserEven
     super(instanceContext);
   }
 
+  @Override
   public Collection<Role> getAuthorizedRoles() {
     return authorizedRoleRefCollection.getReferenceTargetElements(this);
   }
@@ -52,11 +52,7 @@ public class UserEventListenerImpl extends EventListenerImpl implements UserEven
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(UserEventListener.class, CMMN_ELEMENT_USER_EVENT_LISTENER)
         .namespaceUri(CMMN11_NS)
         .extendsType(EventListener.class)
-        .instanceProvider(new ModelTypeInstanceProvider<UserEventListener>() {
-          public UserEventListener newInstance(ModelTypeInstanceContext instanceContext) {
-            return new UserEventListenerImpl(instanceContext);
-          }
-        });
+        .instanceProvider(instanceContext -> new UserEventListenerImpl(instanceContext));
 
     authorizedRoleRefCollection = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_AUTHORIZED_ROLE_REFS)
         .idAttributeReferenceCollection(Role.class, CmmnAttributeElementReferenceCollection.class)

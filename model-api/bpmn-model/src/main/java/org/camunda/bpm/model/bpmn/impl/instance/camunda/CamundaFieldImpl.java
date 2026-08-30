@@ -28,7 +28,6 @@ import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN field camunda extension element
@@ -46,11 +45,7 @@ public class CamundaFieldImpl extends BpmnModelElementInstanceImpl implements Ca
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaField.class, CAMUNDA_ELEMENT_FIELD)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<CamundaField>() {
-        public CamundaField newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CamundaFieldImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new CamundaFieldImpl(instanceContext));
 
     camundaNameAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_NAME)
       .namespace(CAMUNDA_NS)
@@ -79,42 +74,52 @@ public class CamundaFieldImpl extends BpmnModelElementInstanceImpl implements Ca
     super(instanceContext);
   }
 
+  @Override
   public String getCamundaName() {
     return camundaNameAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaName(String camundaName) {
     camundaNameAttribute.setValue(this, camundaName);
   }
 
+  @Override
   public String getCamundaExpression() {
     return camundaExpressionAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaExpression(String camundaExpression) {
     camundaExpressionAttribute.setValue(this, camundaExpression);
   }
 
+  @Override
   public String getCamundaStringValue() {
     return camundaStringValueAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaStringValue(String camundaStringValue) {
     camundaStringValueAttribute.setValue(this, camundaStringValue);
   }
 
+  @Override
   public CamundaString getCamundaString() {
     return camundaStringChild.getChild(this);
   }
 
+  @Override
   public void setCamundaString(CamundaString camundaString) {
     camundaStringChild.setChild(this, camundaString);
   }
 
+  @Override
   public CamundaExpression getCamundaExpressionChild() {
     return camundaExpressionChild.getChild(this);
   }
 
+  @Override
   public void setCamundaExpressionChild(CamundaExpression camundaExpression) {
     camundaExpressionChild.setChild(this, camundaExpression);
   }

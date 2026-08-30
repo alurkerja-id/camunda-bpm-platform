@@ -39,6 +39,7 @@ public class ReadOnlyMapELResolver extends ELResolver {
     this.wrappedMap = map;
   }
 
+  @Override
   public Object getValue(ELContext context, Object base, Object property) {
     if (base == null) {
       if (wrappedMap.containsKey(property)) {
@@ -49,10 +50,12 @@ public class ReadOnlyMapELResolver extends ELResolver {
     return null;
   }
 
+  @Override
   public boolean isReadOnly(ELContext context, Object base, Object property) {
     return true;
   }
 
+  @Override
   public void setValue(ELContext context, Object base, Object property, Object value) {
     if(base == null) {
       if (wrappedMap.containsKey(property)) {
@@ -61,15 +64,18 @@ public class ReadOnlyMapELResolver extends ELResolver {
     }
   }
 
-  public Class< ? > getCommonPropertyType(ELContext context, Object arg) {
+  @Override
+  public Class<?> getCommonPropertyType(ELContext context, Object arg) {
     return Object.class;
   }
 
+  @Override
   public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object arg) {
     return null;
   }
 
-  public Class< ? > getType(ELContext context, Object arg1, Object arg2) {
+  @Override
+  public Class<?> getType(ELContext context, Object arg1, Object arg2) {
     return Object.class;
   }
 }

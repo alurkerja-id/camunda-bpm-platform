@@ -714,6 +714,7 @@ public abstract class JobEntity extends AcquirableJobEntity
     this.failedActivityId = failedActivityId;
   }
 
+  @Override
   public String getBatchId() {
     return batchId;
   }

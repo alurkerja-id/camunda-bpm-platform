@@ -16,7 +16,6 @@
  */
 package org.camunda.bpm.engine.impl.util;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,7 +31,6 @@ import org.camunda.bpm.engine.impl.json.JsonObjectConverter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonIOException;
@@ -727,32 +725,30 @@ public final class JsonUtil {
   public static Gson createGsonMapper() {
     return new GsonBuilder()
       .serializeNulls()
-      .registerTypeAdapter(Map.class, new JsonDeserializer<Map<String,Object>>() {
-        public Map<String, Object> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+      .registerTypeAdapter(Map.class, (JsonDeserializer<Map<String, Object>>) (json, typeOfT, context) -> {
 
-          Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
 
-          for (Map.Entry<String, JsonElement> entry : getObject(json).entrySet()) {
-            if (entry != null) {
-              String key = entry.getKey();
-              JsonElement jsonElement = entry.getValue();
+        for (Map.Entry<String, JsonElement> entry : getObject(json).entrySet()) {
+          if (entry != null) {
+            String key = entry.getKey();
+            JsonElement jsonElement = entry.getValue();
 
-              if (jsonElement != null && jsonElement.isJsonNull()) {
-                map.put(key, null);
+            if (jsonElement != null && jsonElement.isJsonNull()) {
+              map.put(key, null);
 
-              } else if (jsonElement != null && jsonElement.isJsonPrimitive()) {
+            } else if (jsonElement != null && jsonElement.isJsonPrimitive()) {
 
-                Object rawValue = asPrimitiveObject((JsonPrimitive) jsonElement);
-                if (rawValue != null) {
-                  map.put(key, rawValue);
+              Object rawValue = asPrimitiveObject((JsonPrimitive) jsonElement);
+              if (rawValue != null) {
+                map.put(key, rawValue);
 
-                }
               }
             }
           }
-
-          return map;
         }
+
+        return map;
       })
       .create();
   }

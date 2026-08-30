@@ -24,7 +24,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN in camunda extension element
@@ -43,11 +42,7 @@ public class CamundaInImpl extends BpmnModelElementInstanceImpl implements Camun
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaIn.class, CAMUNDA_ELEMENT_IN)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<CamundaIn>() {
-        public CamundaIn newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CamundaInImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new CamundaInImpl(instanceContext));
 
     camundaSourceAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_SOURCE)
       .namespace(CAMUNDA_NS)
@@ -80,50 +75,62 @@ public class CamundaInImpl extends BpmnModelElementInstanceImpl implements Camun
     super(instanceContext);
   }
 
+  @Override
   public String getCamundaSource() {
     return camundaSourceAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaSource(String camundaSource) {
     camundaSourceAttribute.setValue(this, camundaSource);
   }
 
+  @Override
   public String getCamundaSourceExpression() {
     return camundaSourceExpressionAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaSourceExpression(String camundaSourceExpression) {
     camundaSourceExpressionAttribute.setValue(this, camundaSourceExpression);
   }
 
+  @Override
   public String getCamundaVariables() {
     return camundaVariablesAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaVariables(String camundaVariables) {
     camundaVariablesAttribute.setValue(this, camundaVariables);
   }
 
+  @Override
   public String getCamundaTarget() {
     return camundaTargetAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaTarget(String camundaTarget) {
     camundaTargetAttribute.setValue(this, camundaTarget);
   }
 
+  @Override
   public String getCamundaBusinessKey() {
     return camundaBusinessKeyAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaBusinessKey(String camundaBusinessKey) {
     camundaBusinessKeyAttribute.setValue(this, camundaBusinessKey);
   }
 
+  @Override
   public boolean getCamundaLocal() {
     return camundaLocalAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaLocal(boolean camundaLocal) {
     camundaLocalAttribute.setValue(this, camundaLocal);
   }

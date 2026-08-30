@@ -26,7 +26,6 @@ import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN compensateEventDefinition element
@@ -42,11 +41,7 @@ public class CompensateEventDefinitionImpl extends EventDefinitionImpl implement
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CompensateEventDefinition.class, BPMN_ELEMENT_COMPENSATE_EVENT_DEFINITION)
       .namespaceUri(BPMN20_NS)
       .extendsType(EventDefinition.class)
-      .instanceProvider(new ModelTypeInstanceProvider<CompensateEventDefinition>() {
-        public CompensateEventDefinition newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CompensateEventDefinitionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new CompensateEventDefinitionImpl(instanceContext));
 
     waitForCompletionAttribute = typeBuilder.booleanAttribute(BPMN_ATTRIBUTE_WAIT_FOR_COMPLETION)
       .build();
@@ -62,18 +57,22 @@ public class CompensateEventDefinitionImpl extends EventDefinitionImpl implement
     super(context);
   }
 
+  @Override
   public boolean isWaitForCompletion() {
     return waitForCompletionAttribute.getValue(this);
   }
 
+  @Override
   public void setWaitForCompletion(boolean isWaitForCompletion) {
     waitForCompletionAttribute.setValue(this, isWaitForCompletion);
   }
 
+  @Override
   public Activity getActivity() {
     return activityRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setActivity(Activity activity) {
     activityRefAttribute.setReferenceTargetElement(this, activity);
   }

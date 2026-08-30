@@ -24,7 +24,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_CANCEL_EVENT_DEFINITION;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN cancelEventDefinition element
@@ -37,11 +36,7 @@ public class CancelEventDefinitionImpl extends EventDefinitionImpl implements Ca
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CancelEventDefinition.class, BPMN_ELEMENT_CANCEL_EVENT_DEFINITION)
       .namespaceUri(BPMN20_NS)
       .extendsType(EventDefinition.class)
-      .instanceProvider(new ModelTypeInstanceProvider<CancelEventDefinition>() {
-        public CancelEventDefinition newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CancelEventDefinitionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new CancelEventDefinitionImpl(instanceContext));
 
     typeBuilder.build();
   }

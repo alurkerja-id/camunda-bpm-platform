@@ -23,7 +23,6 @@ import org.camunda.bpm.model.dmn.instance.Description;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class DescriptionImpl extends DmnModelElementInstanceImpl implements Description {
 
@@ -34,11 +33,7 @@ public class DescriptionImpl extends DmnModelElementInstanceImpl implements Desc
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Description.class, DMN_ELEMENT_DESCRIPTION)
       .namespaceUri(LATEST_DMN_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<Description>() {
-        public Description newInstance(ModelTypeInstanceContext instanceContext) {
-          return new DescriptionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new DescriptionImpl(instanceContext));
 
     typeBuilder.build();
   }

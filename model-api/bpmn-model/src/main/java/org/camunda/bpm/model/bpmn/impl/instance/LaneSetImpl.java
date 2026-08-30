@@ -29,7 +29,6 @@ import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN laneSet element
@@ -45,11 +44,7 @@ public class LaneSetImpl extends BaseElementImpl implements LaneSet {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(LaneSet.class, BPMN_ELEMENT_LANE_SET)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<LaneSet>() {
-        public LaneSet newInstance(ModelTypeInstanceContext instanceContext) {
-          return new LaneSetImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new LaneSetImpl(instanceContext));
 
     nameAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_NAME)
       .build();
@@ -66,14 +61,17 @@ public class LaneSetImpl extends BaseElementImpl implements LaneSet {
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public Collection<Lane> getLanes() {
     return laneCollection.get(this);
   }

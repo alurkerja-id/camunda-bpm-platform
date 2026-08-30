@@ -26,6 +26,7 @@ import org.camunda.bpm.engine.impl.interceptor.CommandContext;
  */
 public class GetHistoryLevelCmd implements Command<Integer> {
 
+  @Override
   public Integer execute(CommandContext commandContext) {
     commandContext.getAuthorizationManager().checkCamundaAdminOrPermission(CommandChecker::checkReadHistoryLevel);
     return Context.getProcessEngineConfiguration().getHistoryLevel().getId();

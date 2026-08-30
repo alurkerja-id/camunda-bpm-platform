@@ -33,11 +33,9 @@ import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.camunda.bpm.engine.impl.pvm.delegate.ActivityExecution;
 import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
 import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
-import org.camunda.bpm.engine.impl.pvm.runtime.ActivityInstanceState;
 import org.camunda.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
 import org.camunda.bpm.engine.impl.tree.TreeVisitor;
 import org.camunda.bpm.engine.impl.tree.FlowScopeWalker;
-import org.camunda.bpm.engine.impl.tree.ReferenceWalker;
 
 /**
  * @author Daniel Meyer
@@ -197,12 +195,9 @@ public class CompensationUtil {
       }
     };
 
-    new FlowScopeWalker(activity).addPostVisitor(eventSubscriptionCollector).walkUntil(new ReferenceWalker.WalkCondition<ScopeImpl>() {
-      @Override
-      public boolean isFulfilled(ScopeImpl element) {
-        Boolean consumesCompensationProperty = (Boolean) element.getProperty(BpmnParse.PROPERTYNAME_CONSUMES_COMPENSATION);
-        return consumesCompensationProperty == null || consumesCompensationProperty == Boolean.TRUE;
-      }
+    new FlowScopeWalker(activity).addPostVisitor(eventSubscriptionCollector).walkUntil(element -> {
+      Boolean consumesCompensationProperty = (Boolean) element.getProperty(BpmnParse.PROPERTYNAME_CONSUMES_COMPENSATION);
+      return consumesCompensationProperty == null || consumesCompensationProperty == Boolean.TRUE;
     });
 
     return new ArrayList<EventSubscriptionEntity>(subscriptions);

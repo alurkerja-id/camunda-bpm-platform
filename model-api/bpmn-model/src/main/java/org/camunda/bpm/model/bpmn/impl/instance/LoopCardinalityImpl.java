@@ -24,7 +24,6 @@ import org.camunda.bpm.model.bpmn.instance.LoopCardinality;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The loopCardinality element from the tMultiInstanceLoopCharacteristics
@@ -39,11 +38,7 @@ public class LoopCardinalityImpl extends ExpressionImpl implements LoopCardinali
       .defineType(LoopCardinality.class, BPMN_ELEMENT_LOOP_CARDINALITY)
       .namespaceUri(BPMN20_NS)
       .extendsType(Expression.class)
-      .instanceProvider(new ModelTypeInstanceProvider<LoopCardinality>() {
-        public LoopCardinality newInstance(ModelTypeInstanceContext instanceContext) {
-          return new LoopCardinalityImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new LoopCardinalityImpl(instanceContext));
 
     typeBuilder.build();
   }

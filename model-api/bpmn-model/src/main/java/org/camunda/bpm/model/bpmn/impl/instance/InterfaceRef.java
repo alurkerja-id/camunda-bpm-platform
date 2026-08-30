@@ -22,7 +22,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_INTERFACE_REF;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN interfaceRef element of the BPMN tParticipant type
@@ -34,11 +33,7 @@ public class InterfaceRef extends BpmnModelElementInstanceImpl {
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(InterfaceRef.class, BPMN_ELEMENT_INTERFACE_REF)
       .namespaceUri(BPMN20_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<InterfaceRef>() {
-        public InterfaceRef newInstance(ModelTypeInstanceContext instanceContext) {
-          return new InterfaceRef(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new InterfaceRef(instanceContext));
 
     typeBuilder.build();
   }

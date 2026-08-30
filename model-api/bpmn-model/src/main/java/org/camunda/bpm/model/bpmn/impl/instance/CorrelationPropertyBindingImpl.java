@@ -27,7 +27,6 @@ import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN correlationPropertyBinding element
@@ -43,11 +42,7 @@ public class CorrelationPropertyBindingImpl extends BaseElementImpl implements C
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CorrelationPropertyBinding.class, BPMN_ELEMENT_CORRELATION_PROPERTY_BINDING)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<CorrelationPropertyBinding>() {
-        public CorrelationPropertyBinding newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CorrelationPropertyBindingImpl(instanceContext);
-        }
-      });
+      .instanceProvider(instanceContext -> new CorrelationPropertyBindingImpl(instanceContext));
 
     correlationPropertyRefAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_CORRELATION_PROPERTY_REF)
       .required()
@@ -67,18 +62,22 @@ public class CorrelationPropertyBindingImpl extends BaseElementImpl implements C
     super(instanceContext);
   }
 
+  @Override
   public CorrelationProperty getCorrelationProperty() {
     return correlationPropertyRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setCorrelationProperty(CorrelationProperty correlationProperty) {
     correlationPropertyRefAttribute.setReferenceTargetElement(this, correlationProperty);
   }
 
+  @Override
   public DataPath getDataPath() {
     return dataPathChild.getChild(this);
   }
 
+  @Override
   public void setDataPath(DataPath dataPath) {
     dataPathChild.setChild(this, dataPath);
   }

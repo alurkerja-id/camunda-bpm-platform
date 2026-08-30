@@ -16,8 +16,6 @@
  */
 package org.camunda.bpm.engine.impl.form.handler;
 
-import java.util.concurrent.Callable;
-
 import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.persistence.entity.DeploymentEntity;
@@ -33,18 +31,18 @@ public class DelegateTaskFormHandler extends DelegateFormHandler implements Task
     super(formHandler, deployment.getId());
   }
 
+  @Override
   public TaskFormData createTaskForm(final TaskEntity task) {
-    return performContextSwitch(new Callable<TaskFormData> () {
-      public TaskFormData call() throws Exception {
-        CreateTaskFormInvocation invocation = new CreateTaskFormInvocation((TaskFormHandler) formHandler, task);
-        Context.getProcessEngineConfiguration()
-            .getDelegateInterceptor()
-            .handleInvocation(invocation);
-        return (TaskFormData) invocation.getInvocationResult();
-      }
+    return performContextSwitch(() -> {
+      CreateTaskFormInvocation invocation = new CreateTaskFormInvocation((TaskFormHandler) formHandler, task);
+      Context.getProcessEngineConfiguration()
+          .getDelegateInterceptor()
+          .handleInvocation(invocation);
+      return (TaskFormData) invocation.getInvocationResult();
     });
   }
 
+  @Override
   public FormHandler getFormHandler() {
     return (TaskFormHandler) formHandler;
   }
