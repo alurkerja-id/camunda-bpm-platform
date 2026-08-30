@@ -472,6 +472,7 @@ public abstract class TestHelper {
           areJobsAvailable = areJobsAvailable(processEngineConfiguration);
         }
       } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
       } finally {
         timer.cancel();
       }

@@ -283,6 +283,7 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
           }
         }
       } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
       } finally {
         timer.cancel();
       }
@@ -320,6 +321,7 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
           conditionIsViolated = !condition.call();
         }
       } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
       } catch (Exception e) {
         throw new ProcessEngineException("Exception while waiting on condition: "+e.getMessage(), e);
       } finally {

@@ -75,6 +75,9 @@ public class Mocks {
     if (getMocks() != null) {
       getMocks().clear();
     }
+    // clearing the map still left the entry itself in the ThreadLocal, which on a pooled thread
+    // keeps the map alive for whatever runs on that thread next
+    mockContainer.remove();
   }
 
 }

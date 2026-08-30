@@ -35,24 +35,18 @@ import jakarta.el.ResourceBundleELResolver;
  * @author Christoph Beck
  */
 public class SimpleResolver extends ELResolver {
-	private static final ELResolver DEFAULT_RESOLVER_READ_ONLY = new CompositeELResolver() {
-		{
-			add(new ArrayELResolver(true));
-			add(new ListELResolver(true));
-			add(new MapELResolver(true));
-			add(new ResourceBundleELResolver());
-			add(new BeanELResolver(true));
-		}
-	};
-	private static final ELResolver DEFAULT_RESOLVER_READ_WRITE = new CompositeELResolver() {
-		{
-			add(new ArrayELResolver(false));
-			add(new ListELResolver(false));
-			add(new MapELResolver(false));
-			add(new ResourceBundleELResolver());
-			add(new BeanELResolver(false));
-		}
-	};
+	private static final ELResolver DEFAULT_RESOLVER_READ_ONLY = createDefaultResolver(true);
+	private static final ELResolver DEFAULT_RESOLVER_READ_WRITE = createDefaultResolver(false);
+
+	private static ELResolver createDefaultResolver(boolean readOnly) {
+		CompositeELResolver resolver = new CompositeELResolver();
+		resolver.add(new ArrayELResolver(readOnly));
+		resolver.add(new ListELResolver(readOnly));
+		resolver.add(new MapELResolver(readOnly));
+		resolver.add(new ResourceBundleELResolver());
+		resolver.add(new BeanELResolver(readOnly));
+		return resolver;
+	}
 
 	private final RootPropertyResolver root;
 	private final CompositeELResolver delegate;

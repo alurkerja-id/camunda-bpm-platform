@@ -130,6 +130,10 @@ public class ShellActivityBehavior extends AbstractBpmnActivityBehavior {
         }
 
       }
+    } catch (InterruptedException e) {
+      // process.waitFor() throws this one; the broad catch below used to swallow the interrupt
+      Thread.currentThread().interrupt();
+      throw LOG.shellExecutionException(e);
     } catch (Exception e) {
       throw LOG.shellExecutionException(e);
     }

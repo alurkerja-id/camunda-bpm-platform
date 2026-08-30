@@ -656,35 +656,23 @@ public abstract class DbSqlSession extends AbstractPersistenceSession {
 
   protected List<String> getTablesPresentInOracleDatabase() throws SQLException {
     List<String> tableNames = new ArrayList<>();
-    Connection connection = null;
-    PreparedStatement prepStat = null;
-    ResultSet tablesRs = null;
     String selectTableNamesFromOracle = "SELECT table_name FROM all_tables WHERE table_name LIKE ? ESCAPE '-'";
     String databaseTablePrefix = getDbSqlSessionFactory().getDatabaseTablePrefix();
 
-    try {
-      connection = Context.getProcessEngineConfiguration().getDataSource().getConnection();
-      prepStat = connection.prepareStatement(selectTableNamesFromOracle);
+    // try-with-resources rather than a finally block: a close() that throws no longer leaves the
+    // remaining two resources open
+    try (Connection connection = Context.getProcessEngineConfiguration().getDataSource().getConnection();
+         PreparedStatement prepStat = connection.prepareStatement(selectTableNamesFromOracle)) {
       prepStat.setString(1, databaseTablePrefix + "ACT-_%");
 
-      tablesRs = prepStat.executeQuery();
-      while (tablesRs.next()) {
-        String tableName = tablesRs.getString("TABLE_NAME");
-        tableName = tableName.toUpperCase();
-        tableNames.add(tableName);
+      try (ResultSet tablesRs = prepStat.executeQuery()) {
+        while (tablesRs.next()) {
+          String tableName = tablesRs.getString("TABLE_NAME");
+          tableName = tableName.toUpperCase();
+          tableNames.add(tableName);
+        }
       }
       LOG.fetchDatabaseTables("oracle all_tables", tableNames);
-
-    } finally {
-      if (tablesRs != null) {
-        tablesRs.close();
-      }
-      if (prepStat != null) {
-        prepStat.close();
-      }
-      if (connection != null) {
-        connection.close();
-      }
     }
 
     return tableNames;

@@ -54,12 +54,11 @@ public class ProcessDiagramLayoutFactory {
   private static final int GREY_THRESHOLD = 175;
 
   // Parser features and their values needed to disable XXE Parsing
-  private static final Map<String, Boolean> XXE_FEATURES = new HashMap<String, Boolean>(4) {{
-    put("http://apache.org/xml/features/disallow-doctype-decl", true);
-    put("http://xml.org/sax/features/external-general-entities", false);
-    put("http://xml.org/sax/features/external-parameter-entities", false);
-    put("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-  }};
+  private static final Map<String, Boolean> XXE_FEATURES = Map.of(
+      "http://apache.org/xml/features/disallow-doctype-decl", true,
+      "http://xml.org/sax/features/external-general-entities", false,
+      "http://xml.org/sax/features/external-parameter-entities", false,
+      "http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
 
   /**
    * Provides positions and dimensions of elements in a process diagram as

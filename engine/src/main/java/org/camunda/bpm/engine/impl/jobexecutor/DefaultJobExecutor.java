@@ -69,6 +69,7 @@ public class DefaultJobExecutor extends ThreadPoolJobExecutor {
       }
     } catch (InterruptedException e) {
       LOG.interruptedWhileShuttingDownjobExecutor(e);
+      Thread.currentThread().interrupt();
     }
   }
 

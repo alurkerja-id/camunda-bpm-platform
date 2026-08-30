@@ -19,7 +19,6 @@ package org.camunda.bpm.engine.impl.util;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -75,13 +74,14 @@ public class LogUtil {
     }
   }
 
-  private static Format dateFormat = new SimpleDateFormat("HH:mm:ss,SSS");
+  // SimpleDateFormat is not thread-safe and log records arrive from every thread there is
+  private static final String DATE_PATTERN = "HH:mm:ss,SSS";
 
   public static class LogFormatter extends Formatter {
 
     public String format(LogRecord record) {
       StringBuilder line = new StringBuilder();
-      line.append(dateFormat.format(new Date()));
+      line.append(new SimpleDateFormat(DATE_PATTERN).format(new Date()));
       if (Level.FINE.equals(record.getLevel())) {
         line.append(" FIN ");
       } else if (Level.FINEST.equals(record.getLevel())) {

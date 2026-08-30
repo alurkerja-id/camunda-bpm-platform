@@ -60,6 +60,7 @@ public class JmxManagedThreadPool extends SeExecutorService implements JmxManage
     }
     catch (InterruptedException e) {
       LOG.interruptedWhileShuttingDownThreadPool(e);
+      Thread.currentThread().interrupt();
     }
 
   }

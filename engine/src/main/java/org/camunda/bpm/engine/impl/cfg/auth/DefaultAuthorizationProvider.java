@@ -509,7 +509,8 @@ public class DefaultAuthorizationProvider implements ResourceAuthorizationProvid
 
   protected boolean areIdsEqual(String firstId, String secondId) {
     if (firstId == null || secondId == null) {
-      return firstId == secondId;
+      // only reached when at least one of them is null, so both being null is the only match
+      return firstId == null && secondId == null;
     }else {
       return firstId.equals(secondId);
     }

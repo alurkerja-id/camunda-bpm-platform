@@ -377,6 +377,7 @@ public abstract class JobExecutor {
 		}
 		catch (InterruptedException e) {
 		  LOG.interruptedWhileShuttingDownjobExecutor(e);
+		  Thread.currentThread().interrupt();
 		}
 		jobAcquisitionThread = null;
 	}

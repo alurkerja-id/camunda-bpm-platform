@@ -34,11 +34,13 @@ import org.camunda.bpm.engine.impl.util.ClockUtil;
  */
 public abstract class HistoryCleanupHelper {
 
-  private static final SimpleDateFormat TIME_FORMAT_WITHOUT_SECONDS = new SimpleDateFormat("yyyy-MM-ddHH:mm");
+  // SimpleDateFormat is not thread-safe, so these patterns are kept as strings and turned into a
+  // format inside the single method that uses them
+  private static final String TIME_PATTERN_WITHOUT_SECONDS = "yyyy-MM-ddHH:mm";
 
-  private static final SimpleDateFormat TIME_FORMAT_WITHOUT_SECONDS_WITH_TIMEZONE = new SimpleDateFormat("yyyy-MM-ddHH:mmZ");
+  private static final String TIME_PATTERN_WITHOUT_SECONDS_WITH_TIMEZONE = "yyyy-MM-ddHH:mmZ";
 
-  private static final SimpleDateFormat DATE_FORMAT_WITHOUT_TIME = new SimpleDateFormat("yyyy-MM-dd");
+  private static final String DATE_PATTERN_WITHOUT_TIME = "yyyy-MM-dd";
 
   /**
    * Returns the max retries used for cleanup jobs. If the configuration is null, the default value used will be
@@ -75,11 +77,11 @@ public abstract class HistoryCleanupHelper {
   }
 
   public static synchronized Date parseTimeConfiguration(String time) throws ParseException {
-    String today = DATE_FORMAT_WITHOUT_TIME.format(ClockUtil.getCurrentTime());
+    String today = new SimpleDateFormat(DATE_PATTERN_WITHOUT_TIME).format(ClockUtil.getCurrentTime());
     try {
-      return TIME_FORMAT_WITHOUT_SECONDS_WITH_TIMEZONE.parse(today+time);
+      return new SimpleDateFormat(TIME_PATTERN_WITHOUT_SECONDS_WITH_TIMEZONE).parse(today+time);
     } catch (ParseException ex) {
-      return TIME_FORMAT_WITHOUT_SECONDS.parse(today+time);
+      return new SimpleDateFormat(TIME_PATTERN_WITHOUT_SECONDS).parse(today+time);
     }
   }
 
