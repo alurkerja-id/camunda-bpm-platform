@@ -38,7 +38,7 @@ public class CamundaOutputParameterImpl extends CamundaGenericValueElementImpl i
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaOutputParameter.class, CAMUNDA_ELEMENT_OUTPUT_PARAMETER)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(instanceContext -> new CamundaOutputParameterImpl(instanceContext));
+      .instanceProvider(CamundaOutputParameterImpl::new);
 
     camundaNameAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_NAME)
       .namespace(CAMUNDA_NS)

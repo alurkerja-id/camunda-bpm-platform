@@ -42,7 +42,7 @@ public class CamundaConnectorImpl extends BpmnModelElementInstanceImpl implement
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaConnector.class, CAMUNDA_ELEMENT_CONNECTOR)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(instanceContext -> new CamundaConnectorImpl(instanceContext));
+      .instanceProvider(CamundaConnectorImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

@@ -42,7 +42,7 @@ public class CamundaInImpl extends BpmnModelElementInstanceImpl implements Camun
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaIn.class, CAMUNDA_ELEMENT_IN)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(instanceContext -> new CamundaInImpl(instanceContext));
+      .instanceProvider(CamundaInImpl::new);
 
     camundaSourceAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_SOURCE)
       .namespace(CAMUNDA_NS)

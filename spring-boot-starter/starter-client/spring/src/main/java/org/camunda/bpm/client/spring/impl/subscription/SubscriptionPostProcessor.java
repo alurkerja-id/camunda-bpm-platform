@@ -16,7 +16,6 @@
  */
 package org.camunda.bpm.client.spring.impl.subscription;
 
-import org.camunda.bpm.client.spring.impl.client.util.ClientLoggerUtil;
 import org.camunda.bpm.client.spring.annotation.ExternalTaskSubscription;
 import org.camunda.bpm.client.spring.impl.subscription.util.SubscriptionLoggerUtil;
 import org.camunda.bpm.client.spring.impl.util.LoggerUtil;

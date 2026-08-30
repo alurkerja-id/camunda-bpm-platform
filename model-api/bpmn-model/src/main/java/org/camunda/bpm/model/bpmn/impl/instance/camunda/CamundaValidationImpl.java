@@ -42,7 +42,7 @@ public class CamundaValidationImpl extends BpmnModelElementInstanceImpl implemen
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaValidation.class, CAMUNDA_ELEMENT_VALIDATION)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(instanceContext -> new CamundaValidationImpl(instanceContext));
+      .instanceProvider(CamundaValidationImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

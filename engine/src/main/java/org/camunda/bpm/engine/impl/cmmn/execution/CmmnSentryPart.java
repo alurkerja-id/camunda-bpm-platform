@@ -70,21 +70,21 @@ public abstract class CmmnSentryPart implements Serializable {
    * @deprecated since 7.4 A new instance of a sentry
    * does not reference the source case execution id anymore.
    */
-  @Deprecated
+  @Deprecated(since = "7.4")
   public abstract String getSourceCaseExecutionId();
 
   /**
    * @deprecated since 7.4 A new instance of a sentry
    * does not reference the source case execution id anymore.
    */
-  @Deprecated
+  @Deprecated(since = "7.4")
   public abstract CmmnExecution getSourceCaseExecution();
 
   /**
    * @deprecated since 7.4 A new instance of a sentry
    * does not reference the source case execution id anymore.
    */
-  @Deprecated
+  @Deprecated(since = "7.4")
   public abstract void setSourceCaseExecution(CmmnExecution sourceCaseExecution);
 
   public String getStandardEvent() {

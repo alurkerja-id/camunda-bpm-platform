@@ -40,7 +40,7 @@ public class CamundaPotentialStarterImpl extends BpmnModelElementInstanceImpl im
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaPotentialStarter.class, CAMUNDA_ELEMENT_POTENTIAL_STARTER)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(instanceContext -> new CamundaPotentialStarterImpl(instanceContext));
+      .instanceProvider(CamundaPotentialStarterImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

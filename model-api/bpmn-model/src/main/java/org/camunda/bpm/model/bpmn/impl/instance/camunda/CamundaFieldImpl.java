@@ -45,7 +45,7 @@ public class CamundaFieldImpl extends BpmnModelElementInstanceImpl implements Ca
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaField.class, CAMUNDA_ELEMENT_FIELD)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(instanceContext -> new CamundaFieldImpl(instanceContext));
+      .instanceProvider(CamundaFieldImpl::new);
 
     camundaNameAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_NAME)
       .namespace(CAMUNDA_NS)

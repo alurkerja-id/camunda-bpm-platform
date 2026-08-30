@@ -35,7 +35,7 @@ public class InputEntryImpl extends UnaryTestsImpl implements InputEntry {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(InputEntry.class, DMN_ELEMENT_INPUT_ENTRY)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(UnaryTests.class)
-      .instanceProvider(instanceContext -> new InputEntryImpl(instanceContext));
+      .instanceProvider(InputEntryImpl::new);
 
     typeBuilder.build();
   }

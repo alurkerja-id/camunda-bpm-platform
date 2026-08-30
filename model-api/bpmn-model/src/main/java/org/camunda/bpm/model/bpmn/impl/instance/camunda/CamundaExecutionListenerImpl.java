@@ -54,7 +54,7 @@ public class CamundaExecutionListenerImpl extends BpmnModelElementInstanceImpl i
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaExecutionListener.class, CAMUNDA_ELEMENT_EXECUTION_LISTENER)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(instanceContext -> new CamundaExecutionListenerImpl(instanceContext));
+      .instanceProvider(CamundaExecutionListenerImpl::new);
 
     camundaEventAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EVENT)
       .namespace(CAMUNDA_NS)

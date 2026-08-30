@@ -35,7 +35,7 @@ public class CamundaExpressionImpl extends BpmnModelElementInstanceImpl implemen
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaExpression.class, CAMUNDA_ELEMENT_EXPRESSION)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(instanceContext -> new CamundaExpressionImpl(instanceContext));
+      .instanceProvider(CamundaExpressionImpl::new);
 
     typeBuilder.build();
   }

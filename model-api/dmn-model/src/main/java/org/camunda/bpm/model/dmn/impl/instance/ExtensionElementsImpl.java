@@ -40,7 +40,7 @@ public class ExtensionElementsImpl extends DmnModelElementInstanceImpl implement
 
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ExtensionElements.class, DMN_ELEMENT_EXTENSION_ELEMENTS)
       .namespaceUri(LATEST_DMN_NS)
-      .instanceProvider(instanceContext -> new ExtensionElementsImpl(instanceContext));
+      .instanceProvider(ExtensionElementsImpl::new);
 
     typeBuilder.build();
   }

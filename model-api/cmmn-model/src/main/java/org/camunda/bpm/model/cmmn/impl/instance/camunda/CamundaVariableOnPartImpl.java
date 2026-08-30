@@ -44,7 +44,7 @@ public class CamundaVariableOnPartImpl extends CmmnModelElementInstanceImpl impl
 
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaVariableOnPart.class, CAMUNDA_ELEMENT_VARIABLE_ON_PART)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(instanceContext -> new CamundaVariableOnPartImpl(instanceContext));
+      .instanceProvider(CamundaVariableOnPartImpl::new);
 
     camundaVariableNameAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_VARIABLE_NAME)
       .namespace(CAMUNDA_NS)

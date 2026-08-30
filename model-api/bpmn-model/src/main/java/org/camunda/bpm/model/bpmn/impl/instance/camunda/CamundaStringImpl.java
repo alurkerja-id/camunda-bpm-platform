@@ -35,7 +35,7 @@ public class CamundaStringImpl extends BpmnModelElementInstanceImpl implements C
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaString.class, CAMUNDA_ELEMENT_STRING)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(instanceContext -> new CamundaStringImpl(instanceContext));
+      .instanceProvider(CamundaStringImpl::new);
 
     typeBuilder.build();
   }

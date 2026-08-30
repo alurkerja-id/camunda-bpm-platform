@@ -52,7 +52,7 @@ public class CamundaFormPropertyImpl extends BpmnModelElementInstanceImpl implem
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaFormProperty.class, CAMUNDA_ELEMENT_FORM_PROPERTY)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(instanceContext -> new CamundaFormPropertyImpl(instanceContext));
+      .instanceProvider(CamundaFormPropertyImpl::new);
 
     camundaIdAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_ID)
       .namespace(CAMUNDA_NS)

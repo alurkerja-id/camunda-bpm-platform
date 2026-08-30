@@ -42,7 +42,7 @@ public class CamundaFormDataImpl extends BpmnModelElementInstanceImpl implements
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaFormData.class, CAMUNDA_ELEMENT_FORM_DATA)
       .namespaceUri(BpmnModelConstants.CAMUNDA_NS)
-      .instanceProvider(instanceContext -> new CamundaFormDataImpl(instanceContext));
+      .instanceProvider(CamundaFormDataImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

@@ -42,7 +42,7 @@ public class CamundaPropertiesImpl extends BpmnModelElementInstanceImpl implemen
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaProperties.class, CAMUNDA_ELEMENT_PROPERTIES)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(instanceContext -> new CamundaPropertiesImpl(instanceContext));
+      .instanceProvider(CamundaPropertiesImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

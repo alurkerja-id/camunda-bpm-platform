@@ -32,7 +32,7 @@ public class ListTransformer implements FeelToJuelTransformer {
    * @deprecated splitting is done by scanning the expression, this constant is here for
    *             compatibility only
    */
-  @Deprecated
+  @Deprecated(since = "7.24.3")
   public static final String COMMA_SEPARATOR_REGEX = ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)";
 
   public boolean canTransform(String feelExpression) {

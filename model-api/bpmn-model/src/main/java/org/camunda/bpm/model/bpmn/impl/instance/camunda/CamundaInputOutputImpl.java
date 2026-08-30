@@ -43,7 +43,7 @@ public class CamundaInputOutputImpl extends BpmnModelElementInstanceImpl impleme
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaInputOutput.class, CAMUNDA_ELEMENT_INPUT_OUTPUT)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(instanceContext -> new CamundaInputOutputImpl(instanceContext));
+      .instanceProvider(CamundaInputOutputImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

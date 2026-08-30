@@ -52,7 +52,7 @@ public class CamundaVariableListenerImpl extends CmmnModelElementInstanceImpl im
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaVariableListener.class, CAMUNDA_ELEMENT_VARIABLE_LISTENER)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(instanceContext -> new CamundaVariableListenerImpl(instanceContext));
+      .instanceProvider(CamundaVariableListenerImpl::new);
 
     camundaEventAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EVENT)
       .namespace(CAMUNDA_NS)

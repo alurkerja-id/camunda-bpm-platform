@@ -35,7 +35,7 @@ public class CamundaFailedJobRetryTimeCycleImpl extends BpmnModelElementInstance
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaFailedJobRetryTimeCycle.class, CAMUNDA_ELEMENT_FAILED_JOB_RETRY_TIME_CYCLE)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(instanceContext -> new CamundaFailedJobRetryTimeCycleImpl(instanceContext));
+      .instanceProvider(CamundaFailedJobRetryTimeCycleImpl::new);
 
     typeBuilder.build();
   }

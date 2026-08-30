@@ -35,7 +35,7 @@ public class CamundaVariableTransitionEventImpl  extends CmmnModelElementInstanc
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaVariableTransitionEvent.class, CAMUNDA_ELEMENT_VARIABLE_EVENT)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(instanceContext -> new CamundaVariableTransitionEventImpl(instanceContext));
+      .instanceProvider(CamundaVariableTransitionEventImpl::new);
 
     typeBuilder.build();
   }

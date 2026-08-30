@@ -53,7 +53,7 @@ public class CamundaTaskListenerImpl extends CmmnModelElementInstanceImpl implem
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaTaskListener.class, CAMUNDA_ELEMENT_TASK_LISTENER)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(instanceContext -> new CamundaTaskListenerImpl(instanceContext));
+      .instanceProvider(CamundaTaskListenerImpl::new);
 
     camundaEventAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EVENT)
       .namespace(CAMUNDA_NS)

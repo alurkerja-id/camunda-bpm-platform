@@ -41,7 +41,7 @@ public class CamundaScriptImpl extends BpmnModelElementInstanceImpl implements C
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaScript.class, CAMUNDA_ELEMENT_SCRIPT)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(instanceContext -> new CamundaScriptImpl(instanceContext));
+      .instanceProvider(CamundaScriptImpl::new);
 
     camundaScriptFormatAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_SCRIPT_FORMAT)
       .required()

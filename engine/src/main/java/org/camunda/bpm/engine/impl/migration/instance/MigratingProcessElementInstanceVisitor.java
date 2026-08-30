@@ -101,7 +101,7 @@ public abstract class MigratingProcessElementInstanceVisitor implements TreeVisi
     walker.addPreVisitor(obj ->
         result.add(0, obj));
 
-    walker.walkWhile(element -> migratingExecutionBranch.hasInstance(element));
+    walker.walkWhile(migratingExecutionBranch::hasInstance);
 
     return result;
   }

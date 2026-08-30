@@ -42,7 +42,7 @@ public class CamundaMapImpl extends BpmnModelElementInstanceImpl implements Camu
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaMap.class, BpmnModelConstants.CAMUNDA_ELEMENT_MAP)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(instanceContext -> new CamundaMapImpl(instanceContext));
+      .instanceProvider(CamundaMapImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

@@ -41,7 +41,7 @@ public class CamundaListImpl extends BpmnModelElementInstanceImpl implements Cam
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaList.class, CAMUNDA_ELEMENT_LIST)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(instanceContext -> new CamundaListImpl(instanceContext));
+      .instanceProvider(CamundaListImpl::new);
 
     typeBuilder.build();
   }
