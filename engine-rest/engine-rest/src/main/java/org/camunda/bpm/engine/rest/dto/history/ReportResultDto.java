@@ -16,8 +16,11 @@
  */
 package org.camunda.bpm.engine.rest.dto.history;
 
+import javax.ws.rs.core.Response.Status;
+
 import org.camunda.bpm.engine.history.DurationReportResult;
 import org.camunda.bpm.engine.history.ReportResult;
+import org.camunda.bpm.engine.rest.exception.RestException;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
@@ -53,6 +56,10 @@ public abstract class ReportResultDto {
     if (reportResult instanceof DurationReportResult) {
       DurationReportResult durationReport = (DurationReportResult) reportResult;
       dto = DurationReportResultDto.fromDurationReportResult(durationReport);
+    } else {
+      // any other implementation used to fall through and fail with a bare NullPointerException
+      throw new RestException(Status.INTERNAL_SERVER_ERROR, String.format("Unsupported report result type '%s'",
+          reportResult == null ? null : reportResult.getClass().getName()));
     }
 
     dto.period = reportResult.getPeriod();

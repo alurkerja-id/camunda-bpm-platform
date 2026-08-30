@@ -148,11 +148,11 @@ public class ProcessDefinitionRestServiceImpl extends AbstractRestProcessEngineA
       query.includeFailedJobs();
     }
 
-    if (includeIncidents != null && includeIncidents) {
+    if (Boolean.TRUE.equals(includeIncidents)) {
       query.includeIncidents();
     } else if (includeIncidentsForType != null) {
       query.includeIncidentsForType(includeIncidentsForType);
-    } else if (includeRootIncidents != null && includeRootIncidents) {
+    } else if (Boolean.TRUE.equals(includeRootIncidents)) {
       query.includeRootIncidents();
     }
 

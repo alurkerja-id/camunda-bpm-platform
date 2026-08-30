@@ -112,10 +112,12 @@ public class ProcessInstanceSuspensionStateDto extends SuspensionStateDto {
       throw new InvalidRequestException(Status.BAD_REQUEST, message);
     }
 
-    UpdateProcessInstanceSuspensionStateBuilder updateSuspensionStateBuilder = null;
+    // the checks above leave exactly two cases open, params == 1 or syncParams >= 1, so the
+    // builder is always assigned; an else-if plus a null start only hid that from the reader
+    UpdateProcessInstanceSuspensionStateBuilder updateSuspensionStateBuilder;
     if (params == 1) {
       updateSuspensionStateBuilder = createUpdateSuspensionStateBuilder(engine);
-    } else if (syncParams >= 1) {
+    } else {
       updateSuspensionStateBuilder = createUpdateSuspensionStateGroupBuilder(engine);
     }
 

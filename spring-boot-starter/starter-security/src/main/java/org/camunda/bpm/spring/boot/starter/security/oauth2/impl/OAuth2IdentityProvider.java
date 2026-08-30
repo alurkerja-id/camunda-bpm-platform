@@ -36,6 +36,7 @@ import org.camunda.bpm.engine.impl.persistence.entity.TenantEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.UserEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
@@ -105,7 +106,12 @@ public class OAuth2IdentityProvider extends DbIdentityServiceProvider {
   }
 
   protected static List<Group> transformGroups() {
-    return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().map(a -> {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null) {
+      // no authenticated request, so there are no authorities to turn into groups
+      return Collections.emptyList();
+    }
+    return authentication.getAuthorities().stream().map(a -> {
       var group = new GroupEntity();
       group.setId(a.getAuthority());
       group.setName(a.getAuthority());

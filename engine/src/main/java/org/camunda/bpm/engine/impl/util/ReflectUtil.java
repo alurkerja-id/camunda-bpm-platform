@@ -213,6 +213,11 @@ public abstract class ReflectUtil {
     try {
       Class<? extends Object> clazz = target.getClass();
       Method method = findMethod(clazz, methodName, Arrays.stream(args).map(Object::getClass).toArray(Class<?>[]::new));
+      if (method == null) {
+        // was a NullPointerException wrapped by the catch below, which said nothing about what
+        // could not be found; the wrapper is the same, only the cause is now readable
+        throw new NoSuchMethodException(methodName);
+      }
       method.setAccessible(true);
       return method.invoke(target, args);
     }

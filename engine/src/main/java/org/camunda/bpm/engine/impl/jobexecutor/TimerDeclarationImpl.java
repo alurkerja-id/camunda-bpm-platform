@@ -112,8 +112,13 @@ public class TimerDeclarationImpl extends JobDeclaration<ExecutionEntity, TimerE
         .getBusinessCalendarManager()
         .getBusinessCalendar(type.calendarName);
 
+    // context is null for timers on a start event, see the shared variable scope below, so the
+    // activity id has to be read defensively - the error messages here used to fail with a
+    // NullPointerException in exactly the cases they were meant to explain
+    String activityId = context == null ? null : context.getActivityId();
+
     if (description==null) {
-      throw new ProcessEngineException("Timer '"+context.getActivityId()+"' was not configured with a valid duration/time");
+      throw new ProcessEngineException("Timer '"+activityId+"' was not configured with a valid duration/time");
     }
 
     String dueDateString = null;
@@ -134,13 +139,13 @@ public class TimerDeclarationImpl extends JobDeclaration<ExecutionEntity, TimerE
       duedate = (Date)dueDateValue;
     }
     else {
-      throw new ProcessEngineException("Timer '"+context.getActivityId()+"' was not configured with a valid duration/time, either hand in a java.util.Date or a String in format 'yyyy-MM-dd'T'hh:mm:ss'");
+      throw new ProcessEngineException("Timer '"+activityId+"' was not configured with a valid duration/time, either hand in a java.util.Date or a String in format 'yyyy-MM-dd'T'hh:mm:ss'");
     }
 
     if (duedate==null) {
       if (creationDateBased) {
         if (job.getCreateTime() == null) {
-          throw new ProcessEngineException("Timer '"+context.getActivityId()+"' has no creation time and cannot be recalculated based on creation date. Either recalculate on your own or trigger recalculation with creationDateBased set to false.");
+          throw new ProcessEngineException("Timer '"+activityId+"' has no creation time and cannot be recalculated based on creation date. Either recalculate on your own or trigger recalculation with creationDateBased set to false.");
         }
         duedate = businessCalendar.resolveDuedate(dueDateString, job.getCreateTime());
       } else {

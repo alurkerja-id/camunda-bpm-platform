@@ -115,10 +115,12 @@ public class CommandContextInterceptor extends CommandInterceptor {
 
     } finally {
       try {
-        if (openNew) {
+        if (openNew && context != null) {
           LOG.closingCommandContext();
           context.close(commandInvocationContext);
         } else {
+          // context stays null when creating it threw; there is nothing to close then, and the
+          // NullPointerException that used to happen here buried the failure that caused it
           commandInvocationContext.rethrow();
         }
       } finally {

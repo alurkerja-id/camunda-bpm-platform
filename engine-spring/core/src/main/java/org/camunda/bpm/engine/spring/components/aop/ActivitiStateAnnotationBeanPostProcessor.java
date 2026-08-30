@@ -101,6 +101,11 @@ public class ActivitiStateAnnotationBeanPostProcessor implements BeanPostProcess
 					public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
 
 						State state = AnnotationUtils.getAnnotation(method, State.class);
+						if (state == null) {
+							// the MethodFilter below already keeps annotated methods only, so this
+							// cannot happen - but nothing in the code says so until now
+							return;
+						}
 
 						String processName = component.processKey();
 

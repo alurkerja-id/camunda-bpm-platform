@@ -75,6 +75,9 @@ public class ProcessStartingMethodInterceptor implements MethodInterceptor {
 		Method method = invocation.getMethod();
 
 		StartProcess startProcess = AnnotationUtils.getAnnotation(method, StartProcess.class);
+		// the advisor only matches methods carrying @StartProcess, so this holds - but only the
+		// pointcut knew it, and a bare NullPointerException would be a poor way to find out
+		Assert.notNull(startProcess, "the intercepted method must be annotated with @StartProcess");
 
 		String processKey = startProcess.processKey();
 

@@ -77,7 +77,8 @@ public class StateHandlerAnnotationBeanFactoryPostProcessor implements BeanFacto
 	private boolean beanAlreadyConfigured(BeanDefinitionRegistry registry, String beanName, Class clz) {
 		if (registry.isBeanNameInUse(beanName)) {
 			BeanDefinition bDef = registry.getBeanDefinition(beanName);
-			if (bDef.getBeanClassName().equals(clz.getName())) {
+			// a bean definition built from a factory method carries no class name
+			if (clz.getName().equals(bDef.getBeanClassName())) {
 				return true; // so the beans already registered, and of the right type. so we assume the user is overriding our configuration
 			} else {
 				throw new IllegalStateException("The bean name '" + beanName + "' is reserved.");

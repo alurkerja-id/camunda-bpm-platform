@@ -237,7 +237,7 @@ public class ProcessDefinitionResourceImpl implements ProcessDefinitionResource 
       query.includeFailedJobs();
     }
 
-    if (includeIncidents != null && includeIncidents) {
+    if (Boolean.TRUE.equals(includeIncidents)) {
       query.includeIncidents();
     } else if (includeIncidentsForType != null) {
       query.includeIncidentsForType(includeIncidentsForType);
