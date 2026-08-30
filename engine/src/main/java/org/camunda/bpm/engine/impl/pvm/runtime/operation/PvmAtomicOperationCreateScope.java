@@ -17,6 +17,7 @@
 package org.camunda.bpm.engine.impl.pvm.runtime.operation;
 
 import org.camunda.bpm.engine.impl.pvm.PvmActivity;
+import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.pvm.PvmLogger;
 import org.camunda.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
 
@@ -26,7 +27,7 @@ import org.camunda.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
  */
 public abstract class PvmAtomicOperationCreateScope implements PvmAtomicOperation {
 
-  private final static PvmLogger LOG = PvmLogger.PVM_LOGGER;
+  private final static PvmLogger LOG = ProcessEngineLogger.PVM_LOGGER;
 
   @Override
   public void execute(PvmExecutionImpl execution) {

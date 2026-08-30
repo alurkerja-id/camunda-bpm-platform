@@ -22,6 +22,7 @@ import jakarta.servlet.ServletContextListener;
 import java.lang.ref.WeakReference;
 import org.camunda.bpm.application.AbstractProcessApplication;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.impl.util.ClassLoaderUtil;
 import org.camunda.bpm.engine.impl.util.JakartaClassLoaderUtil;
 
 /**
@@ -110,7 +111,7 @@ public class JakartaServletProcessApplication extends AbstractServletProcessAppl
     if (getClass().equals(JakartaServletProcessApplication.class)) {
       return JakartaClassLoaderUtil.getServletContextClassloader(sce);
     } else {
-      return JakartaClassLoaderUtil.getClassloader(getClass());
+      return ClassLoaderUtil.getClassloader(getClass());
     }
   }
 

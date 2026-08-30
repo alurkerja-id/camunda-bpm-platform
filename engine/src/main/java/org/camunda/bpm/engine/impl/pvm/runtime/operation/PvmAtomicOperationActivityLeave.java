@@ -20,6 +20,7 @@ import static org.camunda.bpm.engine.impl.util.ActivityBehaviorUtil.getActivityB
 
 import org.camunda.bpm.engine.impl.bpmn.behavior.FlowNodeActivityBehavior;
 import org.camunda.bpm.engine.impl.pvm.PvmException;
+import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.pvm.PvmLogger;
 import org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior;
 import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
@@ -31,7 +32,7 @@ import org.camunda.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
  */
 public class PvmAtomicOperationActivityLeave implements PvmAtomicOperation {
 
-  private final static PvmLogger LOG = PvmLogger.PVM_LOGGER;
+  private final static PvmLogger LOG = ProcessEngineLogger.PVM_LOGGER;
 
   @Override
   public boolean isAsync(PvmExecutionImpl execution) {

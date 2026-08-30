@@ -21,6 +21,7 @@ import org.camunda.bpm.engine.impl.migration.instance.MigratingExternalTaskInsta
 import org.camunda.bpm.engine.impl.migration.instance.MigratingIncident;
 import org.camunda.bpm.engine.impl.migration.instance.MigratingJobInstance;
 import org.camunda.bpm.engine.impl.persistence.entity.IncidentEntity;
+import org.camunda.bpm.engine.runtime.Incident;
 import org.camunda.bpm.engine.impl.persistence.entity.JobDefinitionEntity;
 
 /**
@@ -52,7 +53,7 @@ public class IncidentInstanceHandler implements MigratingInstanceParseHandler<In
   }
 
   protected boolean isFailedJobIncident(IncidentEntity incident) {
-    return IncidentEntity.FAILED_JOB_HANDLER_TYPE.equals(incident.getIncidentType());
+    return Incident.FAILED_JOB_HANDLER_TYPE.equals(incident.getIncidentType());
   }
 
   protected void handleFailedJobIncident(MigratingInstanceParseContext parseContext, IncidentEntity incident) {
@@ -71,7 +72,7 @@ public class IncidentInstanceHandler implements MigratingInstanceParseHandler<In
   }
 
   protected boolean isExternalTaskIncident(IncidentEntity incident) {
-    return IncidentEntity.EXTERNAL_TASK_HANDLER_TYPE.equals(incident.getIncidentType());
+    return Incident.EXTERNAL_TASK_HANDLER_TYPE.equals(incident.getIncidentType());
   }
 
   protected void handleExternalTaskIncident(MigratingInstanceParseContext parseContext, IncidentEntity incident) {

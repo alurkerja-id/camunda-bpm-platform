@@ -19,6 +19,7 @@ package org.camunda.bpm.client.spring.impl.client;
 import org.camunda.bpm.client.ExternalTaskClient;
 import org.camunda.bpm.client.spring.annotation.EnableExternalTaskClient;
 import org.camunda.bpm.client.spring.impl.client.util.ClientLoggerUtil;
+import org.camunda.bpm.client.spring.impl.util.LoggerUtil;
 import org.camunda.bpm.client.spring.impl.util.AnnotationUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.ListableBeanFactory;
@@ -37,7 +38,7 @@ import java.util.stream.Collectors;
 
 public class ClientPostProcessor implements BeanDefinitionRegistryPostProcessor {
 
-  protected static final ClientLoggerUtil LOG = ClientLoggerUtil.CLIENT_LOGGER;
+  protected static final ClientLoggerUtil LOG = LoggerUtil.CLIENT_LOGGER;
 
   protected static final String BEAN_NAME = "externalTaskClient";
 

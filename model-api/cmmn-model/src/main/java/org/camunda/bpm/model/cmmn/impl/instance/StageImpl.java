@@ -52,6 +52,9 @@ public class StageImpl extends PlanFragmentImpl implements Stage {
   protected static ChildElement<PlanningTable> planningTableChild;
   protected static ChildElementCollection<PlanItemDefinition> planItemDefinitionCollection;
 
+  /**
+   * @deprecated CMMN 1.0 only; CMMN 1.1 uses {@link #exitCriterionCollection} instead
+   */
   // cmmn 1.0
   @Deprecated
   protected static AttributeReferenceCollection<Sentry> exitCriteriaRefCollection;

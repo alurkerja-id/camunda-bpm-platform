@@ -18,6 +18,7 @@ package org.camunda.bpm.engine.impl.interceptor;
 
 
 import org.camunda.bpm.engine.delegate.ProcessEngineServicesAware;
+import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.cmd.CommandLogger;
 import org.camunda.bpm.engine.impl.context.Context;
@@ -54,7 +55,7 @@ import org.camunda.bpm.engine.impl.context.ProcessEngineContextImpl;
  */
 public class CommandContextInterceptor extends CommandInterceptor {
 
-  private final static CommandLogger LOG = CommandLogger.CMD_LOGGER;
+  private final static CommandLogger LOG = ProcessEngineLogger.CMD_LOGGER;
 
   protected CommandContextFactory commandContextFactory;
   protected ProcessEngineConfigurationImpl processEngineConfiguration;

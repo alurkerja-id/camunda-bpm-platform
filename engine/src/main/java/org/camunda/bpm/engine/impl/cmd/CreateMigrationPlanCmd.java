@@ -28,6 +28,7 @@ import org.camunda.bpm.engine.impl.core.variable.VariableUtil;
 import org.camunda.bpm.engine.impl.interceptor.Command;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
 import org.camunda.bpm.engine.impl.migration.MigrationInstructionGenerator;
+import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.migration.MigrationLogger;
 import org.camunda.bpm.engine.impl.migration.MigrationPlanBuilderImpl;
 import org.camunda.bpm.engine.impl.migration.MigrationPlanImpl;
@@ -54,7 +55,7 @@ import org.camunda.bpm.engine.variable.value.TypedValue;
  */
 public class CreateMigrationPlanCmd implements Command<MigrationPlan> {
 
-  public static final MigrationLogger LOG = EngineUtilLogger.MIGRATION_LOGGER;
+  public static final MigrationLogger LOG = ProcessEngineLogger.MIGRATION_LOGGER;
 
   protected MigrationPlanBuilderImpl migrationBuilder;
 

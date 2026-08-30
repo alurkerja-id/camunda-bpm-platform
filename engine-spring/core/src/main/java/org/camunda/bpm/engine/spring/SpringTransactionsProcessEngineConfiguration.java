@@ -40,6 +40,7 @@ import org.springframework.core.io.ContextResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
 
 /**
@@ -79,7 +80,7 @@ public class SpringTransactionsProcessEngineConfiguration extends ProcessEngineC
     defaultCommandInterceptorsTxRequired.add(new LogInterceptor());
     defaultCommandInterceptorsTxRequired.add(new CommandCounterInterceptor(this));
     defaultCommandInterceptorsTxRequired.add(new ProcessApplicationContextInterceptor(this));
-    defaultCommandInterceptorsTxRequired.add(new SpringTransactionInterceptor(transactionManager, TransactionTemplate.PROPAGATION_REQUIRED, this));
+    defaultCommandInterceptorsTxRequired.add(new SpringTransactionInterceptor(transactionManager, TransactionDefinition.PROPAGATION_REQUIRED, this));
     CommandContextInterceptor commandContextInterceptor = new CommandContextInterceptor(commandContextFactory, this);
     defaultCommandInterceptorsTxRequired.add(commandContextInterceptor);
     return defaultCommandInterceptorsTxRequired;
@@ -93,7 +94,7 @@ public class SpringTransactionsProcessEngineConfiguration extends ProcessEngineC
     defaultCommandInterceptorsTxRequiresNew.add(new LogInterceptor());
     defaultCommandInterceptorsTxRequiresNew.add(new CommandCounterInterceptor(this));
     defaultCommandInterceptorsTxRequiresNew.add(new ProcessApplicationContextInterceptor(this));
-    defaultCommandInterceptorsTxRequiresNew.add(new SpringTransactionInterceptor(transactionManager, TransactionTemplate.PROPAGATION_REQUIRES_NEW, this));
+    defaultCommandInterceptorsTxRequiresNew.add(new SpringTransactionInterceptor(transactionManager, TransactionDefinition.PROPAGATION_REQUIRES_NEW, this));
     CommandContextInterceptor commandContextInterceptor = new CommandContextInterceptor(commandContextFactory, this, true);
     defaultCommandInterceptorsTxRequiresNew.add(commandContextInterceptor);
     return defaultCommandInterceptorsTxRequiresNew;

@@ -43,9 +43,15 @@ public class TaskImpl extends PlanItemDefinitionImpl implements Task {
 
   protected static Attribute<Boolean> isBlockingAttribute;
 
+  /**
+   * @deprecated CMMN 1.0 only; CMMN 1.1 uses {@link #inputParameterCollection} instead
+   */
   // cmmn 1.0
   @Deprecated
   protected static ChildElementCollection<InputsCaseParameter> inputsCollection;
+  /**
+   * @deprecated CMMN 1.0 only; CMMN 1.1 uses {@link #outputParameterCollection} instead
+   */
   @Deprecated
   protected static ChildElementCollection<OutputsCaseParameter> outputsCollection;
 

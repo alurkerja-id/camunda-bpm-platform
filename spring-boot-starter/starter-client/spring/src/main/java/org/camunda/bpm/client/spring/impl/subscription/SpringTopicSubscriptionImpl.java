@@ -21,6 +21,7 @@ import org.camunda.bpm.client.spring.SpringTopicSubscription;
 import org.camunda.bpm.client.spring.event.SubscriptionInitializedEvent;
 import org.camunda.bpm.client.spring.impl.client.util.ClientLoggerUtil;
 import org.camunda.bpm.client.spring.impl.subscription.util.SubscriptionLoggerUtil;
+import org.camunda.bpm.client.spring.impl.util.LoggerUtil;
 import org.camunda.bpm.client.task.ExternalTaskHandler;
 import org.camunda.bpm.client.topic.TopicSubscription;
 import org.camunda.bpm.client.topic.TopicSubscriptionBuilder;
@@ -38,7 +39,7 @@ import java.util.function.Predicate;
 public class SpringTopicSubscriptionImpl
     implements SpringTopicSubscription, InitializingBean {
 
-  protected static final SubscriptionLoggerUtil LOG = ClientLoggerUtil.SUBSCRIPTION_LOGGER;
+  protected static final SubscriptionLoggerUtil LOG = LoggerUtil.SUBSCRIPTION_LOGGER;
 
   protected SubscriptionConfiguration subscriptionConfiguration;
   protected ExternalTaskHandler externalTaskHandler;

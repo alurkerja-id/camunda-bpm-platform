@@ -30,6 +30,7 @@ import org.camunda.bpm.engine.impl.core.variable.mapping.value.ParameterValuePro
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
 import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.JobDefinitionEntity;
+import org.camunda.bpm.engine.impl.persistence.entity.AcquirableJobEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
 import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
 import org.camunda.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
@@ -57,7 +58,7 @@ public abstract class JobDeclaration<S, T extends JobEntity> implements Serializ
   protected JobHandlerConfiguration jobHandlerConfiguration;
   protected String jobConfiguration;
 
-  protected boolean exclusive = JobEntity.DEFAULT_EXCLUSIVE;
+  protected boolean exclusive = AcquirableJobEntity.DEFAULT_EXCLUSIVE;
 
   protected ActivityImpl activity;
 

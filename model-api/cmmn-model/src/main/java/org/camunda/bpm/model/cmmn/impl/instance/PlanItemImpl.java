@@ -56,9 +56,15 @@ public class PlanItemImpl extends CmmnElementImpl implements PlanItem {
   protected static AttributeReference<PlanItemDefinition> planItemDefinitionRefAttribute;
   protected static ChildElement<ItemControl> itemControlChild;
 
+  /**
+   * @deprecated CMMN 1.0 only; CMMN 1.1 uses {@link #entryCriterionCollection} instead
+   */
   // cmmn 1.0
   @Deprecated
   protected static AttributeReferenceCollection<Sentry> entryCriteriaRefCollection;
+  /**
+   * @deprecated CMMN 1.0 only; CMMN 1.1 uses {@link #exitCriterionCollection} instead
+   */
   @Deprecated
   protected static AttributeReferenceCollection<Sentry> exitCriteriaRefCollection;
 

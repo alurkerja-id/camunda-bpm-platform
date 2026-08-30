@@ -108,6 +108,7 @@ import org.camunda.bpm.engine.impl.el.UelExpressionCondition;
 import org.camunda.bpm.engine.impl.event.EventType;
 import org.camunda.bpm.engine.impl.form.FormDefinition;
 import org.camunda.bpm.engine.impl.form.handler.DefaultStartFormHandler;
+import org.camunda.bpm.engine.impl.form.handler.DefaultFormHandler;
 import org.camunda.bpm.engine.impl.form.handler.DefaultTaskFormHandler;
 import org.camunda.bpm.engine.impl.form.handler.DelegateStartFormHandler;
 import org.camunda.bpm.engine.impl.form.handler.DelegateTaskFormHandler;
@@ -127,6 +128,7 @@ import org.camunda.bpm.engine.impl.jobexecutor.TimerStartEventJobHandler;
 import org.camunda.bpm.engine.impl.jobexecutor.TimerStartEventSubprocessJobHandler;
 import org.camunda.bpm.engine.impl.jobexecutor.TimerTaskListenerJobHandler;
 import org.camunda.bpm.engine.impl.persistence.entity.DeploymentEntity;
+import org.camunda.bpm.engine.impl.persistence.entity.AcquirableJobEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.camunda.bpm.engine.impl.pvm.PvmTransition;
@@ -2854,9 +2856,9 @@ public class BpmnParse extends Parse {
 
       String formRefBindingAttribute = flowNodeElement.attributeNS(BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS, "formRefBinding");
 
-      if (formRefBindingAttribute == null || !DefaultTaskFormHandler.ALLOWED_FORM_REF_BINDINGS.contains(formRefBindingAttribute)) {
+      if (formRefBindingAttribute == null || !DefaultFormHandler.ALLOWED_FORM_REF_BINDINGS.contains(formRefBindingAttribute)) {
         addError("Invalid element definition: value for formRefBinding attribute has to be one of "
-            + DefaultTaskFormHandler.ALLOWED_FORM_REF_BINDINGS + " but was " + formRefBindingAttribute, flowNodeElement);
+            + DefaultFormHandler.ALLOWED_FORM_REF_BINDINGS + " but was " + formRefBindingAttribute, flowNodeElement);
       }
 
 
@@ -2864,7 +2866,7 @@ public class BpmnParse extends Parse {
         formDefinition.setCamundaFormDefinitionBinding(formRefBindingAttribute);
       }
 
-      if(DefaultTaskFormHandler.FORM_REF_BINDING_VERSION.equals(formRefBindingAttribute)) {
+      if(DefaultFormHandler.FORM_REF_BINDING_VERSION.equals(formRefBindingAttribute)) {
         String formRefVersionAttribute = flowNodeElement.attributeNS(BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS, "formRefVersion");
 
         Expression camundaFormDefinitionVersion = expressionManager.createExpression(formRefVersionAttribute);
@@ -3596,7 +3598,7 @@ public class BpmnParse extends Parse {
     // Parse the timer declaration
     TimerDeclarationImpl timerDeclaration = new TimerDeclarationImpl(expression, type, jobHandlerType);
     timerDeclaration.setRawJobHandlerConfiguration(timerActivity.getId());
-    timerDeclaration.setExclusive(TRUE.equals(timerEventDefinition.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "exclusive", String.valueOf(JobEntity.DEFAULT_EXCLUSIVE))));
+    timerDeclaration.setExclusive(TRUE.equals(timerEventDefinition.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "exclusive", String.valueOf(AcquirableJobEntity.DEFAULT_EXCLUSIVE))));
     if (timerActivity.getId() == null) {
       addError("Attribute \"id\" is required!", timerEventDefinition);
     }
@@ -4749,7 +4751,7 @@ public class BpmnParse extends Parse {
   }
 
   protected boolean isExclusive(Element element) {
-    return TRUE.equals(element.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "exclusive", String.valueOf(JobEntity.DEFAULT_EXCLUSIVE)));
+    return TRUE.equals(element.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "exclusive", String.valueOf(AcquirableJobEntity.DEFAULT_EXCLUSIVE)));
   }
 
   protected boolean isAsyncBefore(Element element) {

@@ -27,6 +27,7 @@ import org.camunda.bpm.client.backoff.BackoffStrategy;
 import org.camunda.bpm.client.interceptor.ClientRequestInterceptor;
 import org.camunda.bpm.client.spring.exception.SpringExternalTaskClientException;
 import org.camunda.bpm.client.spring.impl.client.util.ClientLoggerUtil;
+import org.camunda.bpm.client.spring.impl.util.LoggerUtil;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ import org.springframework.core.env.PropertySourcesPropertyResolver;
 public class ClientFactory
     implements FactoryBean<ExternalTaskClient>, InitializingBean {
 
-  protected static final ClientLoggerUtil LOG = ClientLoggerUtil.CLIENT_LOGGER;
+  protected static final ClientLoggerUtil LOG = LoggerUtil.CLIENT_LOGGER;
 
   protected ClientConfiguration clientConfiguration;
 

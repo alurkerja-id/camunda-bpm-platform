@@ -38,6 +38,9 @@ public class ExpressionImpl extends CmmnElementImpl implements Expression {
 
   protected static Attribute<String> languageAttribute;
 
+  /**
+   * @deprecated CMMN 1.0 only; CMMN 1.1 holds the expression as text on the element itself
+   */
   // cmmn 1.0
   @Deprecated
   protected static ChildElement<Body> bodyChild;

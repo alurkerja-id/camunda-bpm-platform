@@ -46,6 +46,9 @@ public class PlanItemOnPartImpl extends OnPartImpl implements PlanItemOnPart {
   protected static AttributeReference<PlanItem> sourceRefAttribute;
   protected static ChildElement<PlanItemTransitionStandardEvent> standardEventChild;
 
+  /**
+   * @deprecated CMMN 1.0 only; CMMN 1.1 uses {@link #exitCriterionRefAttribute} instead
+   */
   // cmmn 1.0
   @Deprecated
   protected static AttributeReference<Sentry> sentryRefAttribute;

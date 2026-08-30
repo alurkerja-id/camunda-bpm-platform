@@ -53,6 +53,9 @@ public class HumanTaskImpl extends TaskImpl implements HumanTask {
 
   protected static AttributeReference<Role> performerRefAttribute;
 
+  /**
+   * @deprecated CMMN 1.0 only; CMMN 1.1 uses {@link #planningTableChild} instead
+   */
   // cmmn 1.0
   @Deprecated
   protected static ChildElementCollection<PlanningTable> planningTableCollection;

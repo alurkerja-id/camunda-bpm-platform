@@ -28,6 +28,7 @@ import org.camunda.bpm.dmn.engine.impl.CachedCompiledScriptSupport;
 import org.camunda.bpm.dmn.engine.impl.CachedExpressionSupport;
 import org.camunda.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
 import org.camunda.bpm.dmn.engine.impl.DmnEngineLogger;
+import org.camunda.bpm.dmn.engine.impl.DmnLogger;
 import org.camunda.bpm.dmn.engine.impl.DmnExpressionImpl;
 import org.camunda.bpm.dmn.engine.impl.el.VariableContextScriptBindings;
 import org.camunda.bpm.dmn.engine.impl.spi.el.DmnScriptEngineResolver;
@@ -39,7 +40,7 @@ import org.camunda.commons.utils.StringUtil;
 
 public class ExpressionEvaluationHandler {
 
-  protected static final DmnEngineLogger LOG = DmnEngineLogger.ENGINE_LOGGER;
+  protected static final DmnEngineLogger LOG = DmnLogger.ENGINE_LOGGER;
 
   protected final DmnScriptEngineResolver scriptEngineResolver;
   protected final ElProvider elProvider;

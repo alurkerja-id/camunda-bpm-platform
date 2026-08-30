@@ -42,9 +42,15 @@ public interface CaseFileItem extends CmmnElement {
 
   void setDefinitionRef(CaseFileItemDefinition caseFileItemDefinition);
 
+  /**
+   * @deprecated CMMN 1.0 allowed a single source; use {@link #getSourceRefs()}
+   */
   @Deprecated
   CaseFileItem getSourceRef();
 
+  /**
+   * @deprecated CMMN 1.0 allowed a single source; add to {@link #getSourceRefs()} instead
+   */
   @Deprecated
   void setSourceRef(CaseFileItem sourceRef);
 

@@ -40,6 +40,7 @@ import org.camunda.bpm.engine.impl.db.HasDbRevision;
 import org.camunda.bpm.engine.impl.incident.IncidentContext;
 import org.camunda.bpm.engine.impl.incident.IncidentHandling;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
+import org.camunda.bpm.engine.impl.DefaultPriorityProvider;
 import org.camunda.bpm.engine.impl.jobexecutor.DefaultJobPriorityProvider;
 import org.camunda.bpm.engine.impl.jobexecutor.JobHandler;
 import org.camunda.bpm.engine.impl.jobexecutor.JobHandlerConfiguration;
@@ -93,7 +94,7 @@ public abstract class JobEntity extends AcquirableJobEntity
 
   protected String jobDefinitionId;
 
-  protected long priority = DefaultJobPriorityProvider.DEFAULT_PRIORITY;
+  protected long priority = DefaultPriorityProvider.DEFAULT_PRIORITY;
 
   protected String tenantId;
 

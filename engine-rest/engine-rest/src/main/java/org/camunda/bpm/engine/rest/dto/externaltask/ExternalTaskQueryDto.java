@@ -29,6 +29,7 @@ import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.externaltask.ExternalTaskQuery;
 import org.camunda.bpm.engine.rest.dto.AbstractQueryDto;
 import org.camunda.bpm.engine.rest.dto.CamundaQueryParam;
+import org.camunda.bpm.engine.rest.dto.ConditionQueryParameterDto;
 import org.camunda.bpm.engine.rest.dto.VariableQueryParameterDto;
 import org.camunda.bpm.engine.rest.dto.converter.*;
 import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
@@ -322,21 +323,21 @@ public class ExternalTaskQueryDto extends AbstractQueryDto<ExternalTaskQuery> {
         String variableName = variableQueryParam.getName();
         String op = variableQueryParam.getOperator();
         Object variableValue = variableQueryParam.resolveValue(objectMapper);
-        if (op.equals(VariableQueryParameterDto.EQUALS_OPERATOR_NAME)) {
+        if (op.equals(ConditionQueryParameterDto.EQUALS_OPERATOR_NAME)) {
           query.processVariableValueEquals(variableName, variableValue);
-        } else if (op.equals(VariableQueryParameterDto.NOT_EQUALS_OPERATOR_NAME)) {
+        } else if (op.equals(ConditionQueryParameterDto.NOT_EQUALS_OPERATOR_NAME)) {
           query.processVariableValueNotEquals(variableName, variableValue);
-        } else if (op.equals(VariableQueryParameterDto.GREATER_THAN_OPERATOR_NAME)) {
+        } else if (op.equals(ConditionQueryParameterDto.GREATER_THAN_OPERATOR_NAME)) {
           query.processVariableValueGreaterThan(variableName, variableValue);
-        } else if (op.equals(VariableQueryParameterDto.GREATER_THAN_OR_EQUALS_OPERATOR_NAME)) {
+        } else if (op.equals(ConditionQueryParameterDto.GREATER_THAN_OR_EQUALS_OPERATOR_NAME)) {
           query.processVariableValueGreaterThanOrEquals(variableName, variableValue);
-        } else if (op.equals(VariableQueryParameterDto.LESS_THAN_OPERATOR_NAME)) {
+        } else if (op.equals(ConditionQueryParameterDto.LESS_THAN_OPERATOR_NAME)) {
           query.processVariableValueLessThan(variableName, variableValue);
-        } else if (op.equals(VariableQueryParameterDto.LESS_THAN_OR_EQUALS_OPERATOR_NAME)) {
+        } else if (op.equals(ConditionQueryParameterDto.LESS_THAN_OR_EQUALS_OPERATOR_NAME)) {
           query.processVariableValueLessThanOrEquals(variableName, variableValue);
-        } else if (op.equals(VariableQueryParameterDto.LIKE_OPERATOR_NAME)) {
+        } else if (op.equals(ConditionQueryParameterDto.LIKE_OPERATOR_NAME)) {
           query.processVariableValueLike(variableName, String.valueOf(variableValue));
-        } else if (op.equals(VariableQueryParameterDto.NOT_LIKE_OPERATOR_NAME)) {
+        } else if (op.equals(ConditionQueryParameterDto.NOT_LIKE_OPERATOR_NAME)) {
           query.processVariableValueNotLike(variableName, String.valueOf(variableValue));
         } else {
           throw new InvalidRequestException(Response.Status.BAD_REQUEST, "Invalid process variable comparator specified: " + op);

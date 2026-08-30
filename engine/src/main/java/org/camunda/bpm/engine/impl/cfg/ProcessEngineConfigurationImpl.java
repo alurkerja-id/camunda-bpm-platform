@@ -224,6 +224,7 @@ import org.camunda.bpm.engine.impl.interceptor.SessionFactory;
 import org.camunda.bpm.engine.impl.jobexecutor.AsyncContinuationJobHandler;
 import org.camunda.bpm.engine.impl.jobexecutor.DefaultFailedJobCommandFactory;
 import org.camunda.bpm.engine.impl.jobexecutor.DefaultJobExecutor;
+import org.camunda.bpm.engine.impl.DefaultPriorityProvider;
 import org.camunda.bpm.engine.impl.jobexecutor.DefaultJobPriorityProvider;
 import org.camunda.bpm.engine.impl.jobexecutor.FailedJobCommandFactory;
 import org.camunda.bpm.engine.impl.jobexecutor.JobDeclaration;
@@ -390,7 +391,7 @@ import org.camunda.bpm.engine.variable.Variables;
  */
 public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfiguration {
 
-  protected static ConfigurationLogger LOG = ConfigurationLogger.CONFIG_LOGGER;
+  protected static ConfigurationLogger LOG = ProcessEngineLogger.CONFIG_LOGGER;
 
   public static final String DB_SCHEMA_UPDATE_CREATE = "create";
   public static final String DB_SCHEMA_UPDATE_DROP_CREATE = "drop-create";
@@ -566,7 +567,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   /**
    * default priority for batch jobs
    */
-  protected long batchJobPriority = DefaultJobPriorityProvider.DEFAULT_PRIORITY;
+  protected long batchJobPriority = DefaultPriorityProvider.DEFAULT_PRIORITY;
 
   // OTHER ////////////////////////////////////////////////////////////////////
   protected List<FormEngine> customFormEngines;
@@ -950,7 +951,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   /**
    * Default priority for history cleanup jobs. */
-  protected long historyCleanupJobPriority = DefaultJobPriorityProvider.DEFAULT_PRIORITY;
+  protected long historyCleanupJobPriority = DefaultPriorityProvider.DEFAULT_PRIORITY;
 
   /**
    * Specifies how often a cleanup job will be executed before an incident is raised.

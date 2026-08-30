@@ -40,6 +40,7 @@ import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
+import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.jobexecutor.JobExecutor;
 import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
@@ -70,7 +71,7 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
    * It should be removed once those Test classes are migrated to JUnit 4.
    */
 
-  private final static Logger LOG = TestLogger.TEST_LOGGER.getLogger();
+  private final static Logger LOG = ProcessEngineLogger.TEST_LOGGER.getLogger();
 
   static {
     // this ensures that mybatis uses slf4j logging

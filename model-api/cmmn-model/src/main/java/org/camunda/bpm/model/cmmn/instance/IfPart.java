@@ -28,6 +28,9 @@ public interface IfPart extends CmmnElement {
 
   void setContext(CaseFileItem caseFileItem);
 
+  /**
+   * @deprecated CMMN 1.0 allowed several conditions; use {@link #getCondition()}
+   */
   @Deprecated
   public Collection<ConditionExpression> getConditions();
 

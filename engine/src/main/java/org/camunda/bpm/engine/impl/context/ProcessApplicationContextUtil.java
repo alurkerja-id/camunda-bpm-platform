@@ -18,6 +18,7 @@ package org.camunda.bpm.engine.impl.context;
 
 import org.camunda.bpm.application.ProcessApplicationReference;
 import org.camunda.bpm.application.impl.ProcessApplicationLogger;
+import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.application.ProcessApplicationManager;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
@@ -31,7 +32,7 @@ import org.camunda.bpm.engine.impl.util.ClassLoaderUtil;
 
 public class ProcessApplicationContextUtil {
 
-  private final static ProcessApplicationLogger LOG = ProcessApplicationLogger.PROCESS_APPLICATION_LOGGER;
+  private final static ProcessApplicationLogger LOG = ProcessEngineLogger.PROCESS_APPLICATION_LOGGER;
 
   public static ProcessApplicationReference getTargetProcessApplication(CoreExecution execution) {
     if (execution instanceof ExecutionEntity) {

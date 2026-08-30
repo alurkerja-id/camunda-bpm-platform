@@ -21,6 +21,7 @@ import java.io.Reader;
 import java.util.regex.Pattern;
 
 import org.camunda.spin.impl.logging.SpinCoreLogger;
+import org.camunda.spin.impl.logging.SpinLogger;
 
 /**
  * Can be used as a base class to determine whether an input reader
@@ -30,7 +31,7 @@ import org.camunda.spin.impl.logging.SpinCoreLogger;
  */
 public abstract class TextBasedDataFormatReader implements DataFormatReader {
 
-  private static final SpinCoreLogger LOG = SpinCoreLogger.CORE_LOGGER;
+  private static final SpinCoreLogger LOG = SpinLogger.CORE_LOGGER;
 
   public boolean canRead(Reader input, int readLimit) {
     char[] firstCharacters = new char[readLimit];

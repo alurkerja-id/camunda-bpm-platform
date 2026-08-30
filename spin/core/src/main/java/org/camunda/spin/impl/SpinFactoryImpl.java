@@ -25,6 +25,7 @@ import org.camunda.spin.DataFormats;
 import org.camunda.spin.Spin;
 import org.camunda.spin.SpinFactory;
 import org.camunda.spin.impl.logging.SpinCoreLogger;
+import org.camunda.spin.impl.logging.SpinLogger;
 import org.camunda.spin.impl.util.RewindableReader;
 import org.camunda.spin.impl.util.SpinIoUtil;
 import org.camunda.spin.spi.DataFormat;
@@ -39,7 +40,7 @@ import org.camunda.spin.spi.SpinDataFormatException;
  */
 public class SpinFactoryImpl extends SpinFactory {
 
-  private static final SpinCoreLogger LOG = SpinCoreLogger.CORE_LOGGER;
+  private static final SpinCoreLogger LOG = SpinLogger.CORE_LOGGER;
 
   private static final int READ_SIZE = 256;
 

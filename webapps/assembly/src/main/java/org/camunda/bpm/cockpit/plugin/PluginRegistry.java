@@ -26,6 +26,8 @@ import org.camunda.bpm.cockpit.plugin.spi.CockpitPlugin;
  * This class is deprecated, use {@link AppPluginRegistry}
  * 
  * @author nico.rehwaldt
+ *
+ * @deprecated use {@link AppPluginRegistry}
  */
 @Deprecated
 public interface PluginRegistry {

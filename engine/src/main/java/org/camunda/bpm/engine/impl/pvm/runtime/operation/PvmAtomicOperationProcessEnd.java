@@ -22,6 +22,7 @@ import org.camunda.bpm.engine.impl.cmmn.behavior.TransferVariablesActivityBehavi
 import org.camunda.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
 import org.camunda.bpm.engine.impl.cmmn.model.CmmnActivity;
 import org.camunda.bpm.engine.impl.pvm.PvmActivity;
+import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.pvm.PvmLogger;
 import org.camunda.bpm.engine.impl.pvm.delegate.SubProcessActivityBehavior;
 import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
@@ -32,7 +33,7 @@ import org.camunda.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
  */
 public class PvmAtomicOperationProcessEnd extends PvmAtomicOperationActivityInstanceEnd {
 
-  private final static PvmLogger LOG = PvmLogger.PVM_LOGGER;
+  private final static PvmLogger LOG = ProcessEngineLogger.PVM_LOGGER;
 
   @Override
   protected ScopeImpl getScope(PvmExecutionImpl execution) {

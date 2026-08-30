@@ -98,6 +98,9 @@ public abstract class AbstractRestQueryParametersDto<T> extends QueryParameters 
     return getOrderBy();
   }
 
+  /**
+   * @deprecated part of the old sorting parameters; use {@link #getInternalOrderBy()}
+   */
   @Deprecated
   public String getOrderBy() {
     if (sortBy != null) {

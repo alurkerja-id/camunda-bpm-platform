@@ -23,6 +23,7 @@ import org.camunda.bpm.application.ProcessApplicationInterface;
 import org.camunda.bpm.application.ProcessApplicationReference;
 import org.camunda.bpm.application.ProcessApplicationUnavailableException;
 import org.camunda.bpm.application.impl.ProcessApplicationLogger;
+import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.camunda.bpm.engine.delegate.ExecutionListener;
@@ -52,7 +53,7 @@ import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
  */
 public class ProcessApplicationEventListenerDelegate implements ExecutionListener, TaskListener {
 
-  private static ProcessApplicationLogger LOG = ProcessApplicationLogger.PROCESS_APPLICATION_LOGGER;
+  private static ProcessApplicationLogger LOG = ProcessEngineLogger.PROCESS_APPLICATION_LOGGER;
 
   @Override
   public void notify(final DelegateExecution execution) throws Exception {

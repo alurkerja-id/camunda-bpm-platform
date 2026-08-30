@@ -45,6 +45,9 @@ public abstract class CmmnElementImpl extends CmmnModelElementInstanceImpl imple
   protected static Attribute<String> idAttribute;
   protected static ChildElement<ExtensionElements> extensionElementsChild;
 
+  /**
+   * @deprecated CMMN 1.0 only; CMMN 1.1 uses {@link #documentationCollection} instead
+   */
   // cmmn 1.0
   @Deprecated
   protected static Attribute<String> descriptionAttribute;
