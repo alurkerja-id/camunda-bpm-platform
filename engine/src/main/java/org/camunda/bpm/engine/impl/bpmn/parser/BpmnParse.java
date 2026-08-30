@@ -1264,6 +1264,7 @@ public class BpmnParse extends Parse {
     MessageDefinition messageDefinition = messages.get(resolveName(messageRef));
     if (messageDefinition == null) {
       addError("Invalid 'messageRef': no message with id '" + messageRef + "' found.", messageEventDefinition, messageElementId);
+      return null;
     }
     return new EventSubscriptionDeclaration(messageDefinition.getExpression(), EventType.MESSAGE);
   }
@@ -1417,11 +1418,12 @@ public class BpmnParse extends Parse {
       addWarning("Ignoring unsupported activity type", activityElement);
     }
 
-    if (isMultiInstance) {
-      activity.setProperty(PROPERTYNAME_IS_MULTI_INSTANCE, true);
-    }
-
+    // the null check below already says the activity may be missing - an unsupported activity type
+    // is only warned about above - so setting the multi instance property has to sit inside it too
     if (activity != null) {
+      if (isMultiInstance) {
+        activity.setProperty(PROPERTYNAME_IS_MULTI_INSTANCE, true);
+      }
       activity.setName(activityElement.attribute("name"));
       parseActivityInputOutput(activityElement, activity);
     }
@@ -3284,6 +3286,9 @@ public class BpmnParse extends Parse {
       if (attachedActivity == null) {
         addError("Invalid reference in boundary event. Make sure that the referenced activity is defined in the same scope as the boundary event",
             boundaryEventElement);
+        // addError only records the problem; carrying on used to dereference the missing activity
+        // and end the whole parse with a NullPointerException instead of the collected errors
+        continue;
       }
 
       // determine the correct event scope (the scope in which the boundary event catches events)
@@ -3542,6 +3547,9 @@ public class BpmnParse extends Parse {
       SignalDefinition signalDefinition = signals.get(resolveName(signalRef));
       if (signalDefinition == null) {
         addError("Could not find signal with id '" + signalRef + "'", signalEventDefinitionElement, signalElementId);
+        // same as the missing signalRef above: report the problem and stop, rather than read the
+        // expression off the signal that was not found
+        return null;
       }
 
       EventSubscriptionDeclaration signalEventDefinition;
@@ -3604,7 +3612,11 @@ public class BpmnParse extends Parse {
       addError("Attribute \"id\" is required!", timerEventDefinition);
     }
     timerDeclaration.setActivity(timerActivity);
-    timerDeclaration.setJobConfiguration(type.toString() + ": " + expression.getExpressionText());
+    if (expression != null) {
+      // null once the configuration is missing, which addError above already recorded; the
+      // NullPointerException here used to replace that error message with a stack trace
+      timerDeclaration.setJobConfiguration(type.toString() + ": " + expression.getExpressionText());
+    }
     addJobDeclarationToProcessDefinition(timerDeclaration, (ProcessDefinition) timerActivity.getProcessDefinition());
 
     timerDeclaration.setJobPriorityProvider((ParameterValueProvider) timerActivity.getProperty(PROPERTYNAME_JOB_PRIORITY));
