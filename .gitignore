@@ -24,3 +24,7 @@ faces-config.NavData
 camunda-h2-dbs
 
 *.DS_Store
+
+# scripts/scan-trivy.sh output — evidence attached to task comments, not committed source
+/trivy-result-*.json
+/trivy-result-*.html

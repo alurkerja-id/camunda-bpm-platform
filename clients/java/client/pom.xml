@@ -27,6 +27,7 @@
     <tomcat.connector.ajp.port>50009</tomcat.connector.ajp.port>
     <tomcat.connector.ajp.redirectPort>50443</tomcat.connector.ajp.redirectPort>
     <tomcat.server.port>50005</tomcat.server.port>
+    <cargo.rmi.port>50205</cargo.rmi.port>
 
     <cargo.timeout>240000</cargo.timeout>
     <cargo.deploy.timeout>60000</cargo.deploy.timeout>
@@ -276,6 +277,7 @@
             <properties>
               <cargo.servlet.port>${tomcat.connector.http.port}</cargo.servlet.port>
               <cargo.tomcat.ajp.port>${tomcat.connector.ajp.port}</cargo.tomcat.ajp.port>
+              <cargo.rmi.port>${cargo.rmi.port}</cargo.rmi.port>
               <cargo.start.jvmargs>-Djava.security.egd=file:/dev/./urandom</cargo.start.jvmargs>
             </properties>
             <files>

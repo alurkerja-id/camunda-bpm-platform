@@ -30,6 +30,16 @@
          the package.json files need no edit. -->
     <revision>7.24.3-SNAPSHOT</revision>
 
+    <!-- Alurkerja fork: pin the Sonar project explicitly instead of letting the scanner derive it
+         from groupId:artifactId. groupId changed from org.camunda.bpm to alurkerja.camunda.bpm
+         when this fork was renamed (commit c3307546); without a pinned key, the next unpinned scan
+         creates a brand-new Sonar project (alurkerja.camunda.bpm:camunda-root) with no history,
+         orphaning the real baseline that already exists under org.camunda.bpm:camunda-root.
+         Decision: KEEP the old key so history/baseline stays continuous — see README
+         "Alurkerja fork — Sonar & Trivy scan scope" for the full rationale. -->
+    <sonar.projectKey>org.camunda.bpm:camunda-root</sonar.projectKey>
+    <sonar.projectName>Camunda Platform - Root Pom</sonar.projectName>
+
     <license.includeTransitiveDependencies>false</license.includeTransitiveDependencies>
 
     <!-- These properties are used in both the BOM as well as camunda-parent and subprojects -->
