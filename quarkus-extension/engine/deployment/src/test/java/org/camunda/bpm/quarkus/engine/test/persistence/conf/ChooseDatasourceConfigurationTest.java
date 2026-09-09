@@ -42,7 +42,7 @@ class ChooseDatasourceConfigurationTest {
   protected ProcessEngine processEngine;
 
   @Test
-  public void shouldChooseDatasource() throws SQLException {
+  void shouldChooseDatasource() throws SQLException {
     ProcessEngineConfiguration configuration = processEngine.getProcessEngineConfiguration();
     assertThat(configuration.getDataSource().getConnection()).asString().contains("jdbc:h2:mem:secondary");
   }

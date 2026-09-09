@@ -45,13 +45,13 @@ class RegisterNewProcessEngineTest {
       .build();
 
   @AfterAll
-  public static void closeProcessEngine() {
+  static void closeProcessEngine() {
     testEngine.close();
   }
 
   @Test
   @Deployment(resources = "processes/subProcess.bpmn")
-  public void testUseProcessEngine() {
+  void testUseProcessEngine() {
     // given
     RuntimeService runtimeService = testEngine.getRuntimeService();
     runtimeService.startProcessInstanceByKey("subProcess");
@@ -65,7 +65,7 @@ class RegisterNewProcessEngineTest {
   }
 
   @Test
-  public void shouldUpdateServiceReferences() {
+  void shouldUpdateServiceReferences() {
 
     assertThat(extension.getRuntimeService()).isEqualTo(testEngine.getRuntimeService());
   }

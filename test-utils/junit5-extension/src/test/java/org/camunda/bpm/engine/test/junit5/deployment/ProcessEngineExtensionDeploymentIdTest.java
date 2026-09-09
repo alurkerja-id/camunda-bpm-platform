@@ -28,7 +28,7 @@ class ProcessEngineExtensionDeploymentIdTest {
       (CustomProcessEngineExtension) CustomProcessEngineExtension.builder().build();
 
   @Test
-  public void testDeploymentId() {
+  void testDeploymentId() {
     assertEquals("mockedDeploymentId", extension.getDeploymentId());
   }
 

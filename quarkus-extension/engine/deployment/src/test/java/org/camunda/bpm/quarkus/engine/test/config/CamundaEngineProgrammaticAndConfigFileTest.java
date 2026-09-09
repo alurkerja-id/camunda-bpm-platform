@@ -64,7 +64,7 @@ class CamundaEngineProgrammaticAndConfigFileTest {
   }
 
   @Test
-  public void shouldUseProvidedConfigurationAndConfigProperties() throws SQLException {
+  void shouldUseProvidedConfigurationAndConfigProperties() throws SQLException {
     // given
     // a .properties file with process engine and job executor configuration
 

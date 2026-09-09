@@ -40,7 +40,7 @@ class CamundaEngineJobExecutorConfigTest {
   CamundaEngineConfig config;
 
   @Test
-  public void shouldLoadJobExecutorThreadPoolProperties() {
+  void shouldLoadJobExecutorThreadPoolProperties() {
     // given a custom application.properties file
 
     // then
@@ -49,7 +49,7 @@ class CamundaEngineJobExecutorConfigTest {
   }
 
   @Test
-  public void shouldLoadJobAcquisitionProperties() {
+  void shouldLoadJobAcquisitionProperties() {
     // given a custom application.properties file
 
     // then

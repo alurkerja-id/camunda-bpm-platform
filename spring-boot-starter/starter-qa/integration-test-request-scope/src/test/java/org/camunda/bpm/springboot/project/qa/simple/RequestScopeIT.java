@@ -40,7 +40,7 @@ class RequestScopeIT {
   protected RuntimeService runtimeService;
 
   @Test
-  public void shouldEvaluateScript(CapturedOutput logs) {
+  void shouldEvaluateScript(CapturedOutput logs) {
     // given
     repositoryService.createDeployment()
         .addModelInstance("scriptTaskProcess.bpmn", Bpmn.createExecutableProcess("scriptTaskProcess")

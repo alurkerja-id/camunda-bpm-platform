@@ -46,7 +46,7 @@ class CamundaEngineConfigFileTest {
   ProcessEngine processEngine;
 
   @Test
-  public void shouldLoadAllConfigProperties() throws SQLException {
+  void shouldLoadAllConfigProperties() throws SQLException {
     // given
     // a .properties file with process engine and job executor configuration
 

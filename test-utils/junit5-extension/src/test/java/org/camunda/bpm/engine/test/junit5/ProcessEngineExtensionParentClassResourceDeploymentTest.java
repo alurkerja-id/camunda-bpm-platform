@@ -30,7 +30,7 @@ class ProcessEngineExtensionParentClassResourceDeploymentTest extends ProcessEng
   ProcessEngine processEngine;
 
   @Test
-  public void testSuperClassResourcesDeployment() {
+  void testSuperClassResourcesDeployment() {
     List<ProcessDefinition> processDefinitions = processEngine.getRepositoryService().createProcessDefinitionQuery().list();
     Assertions.assertThat(processDefinitions).hasSize(2);
   }

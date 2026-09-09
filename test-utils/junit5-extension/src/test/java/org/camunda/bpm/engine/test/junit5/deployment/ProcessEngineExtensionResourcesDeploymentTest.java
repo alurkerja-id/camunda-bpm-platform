@@ -37,13 +37,13 @@ class ProcessEngineExtensionResourcesDeploymentTest {
       "processes/superProcess.bpmn",
       "processes/subProcess.bpmn"
       })
-  public void testDeployTwoDiagrams() {
+  void testDeployTwoDiagrams() {
     List<ProcessDefinition> processDefinitions = processEngine.getRepositoryService().createProcessDefinitionQuery().list();
     Assertions.assertThat(processDefinitions).hasSize(2);
   }
 
   @Test
-  public void testDeployTwoDiagramsFromClassLevel() {
+  void testDeployTwoDiagramsFromClassLevel() {
     List<ProcessDefinition> processDefinitions = processEngine.getRepositoryService().createProcessDefinitionQuery().list();
     Assertions.assertThat(processDefinitions).hasSize(2);
   }

@@ -38,7 +38,7 @@ class EmbeddedProcessEngineTest {
   public ProcessEngine processEngine;
 
   @Test
-  public void shouldProvideDefaultEmbeddedProcessEngine() {
+  void shouldProvideDefaultEmbeddedProcessEngine() {
     // given no process engine configuration
 
     // then

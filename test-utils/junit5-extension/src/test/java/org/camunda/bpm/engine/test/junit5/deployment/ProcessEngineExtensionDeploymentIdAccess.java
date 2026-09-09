@@ -23,7 +23,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 class ProcessEngineExtensionDeploymentIdAccess {
 
   @Test
-  public void testDeploymentIdWriteableForExtensions() {
+  void testDeploymentIdWriteableForExtensions() {
 
     class ProcessEngineExtensionExtension extends ProcessEngineExtension {
 
@@ -41,7 +41,7 @@ class ProcessEngineExtensionDeploymentIdAccess {
 
 
   @Test
-  public void testDeploymentIdReadableForExtensionsAndWrappers() {
+  void testDeploymentIdReadableForExtensionsAndWrappers() {
 
     class ProcessEngineExtensionExtension extends ProcessEngineExtension {
 

@@ -33,13 +33,13 @@ class ProcessEngineExtensionRequiredHistoryLevelAuditTest {
 
   @Test
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  public void testRequiredHistoryIgnored() {
+  void testRequiredHistoryIgnored() {
     fail("the configured history level is too high");
   }
 
   @Test
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_AUDIT)
-  public void testRequiredHistoryLevelMatch() {
+  void testRequiredHistoryLevelMatch() {
     assertEquals(extension.getProcessEngineConfiguration().getHistoryLevel().getName(),
         ProcessEngineConfiguration.HISTORY_AUDIT);
   }

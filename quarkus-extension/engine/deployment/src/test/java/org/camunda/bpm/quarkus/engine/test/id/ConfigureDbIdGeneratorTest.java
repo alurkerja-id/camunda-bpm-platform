@@ -59,7 +59,7 @@ class ConfigureDbIdGeneratorTest {
   }
 
   @Test
-  public void shouldConfigureDbIdGenerator() {
+  void shouldConfigureDbIdGenerator() {
     Task task = taskService.newTask();
     taskService.saveTask(task);
 

@@ -45,7 +45,7 @@ class CamundaEngineConfigurationConfigTest {
   ProcessEngine processEngine;
 
   @Test
-  public void shouldLoadProcessEngineConfigurationProperties() {
+  void shouldLoadProcessEngineConfigurationProperties() {
     // given a custom application.properties file
 
     // then
@@ -55,7 +55,7 @@ class CamundaEngineConfigurationConfigTest {
   }
 
   @Test
-  public void shouldApplyProcessEngineConfigurationProperties() {
+  void shouldApplyProcessEngineConfigurationProperties() {
     // given
     // a ProcessEngineConfiguration instance
     QuarkusProcessEngineConfiguration configuration

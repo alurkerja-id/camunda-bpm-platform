@@ -30,7 +30,7 @@ class ProcessEngineExtensionSetTimeTest {
   ProcessEngineExtension extension = ProcessEngineExtension.builder().build();
 
   @Test
-  public void shouldSetTime() {
+  void shouldSetTime() {
     // when
     extension.setCurrentTime(new Date(0));
 

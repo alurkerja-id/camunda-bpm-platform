@@ -38,7 +38,7 @@ class ChooseNotExistingDatasourceConfigurationTest {
       .setArchiveProducer(() -> ShrinkWrap.create(JavaArchive.class));
 
   @Test
-  public void shouldExpectException() {
+  void shouldExpectException() {
     // Exception is raised during application bootstrap.
     // See assertion in the extension registration above.
   }

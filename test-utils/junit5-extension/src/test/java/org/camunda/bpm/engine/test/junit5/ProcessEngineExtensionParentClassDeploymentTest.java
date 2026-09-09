@@ -26,7 +26,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 class ProcessEngineExtensionParentClassDeploymentTest extends ProcessEngineExtensionParentClassDeployment {
 
   @Test
-  public void testDeploymentOnParentClassLevel(ProcessEngine processEngine) {
+  void testDeploymentOnParentClassLevel(ProcessEngine processEngine) {
     assertNotNull(processEngine.getRepositoryService().createProcessDefinitionQuery().processDefinitionKey("testHelperDeploymentTest").singleResult(),
         "process is not deployed");
   }

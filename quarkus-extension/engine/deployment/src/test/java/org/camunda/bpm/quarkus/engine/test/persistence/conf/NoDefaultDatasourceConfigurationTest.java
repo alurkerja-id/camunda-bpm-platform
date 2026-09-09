@@ -42,7 +42,7 @@ class NoDefaultDatasourceConfigurationTest {
   protected ProcessEngine processEngine;
 
   @Test
-  public void shouldExpectException() {
+  void shouldExpectException() {
   }
 
 }

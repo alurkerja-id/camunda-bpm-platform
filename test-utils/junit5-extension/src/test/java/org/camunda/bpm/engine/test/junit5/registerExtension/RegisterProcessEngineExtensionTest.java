@@ -33,7 +33,7 @@ class RegisterProcessEngineExtensionTest {
 
   @Test
   @Deployment
-  public void registeredExtensionUsageExample() {
+  void registeredExtensionUsageExample() {
     RuntimeService runtimeService = extension.getProcessEngine()
         .getRuntimeService();
     runtimeService.startProcessInstanceByKey("registeredExtensionUsage");

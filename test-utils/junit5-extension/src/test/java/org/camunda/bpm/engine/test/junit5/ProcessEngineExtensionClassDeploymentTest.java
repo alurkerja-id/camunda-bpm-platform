@@ -28,14 +28,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 class ProcessEngineExtensionClassDeploymentTest {
 
   @Test
-  public void testDeploymentOnClassLevel(ProcessEngine processEngine) {
+  void testDeploymentOnClassLevel(ProcessEngine processEngine) {
     assertNotNull(processEngine.getRepositoryService().createProcessDefinitionQuery().processDefinitionKey("testHelperDeploymentTest").singleResult(),
         "No process deployed with class annotation");
   }
 
   @Test
   @Deployment
-  public void testDeploymentOnMethodOverridesClass(ProcessEngine processEngine) {
+  void testDeploymentOnMethodOverridesClass(ProcessEngine processEngine) {
     assertNotNull(processEngine.getRepositoryService().createProcessDefinitionQuery().processDefinitionKey("testHelperDeploymentTestOverride").singleResult(),
         "No process deployed for method");
   }
