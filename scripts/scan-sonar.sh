@@ -23,15 +23,31 @@
 # manually after a multi-minute stall to find this). Filed as a separate
 # fix (module reordering, or make it-runtime genuinely opt-in); until then,
 # this flag is required for the script to finish on a clean checkout.
+#
+# `-Dcargo.rmi.port` is a second, independent workaround for the SAME
+# clients/java/client module: even with `it-runtime` disabled, the module's
+# `cargo-maven3-plugin` `start-container`/`stop-container` executions are
+# bound directly in <build><plugins> (not gated by any profile), so they
+# always run. Cargo's RMI port (used for its own start/stop signalling, not
+# app traffic) defaults to 8205 for every container type and is NOT declared
+# anywhere in this repo's poms — it is the plugin's own hardcoded default,
+# overridable only via this Maven-recognized system property. On machines
+# where 8205 is already bound by something else entirely unrelated to this
+# build (e.g. this dev box has a long-running `mailpit` Docker container
+# mapping host 8205), the build fails immediately with "Port number 8205
+# ... is in use" instead of the tar.gz-hang above. Override the value if
+# 18205 is also taken on your machine.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 : "${SONAR_TOKEN:?SONAR_TOKEN must be set (a Sonar user token with Execute Analysis permission)}"
 SONAR_HOST_URL="${SONAR_HOST_URL:-https://sonar.javan.co.id}"
+CARGO_RMI_PORT="${CARGO_RMI_PORT:-18205}"
 
 ./mvnw -B clean install \
   "-Dmaven.test.failure.ignore=true" \
   -P '!it-runtime' \
+  "-Dcargo.rmi.port=${CARGO_RMI_PORT}" \
   org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
   "-Dsonar.host.url=${SONAR_HOST_URL}" \
   "-Dsonar.token=${SONAR_TOKEN}"
