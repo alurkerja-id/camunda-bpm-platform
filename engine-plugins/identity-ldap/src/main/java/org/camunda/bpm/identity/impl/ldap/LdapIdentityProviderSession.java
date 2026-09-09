@@ -547,7 +547,7 @@ public class LdapIdentityProviderSession implements ReadOnlyIdentityProvider {
     StringWriter resultDn = new StringWriter();
     for (String s : parts) {
       String part = s;
-      if (part == null || part.length() == 0) {
+      if (part == null || part.isEmpty()) {
         continue;
       }
       if (part.endsWith(",")) {
@@ -557,7 +557,7 @@ public class LdapIdentityProviderSession implements ReadOnlyIdentityProvider {
         part = part.substring(1);
       }
       String currentDn = resultDn.toString();
-      if (!currentDn.endsWith(",") && currentDn.length() > 0) {
+      if (!currentDn.endsWith(",") && !currentDn.isEmpty()) {
         resultDn.write(",");
       }
       resultDn.write(part);

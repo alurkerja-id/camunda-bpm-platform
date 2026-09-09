@@ -96,7 +96,7 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
     // verify content
     InputStream deploymentInputStream = repositoryService.getResourceAsStream(deploymentId, bpmnResourceName);
     String contentFromDeployment = readInputStreamToString(deploymentInputStream);
-    assertThat(contentFromDeployment.length() > 0).isTrue();
+    assertThat(!contentFromDeployment.isEmpty()).isTrue();
     assertThat(contentFromDeployment.contains("process id=\"emptyProcess\"")).isTrue();
 
     InputStream fileInputStream = ReflectUtil.getResourceAsStream("org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testGetBpmnXmlFileThroughService.bpmn20.xml");

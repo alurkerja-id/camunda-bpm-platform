@@ -111,7 +111,7 @@ public class ShellActivityBehavior extends AbstractBpmnActivityBehavior {
         Map<String, String> env = processBuilder.environment();
         env.clear();
       }
-      if (directoryStr != null && directoryStr.length() > 0)
+      if (directoryStr != null && !directoryStr.isEmpty())
         processBuilder.directory(new File(directoryStr));
 
       Process process = processBuilder.start();

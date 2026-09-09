@@ -1471,7 +1471,7 @@ public class BpmnParse extends Parse {
       }
     } else {
       String defaultSequenceFlow = (String) activity.getProperty("default");
-      boolean hasDefaultFlow = defaultSequenceFlow != null && defaultSequenceFlow.length() > 0;
+      boolean hasDefaultFlow = defaultSequenceFlow != null && !defaultSequenceFlow.isEmpty();
 
       ArrayList<PvmTransition> flowsWithoutCondition = new ArrayList<>();
       for (PvmTransition flow : activity.getOutgoingTransitions()) {
@@ -2284,7 +2284,7 @@ public class BpmnParse extends Parse {
       } else {
         addError("Invalid usage of type attribute on " + elementName + ": '" + type + "'", serviceTaskElement);
       }
-    } else if (className != null && className.trim().length() > 0) {
+    } else if (className != null && !className.trim().isEmpty()) {
       if (resultVariableName != null) {
         addError("'resultVariableName' not supported for " + elementName + " elements using 'class'", serviceTaskElement);
       }
@@ -2297,7 +2297,7 @@ public class BpmnParse extends Parse {
       activity.setActivityBehavior(new ServiceTaskDelegateExpressionActivityBehavior(expressionManager.createExpression(delegateExpression),
           parseFieldDeclarations(serviceTaskElement)));
 
-    } else if (expression != null && expression.trim().length() > 0) {
+    } else if (expression != null && !expression.trim().isEmpty()) {
       activity.setActivityBehavior(new ServiceTaskExpressionActivityBehavior(expressionManager.createExpression(expression), resultVariableName));
 
     }
@@ -2667,7 +2667,7 @@ public class BpmnParse extends Parse {
   protected FieldDeclaration parseExpressionFieldDeclaration(Element fieldDeclarationElement, Element serviceTaskElement, String fieldName) {
     try {
       String expression = getStringValueFromAttributeOrElement(PROPERTYNAME_EXPRESSION, PROPERTYNAME_EXPRESSION, fieldDeclarationElement, serviceTaskElement.attribute("id"));
-      if (expression != null && expression.trim().length() > 0) {
+      if (expression != null && !expression.trim().isEmpty()) {
         return new FieldDeclaration(fieldName, Expression.class.getName(), expressionManager.createExpression(expression));
       }
     } catch (ProcessEngineException ae) {
@@ -2691,13 +2691,13 @@ public class BpmnParse extends Parse {
       addError("Can't use attribute '" + attributeName + "' and element '" + elementName + "' together, only use one", element, ancestorElementId);
     } else if (childElement != null) {
       stringElementText = childElement.getText();
-      if (stringElementText == null || stringElementText.length() == 0) {
+      if (stringElementText == null || stringElementText.isEmpty()) {
         addError("No valid value found in attribute '" + attributeName + "' nor element '" + elementName + "'", element, ancestorElementId);
       } else {
         // Use text of element
         value = stringElementText;
       }
-    } else if (attributeValue != null && attributeValue.length() > 0) {
+    } else if (attributeValue != null && !attributeValue.isEmpty()) {
       // Using attribute
       value = attributeValue;
     }
@@ -4031,7 +4031,7 @@ public class BpmnParse extends Parse {
     ParameterValueProvider tenantIdValueProvider = null;
 
     String tenantId = callingActivityElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, attrName);
-    if (tenantId != null && tenantId.length() > 0) {
+    if (tenantId != null && !tenantId.isEmpty()) {
       tenantIdValueProvider = createParameterValueProvider(tenantId, expressionManager);
     }
 
@@ -4451,7 +4451,7 @@ public class BpmnParse extends Parse {
    * added.
    */
   protected boolean isValidEventNameForScope(String eventName, Element listenerElement, String ancestorElementId) {
-    if (eventName != null && eventName.trim().length() > 0) {
+    if (eventName != null && !eventName.trim().isEmpty()) {
       if ("start".equals(eventName) || "end".equals(eventName)) {
         return true;
       } else {

@@ -102,13 +102,13 @@ public abstract class AbstractProcessApplication implements ProcessApplicationIn
     if (annotation != null) {
       name = annotation.value();
 
-      if (name == null || name.length() == 0) {
+      if (name == null || name.isEmpty()) {
         name = annotation.name();
       }
     }
 
 
-    if (name == null || name.length() == 0) {
+    if (name == null || name.isEmpty()) {
       name = autodetectProcessApplicationName();
     }
 

@@ -67,7 +67,7 @@ public class PerfTestRunner {
       watchers = new ArrayList<PerfTestWatcher>();
       String[] watcherClassNames = testWatchers.split(",");
       for (String watcherClassName : watcherClassNames) {
-        if(watcherClassName.length() > 0) {
+        if(!watcherClassName.isEmpty()) {
           Object watcher = ReflectUtil.instantiate(watcherClassName);
           if(watcher instanceof PerfTestWatcher) {
             watchers.add((PerfTestWatcher) watcher);

@@ -248,7 +248,7 @@ public class ProcessDiagramRetrievalTest {
     html.append("        border: 2px dashed lightBlue;\n");
     html.append("        border-radius: 5px; -moz-border-radius: 5px;\n");
     html.append("      }\n");
-    if (highlightedActivityId != null && highlightedActivityId.length() > 0) {
+    if (highlightedActivityId != null && !highlightedActivityId.isEmpty()) {
       html.append("      #" + highlightedActivityId + " {border: 2px solid red;}\n");
     }
     html.append("    --></style>");

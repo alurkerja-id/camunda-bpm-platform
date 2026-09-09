@@ -42,7 +42,7 @@ public class SetJobDuedateCmd implements Command<Void>, Serializable {
   private final boolean cascade;
 
   public SetJobDuedateCmd(String jobId, Date newDuedate, boolean cascade) {
-    if (jobId == null || jobId.length() < 1) {
+    if (jobId == null || jobId.isEmpty()) {
       throw new ProcessEngineException("The job id is mandatory, but '" + jobId + "' has been provided.");
     }
     this.jobId = jobId;

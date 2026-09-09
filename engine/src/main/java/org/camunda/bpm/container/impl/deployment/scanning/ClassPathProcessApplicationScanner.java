@@ -174,7 +174,7 @@ public class ClassPathProcessApplicationScanner implements ProcessApplicationSca
         String modelFileName = zipEntry.getName();
         if (ProcessApplicationScanningUtil.isDeployable(modelFileName, additionalResourceSuffixes) && isBelowPath(modelFileName, paResourceRootPath)) {
           String resourceName = modelFileName;
-          if (paResourceRootPath != null && paResourceRootPath.length() > 0) {
+          if (paResourceRootPath != null && !paResourceRootPath.isEmpty()) {
             // "directory/sub_directory/process.bpmn" -> "sub_directory/process.bpmn"
             resourceName = modelFileName.replaceFirst(paResourceRootPath, "");
           }
@@ -185,7 +185,7 @@ public class ClassPathProcessApplicationScanner implements ProcessApplicationSca
             ZipEntry zipEntry2 = entries2.nextElement();
             String diagramFileName = zipEntry2.getName();
             if (ProcessApplicationScanningUtil.isDiagram(diagramFileName, modelFileName)) {
-              if (paResourceRootPath != null && paResourceRootPath.length() > 0) {
+              if (paResourceRootPath != null && !paResourceRootPath.isEmpty()) {
                 // "directory/sub_directory/process.png" -> "sub_directory/process.png"
                 diagramFileName = diagramFileName.replaceFirst(paResourceRootPath, "");
               }
@@ -205,7 +205,7 @@ public class ClassPathProcessApplicationScanner implements ProcessApplicationSca
     File[] paths = directory.listFiles();
 
     String currentPathSegment = localPath;
-    if (localPath != null && localPath.length() > 0) {
+    if (localPath != null && !localPath.isEmpty()) {
       if (localPath.indexOf('/') > 0) {
         currentPathSegment = localPath.substring(0, localPath.indexOf('/'));
         localPath = localPath.substring(localPath.indexOf('/') + 1, localPath.length());
@@ -219,7 +219,7 @@ public class ClassPathProcessApplicationScanner implements ProcessApplicationSca
 
       if(isPaLocal   // if it is not PA-local, we have already used the classloader to specify the root path explicitly.
               && currentPathSegment != null
-              && currentPathSegment.length()>0) {
+              && !currentPathSegment.isEmpty()) {
 
         if(path.isDirectory()) {
           // only descend into directory, if below resource root:
@@ -295,7 +295,7 @@ public class ClassPathProcessApplicationScanner implements ProcessApplicationSca
   }
 
   protected boolean isBelowPath(String processFileName, String paResourceRootPath) {
-    if(paResourceRootPath == null || paResourceRootPath.length() ==0 ) {
+    if(paResourceRootPath == null || paResourceRootPath.isEmpty() ) {
       return true;
     }
     else {
