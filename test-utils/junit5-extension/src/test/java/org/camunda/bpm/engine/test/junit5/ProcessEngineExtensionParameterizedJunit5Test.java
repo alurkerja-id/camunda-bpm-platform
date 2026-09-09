@@ -35,7 +35,7 @@ import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 @ExtendWith(ProcessEngineExtension.class)
-public class ProcessEngineExtensionParameterizedJunit5Test {
+class ProcessEngineExtensionParameterizedJunit5Test {
 
   ProcessEngine engine;
 

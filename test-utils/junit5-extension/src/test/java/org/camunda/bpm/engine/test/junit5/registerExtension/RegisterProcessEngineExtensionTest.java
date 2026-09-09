@@ -26,7 +26,7 @@ import org.camunda.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-public class RegisterProcessEngineExtensionTest {
+class RegisterProcessEngineExtensionTest {
 
   @RegisterExtension
   ProcessEngineExtension extension = ProcessEngineExtension.builder().build();

@@ -28,7 +28,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(ProcessEngineExtension.class)
 @Deployment(resources = {"processes/superProcess.bpmn", "processes/subProcess.bpmn"})
-public class ProcessEngineExtensionResourcesDeploymentTest {
+class ProcessEngineExtensionResourcesDeploymentTest {
 
   ProcessEngine processEngine;
 

@@ -30,7 +30,7 @@ import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ChooseDatasourceConfigurationTest {
+class ChooseDatasourceConfigurationTest {
 
   @RegisterExtension
   static QuarkusUnitTest unitTest = new ProcessEngineAwareExtension()

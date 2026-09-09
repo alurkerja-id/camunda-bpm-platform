@@ -21,7 +21,7 @@ import org.camunda.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-public class ProcessEngineExtensionManageDeploymentsTest {
+class ProcessEngineExtensionManageDeploymentsTest {
 
   public static final String SUB_PROCESS = "processes/subProcess.bpmn";
 

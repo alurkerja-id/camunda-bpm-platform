@@ -33,7 +33,7 @@ import org.junit.platform.testkit.engine.EngineExecutionResults;
 import org.junit.platform.testkit.engine.EngineTestKit;
 import org.junit.platform.testkit.engine.Events;
 
-public class EnsureDbCleanTest {
+class EnsureDbCleanTest {
 
   public static final String SUB_PROCESS = "processes/subProcess.bpmn";
 
@@ -70,7 +70,7 @@ public class EnsureDbCleanTest {
    * by the containing class
    */
   @EnabledIf("isEnabled")
-  public static class ClassUnderTest {
+  static class ClassUnderTest {
 
     private static boolean isEnabled = false;
 

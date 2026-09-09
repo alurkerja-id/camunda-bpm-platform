@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith({ OutputCaptureExtension.class, SpringExtension.class })
 @SpringBootTest(classes = { Application.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class RequestScopeIT {
+class RequestScopeIT {
 
   @Autowired
   protected RepositoryService repositoryService;

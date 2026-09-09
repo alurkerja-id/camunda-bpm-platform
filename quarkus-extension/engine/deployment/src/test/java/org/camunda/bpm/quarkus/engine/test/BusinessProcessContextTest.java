@@ -32,7 +32,7 @@ import jakarta.inject.Named;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class BusinessProcessContextTest {
+class BusinessProcessContextTest {
 
   @RegisterExtension
   protected static final QuarkusUnitTest unitTest = new ProcessEngineAwareExtension()

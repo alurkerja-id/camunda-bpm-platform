@@ -20,7 +20,7 @@ import org.camunda.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-public class ProcessEngineExtensionDeploymentIdAccess {
+class ProcessEngineExtensionDeploymentIdAccess {
 
   @Test
   public void testDeploymentIdWriteableForExtensions() {

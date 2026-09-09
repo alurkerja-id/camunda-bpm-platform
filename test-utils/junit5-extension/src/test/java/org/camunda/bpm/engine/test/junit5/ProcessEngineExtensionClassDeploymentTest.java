@@ -25,7 +25,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(ProcessEngineExtension.class)
 @Deployment
-public class ProcessEngineExtensionClassDeploymentTest {
+class ProcessEngineExtensionClassDeploymentTest {
 
   @Test
   public void testDeploymentOnClassLevel(ProcessEngine processEngine) {

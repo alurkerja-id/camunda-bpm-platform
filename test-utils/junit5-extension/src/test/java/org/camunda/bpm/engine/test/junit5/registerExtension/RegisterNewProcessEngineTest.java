@@ -28,7 +28,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-public class RegisterNewProcessEngineTest {
+class RegisterNewProcessEngineTest {
 
   private static ProcessEngine testEngine = ((ProcessEngineConfigurationImpl)ProcessEngineConfiguration
       .createStandaloneInMemProcessEngineConfiguration())

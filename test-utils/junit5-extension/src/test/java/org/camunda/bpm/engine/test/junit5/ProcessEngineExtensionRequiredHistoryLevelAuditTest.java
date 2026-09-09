@@ -24,7 +24,7 @@ import org.camunda.bpm.engine.test.RequiredHistoryLevel;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-public class ProcessEngineExtensionRequiredHistoryLevelAuditTest {
+class ProcessEngineExtensionRequiredHistoryLevelAuditTest {
 
   @RegisterExtension
   ProcessEngineExtension extension = ProcessEngineExtension.builder()

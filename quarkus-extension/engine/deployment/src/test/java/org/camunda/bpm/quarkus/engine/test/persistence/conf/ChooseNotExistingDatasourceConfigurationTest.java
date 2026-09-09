@@ -26,7 +26,7 @@ import jakarta.enterprise.inject.UnsatisfiedResolutionException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ChooseNotExistingDatasourceConfigurationTest {
+class ChooseNotExistingDatasourceConfigurationTest {
 
   @RegisterExtension
   static QuarkusUnitTest unitTest = new ProcessEngineAwareExtension()

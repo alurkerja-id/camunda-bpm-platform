@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(ProcessEngineExtension.class)
-public class ProcessEngineExtensionJunit5Test {
+class ProcessEngineExtensionJunit5Test {
 
   ProcessEngine engine;
 
