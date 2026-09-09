@@ -15,13 +15,74 @@ Camunda Platform 7 is a flexible framework for workflow and process automation. 
 
 ## Alurkerja fork — publishing to Javan Nexus
 
-Scan Sonar
+### Sonar & Trivy scan scope
 
-`mvn clean install "-Dmaven.test.failure.ignore=true" org.sonarsource.scanner.maven:sonar-maven-plugin:sonar "-Dsonar.host.url=https://sonar.javan.co.id" "-Dsonar.token=<token>"`
+Both scans have concrete, versioned scripts in `scripts/` — run those instead of copy-pasting
+commands from this README, so results are reproducible from a clean clone.
 
-Scan Trivy
+**Sonar project key.** The root `pom.xml` pins `sonar.projectKey=org.camunda.bpm:camunda-root` and
+`sonar.projectName=Camunda Platform - Root Pom` explicitly. Why pinning matters and why this key:
+the fork's groupId was renamed from `org.camunda.bpm` to `alurkerja.camunda.bpm` (commit
+`c3307546`), and the Sonar Maven plugin derives the project key from `groupId:artifactId` when
+none is pinned. Left unpinned, the first scan after the rename silently created a **second**,
+history-less Sonar project (`alurkerja.camunda.bpm:camunda-root`) — confirmed on
+`sonar.javan.co.id` (scanned once, 2026-08-24) — leaving the real baseline
+(`org.camunda.bpm:camunda-root`, 302 843 ncloc / 11 383 code smells / 291 bugs as of 2026-08-19)
+orphaned. A third stray project, `alurkerja-camunda-bpm-platform`, also exists from an earlier
+unpinned/partial run (scanned 5×, last 2026-08-30) and reports 0 bugs / 0 vulnerabilities / 3 156
+code smells on only 270 530 ncloc — i.e. it never covered the full reactor, so its "clean" numbers
+prove nothing. **Keep pointing at `org.camunda.bpm:camunda-root`** so history stays continuous;
+do not treat the other two keys as sources of truth, and consider deleting them on the Sonar
+server once this is confirmed (out of scope for this change — flag to Purwa).
 
-`trivy fs . --scanners vuln --timeout 30m --format template --template "@html.tpl" -o trivy-result.html`
+Sonar 26.8.0 exposes two parallel severity taxonomies for the same issues — legacy
+(`INFO`/`MINOR`/`MAJOR`/`CRITICAL`/`BLOCKER`) and Clean Code "software quality" impact severity
+(`LOW`/`MEDIUM`/`HIGH`/`BLOCKER`) — and they do not map 1:1. **The legacy taxonomy is the one this
+fork's tasks (`code smell info/minor = 0`) are written against**, so treat legacy severity as
+authoritative; report the Clean Code breakdown alongside it for anyone reading the dashboard
+directly.
+
+```bash
+scripts/scan-sonar.sh          # needs SONAR_TOKEN in the environment
+```
+
+**Trivy scope.** `trivy fs .` on the raw reactor scans every module, including ones that are never
+built into anything a consumer depends on: `qa/` (upgrade-path test fixtures), `examples/`
+(build-time fixture only — needed because `spring-boot-starter`'s tests depend on the invoice
+example), `javaee/*` and the JBoss/WildFly/Tomcat/`distro/run` packagings (no consumer here runs
+Camunda in an app server or as a standalone distro — `alurkerja-saas-camunda` embeds the engine as
+a Spring Boot 4 library), `connect`, `freemarker-template-engine`, `clients/java`, `quarkus-extension`,
+and the test-only `test-utils/archunit` / `test-utils/testcontainers`. None of these ship in what
+actually reaches production.
+
+The "reaches production" set was **not guessed** — it was read off
+`mvn -o dependency:list` on `alurkerja-saas-camunda`'s `master` branch (the trunk that's actually
+deployed; `develop` is stale and still on plain upstream Camunda 7.21.0), which imports
+`alurkerja.camunda.bpm:camunda-bom:7.24.0`. The resolved compile+test classpath maps to these
+reactor modules: `engine`, `engine-spring`, `engine-rest`, `engine-dmn`, `engine-plugins/spin-plugin`
+(not `engine-plugins/connect-plugin` or `engine-plugins/identity-ldap`), `juel`, `model-api`,
+`spring-boot-starter`, `webapps`, `distro/webjar`, `commons`, `spin`,
+`test-utils/junit5-extension`, `test-utils/junit5-extension-dmn`, plus the aggregator/version-pin
+poms `parent`, `bom`, `database`, `internal-dependencies` (no source of their own, but they pin the
+versions everything above resolves to, so a pinned-CVE manifest lives there).
+
+Two scans are kept, both run by the same script and reported separately — do not average them:
+
+| Scan | What | Why keep it |
+|------|------|-------------|
+| `full` | `trivy fs .` on the whole reactor | comparison baseline against the historical 1997-finding number; catches CVEs in modules we may adopt later |
+| `distributed` | `trivy fs` restricted to the modules above via `--skip-dirs` | the number that actually describes production risk today |
+
+`--severity CRITICAL,HIGH` is what fails the script (non-zero exit); `MEDIUM`/`LOW` are still
+reported in the output files but are informational only — this mirrors how `alurkerja-saas-camunda`
+already triages CVEs one-by-one in `.trivyignore` rather than gating on every severity. Anything
+excluded for a real reason (not just "different scope") goes in `.trivyignore` at repo root, one
+CVE per entry, each with a comment explaining why — see `alurkerja-saas-camunda/.trivyignore` for
+the style to follow.
+
+```bash
+scripts/scan-trivy.sh          # writes trivy-result-full.json/html and trivy-result-distributed.json/html
+```
 
 This repository is the Alurkerja-maintained fork of Camunda 7 (upstream CE is EoL). Artifacts are
 **not** published to Maven Central anymore; they go to the Javan Nexus:
