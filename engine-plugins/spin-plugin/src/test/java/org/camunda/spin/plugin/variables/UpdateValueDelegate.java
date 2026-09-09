@@ -17,12 +17,10 @@
 package org.camunda.spin.plugin.variables;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.bpm.engine.variable.Variables;
 import org.camunda.bpm.engine.variable.value.TypedValue;
 
 /**

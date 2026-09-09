@@ -31,7 +31,6 @@ import org.camunda.bpm.qa.upgrade.json.beans.Order;
 import org.camunda.bpm.qa.upgrade.json.beans.OrderDetails;
 import org.camunda.bpm.qa.upgrade.json.beans.RegularCustomer;
 import static org.camunda.bpm.engine.variable.Variables.serializedObjectValue;
-import static org.junit.Assert.assertEquals;
 
 public class CreateProcessInstanceWithJsonVariablesScenario {
 

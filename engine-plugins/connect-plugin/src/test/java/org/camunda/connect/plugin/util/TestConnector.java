@@ -16,7 +16,7 @@
  */
 package org.camunda.connect.plugin.util;
 
-import java.lang.Exception;import java.lang.Object;import java.lang.RuntimeException;import java.lang.String;import java.util.HashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.camunda.connect.impl.AbstractConnector;

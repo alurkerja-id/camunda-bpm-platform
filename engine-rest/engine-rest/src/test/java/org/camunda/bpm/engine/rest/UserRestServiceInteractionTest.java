@@ -58,7 +58,6 @@ import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
 import org.camunda.bpm.engine.rest.helper.MockProvider;
 import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
 import org.camunda.commons.testing.ProcessEngineLoggingRule;
-import org.camunda.commons.testing.WatchLogger;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;

@@ -24,7 +24,6 @@ import static org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeD
 import static org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.QUEUE_LENGTH;
 import static org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.THREAD_POOL_NAME;
 
-import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;

@@ -19,7 +19,6 @@ package org.camunda.bpm.dmn.engine.feel;
 import org.camunda.bpm.dmn.engine.DmnEngineException;
 import org.camunda.bpm.dmn.engine.test.DecisionResource;
 import org.camunda.bpm.dmn.engine.test.DmnEngineTest;
-import org.camunda.bpm.dmn.feel.impl.FeelException;
 import org.camunda.bpm.engine.variable.Variables;
 import org.junit.Ignore;
 import org.junit.Rule;

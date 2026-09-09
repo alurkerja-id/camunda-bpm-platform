@@ -23,11 +23,7 @@ import org.camunda.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
 import org.camunda.bpm.engine.cdi.test.CdiProcessEngineTestCase;
 import org.camunda.bpm.engine.cdi.test.impl.beans.InjectedProcessEngineBean;
 import org.camunda.bpm.engine.impl.test.TestHelper;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.*;
 import org.junit.runner.RunWith;
 

@@ -19,7 +19,6 @@ package org.camunda.bpm.qa.performance.engine.junit;
 import static org.camunda.bpm.engine.authorization.Authorization.ANY;
 import static org.camunda.bpm.engine.authorization.Authorization.AUTH_TYPE_GRANT;
 
-import java.util.List;
 
 import org.camunda.bpm.engine.AuthorizationService;
 import org.camunda.bpm.engine.HistoryService;
@@ -30,10 +29,8 @@ import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.authorization.Authorization;
 import org.camunda.bpm.engine.authorization.Permission;
 import org.camunda.bpm.engine.authorization.Resource;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
 import org.camunda.bpm.qa.performance.engine.framework.PerfTestBuilder;
 import org.camunda.bpm.qa.performance.engine.framework.PerfTestConfiguration;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.RuleChain;

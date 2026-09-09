@@ -17,7 +17,6 @@
 package org.camunda.bpm.model.cmmn.instance.camunda;
 
 import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CMMN11_NS;
 
 import java.util.Arrays;
 import java.util.Collection;

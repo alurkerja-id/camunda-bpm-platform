@@ -17,7 +17,6 @@
 package org.camunda.bpm.model.xml.testmodel;
 
 import org.camunda.bpm.model.xml.ModelInstance;
-import org.camunda.bpm.model.xml.impl.ModelInstanceImpl;
 import org.camunda.bpm.model.xml.impl.parser.AbstractModelParser;
 import org.camunda.bpm.model.xml.testmodel.instance.*;
 import org.junit.After;

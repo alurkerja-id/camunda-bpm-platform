@@ -19,13 +19,10 @@ package org.camunda.bpm.engine.rest.sub.batch.impl;
 import javax.ws.rs.core.Response.Status;
 
 import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.ManagementService;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.impl.persistence.entity.SuspensionState;
 import org.camunda.bpm.engine.rest.dto.SuspensionStateDto;
 import org.camunda.bpm.engine.rest.dto.batch.BatchDto;
-import org.camunda.bpm.engine.rest.dto.management.JobDefinitionSuspensionStateDto;
 import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
 import org.camunda.bpm.engine.rest.sub.batch.BatchResource;
 

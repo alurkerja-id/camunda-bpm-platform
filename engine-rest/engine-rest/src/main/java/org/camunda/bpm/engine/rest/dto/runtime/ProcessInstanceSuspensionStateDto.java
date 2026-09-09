@@ -20,7 +20,6 @@ import java.util.List;
 import javax.ws.rs.core.Response.Status;
 
 import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.batch.Batch;
 import org.camunda.bpm.engine.rest.dto.SuspensionStateDto;
 import org.camunda.bpm.engine.rest.dto.history.HistoricProcessInstanceQueryDto;
 import org.camunda.bpm.engine.rest.exception.InvalidRequestException;

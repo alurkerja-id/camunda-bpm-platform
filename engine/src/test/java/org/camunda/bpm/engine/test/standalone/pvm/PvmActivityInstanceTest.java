@@ -27,8 +27,6 @@ import org.camunda.bpm.engine.impl.pvm.ProcessDefinitionBuilder;
 import org.camunda.bpm.engine.impl.pvm.PvmExecution;
 import org.camunda.bpm.engine.impl.pvm.PvmProcessDefinition;
 import org.camunda.bpm.engine.impl.pvm.PvmProcessInstance;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
 import org.camunda.bpm.engine.impl.pvm.runtime.ExecutionImpl;
 import org.camunda.bpm.engine.test.standalone.pvm.activities.Automatic;
 import org.camunda.bpm.engine.test.standalone.pvm.activities.EmbeddedSubProcess;

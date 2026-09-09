@@ -32,7 +32,6 @@ import org.camunda.bpm.model.cmmn.instance.ConditionExpression;
 import org.camunda.bpm.model.cmmn.instance.Documentation;
 import org.camunda.bpm.model.cmmn.instance.EntryCriterion;
 import org.camunda.bpm.model.cmmn.instance.Event;
-import org.camunda.bpm.model.cmmn.instance.EventListener;
 import org.camunda.bpm.model.cmmn.instance.ExitCriterion;
 import org.camunda.bpm.model.cmmn.instance.HumanTask;
 import org.camunda.bpm.model.cmmn.instance.IfPart;

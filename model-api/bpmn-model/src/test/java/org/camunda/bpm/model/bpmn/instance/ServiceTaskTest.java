@@ -22,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.camunda.bpm.model.bpmn.BpmnTestConstants;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
-import static org.camunda.bpm.model.xml.test.AbstractModelElementInstanceTest.modelInstance;
 import org.junit.Test;
 
 /**

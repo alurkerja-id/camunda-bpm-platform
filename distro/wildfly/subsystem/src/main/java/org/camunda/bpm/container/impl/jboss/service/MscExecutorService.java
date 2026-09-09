@@ -18,7 +18,6 @@ package org.camunda.bpm.container.impl.jboss.service;
 
 import java.util.List;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Level;

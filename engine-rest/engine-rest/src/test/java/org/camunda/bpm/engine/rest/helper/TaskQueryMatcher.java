@@ -19,7 +19,6 @@ package org.camunda.bpm.engine.rest.helper;
 import org.camunda.bpm.engine.impl.TaskQueryImpl;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
-import org.mockito.ArgumentMatcher;
 
 /**
  * @author Thorben Lindhauer

@@ -24,7 +24,6 @@ import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
 import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
 import org.camunda.bpm.engine.impl.util.xml.Element;
 import org.camunda.bpm.engine.management.Metrics;
-import org.camunda.bpm.engine.runtime.Execution;
 
 /**
  * @author Daniel Meyer

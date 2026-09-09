@@ -21,7 +21,6 @@ import org.camunda.bpm.engine.exception.cmmn.CaseIllegalStateTransitionException
 import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState;
 import org.camunda.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
-import org.camunda.bpm.engine.impl.core.model.BaseCallableElement;
 import org.camunda.bpm.engine.impl.pvm.PvmException;
 
 /**

@@ -17,7 +17,6 @@
 package org.camunda.bpm.engine.rest.sub.task.impl;
 
 import java.util.List;
-import java.util.Map;
 
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.impl.TaskServiceImpl;

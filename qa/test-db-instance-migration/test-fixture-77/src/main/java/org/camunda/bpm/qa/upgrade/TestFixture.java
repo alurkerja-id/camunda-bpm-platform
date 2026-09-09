@@ -19,7 +19,6 @@ package org.camunda.bpm.qa.upgrade;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.qa.upgrade.ScenarioRunner;
 import org.camunda.bpm.qa.upgrade.variable.CreateProcessInstanceWithVariableScenario;
 
 public class TestFixture {

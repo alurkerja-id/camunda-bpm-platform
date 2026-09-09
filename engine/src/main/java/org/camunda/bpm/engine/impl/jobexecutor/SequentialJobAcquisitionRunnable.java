@@ -19,7 +19,6 @@ package org.camunda.bpm.engine.impl.jobexecutor;
 import java.util.Iterator;
 import java.util.List;
 
-import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
 import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;

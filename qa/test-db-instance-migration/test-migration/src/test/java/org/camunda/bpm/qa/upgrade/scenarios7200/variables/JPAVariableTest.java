@@ -16,7 +16,6 @@
  */
 package org.camunda.bpm.qa.upgrade.scenarios7200.variables;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.Map;

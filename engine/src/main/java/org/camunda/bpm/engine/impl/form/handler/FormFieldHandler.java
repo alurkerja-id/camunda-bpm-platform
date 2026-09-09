@@ -27,7 +27,6 @@ import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.FormFieldValidationConstraint;
 import org.camunda.bpm.engine.form.FormType;
 import org.camunda.bpm.engine.impl.el.StartProcessVariableScope;
-import org.camunda.bpm.engine.impl.form.FormDataImpl;
 import org.camunda.bpm.engine.impl.form.FormFieldImpl;
 import org.camunda.bpm.engine.impl.form.type.AbstractFormFieldType;
 import org.camunda.bpm.engine.impl.form.validator.FormFieldValidationException;

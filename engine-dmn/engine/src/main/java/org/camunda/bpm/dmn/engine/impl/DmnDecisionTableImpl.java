@@ -20,10 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.camunda.bpm.dmn.engine.DmnDecisionLogic;
-import org.camunda.bpm.dmn.engine.impl.hitpolicy.DefaultHitPolicyHandlerRegistry;
 import org.camunda.bpm.dmn.engine.impl.spi.hitpolicy.DmnHitPolicyHandler;
-import org.camunda.bpm.model.dmn.BuiltinAggregator;
-import org.camunda.bpm.model.dmn.HitPolicy;
 
 public class DmnDecisionTableImpl implements DmnDecisionLogic {
 

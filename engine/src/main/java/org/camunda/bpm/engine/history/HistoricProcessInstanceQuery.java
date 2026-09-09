@@ -24,7 +24,6 @@ import java.util.Set;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.query.Query;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
 
 /**

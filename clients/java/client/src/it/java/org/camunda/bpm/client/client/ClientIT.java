@@ -38,7 +38,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import org.camunda.bpm.client.ExternalTaskClient;
 import org.camunda.bpm.client.ExternalTaskClientBuilder;
-import org.camunda.bpm.client.UrlResolver;
 import org.camunda.bpm.client.backoff.BackoffStrategy;
 import org.camunda.bpm.client.backoff.ErrorAwareBackoffStrategy;
 import org.camunda.bpm.client.dto.ProcessDefinitionDto;

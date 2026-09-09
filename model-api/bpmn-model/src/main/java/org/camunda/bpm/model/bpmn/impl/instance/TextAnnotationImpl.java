@@ -21,7 +21,6 @@ import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ATTRIBUTE_
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_TEXT_ANNOTATION;
 
 import org.camunda.bpm.model.bpmn.instance.Artifact;
-import org.camunda.bpm.model.bpmn.instance.Script;
 import org.camunda.bpm.model.bpmn.instance.Text;
 import org.camunda.bpm.model.bpmn.instance.TextAnnotation;
 import org.camunda.bpm.model.xml.ModelBuilder;

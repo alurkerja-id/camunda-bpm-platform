@@ -20,7 +20,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import kong.unirest.ObjectMapper;
 import kong.unirest.Unirest;
 import org.camunda.bpm.TestProperties;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.openqa.selenium.chrome.ChromeDriverService;

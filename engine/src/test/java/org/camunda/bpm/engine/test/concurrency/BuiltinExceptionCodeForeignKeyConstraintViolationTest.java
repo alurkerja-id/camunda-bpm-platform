@@ -19,10 +19,8 @@ package org.camunda.bpm.engine.test.concurrency;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.db.sql.DbSqlSessionFactory;
 import org.camunda.bpm.engine.impl.errorcode.BuiltinExceptionCode;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.test.RequiredDatabase;
 import org.camunda.bpm.engine.test.Deployment;
 import org.junit.Test;
 

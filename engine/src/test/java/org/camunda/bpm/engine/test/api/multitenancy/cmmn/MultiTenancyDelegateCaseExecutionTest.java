@@ -19,8 +19,6 @@ package org.camunda.bpm.engine.test.api.multitenancy.cmmn;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.camunda.bpm.engine.delegate.DelegateCaseExecution;
-import org.camunda.bpm.engine.repository.CaseDefinition;
-import org.camunda.bpm.engine.runtime.CaseInstance;
 import org.camunda.bpm.engine.test.api.multitenancy.listener.AssertingCaseExecutionListener;
 import org.camunda.bpm.engine.test.api.multitenancy.listener.AssertingCaseExecutionListener.DelegateCaseExecutionAsserter;
 import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;

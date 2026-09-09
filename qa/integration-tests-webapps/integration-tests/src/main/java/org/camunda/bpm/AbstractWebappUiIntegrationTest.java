@@ -22,7 +22,6 @@ import java.net.URISyntaxException;
 import java.util.Locale;
 
 import org.camunda.bpm.util.SeleniumScreenshotRule;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

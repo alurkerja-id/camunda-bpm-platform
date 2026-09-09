@@ -16,12 +16,9 @@
  */
 package org.camunda.bpm.engine.rest.dto.message;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.camunda.bpm.engine.rest.dto.VariableValueDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ExecutionDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
 import org.camunda.bpm.engine.runtime.MessageCorrelationResultWithVariables;
 
 public class MessageCorrelationResultWithVariableDto extends MessageCorrelationResultDto {

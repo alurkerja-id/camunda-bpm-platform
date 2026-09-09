@@ -16,7 +16,6 @@
  */
 package org.camunda.spin;
 
-import org.camunda.spin.SpinRuntimeException;
 
 /**
  * @author Sebastian Menski

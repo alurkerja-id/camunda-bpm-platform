@@ -52,8 +52,6 @@ import org.camunda.bpm.engine.history.NativeHistoricVariableInstanceQuery;
 import org.camunda.bpm.engine.history.SetRemovalTimeSelectModeForHistoricBatchesBuilder;
 import org.camunda.bpm.engine.history.SetRemovalTimeSelectModeForHistoricDecisionInstancesBuilder;
 import org.camunda.bpm.engine.history.SetRemovalTimeSelectModeForHistoricProcessInstancesBuilder;
-import org.camunda.bpm.engine.history.SetRemovalTimeToHistoricBatchesBuilder;
-import org.camunda.bpm.engine.history.SetRemovalTimeToHistoricDecisionInstancesBuilder;
 import org.camunda.bpm.engine.history.UserOperationLogQuery;
 import org.camunda.bpm.engine.impl.batch.history.DeleteHistoricBatchCmd;
 import org.camunda.bpm.engine.impl.batch.history.HistoricBatchQueryImpl;
@@ -73,7 +71,6 @@ import org.camunda.bpm.engine.impl.dmn.cmd.DeleteHistoricDecisionInstanceByDefin
 import org.camunda.bpm.engine.impl.dmn.cmd.DeleteHistoricDecisionInstanceByInstanceIdCmd;
 import org.camunda.bpm.engine.impl.dmn.cmd.DeleteHistoricDecisionInstancesBatchCmd;
 import org.camunda.bpm.engine.impl.dmn.cmd.DeleteHistoricDecisionInstancesBulkCmd;
-import org.camunda.bpm.engine.history.SetRemovalTimeToHistoricProcessInstancesBuilder;
 import org.camunda.bpm.engine.impl.history.SetRemovalTimeToHistoricBatchesBuilderImpl;
 import org.camunda.bpm.engine.impl.history.SetRemovalTimeToHistoricDecisionInstancesBuilderImpl;
 import org.camunda.bpm.engine.impl.history.SetRemovalTimeToHistoricProcessInstancesBuilderImpl;

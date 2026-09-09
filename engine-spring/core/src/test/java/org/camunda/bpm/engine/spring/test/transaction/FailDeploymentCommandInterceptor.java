@@ -16,7 +16,6 @@
  */
 package org.camunda.bpm.engine.spring.test.transaction;
 
-import org.camunda.bpm.engine.impl.cmd.DeleteDeploymentCmd;
 import org.camunda.bpm.engine.impl.cmd.DeployCmd;
 import org.camunda.bpm.engine.impl.interceptor.Command;
 import org.camunda.bpm.engine.impl.interceptor.CommandInterceptor;

@@ -16,17 +16,10 @@
  */
 package org.camunda.bpm.qa.rolling.update.timestamp;
 
-import org.camunda.bpm.engine.ExternalTaskService;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
 import org.camunda.bpm.qa.rolling.update.AbstractRollingUpdateTestCase;
 import org.junit.Before;
-import org.junit.Rule;
 
 import java.util.Date;
 

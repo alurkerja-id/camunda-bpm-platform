@@ -16,7 +16,6 @@
  */
 package org.camunda.bpm.engine.rest.dto.telemetry;
 
-import static org.camunda.bpm.engine.impl.util.ParseUtil.parseServerVendor;
 
 import org.camunda.bpm.engine.telemetry.ApplicationServer;
 

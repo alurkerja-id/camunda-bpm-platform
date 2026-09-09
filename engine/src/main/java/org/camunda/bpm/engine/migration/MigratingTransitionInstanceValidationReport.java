@@ -18,7 +18,6 @@ package org.camunda.bpm.engine.migration;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.migration.MigrationInstruction;
 
 /**
  * Collects all failures for a migrating transition instance.

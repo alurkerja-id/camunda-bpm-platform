@@ -18,7 +18,6 @@ package org.camunda.bpm.model.cmmn.instance;
 
 import java.util.Collection;
 
-import org.camunda.bpm.model.cmmn.instance.CmmnModelElementInstanceTest;
 
 /**
  * @author Roman Smirnov

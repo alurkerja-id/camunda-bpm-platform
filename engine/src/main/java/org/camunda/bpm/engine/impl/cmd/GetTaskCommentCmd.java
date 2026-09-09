@@ -19,7 +19,6 @@ package org.camunda.bpm.engine.impl.cmd;
 import java.io.Serializable;
 import org.camunda.bpm.engine.impl.interceptor.Command;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.util.EnsureUtil;
 import org.camunda.bpm.engine.task.Comment;
 
 import static org.camunda.bpm.engine.impl.util.EnsureUtil.*;

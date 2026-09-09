@@ -18,13 +18,10 @@ package org.camunda.spin.plugin.variables;
 
 import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.impl.test.PluggableProcessEngineTestCase;
-import org.camunda.bpm.engine.impl.variable.serializer.VariableSerializerFactory;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.test.Deployment;
 import org.camunda.bpm.engine.variable.Variables;
 import org.camunda.bpm.engine.variable.value.ObjectValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
-import org.junit.Test;
 
 /**
  * @author Thorben Lindhauer

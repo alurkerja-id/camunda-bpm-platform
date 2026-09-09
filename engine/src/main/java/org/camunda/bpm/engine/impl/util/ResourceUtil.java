@@ -19,7 +19,6 @@ package org.camunda.bpm.engine.impl.util;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 
-import org.camunda.bpm.engine.exception.NotFoundException;
 import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.persistence.entity.DeploymentEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.ResourceEntity;

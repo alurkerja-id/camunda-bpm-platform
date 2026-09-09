@@ -17,7 +17,6 @@
 package org.camunda.bpm.engine.test.api.multitenancy.cmmn;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.fail;
 
 import org.camunda.bpm.engine.ProcessEngineException;

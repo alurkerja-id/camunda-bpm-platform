@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.camunda.bpm.dmn.feel.impl.juel.FeelSyntaxException;
 import org.camunda.bpm.engine.DecisionService;
-import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.test.Deployment;
 import org.camunda.bpm.engine.test.util.ProcessEngineBootstrapRule;
 import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;

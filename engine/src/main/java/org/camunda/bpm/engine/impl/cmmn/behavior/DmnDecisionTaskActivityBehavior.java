@@ -20,7 +20,6 @@ import static org.camunda.bpm.engine.impl.util.DecisionEvaluationUtil.evaluateDe
 
 import org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
 import org.camunda.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
-import org.camunda.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
 import org.camunda.bpm.engine.impl.dmn.result.DecisionResultMapper;
 
 /**

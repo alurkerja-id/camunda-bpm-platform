@@ -33,7 +33,6 @@ import org.camunda.bpm.engine.test.util.ProcessEngineBootstrapRule;
 import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
 import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.camunda.bpm.engine.variable.Variables;
-import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Rule;

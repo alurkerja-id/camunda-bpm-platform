@@ -23,7 +23,6 @@ import org.camunda.bpm.application.ProcessApplicationInfo;
 import org.camunda.bpm.container.RuntimeContainerDelegate;
 import org.camunda.bpm.engine.*;
 import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.exception.NullValueException;
 import org.camunda.bpm.engine.form.StartFormData;
 import org.camunda.bpm.engine.impl.calendar.DateTimeUtil;
 import org.camunda.bpm.engine.impl.digest._apacheCommonsCodec.Base64;

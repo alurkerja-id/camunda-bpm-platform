@@ -25,7 +25,6 @@ import org.camunda.bpm.engine.exception.NotValidException;
 import org.camunda.bpm.engine.history.DurationReportResult;
 import org.camunda.bpm.engine.history.HistoricTaskInstanceReport;
 import org.camunda.bpm.engine.history.HistoricTaskInstanceReportResult;
-import org.camunda.bpm.engine.impl.cfg.CommandChecker;
 import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.db.TenantCheck;
 import org.camunda.bpm.engine.impl.interceptor.Command;

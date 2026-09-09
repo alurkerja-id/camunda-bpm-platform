@@ -38,9 +38,7 @@ import org.junit.rules.RuleChain;
 
 import java.sql.SQLException;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 
 public class BuiltinExceptionCodeProviderDisabledWithCustomProviderTest {

@@ -19,7 +19,6 @@ package org.camunda.bpm.spring.boot.starter.actuator;
 import static java.util.Objects.requireNonNull;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;

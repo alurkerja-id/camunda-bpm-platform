@@ -20,7 +20,6 @@ import org.camunda.bpm.client.exception.BadRequestException;
 import org.camunda.bpm.client.exception.ConnectionLostException;
 import org.camunda.bpm.client.exception.EngineException;
 import org.camunda.bpm.client.exception.ExternalTaskClientException;
-import org.camunda.bpm.client.exception.NotFoundException;
 import org.camunda.bpm.client.exception.UnknownHttpErrorException;
 import org.camunda.bpm.client.task.ExternalTask;
 

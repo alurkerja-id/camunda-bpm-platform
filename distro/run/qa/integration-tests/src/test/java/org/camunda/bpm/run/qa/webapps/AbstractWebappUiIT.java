@@ -17,7 +17,6 @@
 package org.camunda.bpm.run.qa.webapps;
 
 import org.camunda.bpm.util.SeleniumScreenshotRule;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

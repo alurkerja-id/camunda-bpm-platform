@@ -16,8 +16,6 @@
  */
 package org.camunda.bpm.spring.boot.starter.test.nonpa.service;
 
-import jakarta.transaction.Transactional;
-import jakarta.transaction.Transactional.TxType;
 
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 

@@ -18,12 +18,9 @@ package org.camunda.bpm.model.cmmn;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Collection;
 
-import org.camunda.bpm.model.cmmn.impl.instance.CaseFileItemTransitionStandardEventImpl;
 import org.camunda.bpm.model.cmmn.instance.Case;
 import org.camunda.bpm.model.cmmn.instance.CasePlanModel;
-import org.camunda.bpm.model.cmmn.instance.DefaultControl;
 import org.camunda.bpm.model.cmmn.instance.Definitions;
 import org.camunda.bpm.model.cmmn.instance.HumanTask;
 import org.junit.Test;

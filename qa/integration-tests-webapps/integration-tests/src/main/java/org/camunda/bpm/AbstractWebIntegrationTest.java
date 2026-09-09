@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 import javax.ws.rs.core.MediaType;
 
 import kong.unirest.ObjectMapper;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.openqa.selenium.chrome.ChromeDriverService;

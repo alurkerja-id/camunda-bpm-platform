@@ -34,7 +34,6 @@ import org.camunda.bpm.engine.rest.dto.CountResultDto;
 import org.camunda.bpm.engine.rest.dto.ResourceOptionsDto;
 import org.camunda.bpm.engine.rest.dto.identity.GroupDto;
 import org.camunda.bpm.engine.rest.dto.identity.GroupQueryDto;
-import org.camunda.bpm.engine.rest.dto.task.TaskQueryDto;
 import org.camunda.bpm.engine.rest.sub.identity.GroupResource;
 
 /**
