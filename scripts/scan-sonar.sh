@@ -29,20 +29,28 @@
 # `cargo-maven3-plugin` `start-container`/`stop-container` executions are
 # bound directly in <build><plugins> (not gated by any profile), so they
 # always run. Cargo's RMI port (used for its own start/stop signalling, not
-# app traffic) defaults to 8205 for every container type and is NOT declared
-# anywhere in this repo's poms — it is the plugin's own hardcoded default,
-# overridable only via this Maven-recognized system property. On machines
-# where 8205 is already bound by something else entirely unrelated to this
-# build (e.g. this dev box has a long-running `mailpit` Docker container
-# mapping host 8205), the build fails immediately with "Port number 8205
-# ... is in use" instead of the tar.gz-hang above. Override the value if
-# 18205 is also taken on your machine.
+# app traffic) defaults to 8205 for every container type. Every OTHER port
+# this module's cargo config uses (servlet/AJP/shutdown) is deliberately
+# remapped into the 50000s in the pom's <properties> to avoid exactly this
+# class of collision — RMI was simply missed. Fixed at the source in this
+# branch: clients/java/client/pom.xml now declares `<cargo.rmi.port>50205
+# </cargo.rmi.port>` (same 50000s scheme as its siblings) AND wires it into
+# the cargo `<configuration><properties>` block, which is what actually
+# matters — passing `-Dcargo.rmi.port` alone on the CLI does NOT reach the
+# container's start-up configuration for this module (only the plugin's own
+# stop-goal happens to read the raw system property), so a CLI-only
+# workaround silently fails to prevent the collision at start time while
+# looking like it worked. Confirmed the hard way: this dev box has a
+# long-running `mailpit` Docker container permanently bound to host 8205,
+# and the build hung/failed at this exact step even with the CLI flag set,
+# until the pom itself was fixed. The env var below is kept only so a
+# collision on 50205 itself can still be overridden without editing the pom.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 : "${SONAR_TOKEN:?SONAR_TOKEN must be set (a Sonar user token with Execute Analysis permission)}"
 SONAR_HOST_URL="${SONAR_HOST_URL:-https://sonar.javan.co.id}"
-CARGO_RMI_PORT="${CARGO_RMI_PORT:-18205}"
+CARGO_RMI_PORT="${CARGO_RMI_PORT:-50205}"
 
 ./mvnw -B clean install \
   "-Dmaven.test.failure.ignore=true" \
