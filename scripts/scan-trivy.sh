@@ -23,9 +23,17 @@ if command -v trivy >/dev/null 2>&1; then
 else
   echo "trivy not found on PATH, using aquasec/trivy via Docker" >&2
   trivy() {
+    # Mount the host ~/.m2 read-only: for a reactor this size, Trivy's Java/pom
+    # analyzer walks parent-pom chains and — without a local repo to resolve
+    # from — does it over the network, straight into Maven Central's rate
+    # limit (`429 Too Many Requests`, then a 30 min IP-wide block; hit this
+    # once with an unmounted container). --offline-scan is the actual fix
+    # (forces Trivy to use whatever's on disk, never fall back to network);
+    # the ~/.m2 mount just makes the offline resolution more complete.
     docker run --rm \
       -v "$(pwd)":/repo -w /repo \
       -v trivy-cache:/root/.cache/ \
+      -v "${HOME}/.m2":/root/.m2:ro \
       aquasec/trivy:latest "$@"
   }
 fi
@@ -64,23 +72,25 @@ done
 echo "=== full reactor scan ==="
 trivy fs . \
   --scanners vuln \
+  --offline-scan \
   --timeout "${TIMEOUT}" \
   --severity "${SEVERITY_FAIL},MEDIUM,LOW" \
   --exit-code 0 \
   --format json -o trivy-result-full.json
-trivy fs . --scanners vuln --timeout "${TIMEOUT}" \
+trivy fs . --scanners vuln --offline-scan --timeout "${TIMEOUT}" \
   --format template --template "@contrib/html.tpl" -o trivy-result-full.html \
   2>/dev/null || echo "(html.tpl not found locally — json report is authoritative, see trivy-result-full.json)"
 
 echo "=== distributed (production-consumed) scan ==="
 trivy fs . \
   --scanners vuln \
+  --offline-scan \
   --timeout "${TIMEOUT}" \
   --severity "${SEVERITY_FAIL},MEDIUM,LOW" \
   --exit-code 0 \
   "${SKIP_ARGS[@]}" \
   --format json -o trivy-result-distributed.json
-trivy fs . --scanners vuln --timeout "${TIMEOUT}" "${SKIP_ARGS[@]}" \
+trivy fs . --scanners vuln --offline-scan --timeout "${TIMEOUT}" "${SKIP_ARGS[@]}" \
   --format template --template "@contrib/html.tpl" -o trivy-result-distributed.html \
   2>/dev/null || echo "(html.tpl not found locally — json report is authoritative, see trivy-result-distributed.json)"
 
