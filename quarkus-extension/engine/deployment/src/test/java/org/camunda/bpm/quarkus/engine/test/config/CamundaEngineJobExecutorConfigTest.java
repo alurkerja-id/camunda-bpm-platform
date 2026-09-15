@@ -28,7 +28,7 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-public class CamundaEngineJobExecutorConfigTest {
+class CamundaEngineJobExecutorConfigTest {
 
   @RegisterExtension
   static final QuarkusUnitTest unitTest = new ProcessEngineAwareExtension()
@@ -40,7 +40,7 @@ public class CamundaEngineJobExecutorConfigTest {
   CamundaEngineConfig config;
 
   @Test
-  public void shouldLoadJobExecutorThreadPoolProperties() {
+  void shouldLoadJobExecutorThreadPoolProperties() {
     // given a custom application.properties file
 
     // then
@@ -49,7 +49,7 @@ public class CamundaEngineJobExecutorConfigTest {
   }
 
   @Test
-  public void shouldLoadJobAcquisitionProperties() {
+  void shouldLoadJobAcquisitionProperties() {
     // given a custom application.properties file
 
     // then

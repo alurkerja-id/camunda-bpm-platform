@@ -35,7 +35,7 @@ import jakarta.inject.Inject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ConfigureDbIdGeneratorTest {
+class ConfigureDbIdGeneratorTest {
 
   @RegisterExtension
   static final QuarkusUnitTest unitTest = new ProcessEngineAwareExtension()
@@ -59,7 +59,7 @@ public class ConfigureDbIdGeneratorTest {
   }
 
   @Test
-  public void shouldConfigureDbIdGenerator() {
+  void shouldConfigureDbIdGenerator() {
     Task task = taskService.newTask();
     taskService.saveTask(task);
 

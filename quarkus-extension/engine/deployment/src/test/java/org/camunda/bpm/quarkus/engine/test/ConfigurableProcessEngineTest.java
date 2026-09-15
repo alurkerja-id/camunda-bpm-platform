@@ -30,7 +30,7 @@ import jakarta.inject.Inject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ConfigurableProcessEngineTest {
+class ConfigurableProcessEngineTest {
 
   @RegisterExtension
   static final QuarkusUnitTest unitTest = new QuarkusUnitTest()
@@ -57,7 +57,7 @@ public class ConfigurableProcessEngineTest {
   public ProcessEngine processEngine;
 
   @Test
-  public void shouldProvideCustomEmbeddedProcessEngine() {
+  void shouldProvideCustomEmbeddedProcessEngine() {
     // given a custom process engine configuration
 
     // then

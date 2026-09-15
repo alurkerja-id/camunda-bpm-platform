@@ -38,7 +38,7 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-public class ProcessEngineMultipleDeploymentTest {
+class ProcessEngineMultipleDeploymentTest {
 
   @RegisterExtension
   protected static final QuarkusUnitTest unitTest = new ProcessEngineAwareExtension()
@@ -85,7 +85,7 @@ public class ProcessEngineMultipleDeploymentTest {
   public ProcessEngine processEngine;
 
   @Test
-  public void shouldHaveDeployedResources() {
+  void shouldHaveDeployedResources() {
     // given
     RepositoryService repositoryService = processEngine.getRepositoryService();
 

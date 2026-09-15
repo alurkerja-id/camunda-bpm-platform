@@ -30,7 +30,7 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-public class CamundaEngineConfigurationConfigTest {
+class CamundaEngineConfigurationConfigTest {
 
   @RegisterExtension
   static final QuarkusUnitTest unitTest = new ProcessEngineAwareExtension()
@@ -45,7 +45,7 @@ public class CamundaEngineConfigurationConfigTest {
   ProcessEngine processEngine;
 
   @Test
-  public void shouldLoadProcessEngineConfigurationProperties() {
+  void shouldLoadProcessEngineConfigurationProperties() {
     // given a custom application.properties file
 
     // then
@@ -55,7 +55,7 @@ public class CamundaEngineConfigurationConfigTest {
   }
 
   @Test
-  public void shouldApplyProcessEngineConfigurationProperties() {
+  void shouldApplyProcessEngineConfigurationProperties() {
     // given
     // a ProcessEngineConfiguration instance
     QuarkusProcessEngineConfiguration configuration

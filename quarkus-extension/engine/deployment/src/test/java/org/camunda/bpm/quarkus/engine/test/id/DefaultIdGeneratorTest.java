@@ -32,7 +32,7 @@ import jakarta.inject.Inject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DefaultIdGeneratorTest {
+class DefaultIdGeneratorTest {
 
   @RegisterExtension
   static final QuarkusUnitTest unitTest = new ProcessEngineAwareExtension()
@@ -46,7 +46,7 @@ public class DefaultIdGeneratorTest {
   protected ProcessEngine processEngine;
 
   @Test
-  public void shouldConfigureStrongIdGenerator() {
+  void shouldConfigureStrongIdGenerator() {
     Task task = taskService.newTask();
     taskService.saveTask(task);
 
