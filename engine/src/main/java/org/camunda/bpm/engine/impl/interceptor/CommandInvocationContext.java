@@ -18,7 +18,6 @@ package org.camunda.bpm.engine.impl.interceptor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import org.camunda.bpm.application.InvocationContext;
 import org.camunda.bpm.application.ProcessApplicationReference;
@@ -107,12 +106,9 @@ public class CommandInvocationContext {
     ProcessApplicationReference targetProcessApplication = getTargetProcessApplication(nextInvocation.execution);
     if(requiresContextSwitch(targetProcessApplication)) {
 
-      Context.executeWithinProcessApplication(new Callable<Void>() {
-        public Void call() throws Exception {
-          performNext();
-          return null;
-        }
-
+      Context.executeWithinProcessApplication(() -> {
+        performNext();
+        return null;
       }, targetProcessApplication, new InvocationContext(nextInvocation.execution));
     }
     else {

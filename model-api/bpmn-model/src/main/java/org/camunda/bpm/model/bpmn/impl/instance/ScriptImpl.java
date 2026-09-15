@@ -23,7 +23,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_SCRIPT;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN script element
@@ -35,11 +34,7 @@ public class ScriptImpl extends BpmnModelElementInstanceImpl implements Script {
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Script.class, BPMN_ELEMENT_SCRIPT)
       .namespaceUri(BPMN20_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<Script>() {
-        public Script newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ScriptImpl(instanceContext);
-        }
-      });
+      .instanceProvider(ScriptImpl::new);
 
     typeBuilder.build();
   }

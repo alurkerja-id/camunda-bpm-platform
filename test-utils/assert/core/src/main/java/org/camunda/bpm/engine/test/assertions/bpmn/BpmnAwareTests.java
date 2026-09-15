@@ -952,7 +952,7 @@ public class BpmnAwareTests extends AbstractAssertions {
     if (externalTask == null || variables == null) {
       throw new IllegalArgumentException(format("Illegal call of completeExternalTask(externalTask = '%s', variables = '%s') - both must not be null!", externalTask, variables));
     }
-    complete(externalTask, variables, Collections.EMPTY_MAP);
+    complete(externalTask, variables, Collections.emptyMap());
   }
 
   /**
@@ -1039,7 +1039,7 @@ public class BpmnAwareTests extends AbstractAssertions {
     if (lockedExternalTask == null || variables == null) {
       throw new IllegalArgumentException(format("Illegal call of completeExternalTask(lockedExternalTask = '%s', variables = '%s') - both must not be null!", lockedExternalTask, variables));
     }
-    complete(lockedExternalTask, variables, Collections.EMPTY_MAP);
+    complete(lockedExternalTask, variables, Collections.emptyMap());
   }
 
   /**

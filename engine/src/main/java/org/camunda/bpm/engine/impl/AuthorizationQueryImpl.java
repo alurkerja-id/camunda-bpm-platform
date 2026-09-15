@@ -57,11 +57,13 @@ public class AuthorizationQueryImpl extends AbstractQuery<AuthorizationQuery, Au
     super(commandExecutor);
   }
 
+  @Override
   public AuthorizationQuery authorizationId(String id) {
     this.id = id;
     return this;
   }
 
+  @Override
   public AuthorizationQuery userIdIn(String... userIdIn) {
     if(groupIds != null) {
       throw new ProcessEngineException("Cannot query for user and group authorizations at the same time.");
@@ -70,6 +72,7 @@ public class AuthorizationQueryImpl extends AbstractQuery<AuthorizationQuery, Au
     return this;
   }
 
+  @Override
   public AuthorizationQuery groupIdIn(String... groupIdIn) {
     if(userIds != null) {
       throw new ProcessEngineException("Cannot query for user and group authorizations at the same time.");
@@ -78,25 +81,29 @@ public class AuthorizationQueryImpl extends AbstractQuery<AuthorizationQuery, Au
     return this;
   }
 
+  @Override
   public AuthorizationQuery resourceType(Resource resource) {
     return resourceType(resource.resourceType());
   }
 
+  @Override
   public AuthorizationQuery resourceType(int resourceType) {
     this.resourceType = resourceType;
     queryByResourceType = true;
     return this;
   }
 
+  @Override
   public AuthorizationQuery resourceId(String resourceId) {
     this.resourceId = resourceId;
     return this;
   }
 
+  @Override
   public AuthorizationQuery hasPermission(Permission p) {
     queryByPermission = true;
 
-    if (resourcesIntersection.size() == 0) {
+    if (resourcesIntersection.isEmpty()) {
       resourcesIntersection.addAll(Arrays.asList(p.getTypes()));
     } else {
       resourcesIntersection.retainAll(new HashSet<Resource>(Arrays.asList(p.getTypes())));
@@ -106,17 +113,20 @@ public class AuthorizationQueryImpl extends AbstractQuery<AuthorizationQuery, Au
     return this;
   }
 
+  @Override
   public AuthorizationQuery authorizationType(Integer type) {
     this.authorizationType = type;
     return this;
   }
 
+  @Override
   public long executeCount(CommandContext commandContext) {
     checkQueryOk();
     return commandContext.getAuthorizationManager()
       .selectAuthorizationCountByQueryCriteria(this);
   }
 
+  @Override
   public List<Authorization> executeList(CommandContext commandContext, Page page) {
     checkQueryOk();
     return commandContext.getAuthorizationManager()
@@ -188,11 +198,13 @@ public class AuthorizationQueryImpl extends AbstractQuery<AuthorizationQuery, Au
     return resourcesIntersection;
   }
 
+  @Override
   public AuthorizationQuery orderByResourceType() {
     orderBy(AuthorizationQueryProperty.RESOURCE_TYPE);
     return this;
   }
 
+  @Override
   public AuthorizationQuery orderByResourceId() {
     orderBy(AuthorizationQueryProperty.RESOURCE_ID);
     return this;

@@ -22,7 +22,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_RESOURCE_REF;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN resourceRef element of the BPMN tResourceRole type
@@ -34,11 +33,7 @@ public class ResourceRef extends BpmnModelElementInstanceImpl {
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ResourceRef.class, BPMN_ELEMENT_RESOURCE_REF)
       .namespaceUri(BPMN20_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<ResourceRef>() {
-        public ResourceRef newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ResourceRef(instanceContext);
-        }
-      });
+      .instanceProvider(ResourceRef::new);
 
     typeBuilder.build();
   }

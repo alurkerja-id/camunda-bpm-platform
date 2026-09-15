@@ -39,7 +39,8 @@ public class ServiceTaskConnectorActivityBehavior extends TaskActivityBehavior {
 
   /** cached connector instance for this activity.
    * Will be initialized after the first execution of this activity. */
-  protected Connector<?> connectorInstance;
+  // volatile: lazily initialized under double-checked locking
+  protected volatile Connector<?> connectorInstance;
 
   /** the local ioMapping for this connector. */
   protected IoMapping ioMapping;
@@ -49,6 +50,7 @@ public class ServiceTaskConnectorActivityBehavior extends TaskActivityBehavior {
     this.ioMapping = ioMapping;
   }
 
+  @Override
   public void execute(final ActivityExecution execution) throws Exception {
     ensureConnectorInitialized();
 
@@ -93,10 +95,12 @@ public class ServiceTaskConnectorActivityBehavior extends TaskActivityBehavior {
     if(connectorInstance == null) {
       synchronized (this) {
         if(connectorInstance == null) {
-          connectorInstance = Connectors.getConnector(connectorId);
-          if (connectorInstance == null) {
+          // resolved into a local first: the field is only published once it is known to be usable
+          Connector<?> connector = Connectors.getConnector(connectorId);
+          if (connector == null) {
             throw new ConnectorException("No connector found for connector id '" + connectorId + "'");
           }
+          connectorInstance = connector;
         }
       }
     }

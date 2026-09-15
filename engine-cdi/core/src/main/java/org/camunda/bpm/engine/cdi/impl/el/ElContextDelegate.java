@@ -66,6 +66,12 @@ public class ElContextDelegate extends ELContext {
   }
 
   @Override
+  public int hashCode() {
+    // equals delegates, so hashCode has to delegate as well to stay consistent with it
+    return delegateContext.hashCode();
+  }
+
+  @Override
   public Locale getLocale() {
     return delegateContext.getLocale();
   }

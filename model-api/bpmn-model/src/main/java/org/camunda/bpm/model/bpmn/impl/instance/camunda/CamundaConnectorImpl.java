@@ -26,7 +26,6 @@ import org.camunda.bpm.model.bpmn.instance.camunda.CamundaInputOutput;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 
@@ -43,11 +42,7 @@ public class CamundaConnectorImpl extends BpmnModelElementInstanceImpl implement
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaConnector.class, CAMUNDA_ELEMENT_CONNECTOR)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<CamundaConnector>() {
-        public CamundaConnector newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CamundaConnectorImpl(instanceContext);
-        }
-      });
+      .instanceProvider(CamundaConnectorImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 
@@ -65,18 +60,22 @@ public class CamundaConnectorImpl extends BpmnModelElementInstanceImpl implement
     super(instanceContext);
   }
 
+  @Override
   public CamundaConnectorId getCamundaConnectorId() {
     return camundaConnectorIdChild.getChild(this);
   }
 
+  @Override
   public void setCamundaConnectorId(CamundaConnectorId camundaConnectorId) {
     camundaConnectorIdChild.setChild(this, camundaConnectorId);
   }
 
+  @Override
   public CamundaInputOutput getCamundaInputOutput() {
     return camundaInputOutputChild.getChild(this);
   }
 
+  @Override
   public void setCamundaInputOutput(CamundaInputOutput camundaInputOutput) {
     camundaInputOutputChild.setChild(this, camundaInputOutput);
   }

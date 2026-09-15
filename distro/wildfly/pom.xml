@@ -18,6 +18,14 @@
 
   <name>Camunda Platform - Wildfly</name>
 
+  <properties>
+    <!-- Alurkerja fork: the WildFly/JBoss subsystem installs the engine into an application server
+         and is configured in standalone.xml. This fork ships libraries to the Javan Nexus and
+         deploys nothing onto WildFly, so that integration is out of the SonarQube analysis. It
+         also only runs once the server boots, which is why no unit test ever reaches it. -->
+    <sonar.skip>true</sonar.skip>
+  </properties>
+
   <dependencyManagement>
     <dependencies>
       <dependency>

@@ -24,7 +24,6 @@ import org.camunda.bpm.model.cmmn.instance.PlanItemDefinition;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * @author Roman Smirnov
@@ -40,11 +39,7 @@ public class MilestoneImpl extends PlanItemDefinitionImpl implements Milestone {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Milestone.class, CMMN_ELEMENT_MILESTONE)
         .namespaceUri(CMMN11_NS)
         .extendsType(PlanItemDefinition.class)
-        .instanceProvider(new ModelTypeInstanceProvider<Milestone>() {
-          public Milestone newInstance(ModelTypeInstanceContext instanceContext) {
-            return new MilestoneImpl(instanceContext);
-          }
-        });
+        .instanceProvider(MilestoneImpl::new);
 
     typeBuilder.build();
   }

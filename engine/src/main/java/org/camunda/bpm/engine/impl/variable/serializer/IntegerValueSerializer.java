@@ -31,6 +31,7 @@ public class IntegerValueSerializer extends PrimitiveValueSerializer<IntegerValu
     super(ValueType.INTEGER);
   }
 
+  @Override
   public IntegerValue convertToTypedValue(UntypedValueImpl untypedValue) {
     return Variables.integerValue((Integer) untypedValue.getValue(), untypedValue.isTransient());
   }
@@ -39,7 +40,7 @@ public class IntegerValueSerializer extends PrimitiveValueSerializer<IntegerValu
     Integer value = variableValue.getValue();
 
     if (value!=null) {
-      valueFields.setLongValue(((Integer) value).longValue());
+      valueFields.setLongValue(value.longValue());
       valueFields.setTextValue(value.toString());
     } else {
       valueFields.setLongValue(null);
@@ -48,6 +49,7 @@ public class IntegerValueSerializer extends PrimitiveValueSerializer<IntegerValu
 
   }
 
+  @Override
   public IntegerValue readValue(ValueFields valueFields, boolean asTransientValue) {
     Integer intValue = null;
 

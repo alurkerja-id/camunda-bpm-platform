@@ -24,7 +24,6 @@ import org.camunda.bpm.model.dmn.instance.InputDataReference;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class InputDataReferenceImpl extends DmnElementReferenceImpl implements InputDataReference {
 
@@ -36,11 +35,7 @@ public class InputDataReferenceImpl extends DmnElementReferenceImpl implements I
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(InputDataReference.class, DMN_ELEMENT_INPUT_DATA_REFERENCE)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(DmnElementReference.class)
-      .instanceProvider(new ModelTypeInstanceProvider<InputDataReference>() {
-        public InputDataReference newInstance(ModelTypeInstanceContext instanceContext) {
-          return new InputDataReferenceImpl(instanceContext);
-        }
-      });
+      .instanceProvider(InputDataReferenceImpl::new);
 
     typeBuilder.build();
   }

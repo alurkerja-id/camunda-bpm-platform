@@ -25,7 +25,6 @@ import org.camunda.bpm.model.cmmn.instance.Documentation;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
 /**
@@ -41,18 +40,22 @@ public class DocumentationImpl extends CmmnModelElementInstanceImpl implements D
     super(context);
   }
 
+  @Override
   public String getId() {
     return idAttribute.getValue(this);
   }
 
+  @Override
   public void setId(String id) {
     idAttribute.setValue(this, id);
   }
 
+  @Override
   public String getTextFormat() {
     return textFormatAttribute.getValue(this);
   }
 
+  @Override
   public void setTextFormat(String textFormat) {
     textFormatAttribute.setValue(this, textFormat);
   }
@@ -60,11 +63,7 @@ public class DocumentationImpl extends CmmnModelElementInstanceImpl implements D
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Documentation.class, CMMN_ELEMENT_DOCUMENTATION)
       .namespaceUri(CMMN11_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<Documentation>() {
-        public Documentation newInstance(ModelTypeInstanceContext instanceContext) {
-          return new DocumentationImpl(instanceContext);
-        }
-      });
+      .instanceProvider(DocumentationImpl::new);
 
     idAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_ID)
       .idAttribute()

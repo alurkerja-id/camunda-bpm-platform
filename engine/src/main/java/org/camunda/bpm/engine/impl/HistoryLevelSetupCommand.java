@@ -33,6 +33,7 @@ public final class HistoryLevelSetupCommand implements Command<Void> {
 
   private final static EnginePersistenceLogger LOG = ProcessEngineLogger.PERSISTENCE_LOGGER;
 
+  @Override
   public Void execute(CommandContext commandContext) {
 
     ProcessEngineConfigurationImpl processEngineConfiguration = Context.getProcessEngineConfiguration();

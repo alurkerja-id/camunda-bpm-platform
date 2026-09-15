@@ -51,6 +51,9 @@ public class LaunchThread extends Thread {
       LaunchThread launchThread = new LaunchThread(task, cmd, dir, launchCompleteText);
       launchThread.start();
       launchThread.join();
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new BuildException("couldn't launch cmd: "+cmdString(cmd), e);
     } catch (Exception e) {
       throw new BuildException("couldn't launch cmd: "+cmdString(cmd), e);
     }
@@ -65,6 +68,7 @@ public class LaunchThread extends Thread {
     return cmdText.toString();
   }
 
+  @Override
   public void run() {
     task.log("launching cmd '"+cmdString(cmd)+"' in dir '"+dir+"'");
     if (msg!=null) {

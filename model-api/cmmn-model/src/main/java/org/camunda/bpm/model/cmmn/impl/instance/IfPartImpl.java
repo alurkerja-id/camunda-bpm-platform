@@ -29,7 +29,6 @@ import org.camunda.bpm.model.cmmn.instance.IfPart;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
@@ -49,22 +48,27 @@ public class IfPartImpl extends CmmnElementImpl implements IfPart {
     super(instanceContext);
   }
 
+  @Override
   public CaseFileItem getContext() {
     return contextRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setContext(CaseFileItem caseFileItem) {
     contextRefAttribute.setReferenceTargetElement(this, caseFileItem);
   }
 
+  @Override
   public Collection<ConditionExpression> getConditions() {
     return conditionChild.get(this);
   }
 
+  @Override
   public ConditionExpression getCondition() {
     return conditionChild.getChild(this);
   }
 
+  @Override
   public void setCondition(ConditionExpression condition) {
     conditionChild.setChild(this, condition);
   }
@@ -73,11 +77,7 @@ public class IfPartImpl extends CmmnElementImpl implements IfPart {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(IfPart.class, CMMN_ELEMENT_IF_PART)
         .namespaceUri(CMMN11_NS)
         .extendsType(CmmnElement.class)
-        .instanceProvider(new ModelTypeInstanceProvider<IfPart>() {
-          public IfPart newInstance(ModelTypeInstanceContext instanceContext) {
-            return new IfPartImpl(instanceContext);
-          }
-        });
+        .instanceProvider(IfPartImpl::new);
 
     contextRefAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_CONTEXT_REF)
         .idAttributeReference(CaseFileItem.class)

@@ -26,9 +26,17 @@ public interface Expression extends CmmnElement {
 
   void setText(String text);
 
+  /**
+   * @deprecated the body element is CMMN 1.0; CMMN 1.1 holds the expression as text, see
+   *             {@link #getText()}
+   */
   @Deprecated
   String getBody();
 
+  /**
+   * @deprecated the body element is CMMN 1.0; CMMN 1.1 holds the expression as text, see
+   *             {@link #setText(String)}
+   */
   @Deprecated
   void setBody(String body);
 

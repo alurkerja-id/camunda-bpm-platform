@@ -31,7 +31,6 @@ import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.util.IoUtil;
 import org.jboss.vfs.VFS;
 import org.jboss.vfs.VirtualFile;
-import org.jboss.vfs.VirtualFileFilter;
 
 /**
  * <p>A {@link ProcessArchiveScanner} which uses Jboss VFS for
@@ -46,10 +45,12 @@ public class VfsProcessApplicationScanner implements ProcessApplicationScanner {
 
   private final static ContainerIntegrationLogger LOG = ProcessEngineLogger.CONTAINER_INTEGRATION_LOGGER;
 
+  @Override
   public Map<String, byte[]> findResources(ClassLoader classLoader, String resourceRootPath, URL processesXml) {
     return findResources(classLoader, resourceRootPath, processesXml, null);
   }
 
+  @Override
   public Map<String, byte[]> findResources(ClassLoader classLoader, String resourceRootPath, URL processesXml, String[] additionalResourceSuffixes) {
 
     // the map in which we collect the resources
@@ -107,19 +108,11 @@ public class VfsProcessApplicationScanner implements ProcessApplicationScanner {
 
   protected void scanRoot(VirtualFile processArchiveRoot, final String[] additionalResourceSuffixes, Map<String, byte[]> resources) {
     try {
-      List<VirtualFile> processes = processArchiveRoot.getChildrenRecursively(new VirtualFileFilter() {
-        public boolean accepts(VirtualFile file) {
-          return file.isFile() && ProcessApplicationScanningUtil.isDeployable(file.getName(), additionalResourceSuffixes);
-        }
-      });
+      List<VirtualFile> processes = processArchiveRoot.getChildrenRecursively(file -> file.isFile() && ProcessApplicationScanningUtil.isDeployable(file.getName(), additionalResourceSuffixes));
       for (final VirtualFile process : processes) {
         addResource(process, processArchiveRoot, resources);
         // find diagram(s) for process
-        List<VirtualFile> diagrams = process.getParent().getChildren(new VirtualFileFilter() {
-          public boolean accepts(VirtualFile file) {
-            return ProcessApplicationScanningUtil.isDiagram(file.getName(), process.getName());
-          }
-        });
+        List<VirtualFile> diagrams = process.getParent().getChildren(file -> ProcessApplicationScanningUtil.isDiagram(file.getName(), process.getName()));
         for (VirtualFile diagram : diagrams) {
           addResource(diagram, processArchiveRoot, resources);
         }

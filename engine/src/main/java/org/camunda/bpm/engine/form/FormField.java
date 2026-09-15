@@ -53,6 +53,8 @@ public interface FormField {
 
   /**
    * @return the default value for this form field.
+   *
+   * @deprecated returns the raw value; use {@link #getValue()} for the typed one
    */
   @Deprecated
   public Object getDefaultValue();

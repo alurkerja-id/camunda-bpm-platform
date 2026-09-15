@@ -26,7 +26,6 @@ import org.camunda.bpm.model.dmn.instance.List;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 
@@ -38,6 +37,7 @@ public class ListImpl extends ExpressionImpl implements List {
     super(instanceContext);
   }
 
+  @Override
   public Collection<Expression> getExpressions() {
     return expressionCollection.get(this);
   }
@@ -46,11 +46,7 @@ public class ListImpl extends ExpressionImpl implements List {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(List.class, DMN_ELEMENT_LIST)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(Expression.class)
-      .instanceProvider(new ModelTypeInstanceProvider<List>() {
-        public List newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ListImpl(instanceContext);
-        }
-      });
+      .instanceProvider(ListImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

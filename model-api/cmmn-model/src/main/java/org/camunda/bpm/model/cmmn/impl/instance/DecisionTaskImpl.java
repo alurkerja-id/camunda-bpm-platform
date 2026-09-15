@@ -35,7 +35,6 @@ import org.camunda.bpm.model.cmmn.instance.Task;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
@@ -63,54 +62,67 @@ public class DecisionTaskImpl extends TaskImpl implements DecisionTask {
     super(instanceContext);
   }
 
+  @Override
   public String getDecision() {
     return decisionRefAttribute.getValue(this);
   }
 
+  @Override
   public void setDecision(String decision) {
     decisionRefAttribute.setValue(this, decision);
   }
 
+  @Override
   public Collection<ParameterMapping> getParameterMappings() {
     return parameterMappingCollection.get(this);
   }
 
+  @Override
   public DecisionRefExpression getDecisionExpression() {
     return decisionRefExpressionChild.getChild(this);
   }
 
+  @Override
   public void setDecisionExpression(DecisionRefExpression decisionExpression) {
     decisionRefExpressionChild.setChild(this, decisionExpression);
   }
 
+  @Override
   public String getCamundaResultVariable() {
     return camundaResultVariableAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaResultVariable(String camundaResultVariable) {
     camundaResultVariableAttribute.setValue(this, camundaResultVariable);
   }
 
+  @Override
   public String getCamundaDecisionBinding() {
     return camundaDecisionBindingAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaDecisionBinding(String camundaDecisionBinding) {
     camundaDecisionBindingAttribute.setValue(this, camundaDecisionBinding);
   }
 
+  @Override
   public String getCamundaDecisionVersion() {
     return camundaDecisionVersionAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaDecisionVersion(String camundaDecisionVersion) {
     camundaDecisionVersionAttribute.setValue(this, camundaDecisionVersion);
   }
 
+  @Override
   public String getCamundaDecisionTenantId() {
     return camundaDecisionTenantIdAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaDecisionTenantId(String camundaDecisionTenantId) {
     camundaDecisionTenantIdAttribute.setValue(this, camundaDecisionTenantId);
   }
@@ -129,11 +141,7 @@ public class DecisionTaskImpl extends TaskImpl implements DecisionTask {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(DecisionTask.class, CMMN_ELEMENT_DECISION_TASK)
         .namespaceUri(CMMN11_NS)
         .extendsType(Task.class)
-        .instanceProvider(new ModelTypeInstanceProvider<DecisionTask>() {
-          public DecisionTask newInstance(ModelTypeInstanceContext instanceContext) {
-            return new DecisionTaskImpl(instanceContext);
-          }
-        });
+        .instanceProvider(DecisionTaskImpl::new);
 
     decisionRefAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_DECISION_REF)
         .build();

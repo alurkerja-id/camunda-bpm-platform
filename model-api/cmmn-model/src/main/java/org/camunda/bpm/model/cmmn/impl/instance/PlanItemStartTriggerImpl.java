@@ -28,7 +28,6 @@ import org.camunda.bpm.model.cmmn.instance.StartTrigger;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
@@ -46,19 +45,23 @@ public class PlanItemStartTriggerImpl extends StartTriggerImpl implements PlanIt
     super(instanceContext);
   }
 
+  @Override
   public PlanItem getSource() {
     return sourceRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setSource(PlanItem source) {
     sourceRefAttribute.setReferenceTargetElement(this, source);
   }
 
+  @Override
   public PlanItemTransition getStandardEvent() {
     PlanItemTransitionStandardEvent child = standardEventChild.getChild(this);
     return child.getValue();
   }
 
+  @Override
   public void setStandardEvent(PlanItemTransition standardEvent) {
     PlanItemTransitionStandardEvent child = standardEventChild.getChild(this);
     child.setValue(standardEvent);
@@ -68,11 +71,7 @@ public class PlanItemStartTriggerImpl extends StartTriggerImpl implements PlanIt
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(PlanItemStartTrigger.class, CMMN_ELEMENT_PLAN_ITEM_START_TRIGGER)
         .extendsType(StartTrigger.class)
         .namespaceUri(CMMN11_NS)
-        .instanceProvider(new ModelTypeInstanceProvider<PlanItemStartTrigger>() {
-          public PlanItemStartTrigger newInstance(ModelTypeInstanceContext instanceContext) {
-            return new PlanItemStartTriggerImpl(instanceContext);
-          }
-        });
+        .instanceProvider(PlanItemStartTriggerImpl::new);
 
     sourceRefAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_SOURCE_REF)
         .idAttributeReference(PlanItem.class)

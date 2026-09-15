@@ -170,46 +170,46 @@ public class SubscriptionConfiguration {
   public void fromAnnotation(ExternalTaskSubscription config) {
     setAutoOpen(config.autoOpen());
 
-    String topicName = config.topicName();
-    setTopicName(isNull(topicName) ? null : topicName);
+    String annotatedTopicName = config.topicName();
+    setTopicName(isNull(annotatedTopicName) ? null : annotatedTopicName);
 
-    long lockDuration = config.lockDuration();
-    setLockDuration(isNull(lockDuration) ? null : lockDuration);
+    long annotatedLockDuration = config.lockDuration();
+    setLockDuration(isNull(annotatedLockDuration) ? null : annotatedLockDuration);
 
-    String[] variableNames = config.variableNames();
-    setVariableNames(isNull(variableNames) ? null : Arrays.asList(variableNames));
+    String[] annotatedVariableNames = config.variableNames();
+    setVariableNames(isNull(annotatedVariableNames) ? null : Arrays.asList(annotatedVariableNames));
 
     setLocalVariables(config.localVariables());
 
-    String businessKey = config.businessKey();
-    setBusinessKey(isNull(businessKey) ? null : businessKey);
+    String annotatedBusinessKey = config.businessKey();
+    setBusinessKey(isNull(annotatedBusinessKey) ? null : annotatedBusinessKey);
 
-    String processDefinitionId = config.processDefinitionId();
-    setProcessDefinitionId(isNull(processDefinitionId) ? null : processDefinitionId);
+    String annotatedProcessDefinitionId = config.processDefinitionId();
+    setProcessDefinitionId(isNull(annotatedProcessDefinitionId) ? null : annotatedProcessDefinitionId);
 
-    String[] processDefinitionIdIn = config.processDefinitionIdIn();
-    setProcessDefinitionIdIn(isNull(processDefinitionIdIn) ? null :
-        Arrays.asList(processDefinitionIdIn));
+    String[] annotatedProcessDefinitionIdIn = config.processDefinitionIdIn();
+    setProcessDefinitionIdIn(isNull(annotatedProcessDefinitionIdIn) ? null :
+        Arrays.asList(annotatedProcessDefinitionIdIn));
 
-    String processDefinitionKey = config.processDefinitionKey();
-    setProcessDefinitionKey(isNull(processDefinitionKey) ? null : processDefinitionKey);
+    String annotatedProcessDefinitionKey = config.processDefinitionKey();
+    setProcessDefinitionKey(isNull(annotatedProcessDefinitionKey) ? null : annotatedProcessDefinitionKey);
 
-    String[] processDefinitionKeyIn = config.processDefinitionKeyIn();
-    setProcessDefinitionKeyIn(isNull(processDefinitionKeyIn) ? null :
-        Arrays.asList(processDefinitionKeyIn));
+    String[] annotatedProcessDefinitionKeyIn = config.processDefinitionKeyIn();
+    setProcessDefinitionKeyIn(isNull(annotatedProcessDefinitionKeyIn) ? null :
+        Arrays.asList(annotatedProcessDefinitionKeyIn));
 
-    String processDefinitionVersionTag = config.processDefinitionVersionTag();
-    setProcessDefinitionVersionTag(isNull(processDefinitionVersionTag) ? null :
-        processDefinitionVersionTag);
+    String annotatedProcessDefinitionVersionTag = config.processDefinitionVersionTag();
+    setProcessDefinitionVersionTag(isNull(annotatedProcessDefinitionVersionTag) ? null :
+        annotatedProcessDefinitionVersionTag);
 
-    ProcessVariable[] processVariables = config.processVariables();
-    setProcessVariables(isNull(processVariables) ? null : Arrays.stream(processVariables)
+    ProcessVariable[] annotatedProcessVariables = config.processVariables();
+    setProcessVariables(isNull(annotatedProcessVariables) ? null : Arrays.stream(annotatedProcessVariables)
         .collect(Collectors.toMap(ProcessVariable::name, ProcessVariable::value)));
 
     setWithoutTenantId(config.withoutTenantId());
 
-    String[] tenantIdIn = config.tenantIdIn();
-    setTenantIdIn(isNull(tenantIdIn) ? null : Arrays.asList(tenantIdIn));
+    String[] annotatedTenantIdIn = config.tenantIdIn();
+    setTenantIdIn(isNull(annotatedTenantIdIn) ? null : Arrays.asList(annotatedTenantIdIn));
 
     setIncludeExtensionProperties(config.includeExtensionProperties());
   }

@@ -26,11 +26,9 @@ import org.camunda.bpm.engine.rest.spi.ProcessEngineProvider;
 public class WebApplicationUtil {
 
   public static void setApplicationServer(String serverInfo) {
-    if (serverInfo != null && !serverInfo.isEmpty() ) {
-      // set the application server info globally for all engines in the container
-      if (PlatformDiagnosticsRegistry.getApplicationServer() == null) {
-        PlatformDiagnosticsRegistry.setApplicationServer(serverInfo);
-      }
+    // set the application server info globally for all engines in the container
+    if (serverInfo != null && !serverInfo.isEmpty() && PlatformDiagnosticsRegistry.getApplicationServer() == null) {
+      PlatformDiagnosticsRegistry.setApplicationServer(serverInfo);
     }
   }
 

@@ -24,7 +24,6 @@ import org.camunda.bpm.model.bpmn.instance.ComplexBehaviorDefinition;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN 2.0 complexBehaviorDefinition element
@@ -38,11 +37,7 @@ public class ComplexBehaviorDefinitionImpl extends BaseElementImpl implements Co
       .defineType(ComplexBehaviorDefinition.class, BPMN_ELEMENT_COMPLEX_BEHAVIOR_DEFINITION)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ComplexBehaviorDefinition>() {
-        public ComplexBehaviorDefinition newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ComplexBehaviorDefinitionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(ComplexBehaviorDefinitionImpl::new);
 
     typeBuilder.build();
   }

@@ -27,7 +27,6 @@ import org.camunda.bpm.model.cmmn.instance.TableItem;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 
@@ -44,10 +43,12 @@ public class PlanningTableImpl extends TableItemImpl implements PlanningTable {
     super(instanceContext);
   }
 
+  @Override
   public Collection<TableItem> getTableItems() {
     return tableItemCollection.get(this);
   }
 
+  @Override
   public Collection<ApplicabilityRule> getApplicabilityRules() {
     return applicabilityRuleCollection.get(this);
   }
@@ -56,11 +57,7 @@ public class PlanningTableImpl extends TableItemImpl implements PlanningTable {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(PlanningTable.class, CMMN_ELEMENT_PLANNING_TABLE)
         .namespaceUri(CMMN11_NS)
         .extendsType(TableItem.class)
-        .instanceProvider(new ModelTypeInstanceProvider<PlanningTable>() {
-          public PlanningTable newInstance(ModelTypeInstanceContext instanceContext) {
-            return new PlanningTableImpl(instanceContext);
-          }
-        });
+        .instanceProvider(PlanningTableImpl::new);
 
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();

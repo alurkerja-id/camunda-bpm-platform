@@ -17,7 +17,6 @@
 package org.camunda.bpm.engine.impl.cmd;
 
 import java.util.Arrays;
-import java.util.concurrent.Callable;
 
 import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.impl.cfg.CommandChecker;
@@ -103,14 +102,12 @@ public abstract class AbstractSetProcessDefinitionStateCmd extends AbstractSetSt
       processDefinitionManager.updateProcessDefinitionSuspensionStateByKey(processDefinitionKey, suspensionState);
     }
 
-    commandContext.runWithoutAuthorization(new Callable<Void>() {
-      public Void call() throws Exception {
-        UpdateJobDefinitionSuspensionStateBuilderImpl jobDefinitionSuspensionStateBuilder = createJobDefinitionCommandBuilder();
-        AbstractSetJobDefinitionStateCmd jobDefinitionCmd = getSetJobDefinitionStateCmd(jobDefinitionSuspensionStateBuilder);
-        jobDefinitionCmd.disableLogUserOperation();
-        jobDefinitionCmd.execute(commandContext);
-        return null;
-      }
+    commandContext.runWithoutAuthorization(() -> {
+      UpdateJobDefinitionSuspensionStateBuilderImpl jobDefinitionSuspensionStateBuilder = createJobDefinitionCommandBuilder();
+      AbstractSetJobDefinitionStateCmd jobDefinitionCmd = getSetJobDefinitionStateCmd(jobDefinitionSuspensionStateBuilder);
+      jobDefinitionCmd.disableLogUserOperation();
+      jobDefinitionCmd.execute(commandContext);
+      return null;
     });
   }
 

@@ -27,7 +27,6 @@ import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * @author Sebastian Menski
@@ -44,11 +43,7 @@ public class ErrorImpl extends RootElementImpl implements Error {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Error.class, BPMN_ELEMENT_ERROR)
       .namespaceUri(BpmnModelConstants.BPMN20_NS)
       .extendsType(RootElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Error>() {
-        public Error newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ErrorImpl(instanceContext);
-        }
-      });
+      .instanceProvider(ErrorImpl::new);
 
     nameAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_NAME)
       .build();
@@ -70,34 +65,42 @@ public class ErrorImpl extends RootElementImpl implements Error {
     super(context);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public String getErrorCode() {
     return errorCodeAttribute.getValue(this);
   }
 
+  @Override
   public void setErrorCode(String errorCode) {
     errorCodeAttribute.setValue(this, errorCode);
   }
 
+  @Override
   public String getCamundaErrorMessage() {
     return camundaErrorMessageAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaErrorMessage(String camundaErrorMessage) {
     camundaErrorMessageAttribute.setValue(this, camundaErrorMessage);
   }
 
+  @Override
   public ItemDefinition getStructure() {
     return structureRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setStructure(ItemDefinition structure) {
     structureRefAttribute.setReferenceTargetElement(this, structure);
   }

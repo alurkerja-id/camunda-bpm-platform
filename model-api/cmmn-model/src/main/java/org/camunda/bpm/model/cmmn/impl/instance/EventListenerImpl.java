@@ -24,7 +24,6 @@ import org.camunda.bpm.model.cmmn.instance.PlanItemDefinition;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * @author Roman Smirnov
@@ -40,11 +39,7 @@ public class EventListenerImpl extends PlanItemDefinitionImpl implements EventLi
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(EventListener.class, CMMN_ELEMENT_EVENT_LISTENER)
         .namespaceUri(CMMN11_NS)
         .extendsType(PlanItemDefinition.class)
-        .instanceProvider(new ModelTypeInstanceProvider<EventListener>() {
-          public EventListener newInstance(ModelTypeInstanceContext instanceContext) {
-            return new EventListenerImpl(instanceContext);
-          }
-        });
+        .instanceProvider(EventListenerImpl::new);
 
     typeBuilder.build();
   }

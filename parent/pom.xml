@@ -118,6 +118,26 @@
     <camunda.osgi.include.resource>{maven-resources}</camunda.osgi.include.resource>
     <camunda.osgi.embed />
     <plugin.version.maven-bundle>5.1.9</plugin.version.maven-bundle> <!-- compatible with JDK 17 -->
+
+    <!-- Alurkerja fork: JaCoCo coverage for the SonarQube analysis (see /sonar-project.properties).
+         jacoco:prepare-agent puts the agent's -javaagent flag in the argLine property, which the
+         surefire configurations below pick up as @{argLine}. This empty default keeps those
+         configurations valid when the agent does not run (-Djacoco.skip=true). -->
+    <plugin.version.jacoco>0.8.13</plugin.version.jacoco>
+    <argLine />
+
+    <!-- Alurkerja fork: for the modules that pull JUnit Platform 6 through
+         spring-boot-starter-test. Surefire 2.22.2 cannot launch that platform - see the comment in
+         spring-boot-starter/pom.xml. Only those modules override the version; everything else
+         stays on 2.22.2, which runs their JUnit 4 suites fine. -->
+    <plugin.version.surefire-junit-platform>3.5.2</plugin.version.surefire-junit-platform>
+
+    <!-- Two reports, and SonarQube takes the union of their hits: the module's own, plus the
+         reactor-wide aggregate from coverage-report/. The aggregate is what gives a module like
+         camunda-juel - no tests of its own, but exercised all over the engine suite - its real
+         number instead of 0%. Maven interpolates both into absolute paths per module, which the
+         aggregate one needs; that is why this is not in /sonar-project.properties. -->
+    <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml,${maven.multiModuleProjectDirectory}/coverage-report/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
   </properties>
 
   <dependencyManagement>
@@ -147,7 +167,10 @@
             <systemPropertyVariables>
               <myWorkingDir>${project.build.directory}</myWorkingDir>
             </systemPropertyVariables>
-            <argLine>-Xmx968m -Duser.language=en -Duser.region=US -XX:+HeapDumpOnOutOfMemoryError
+            <!-- @{argLine} = the JaCoCo agent (see the jacoco-maven-plugin below); it must stay
+                 first, and every surefire configuration that overrides this argLine has to repeat
+                 it or that module reports no coverage. -->
+            <argLine>@{argLine} -Xmx968m -Duser.language=en -Duser.region=US -XX:+HeapDumpOnOutOfMemoryError
               -XX:HeapDumpPath=${project.build.directory}/heap_dump.hprof
               --add-opens=java.base/java.util=ALL-UNNAMED
               --add-opens=java.base/java.lang=ALL-UNNAMED</argLine>
@@ -324,8 +347,39 @@
             <wait>750</wait>
           </configuration>
         </plugin>
+
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>${plugin.version.jacoco}</version>
+        </plugin>
       </plugins>
     </pluginManagement>
+
+    <plugins>
+      <!-- Alurkerja fork: measure test coverage in every module, so SonarQube gets a number
+           instead of 0%. report writes target/site/jacoco/jacoco.xml, which the scanner picks up
+           via sonar.coverage.jacoco.xmlReportPaths (/sonar-project.properties). -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 
   <profiles>

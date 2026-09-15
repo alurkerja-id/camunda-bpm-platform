@@ -43,10 +43,13 @@ public class AuthorizationException extends ProcessEngineException {
   // these properties have been replaced by the list of missingAuthorizations
   // and are only left because this is a public API package and users might
   // have subclasses relying on these fields
+  /** @deprecated use {@link #getMissingAuthorizations()} */
   @Deprecated
   protected String resourceType;
+  /** @deprecated use {@link #getMissingAuthorizations()} */
   @Deprecated
   protected String permissionName;
+  /** @deprecated use {@link #getMissingAuthorizations()} */
   @Deprecated
   protected String resourceId;
 
@@ -88,11 +91,11 @@ public class AuthorizationException extends ProcessEngineException {
    */
   @Deprecated
   public String getResourceType() {
-    String resourceType = null;
+    String type = null;
     if (missingAuthorizations.size() == 1) {
-      resourceType = missingAuthorizations.get(0).getResourceType();
+      type = missingAuthorizations.get(0).getResourceType();
     }
-    return resourceType;
+    return type;
   }
 
   /**

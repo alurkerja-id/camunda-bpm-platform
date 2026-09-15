@@ -22,6 +22,8 @@ package org.camunda.bpm.engine.history;
  * input for which tasks at what time.
  *
  * @author Tom Baeyens
+ *
+ * @deprecated form properties were replaced by form fields; use {@link HistoricFormField}
  */
 @Deprecated
 public interface HistoricFormProperty extends HistoricDetail {

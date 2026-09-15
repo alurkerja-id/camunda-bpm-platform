@@ -16,9 +16,7 @@
  */
 package org.camunda.bpm.webapp.plugin.resource;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +24,6 @@ import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
@@ -140,24 +137,20 @@ public class AbstractAppPluginRootResource<T extends AppPlugin> {
 
       if (assetStream != null) {
         String contentType = getContentType(file);
-        return Response.ok(new StreamingOutput() {
+        return Response.ok((StreamingOutput) out -> {
 
-          @Override
-          public void write(OutputStream out) throws IOException, WebApplicationException {
-
-            try {
-              byte[] buff = new byte[16 * 1000];
-              int read = 0;
-              while((read = filteredStream.read(buff)) > 0) {
-                out.write(buff, 0, read);
-              }
+          try {
+            byte[] buff = new byte[16 * 1000];
+            int read = 0;
+            while ((read = filteredStream.read(buff)) > 0) {
+              out.write(buff, 0, read);
             }
-            finally {
-              IoUtil.closeSilently(filteredStream);
-              IoUtil.closeSilently(out);
-            }
-
           }
+          finally {
+            IoUtil.closeSilently(filteredStream);
+            IoUtil.closeSilently(out);
+          }
+
         }, contentType).build();
       }
     }

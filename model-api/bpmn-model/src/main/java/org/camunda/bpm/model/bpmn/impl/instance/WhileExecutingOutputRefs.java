@@ -22,7 +22,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_WHILE_EXECUTING_OUTPUT_REFS;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN whileExecutingOutputRefs element of the BPMN tOutputSet type
@@ -34,11 +33,7 @@ public class WhileExecutingOutputRefs extends BpmnModelElementInstanceImpl {
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(WhileExecutingOutputRefs.class, BPMN_ELEMENT_WHILE_EXECUTING_OUTPUT_REFS)
       .namespaceUri(BPMN20_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<WhileExecutingOutputRefs>() {
-        public WhileExecutingOutputRefs newInstance(ModelTypeInstanceContext instanceContext) {
-          return new WhileExecutingOutputRefs(instanceContext);
-        }
-      });
+      .instanceProvider(WhileExecutingOutputRefs::new);
 
     typeBuilder.build();
   }

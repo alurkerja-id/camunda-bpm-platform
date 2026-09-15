@@ -48,7 +48,9 @@ public class ActivitiStateHandlerRegistry extends ReceiveTaskActivityBehavior im
 
 	private BeanFactory beanFactory;
 
-	private volatile ConcurrentHashMap<String, ActivitiStateHandlerRegistration> registrations = new ConcurrentHashMap<String, ActivitiStateHandlerRegistration>();
+	// the map is never replaced, and ConcurrentHashMap already handles concurrent access, so
+	// volatile on the reference bought nothing
+	private final ConcurrentHashMap<String, ActivitiStateHandlerRegistration> registrations = new ConcurrentHashMap<>();
 
 	private ProcessEngine processEngine;
 
@@ -102,7 +104,7 @@ public class ActivitiStateHandlerRegistry extends ReceiveTaskActivityBehavior im
 				registrationCollection.add(this.registrations.get(k));
 			}
 
-		if (registrationCollection.size() == 0) {
+		if (registrationCollection.isEmpty()) {
 			for (String k : this.registrations.keySet())
 				if (k.contains(regKeyWithJustState)) {
 					registrationCollection.add(this.registrations.get(k));
@@ -144,21 +146,24 @@ public class ActivitiStateHandlerRegistry extends ReceiveTaskActivityBehavior im
 			}
 		}
 
-		if ((r == null) && (rs.size() > 0)) {
+		if ((r == null) && (!rs.isEmpty())) {
 			r = rs.iterator().next();
 		}
 
 		return r;
 	}
 
+	@Override
 	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
 		this.beanFactory = beanFactory;
 	}
 
+	@Override
 	public void setBeanName(String name) {
 		this.beanName = name;
 	}
 
+	@Override
 	public void afterPropertiesSet() throws Exception {
 		Assert.notNull(this.processEngine, "the 'processEngine' can't be null");
 		logger.info( "this bean contains a processEngine reference. "+ this.processEngine);

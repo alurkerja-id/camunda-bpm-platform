@@ -52,6 +52,7 @@ public class SentryHandler extends CmmnElementHandler<Sentry, CmmnSentryDeclarat
 
   protected static final CmmnTransformerLogger LOG = ProcessEngineLogger.CMMN_TRANSFORMER_LOGGER;
 
+  @Override
   public CmmnSentryDeclaration handleElement(Sentry element, CmmnHandlerContext context) {
 
     String id = element.getId();
@@ -195,9 +196,7 @@ public class SentryHandler extends CmmnElementHandler<Sentry, CmmnSentryDeclarat
 
     try {
       variableTransition = variableOnPart.getVariableEvent();
-    } catch(IllegalArgumentException illegalArgumentexception) {
-      throw LOG.nonMatchingVariableEvents(sentryDeclaration.getId());
-    } catch(NullPointerException nullPointerException) {
+    } catch (IllegalArgumentException | NullPointerException illegalArgumentexception) {
       throw LOG.nonMatchingVariableEvents(sentryDeclaration.getId());
     }
 

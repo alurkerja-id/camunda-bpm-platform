@@ -25,6 +25,7 @@ import org.camunda.bpm.model.bpmn.builder.EndEventBuilder;
  */
 public interface EndEvent extends ThrowEvent {
 
+  @Override
   EndEventBuilder builder();
 
 }

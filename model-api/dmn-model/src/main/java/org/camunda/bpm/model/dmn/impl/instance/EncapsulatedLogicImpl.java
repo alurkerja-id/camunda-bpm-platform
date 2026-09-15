@@ -24,7 +24,6 @@ import org.camunda.bpm.model.dmn.instance.FunctionDefinition;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class EncapsulatedLogicImpl extends FunctionDefinitionImpl implements EncapsulatedLogic {
 
@@ -36,11 +35,7 @@ public class EncapsulatedLogicImpl extends FunctionDefinitionImpl implements Enc
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(EncapsulatedLogic.class, DMN_ELEMENT_ENCAPSULATED_LOGIC)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(FunctionDefinition.class)
-      .instanceProvider(new ModelTypeInstanceProvider<EncapsulatedLogic>() {
-        public EncapsulatedLogic newInstance(ModelTypeInstanceContext instanceContext) {
-          return new EncapsulatedLogicImpl(instanceContext);
-        }
-      });
+      .instanceProvider(EncapsulatedLogicImpl::new);
 
     typeBuilder.build();
   }

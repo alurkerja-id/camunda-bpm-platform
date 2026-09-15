@@ -41,6 +41,9 @@ public class UserTaskActivityBehavior extends TaskActivityBehavior implements Mi
 
   protected TaskDecorator taskDecorator;
 
+  /**
+   * @deprecated use {@link #UserTaskActivityBehavior(TaskDecorator)}
+   */
   @Deprecated
   public UserTaskActivityBehavior(ExpressionManager expressionManager, TaskDefinition taskDefinition) {
     this.taskDecorator = new TaskDecorator(taskDefinition, expressionManager);
@@ -62,6 +65,7 @@ public class UserTaskActivityBehavior extends TaskActivityBehavior implements Mi
     task.transitionTo(TaskState.STATE_CREATED);
   }
 
+  @Override
   public void signal(ActivityExecution execution, String signalName, Object signalData) throws Exception {
     leave(execution);
   }

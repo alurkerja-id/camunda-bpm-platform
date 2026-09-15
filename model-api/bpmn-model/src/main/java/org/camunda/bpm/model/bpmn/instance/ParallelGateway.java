@@ -39,6 +39,7 @@ public interface ParallelGateway extends Gateway {
   @Deprecated
   void setCamundaAsync(boolean isCamundaAsync);
 
+  @Override
   ParallelGatewayBuilder builder();
 
 }

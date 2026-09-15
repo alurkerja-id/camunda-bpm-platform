@@ -24,7 +24,6 @@ import org.camunda.bpm.model.cmmn.instance.PlanItemControl;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * @author Roman Smirnov
@@ -40,11 +39,7 @@ public class ItemControlImpl extends PlanItemControlImpl implements ItemControl 
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ItemControl.class, CMMN_ELEMENT_ITEM_CONTROL)
       .namespaceUri(CMMN11_NS)
       .extendsType(PlanItemControl.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ItemControl>() {
-        public ItemControl newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ItemControlImpl(instanceContext);
-        }
-      });
+      .instanceProvider(ItemControlImpl::new);
 
     typeBuilder.build();
   }

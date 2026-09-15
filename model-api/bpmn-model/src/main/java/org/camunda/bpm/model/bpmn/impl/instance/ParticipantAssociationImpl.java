@@ -27,7 +27,6 @@ import org.camunda.bpm.model.xml.type.reference.ElementReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_PARTICIPANT_ASSOCIATION;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN participantAssociation element
@@ -43,11 +42,7 @@ public class ParticipantAssociationImpl extends BaseElementImpl implements Parti
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ParticipantAssociation.class, BPMN_ELEMENT_PARTICIPANT_ASSOCIATION)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ParticipantAssociation>() {
-        public ParticipantAssociation newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ParticipantAssociationImpl(instanceContext);
-        }
-      });
+      .instanceProvider(ParticipantAssociationImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 
@@ -68,18 +63,22 @@ public class ParticipantAssociationImpl extends BaseElementImpl implements Parti
     super(instanceContext);
   }
 
+  @Override
   public Participant getInnerParticipant() {
     return innerParticipantRefChild.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setInnerParticipant(Participant innerParticipant) {
    innerParticipantRefChild.setReferenceTargetElement(this, innerParticipant);
   }
 
+  @Override
   public Participant getOuterParticipant() {
     return outerParticipantRefChild.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setOuterParticipant(Participant outerParticipant) {
      outerParticipantRefChild.setReferenceTargetElement(this, outerParticipant);
   }

@@ -19,6 +19,7 @@ package org.camunda.bpm.engine.impl.el;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import org.camunda.bpm.dmn.engine.impl.spi.el.ElProvider;
 import org.camunda.bpm.engine.delegate.VariableScope;
 import org.camunda.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
@@ -54,7 +55,7 @@ public class JuelExpressionManager implements ExpressionManager, ElProviderCompa
   protected FunctionMapper functionMapper;
   // Default implementation (does nothing)
   protected ELContext parsingElContext;
-  protected volatile ElProvider elProvider;
+  protected final AtomicReference<ElProvider> elProvider = new AtomicReference<>();
 
   public JuelExpressionManager() {
     this(null);
@@ -140,30 +141,30 @@ public class JuelExpressionManager implements ExpressionManager, ElProviderCompa
   }
 
   protected ELResolver createElResolver() {
-    CompositeELResolver elResolver = new CompositeELResolver();
-    elResolver.add(new VariableScopeElResolver());
-    elResolver.add(new VariableContextElResolver());
-    elResolver.add(new MockElResolver());
+    CompositeELResolver compositeResolver = new CompositeELResolver();
+    compositeResolver.add(new VariableScopeElResolver());
+    compositeResolver.add(new VariableContextElResolver());
+    compositeResolver.add(new MockElResolver());
 
     if (beans != null) {
       // ACT-1102: Also expose all beans in configuration when using standalone
       // engine, not
       // in spring-context
-      elResolver.add(new ReadOnlyMapELResolver(beans));
+      compositeResolver.add(new ReadOnlyMapELResolver(beans));
     }
 
-    elResolver.add(new ProcessApplicationElResolverDelegate());
+    compositeResolver.add(new ProcessApplicationElResolverDelegate());
 
-    elResolver.add(new ArrayELResolver());
-    elResolver.add(new ListELResolver());
-    elResolver.add(new MapELResolver());
-    elResolver.add(new ProcessApplicationBeanElResolverDelegate());
+    compositeResolver.add(new ArrayELResolver());
+    compositeResolver.add(new ListELResolver());
+    compositeResolver.add(new MapELResolver());
+    compositeResolver.add(new ProcessApplicationBeanElResolverDelegate());
 
-    return elResolver;
+    return compositeResolver;
   }
 
   protected FunctionMapper createFunctionMapper() {
-    FunctionMapper functionMapper = new FunctionMapper() {
+    return new FunctionMapper() {
       @Override
       public Method resolveFunction(String prefix, String localName) {
         String fullName = localName;
@@ -174,19 +175,20 @@ public class JuelExpressionManager implements ExpressionManager, ElProviderCompa
       }
 
     };
-    return functionMapper;
   }
 
   @Override
   public ElProvider toElProvider() {
-    if (elProvider == null) {
-      synchronized (this) {
-        if (elProvider == null) {
-          elProvider = createElProvider();
-        }
+    ElProvider provider = elProvider.get();
+    if (provider == null) {
+      // two threads arriving together may both build one, but only the first is published and
+      // every caller gets that same instance back
+      provider = createElProvider();
+      if (!elProvider.compareAndSet(null, provider)) {
+        provider = elProvider.get();
       }
     }
-    return elProvider;
+    return provider;
   }
 
   protected ElProvider createElProvider() {

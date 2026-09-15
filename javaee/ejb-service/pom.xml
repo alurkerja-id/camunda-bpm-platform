@@ -11,6 +11,11 @@
 
   <name>Camunda Platform - EJB Service</name>
 
+  <properties>
+    <!-- Alurkerja fork: Java EE integration, out of the SonarQube analysis - see javaee/ejb-client. -->
+    <sonar.skip>true</sonar.skip>
+  </properties>
+
   <parent>
     <groupId>alurkerja.camunda.bpm</groupId>
     <artifactId>camunda-database-settings</artifactId>

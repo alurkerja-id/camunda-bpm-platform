@@ -17,7 +17,6 @@
 package org.camunda.bpm.dmn.feel.impl.juel.transform;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.camunda.bpm.dmn.feel.impl.juel.FeelEngineLogger;
@@ -26,7 +25,14 @@ import org.camunda.bpm.dmn.feel.impl.juel.FeelLogger;
 public class ListTransformer implements FeelToJuelTransformer {
 
   public static final FeelEngineLogger LOG = FeelLogger.ENGINE_LOGGER;
-  // regex to split by comma which does a positive look ahead to ignore commas enclosed in quotes
+  /**
+   * The regex that splitExpression used to run. Kept because it is public API, but no longer used:
+   * see splitExpression for why.
+   *
+   * @deprecated splitting is done by scanning the expression, this constant is here for
+   *             compatibility only
+   */
+  @Deprecated(since = "7.24.3")
   public static final String COMMA_SEPARATOR_REGEX = ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)";
 
   public boolean canTransform(String feelExpression) {
@@ -42,8 +48,40 @@ public class ListTransformer implements FeelToJuelTransformer {
     return splitExpression(feelExpression);
   }
 
+  /**
+   * Splits on commas that are not enclosed in quotes. This used to be a single regex with a
+   * look-ahead, {@code ,(?=([^"]*"[^"]*")*[^"]*$)}, whose nested quantifier drove the matcher into
+   * deep recursion: a perfectly valid list of 5000 quoted entries ended in a StackOverflowError,
+   * and the cost grew far faster than the input.
+   *
+   * <p>The look-ahead accepted a comma exactly when the rest of the expression held an even number
+   * of quotes, so that is what this counts - in one pass, without recursion.
+   */
   private List<String> splitExpression(String feelExpression) {
-    return Arrays.asList(feelExpression.split(COMMA_SEPARATOR_REGEX, -1));
+    int totalQuotes = 0;
+    for (int i = 0; i < feelExpression.length(); i++) {
+      if (feelExpression.charAt(i) == '"') {
+        totalQuotes++;
+      }
+    }
+
+    List<String> parts = new ArrayList<>();
+    int quotesSeen = 0;
+    int partStart = 0;
+    for (int i = 0; i < feelExpression.length(); i++) {
+      char character = feelExpression.charAt(i);
+      if (character == '"') {
+        quotesSeen++;
+      }
+      // quotes after this position are totalQuotes - quotesSeen, and the look-ahead required that
+      // count to be even
+      else if (character == ',' && (totalQuotes - quotesSeen) % 2 == 0) {
+        parts.add(feelExpression.substring(partStart, i));
+        partStart = i + 1;
+      }
+    }
+    parts.add(feelExpression.substring(partStart));
+    return parts;
   }
 
   protected List<String> transformExpressions(FeelToJuelTransform transform, String feelExpression, String inputName) {

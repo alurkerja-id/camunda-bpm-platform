@@ -48,7 +48,8 @@ public class MBeanServiceContainer implements PlatformServiceContainer {
 
   private final static ContainerIntegrationLogger LOG = ProcessEngineLogger.CONTAINER_INTEGRATION_LOGGER;
 
-  protected MBeanServer mBeanServer;
+  // volatile: lazily initialized under double-checked locking
+  protected volatile MBeanServer mBeanServer;
 
   protected Map<ObjectName, PlatformService<?>> servicesByName = new ConcurrentHashMap<ObjectName, PlatformService<?>>();
 
@@ -57,6 +58,7 @@ public class MBeanServiceContainer implements PlatformServiceContainer {
 
   public final static String SERVICE_NAME_EXECUTOR = "executor-service";
 
+  @Override
   public synchronized <S> void startService(ServiceType serviceType, String localName, PlatformService<S> service) {
 
     String serviceName = composeLocalName(serviceType, localName);
@@ -64,6 +66,7 @@ public class MBeanServiceContainer implements PlatformServiceContainer {
 
   }
 
+  @Override
   public synchronized <S> void startService(String name, PlatformService<S> service) {
 
     ObjectName serviceName = getObjectName(name);
@@ -104,15 +107,17 @@ public class MBeanServiceContainer implements PlatformServiceContainer {
     return type.getTypeName() + ":type=" + localName;
   }
 
+  @Override
   public synchronized void stopService(ServiceType serviceType, String localName) {
     String globalName = composeLocalName(serviceType, localName);
     stopService(globalName);
 
   }
 
+  @Override
   public synchronized void stopService(String name) {
 
-    final MBeanServer mBeanServer = getmBeanServer();
+    final MBeanServer beanServer = getmBeanServer();
 
     ObjectName serviceName = getObjectName(name);
 
@@ -120,32 +125,50 @@ public class MBeanServiceContainer implements PlatformServiceContainer {
 
     ensureNotNull("Cannot stop service " + serviceName + ": no such service registered", "service", service);
 
+    // the stop failure is held rather than left to a finally block: throwing from inside finally
+    // discarded whatever service.stop() had thrown, so a service that failed to stop reported
+    // only the unregistration problem, if any
+    RuntimeException stopFailure = null;
     try {
       // call the service-provided stop behavior
       service.stop(this);
-    } finally {
-      // always unregister, even if the stop method throws an exception.
-      try {
-        mBeanServer.unregisterMBean(serviceName);
-        servicesByName.remove(serviceName);
+    }
+    catch (RuntimeException e) {
+      stopFailure = e;
+    }
+
+    // always unregister, even if the stop method threw an exception.
+    try {
+      beanServer.unregisterMBean(serviceName);
+      servicesByName.remove(serviceName);
+    }
+    catch (Throwable t) {
+      ProcessEngineException unregisterFailure = LOG.exceptionWhileUnregisteringService(serviceName.getCanonicalName(), t);
+      if (stopFailure != null) {
+        unregisterFailure.addSuppressed(stopFailure);
       }
-      catch (Throwable t) {
-        throw LOG.exceptionWhileUnregisteringService(serviceName.getCanonicalName(), t);
-      }
+      throw unregisterFailure;
+    }
+
+    if (stopFailure != null) {
+      throw stopFailure;
     }
 
   }
 
+  @Override
   public DeploymentOperationBuilder createDeploymentOperation(String name) {
     return new DeploymentOperation.DeploymentOperationBuilder(this, name);
   }
 
+  @Override
   public DeploymentOperationBuilder createUndeploymentOperation(String name) {
     DeploymentOperationBuilder builder = new DeploymentOperation.DeploymentOperationBuilder(this, name);
     builder.setUndeploymentOperation();
     return builder;
   }
 
+  @Override
   public void executeDeploymentOperation(DeploymentOperation operation) {
 
     Stack<DeploymentOperation> currentOperationContext = activeDeploymentOperations.get();
@@ -171,6 +194,7 @@ public class MBeanServiceContainer implements PlatformServiceContainer {
    * get a specific service by name or null if no such Service exists.
    *
    */
+  @Override
   public <S> S getService(ServiceType type, String localName) {
     String globalName = composeLocalName(type, localName);
     ObjectName serviceName = getObjectName(globalName);
@@ -206,6 +230,7 @@ public class MBeanServiceContainer implements PlatformServiceContainer {
    * Service exists.
    *
    */
+  @Override
   public <S> S getServiceValue(ServiceType type, String localName) {
     String globalName = composeLocalName(type, localName);
     ObjectName serviceName = getObjectName(globalName);
@@ -215,6 +240,7 @@ public class MBeanServiceContainer implements PlatformServiceContainer {
   /**
    * @return all services for a specific {@link ServiceType}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public <S> List<PlatformService<S>> getServicesByType(ServiceType type) {
 
@@ -232,6 +258,7 @@ public class MBeanServiceContainer implements PlatformServiceContainer {
   /**
    * @return the service names ( {@link ObjectName} ) for all services for a given type
    */
+  @Override
   public Set<String> getServiceNames(ServiceType type) {
     String typeName = composeLocalName(type, "*");
     ObjectName typeObjectName = getObjectName(typeName);
@@ -246,6 +273,7 @@ public class MBeanServiceContainer implements PlatformServiceContainer {
   /**
    * @return the values of all services for a specific {@link ServiceType}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public <S> List<S> getServiceValuesByType(ServiceType type) {
 

@@ -88,9 +88,7 @@ public class HalRelationCacheConfiguration {
   protected void parseCacheImplementationClass(JsonNode jsonConfiguration) {
     JsonNode jsonNode = jsonConfiguration.get(CONFIG_CACHE_IMPLEMENTATION);
     if (jsonNode != null) {
-      String cacheImplementationClassName = jsonNode.textValue();
-      Class<?> cacheImplementationClass = loadClass(cacheImplementationClassName);
-      setCacheImplementationClass(cacheImplementationClass);
+      setCacheImplementationClass(loadClass(jsonNode.textValue()));
     }
     else {
       throw new HalRelationCacheConfigurationException("Unable to find the " + CONFIG_CACHE_IMPLEMENTATION + " parameter");
@@ -100,9 +98,9 @@ public class HalRelationCacheConfiguration {
   protected void parseCacheConfigurations(JsonNode jsonConfiguration) {
     JsonNode jsonNode = jsonConfiguration.get(CONFIG_CACHES);
     if (jsonNode != null) {
-      Iterator<Entry<String, JsonNode>> cacheConfigurations = jsonNode.fields();
-      while (cacheConfigurations.hasNext()) {
-        Entry<String, JsonNode> cacheConfiguration = cacheConfigurations.next();
+      Iterator<Entry<String, JsonNode>> configuredCaches = jsonNode.fields();
+      while (configuredCaches.hasNext()) {
+        Entry<String, JsonNode> cacheConfiguration = configuredCaches.next();
         parseCacheConfiguration(cacheConfiguration.getKey(), cacheConfiguration.getValue());
       }
     }

@@ -18,6 +18,10 @@
   </parent>
 
   <properties>
+    <!-- Alurkerja fork: demo applications, not shipped code - left out of the SonarQube analysis.
+         Their "compromised password" findings are the demo/demo credentials on purpose. -->
+    <sonar.skip>true</sonar.skip>
+
     <version.jetty>8.1.14.v20131031</version.jetty>
   </properties>
 

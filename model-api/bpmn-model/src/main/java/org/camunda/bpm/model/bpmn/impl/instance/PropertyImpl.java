@@ -38,11 +38,7 @@ public class PropertyImpl extends ItemAwareElementImpl implements Property {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Property.class, BPMN_ELEMENT_PROPERTY)
       .namespaceUri(BPMN20_NS)
       .extendsType(ItemAwareElement.class)
-      .instanceProvider(new ModelElementTypeBuilder.ModelTypeInstanceProvider<Property>() {
-        public Property newInstance(ModelTypeInstanceContext instanceContext) {
-          return new PropertyImpl(instanceContext);
-        }
-      });
+      .instanceProvider(PropertyImpl::new);
 
     nameAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_NAME)
       .build();
@@ -54,10 +50,12 @@ public class PropertyImpl extends ItemAwareElementImpl implements Property {
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }

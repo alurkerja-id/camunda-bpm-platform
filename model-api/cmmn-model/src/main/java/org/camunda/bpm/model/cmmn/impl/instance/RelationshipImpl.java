@@ -31,7 +31,6 @@ import org.camunda.bpm.model.cmmn.instance.Target;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
@@ -51,11 +50,7 @@ public class RelationshipImpl extends CmmnElementImpl implements Relationship {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Relationship.class, CMMN_ELEMENT_RELATIONSHIP)
       .namespaceUri(CMMN11_NS)
       .extendsType(CmmnElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Relationship>() {
-        public Relationship newInstance(ModelTypeInstanceContext instanceContext) {
-          return new RelationshipImpl(instanceContext);
-        }
-      });
+      .instanceProvider(RelationshipImpl::new);
 
     typeAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_TYPE)
       .required()
@@ -81,26 +76,32 @@ public class RelationshipImpl extends CmmnElementImpl implements Relationship {
     super(instanceContext);
   }
 
+  @Override
   public String getType() {
     return typeAttribute.getValue(this);
   }
 
+  @Override
   public void setType(String type) {
     typeAttribute.setValue(this, type);
   }
 
+  @Override
   public RelationshipDirection getDirection() {
     return directionAttribute.getValue(this);
   }
 
+  @Override
   public void setDirection(RelationshipDirection direction) {
     directionAttribute.setValue(this, direction);
   }
 
+  @Override
   public Collection<Source> getSources() {
     return sourceCollection.get(this);
   }
 
+  @Override
   public Collection<Target> getTargets() {
     return targetCollection.get(this);
   }

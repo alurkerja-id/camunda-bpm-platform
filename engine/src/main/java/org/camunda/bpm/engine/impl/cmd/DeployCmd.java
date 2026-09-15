@@ -444,13 +444,13 @@ public class DeployCmd implements Command<DeploymentWithDefinitions>, Serializab
 
     ResourceManager resourceManager = commandContext.getResourceManager();
 
-    for (String deploymentId : resourcesById.keySet()) {
-      Set<String> resourceIds = resourcesById.get(deploymentId);
+    for (Map.Entry<String, Set<String>> entry : resourcesById.entrySet()) {
+      Set<String> resourceIds = entry.getValue();
 
       String[] resourceIdArray = resourceIds.toArray(new String[resourceIds.size()]);
-      List<ResourceEntity> resources = resourceManager.findResourceByDeploymentIdAndResourceIds(deploymentId, resourceIdArray);
+      List<ResourceEntity> resources = resourceManager.findResourceByDeploymentIdAndResourceIds(entry.getKey(), resourceIdArray);
 
-      ensureResourcesWithIdsExist(deploymentId, resourceIds, resources);
+      ensureResourcesWithIdsExist(entry.getKey(), resourceIds, resources);
 
       result.addAll(resources);
     }
@@ -463,13 +463,13 @@ public class DeployCmd implements Command<DeploymentWithDefinitions>, Serializab
 
     ResourceManager resourceManager = commandContext.getResourceManager();
 
-    for (String deploymentId : resourcesByName.keySet()) {
-      Set<String> resourceNames = resourcesByName.get(deploymentId);
+    for (Map.Entry<String, Set<String>> entry : resourcesByName.entrySet()) {
+      Set<String> resourceNames = entry.getValue();
 
       String[] resourceNameArray = resourceNames.toArray(new String[resourceNames.size()]);
-      List<ResourceEntity> resources = resourceManager.findResourceByDeploymentIdAndResourceNames(deploymentId, resourceNameArray);
+      List<ResourceEntity> resources = resourceManager.findResourceByDeploymentIdAndResourceNames(entry.getKey(), resourceNameArray);
 
-      ensureResourcesWithNamesExist(deploymentId, resourceNames, resources);
+      ensureResourcesWithNamesExist(entry.getKey(), resourceNames, resources);
 
       result.addAll(resources);
     }

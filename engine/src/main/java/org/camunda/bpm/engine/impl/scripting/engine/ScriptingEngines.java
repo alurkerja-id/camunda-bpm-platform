@@ -97,6 +97,7 @@ public class ScriptingEngines implements DmnScriptEngineResolver {
    * @return the script engine
    * @throws ProcessEngineException if no such engine can be found.
    */
+  @Override
   public ScriptEngine getScriptEngineForLanguage(String language) {
 
     if (language != null) {
@@ -107,10 +108,8 @@ public class ScriptingEngines implements DmnScriptEngineResolver {
     ProcessEngineConfigurationImpl config = Context.getProcessEngineConfiguration();
 
     ScriptEngine engine = null;
-    if (config.isEnableFetchScriptEngineFromProcessApplication()) {
-      if(pa != null) {
-        engine = getPaScriptEngine(language, pa);
-      }
+    if (config.isEnableFetchScriptEngineFromProcessApplication() && pa != null) {
+      engine = getPaScriptEngine(language, pa);
     }
 
     if(engine == null) {

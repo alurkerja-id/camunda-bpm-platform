@@ -58,16 +58,19 @@ public class ProcessDefinitionImpl extends ScopeImpl implements PvmProcessDefini
     ensureNotNull("Process '" + name + "' has no default start activity (e.g. none start event), hence you cannot use 'startProcessInstanceBy...' but have to start it using one of the modeled start events (e.g. message start events)", "initial", initial);
   }
 
+  @Override
   public PvmProcessInstance createProcessInstance() {
     ensureDefaultInitialExists();
     return createProcessInstance(null, null, initial);
   }
 
+  @Override
   public PvmProcessInstance createProcessInstance(String businessKey) {
     ensureDefaultInitialExists();
     return createProcessInstance(businessKey, null, this.initial);
   }
 
+  @Override
   public PvmProcessInstance createProcessInstance(String businessKey, String caseInstanceId) {
     ensureDefaultInitialExists();
     return createProcessInstance(businessKey, caseInstanceId, this.initial);
@@ -114,23 +117,23 @@ public class ProcessDefinitionImpl extends ScopeImpl implements PvmProcessDefini
   }
 
   public synchronized List<ActivityImpl> getInitialActivityStack(ActivityImpl startActivity) {
-    List<ActivityImpl> initialActivityStack = initialActivityStacks.get(startActivity);
-    if(initialActivityStack == null) {
-      initialActivityStack = new ArrayList<ActivityImpl>();
-      ActivityImpl activity = startActivity;
+    return initialActivityStacks.computeIfAbsent(startActivity, start -> {
+      List<ActivityImpl> stack = new ArrayList<ActivityImpl>();
+      ActivityImpl activity = start;
       while (activity!=null) {
-        initialActivityStack.add(0, activity);
+        stack.add(0, activity);
         activity = activity.getParentFlowScopeActivity();
       }
-      initialActivityStacks.put(startActivity, initialActivityStack);
-    }
-    return initialActivityStack;
+      return stack;
+    });
   }
 
+  @Override
   public String getDiagramResourceName() {
     return null;
   }
 
+  @Override
   public String getDeploymentId() {
     return null;
   }
@@ -140,7 +143,7 @@ public class ProcessDefinitionImpl extends ScopeImpl implements PvmProcessDefini
   }
 
   public Lane getLaneForId(String id) {
-    if(laneSets != null && laneSets.size() > 0) {
+    if(laneSets != null && !laneSets.isEmpty()) {
       Lane lane;
       for(LaneSet set : laneSets) {
         lane = set.getLaneForId(id);
@@ -160,6 +163,7 @@ public class ProcessDefinitionImpl extends ScopeImpl implements PvmProcessDefini
 
   // getters and setters //////////////////////////////////////////////////////
 
+  @Override
   public ActivityImpl getInitial() {
     return initial;
   }
@@ -173,7 +177,8 @@ public class ProcessDefinitionImpl extends ScopeImpl implements PvmProcessDefini
     return "ProcessDefinition("+id+")";
   }
 
-   public String getDescription() {
+  @Override
+  public String getDescription() {
     return (String) getProperty("documentation");
   }
 
@@ -196,18 +201,22 @@ public class ProcessDefinitionImpl extends ScopeImpl implements PvmProcessDefini
     return participantProcess;
   }
 
+  @Override
   public boolean isScope() {
     return true;
   }
 
+  @Override
   public PvmScope getEventScope() {
     return null;
   }
 
+  @Override
   public ScopeImpl getFlowScope() {
     return null;
   }
 
+  @Override
   public PvmScope getLevelOfSubprocessScope() {
     return null;
   }

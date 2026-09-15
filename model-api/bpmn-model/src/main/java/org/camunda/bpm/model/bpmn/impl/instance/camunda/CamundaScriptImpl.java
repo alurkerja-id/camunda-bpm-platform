@@ -21,7 +21,6 @@ import org.camunda.bpm.model.bpmn.instance.camunda.CamundaScript;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_RESOURCE;
@@ -42,11 +41,7 @@ public class CamundaScriptImpl extends BpmnModelElementInstanceImpl implements C
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaScript.class, CAMUNDA_ELEMENT_SCRIPT)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<CamundaScript>() {
-        public CamundaScript newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CamundaScriptImpl(instanceContext);
-        }
-      });
+      .instanceProvider(CamundaScriptImpl::new);
 
     camundaScriptFormatAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_SCRIPT_FORMAT)
       .required()
@@ -62,18 +57,22 @@ public class CamundaScriptImpl extends BpmnModelElementInstanceImpl implements C
     super(instanceContext);
   }
 
+  @Override
   public String getCamundaScriptFormat() {
     return camundaScriptFormatAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaScriptFormat(String camundaScriptFormat) {
     camundaScriptFormatAttribute.setValue(this, camundaScriptFormat);
   }
 
+  @Override
   public String getCamundaResource() {
     return camundaResourceAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaResource(String camundaResource) {
     camundaResourceAttribute.setValue(this, camundaResource);
   }

@@ -47,6 +47,7 @@ public class PluggableProcessEngineTestCase extends AbstractProcessEngineTestCas
 
   protected static ProcessEngine cachedProcessEngine;
 
+  @Override
   protected void initializeProcessEngine() {
     processEngine = getOrInitializeCachedProcessEngine();
   }
@@ -58,7 +59,7 @@ public class PluggableProcessEngineTestCase extends AbstractProcessEngineTestCas
                 .createProcessEngineConfigurationFromResource("camunda.cfg.xml")
                 .buildProcessEngine();
       } catch (RuntimeException ex) {
-        if (ex.getCause() != null && ex.getCause() instanceof FileNotFoundException) {
+        if (ex.getCause() instanceof FileNotFoundException) {
           cachedProcessEngine = ProcessEngineConfiguration
               .createProcessEngineConfigurationFromResource("activiti.cfg.xml")
               .buildProcessEngine();

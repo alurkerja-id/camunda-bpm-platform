@@ -27,7 +27,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN eventBasedGateway element
@@ -43,11 +42,7 @@ public class EventBasedGatewayImpl extends GatewayImpl implements EventBasedGate
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(EventBasedGateway.class, BPMN_ELEMENT_EVENT_BASED_GATEWAY)
       .namespaceUri(BPMN20_NS)
       .extendsType(Gateway.class)
-      .instanceProvider(new ModelTypeInstanceProvider<EventBasedGateway>() {
-        public EventBasedGateway newInstance(ModelTypeInstanceContext instanceContext) {
-          return new EventBasedGatewayImpl(instanceContext);
-        }
-      });
+      .instanceProvider(EventBasedGatewayImpl::new);
 
     instantiateAttribute = typeBuilder.booleanAttribute(BPMN_ATTRIBUTE_INSTANTIATE)
       .defaultValue(false)
@@ -69,18 +64,22 @@ public class EventBasedGatewayImpl extends GatewayImpl implements EventBasedGate
     return new EventBasedGatewayBuilder((BpmnModelInstance) modelInstance, this);
   }
 
+  @Override
   public boolean isInstantiate() {
     return instantiateAttribute.getValue(this);
   }
 
+  @Override
   public void setInstantiate(boolean isInstantiate) {
     instantiateAttribute.setValue(this, isInstantiate);
   }
 
+  @Override
   public EventBasedGatewayType getEventGatewayType() {
     return eventGatewayTypeAttribute.getValue(this);
   }
 
+  @Override
   public void setEventGatewayType(EventBasedGatewayType eventGatewayType) {
     eventGatewayTypeAttribute.setValue(this, eventGatewayType);
   }

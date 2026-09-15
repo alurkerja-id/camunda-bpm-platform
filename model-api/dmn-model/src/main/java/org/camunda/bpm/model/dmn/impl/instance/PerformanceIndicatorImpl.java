@@ -28,7 +28,6 @@ import org.camunda.bpm.model.dmn.instance.PerformanceIndicator;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import org.camunda.bpm.model.xml.type.reference.ElementReferenceCollection;
 
@@ -40,6 +39,7 @@ public class PerformanceIndicatorImpl extends BusinessContextElementImpl impleme
     super(instanceContext);
   }
 
+  @Override
   public Collection<Decision> getImpactingDecisions() {
     return impactingDecisionRefCollection.getReferenceTargetElements(this);
   }
@@ -48,11 +48,7 @@ public class PerformanceIndicatorImpl extends BusinessContextElementImpl impleme
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(PerformanceIndicator.class, DMN_ELEMENT_PERFORMANCE_INDICATOR)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(BusinessContextElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<PerformanceIndicator>() {
-        public PerformanceIndicator newInstance(ModelTypeInstanceContext instanceContext) {
-          return new PerformanceIndicatorImpl(instanceContext);
-        }
-      });
+      .instanceProvider(PerformanceIndicatorImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

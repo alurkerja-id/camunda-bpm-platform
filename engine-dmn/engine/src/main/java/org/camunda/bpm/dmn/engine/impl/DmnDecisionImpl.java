@@ -32,6 +32,7 @@ public class DmnDecisionImpl implements DmnDecision {
 
   protected Collection<DmnDecision> requiredDecision = new ArrayList<DmnDecision>();
 
+  @Override
   public String getKey() {
     return key;
   }
@@ -40,6 +41,7 @@ public class DmnDecisionImpl implements DmnDecision {
     this.key = key;
   }
 
+  @Override
   public String getName() {
     return name;
   }
@@ -52,6 +54,7 @@ public class DmnDecisionImpl implements DmnDecision {
     this.decisionLogic = decisionLogic;
   }
 
+  @Override
   public DmnDecisionLogic getDecisionLogic() {
     return decisionLogic;
   }
@@ -67,7 +70,7 @@ public class DmnDecisionImpl implements DmnDecision {
 
   @Override
   public boolean isDecisionTable() {
-    return decisionLogic != null && decisionLogic instanceof DmnDecisionTableImpl;
+    return decisionLogic instanceof DmnDecisionTableImpl;
   }
 
   @Override

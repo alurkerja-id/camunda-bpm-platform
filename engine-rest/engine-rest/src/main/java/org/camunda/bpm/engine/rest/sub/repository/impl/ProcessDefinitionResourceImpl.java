@@ -237,7 +237,7 @@ public class ProcessDefinitionResourceImpl implements ProcessDefinitionResource 
       query.includeFailedJobs();
     }
 
-    if (includeIncidents != null && includeIncidents) {
+    if (Boolean.TRUE.equals(includeIncidents)) {
       query.includeIncidents();
     } else if (includeIncidentsForType != null) {
       query.includeIncidentsForType(includeIncidentsForType);
@@ -261,8 +261,6 @@ public class ProcessDefinitionResourceImpl implements ProcessDefinitionResource 
       processModelIn = engine.getRepositoryService().getProcessModel(processDefinitionId);
       byte[] processModel = IoUtil.readInputStream(processModelIn, "processModelBpmn20Xml");
       return ProcessDefinitionDiagramDto.create(processDefinitionId, new String(processModel, "UTF-8"));
-    } catch (AuthorizationException e) {
-      throw e;
     } catch (NotFoundException e) {
       throw new InvalidRequestException(Status.NOT_FOUND, e, "No matching definition with id " + processDefinitionId);
     } catch (UnsupportedEncodingException e) {
@@ -325,16 +323,15 @@ public class ProcessDefinitionResourceImpl implements ProcessDefinitionResource 
       throw new InvalidRequestException(Status.BAD_REQUEST, e, "Cannot get start form data for process definition " + processDefinitionId);
     }
     FormDto dto = FormDto.fromFormData(formData);
-    if((dto.getKey() == null || dto.getKey().isEmpty()) && dto.getCamundaFormRef() == null) {
-      if(formData != null && formData.getFormFields() != null && !formData.getFormFields().isEmpty()) {
-        dto.setKey("embedded:engine://engine/:engine/process-definition/"+processDefinitionId+"/rendered-form");
-      }
+    if ((dto.getKey() == null || dto.getKey().isEmpty()) && dto.getCamundaFormRef() == null && formData != null && formData.getFormFields() != null && !formData.getFormFields().isEmpty()) {
+      dto.setKey("embedded:engine://engine/:engine/process-definition/" + processDefinitionId + "/rendered-form");
     }
     dto.setContextPath(ApplicationContextPathUtil.getApplicationPathByProcessDefinitionId(engine, processDefinitionId));
 
     return dto;
   }
 
+  @Override
   public Response getRenderedForm() {
     FormService formService = engine.getFormService();
 
@@ -351,6 +348,7 @@ public class ProcessDefinitionResourceImpl implements ProcessDefinitionResource 
     throw new InvalidRequestException(Status.NOT_FOUND, "No matching rendered start form for process definition with the id " + processDefinitionId + " found.");
   }
 
+  @Override
   public void updateSuspensionState(ProcessDefinitionSuspensionStateDto dto) {
     try {
       dto.setProcessDefinitionId(processDefinitionId);
@@ -367,6 +365,7 @@ public class ProcessDefinitionResourceImpl implements ProcessDefinitionResource 
     engine.getRepositoryService().updateProcessDefinitionHistoryTimeToLive(processDefinitionId, historyTimeToLiveDto.getHistoryTimeToLive());
   }
 
+  @Override
   public Map<String, VariableValueDto> getFormVariables(String variableNames, boolean deserializeValues) {
 
     final FormService formService = engine.getFormService();
@@ -445,6 +444,7 @@ public class ProcessDefinitionResourceImpl implements ProcessDefinitionResource 
     return builder;
   }
 
+  @Override
   public Response getDeployedStartForm() {
     try {
       InputStream deployedStartForm = engine.getFormService().getDeployedStartForm(processDefinitionId);

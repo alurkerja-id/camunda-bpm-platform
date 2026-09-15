@@ -27,7 +27,6 @@ import org.camunda.bpm.model.cmmn.instance.CmmnElement;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 
@@ -43,6 +42,7 @@ public class CaseFileImpl extends CmmnElementImpl implements CaseFile {
     super(instanceContext);
   }
 
+  @Override
   public Collection<CaseFileItem> getCaseFileItems() {
     return caseFileItemCollection.get(this);
   }
@@ -51,11 +51,7 @@ public class CaseFileImpl extends CmmnElementImpl implements CaseFile {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CaseFile.class, CMMN_ELEMENT_CASE_FILE)
         .namespaceUri(CMMN11_NS)
         .extendsType(CmmnElement.class)
-        .instanceProvider(new ModelTypeInstanceProvider<CaseFile>() {
-          public CaseFile newInstance(ModelTypeInstanceContext instanceContext) {
-            return new CaseFileImpl(instanceContext);
-          }
-        });
+        .instanceProvider(CaseFileImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

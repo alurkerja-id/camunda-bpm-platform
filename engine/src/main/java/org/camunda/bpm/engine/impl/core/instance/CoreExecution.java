@@ -18,6 +18,7 @@ package org.camunda.bpm.engine.impl.core.instance;
 
 import org.camunda.bpm.engine.delegate.BaseDelegateExecution;
 import org.camunda.bpm.engine.delegate.DelegateListener;
+import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.core.CoreLogger;
 import org.camunda.bpm.engine.impl.core.model.CoreModelElement;
 import org.camunda.bpm.engine.impl.core.operation.CoreAtomicOperation;
@@ -35,7 +36,7 @@ public abstract class CoreExecution extends AbstractVariableScope implements Bas
 
   private static final long serialVersionUID = 1L;
 
-  private final static CoreLogger LOG = CoreLogger.CORE_LOGGER;
+  private final static CoreLogger LOG = ProcessEngineLogger.CORE_LOGGER;
 
   protected String id;
 
@@ -72,6 +73,7 @@ public abstract class CoreExecution extends AbstractVariableScope implements Bas
 
   // event handling ////////////////////////////////////////////////////////
 
+  @Override
   public String getEventName() {
     return eventName;
   }
@@ -107,6 +109,7 @@ public abstract class CoreExecution extends AbstractVariableScope implements Bas
 
   // getters / setters /////////////////////////////////////////////////
 
+  @Override
   public String getId() {
     return id;
   }

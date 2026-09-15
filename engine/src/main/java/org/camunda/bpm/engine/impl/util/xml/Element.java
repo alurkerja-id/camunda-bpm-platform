@@ -85,11 +85,9 @@ public class Element {
   protected List<Element> elementsNS(String nameSpaceUri, String tagName) {
     List<Element> selectedElements = new ArrayList<Element>();
     for (Element element: elements) {
-      if (tagName.equals(element.getTagName())) {
-        if (nameSpaceUri  == null
-                || ( nameSpaceUri != null && nameSpaceUri.equals(element.getUri()) ) ) {
-          selectedElements.add(element);
-        }
+      if (tagName.equals(element.getTagName()) && (nameSpaceUri == null
+          || (nameSpaceUri != null && nameSpaceUri.equals(element.getUri())))) {
+        selectedElements.add(element);
       }
     }
     return selectedElements;
@@ -101,10 +99,10 @@ public class Element {
 
   public Element elementNS(Namespace nameSpace, String tagName) {
     List<Element> elements = elementsNS(nameSpace.getNamespaceUri(), tagName);
-    if (elements.size() == 0 && nameSpace.hasAlternativeUri()) {
+    if (elements.isEmpty() && nameSpace.hasAlternativeUri()) {
       elements = elementsNS(nameSpace.getAlternativeUri(), tagName);
     }
-    if (elements.size() == 0) {
+    if (elements.isEmpty()) {
       return null;
     } else if (elements.size() > 1) {
       throw new ProcessEngineException("Parsing exception: multiple elements with tag name " + tagName + " found");
@@ -167,6 +165,7 @@ public class Element {
     return elements;
   }
 
+  @Override
   public String toString() {
     return "<"+tagName+"...";
   }

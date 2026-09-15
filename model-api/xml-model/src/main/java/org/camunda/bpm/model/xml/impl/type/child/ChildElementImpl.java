@@ -35,13 +35,16 @@ public class ChildElementImpl<T extends ModelElementInstance> extends ChildEleme
     this.maxOccurs = 1;
   }
 
-  /** the add operation replaces the child */
-  private void performAddOperation(ModelElementInstanceImpl modelElement, T e) {
+  /**
+   * The add operation replaces the child. Named differently from the parent class' private method
+   * of the same name: neither overrides the other, which made the pair easy to misread.
+   */
+  private void replaceChild(ModelElementInstanceImpl modelElement, T e) {
     modelElement.setUniqueChildElementByNameNs(e);
   }
 
   public void setChild(ModelElementInstance element, T newChildElement) {
-    performAddOperation((ModelElementInstanceImpl) element, newChildElement);
+    replaceChild((ModelElementInstanceImpl) element, newChildElement);
   }
 
   @SuppressWarnings("unchecked")

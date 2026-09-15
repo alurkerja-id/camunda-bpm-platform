@@ -31,7 +31,6 @@ import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_ER
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_ERROR_CODE_VARIABLE;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_ERROR_MESSAGE_VARIABLE;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN errorEventDefinition element
@@ -50,11 +49,7 @@ public class ErrorEventDefinitionImpl extends EventDefinitionImpl implements Err
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ErrorEventDefinition.class, BPMN_ELEMENT_ERROR_EVENT_DEFINITION)
       .namespaceUri(BPMN20_NS)
       .extendsType(EventDefinition.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ErrorEventDefinition>() {
-        public ErrorEventDefinition newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ErrorEventDefinitionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(ErrorEventDefinitionImpl::new);
 
     errorRefAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_ERROR_REF)
       .qNameAttributeReference(Error.class)
@@ -75,10 +70,12 @@ public class ErrorEventDefinitionImpl extends EventDefinitionImpl implements Err
     super(context);
   }
 
+  @Override
   public Error getError() {
     return errorRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setError(Error error) {
     errorRefAttribute.setReferenceTargetElement(this, error);
   }

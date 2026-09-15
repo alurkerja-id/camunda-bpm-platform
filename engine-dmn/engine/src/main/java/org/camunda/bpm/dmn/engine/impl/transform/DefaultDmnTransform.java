@@ -90,6 +90,7 @@ public class DefaultDmnTransform implements DmnTransform, DmnElementTransformCon
     hitPolicyHandlerRegistry = transformer.getHitPolicyHandlerRegistry();
   }
 
+  @Override
   public void setModelInstance(File file) {
     ensureNotNull("file", file);
     try {
@@ -100,11 +101,13 @@ public class DefaultDmnTransform implements DmnTransform, DmnElementTransformCon
     }
   }
 
+  @Override
   public DmnTransform modelInstance(File file) {
     setModelInstance(file);
     return this;
   }
 
+  @Override
   public void setModelInstance(InputStream inputStream) {
     ensureNotNull("inputStream", inputStream);
     try {
@@ -115,16 +118,19 @@ public class DefaultDmnTransform implements DmnTransform, DmnElementTransformCon
     }
   }
 
+  @Override
   public DmnTransform modelInstance(InputStream inputStream) {
     setModelInstance(inputStream);
     return this;
   }
 
+  @Override
   public void setModelInstance(DmnModelInstance modelInstance) {
     ensureNotNull("dmnModelInstance", modelInstance);
     this.modelInstance = modelInstance;
   }
 
+  @Override
   public DmnTransform modelInstance(DmnModelInstance modelInstance) {
     setModelInstance(modelInstance);
     return this;
@@ -132,6 +138,7 @@ public class DefaultDmnTransform implements DmnTransform, DmnElementTransformCon
 
   // transform ////////////////////////////////////////////////////////////////
 
+  @Override
   @SuppressWarnings("unchecked")
   public <T extends DmnDecisionRequirementsGraph> T transformDecisionRequirementsGraph() {
     try {
@@ -162,6 +169,7 @@ public class DefaultDmnTransform implements DmnTransform, DmnElementTransformCon
     return dmnDrg;
   }
 
+  @Override
   @SuppressWarnings("unchecked")
   public <T extends DmnDecision> List<T> transformDecisions() {
     try {
@@ -179,9 +187,9 @@ public class DefaultDmnTransform implements DmnTransform, DmnElementTransformCon
     buildDecisionRequirements(decisions, dmnDecisions);
     List<DmnDecision> dmnDecisionList = new ArrayList<DmnDecision>(dmnDecisions.values());
 
-    for(Decision decision: decisions) {
-      DmnDecision dmnDecision = dmnDecisions.get(decision.getId());
-      notifyTransformListeners(decision, dmnDecision);
+    for(Decision sourceDecision: decisions) {
+      DmnDecision dmnDecision = dmnDecisions.get(sourceDecision.getId());
+      notifyTransformListeners(sourceDecision, dmnDecision);
     }
     ensureNoLoopInDecisions(dmnDecisionList);
 
@@ -191,8 +199,8 @@ public class DefaultDmnTransform implements DmnTransform, DmnElementTransformCon
   protected Map<String,DmnDecisionImpl> transformIndividualDecisions(Collection<Decision> decisions) {
     Map<String, DmnDecisionImpl> dmnDecisions = new HashMap<String, DmnDecisionImpl>();
 
-    for (Decision decision : decisions) {
-      DmnDecisionImpl dmnDecision = transformDecision(decision);
+    for (Decision sourceDecision : decisions) {
+      DmnDecisionImpl dmnDecision = transformDecision(sourceDecision);
       if (dmnDecision != null) {
         dmnDecisions.put(dmnDecision.getKey(), dmnDecision);
       }
@@ -201,11 +209,11 @@ public class DefaultDmnTransform implements DmnTransform, DmnElementTransformCon
   }
 
   protected void buildDecisionRequirements(Collection<Decision> decisions, Map<String, DmnDecisionImpl> dmnDecisions) {
-    for(Decision decision: decisions) {
-      List<DmnDecision> requiredDmnDecisions = getRequiredDmnDecisions(decision, dmnDecisions);
-      DmnDecisionImpl dmnDecision = dmnDecisions.get(decision.getId());
+    for(Decision sourceDecision: decisions) {
+      List<DmnDecision> requiredDmnDecisions = getRequiredDmnDecisions(sourceDecision, dmnDecisions);
+      DmnDecisionImpl dmnDecision = dmnDecisions.get(sourceDecision.getId());
 
-      if(requiredDmnDecisions.size() > 0) {
+      if(!requiredDmnDecisions.isEmpty()) {
         dmnDecision.setRequiredDecision(requiredDmnDecisions);
       }
     }
@@ -214,8 +222,8 @@ public class DefaultDmnTransform implements DmnTransform, DmnElementTransformCon
   protected void ensureNoLoopInDecisions(List<DmnDecision> dmnDecisionList) {
     List<String> visitedDecisions = new ArrayList<String>();
 
-    for(DmnDecision decision: dmnDecisionList) {
-      ensureNoLoopInDecision(decision, new ArrayList<String>(), visitedDecisions);
+    for(DmnDecision dmnDecision: dmnDecisionList) {
+      ensureNoLoopInDecision(dmnDecision, new ArrayList<String>(), visitedDecisions);
     }
   }
 
@@ -478,22 +486,27 @@ public class DefaultDmnTransform implements DmnTransform, DmnElementTransformCon
 
   // context //////////////////////////////////////////////////////////////////
 
+  @Override
   public DmnModelInstance getModelInstance() {
     return modelInstance;
   }
 
+  @Override
   public Object getParent() {
     return parent;
   }
 
+  @Override
   public DmnDecision getDecision() {
     return decision;
   }
 
+  @Override
   public DmnDataTypeTransformerRegistry getDataTypeTransformerRegistry() {
     return dataTypeTransformerRegistry;
   }
 
+  @Override
   public DmnHitPolicyHandlerRegistry getHitPolicyHandlerRegistry() {
     return hitPolicyHandlerRegistry;
   }

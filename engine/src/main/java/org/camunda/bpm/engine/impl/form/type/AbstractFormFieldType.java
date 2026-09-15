@@ -26,18 +26,28 @@ import org.camunda.bpm.engine.variable.value.TypedValue;
  */
 public abstract class AbstractFormFieldType implements FormType {
 
+  @Override
   public abstract String getName();
 
   public abstract TypedValue convertToFormValue(TypedValue propertyValue);
 
   public abstract TypedValue convertToModelValue(TypedValue propertyValue);
 
+  /**
+   * @deprecated conversion works on typed values now; use
+   *             {@link #convertToModelValue(TypedValue)}
+   */
   @Deprecated
   public abstract Object convertFormValueToModelValue(Object propertyValue);
 
+  /**
+   * @deprecated conversion works on typed values now; use
+   *             {@link #convertToFormValue(TypedValue)}
+   */
   @Deprecated
   public abstract String convertModelValueToFormValue(Object modelValue);
 
+  @Override
   public Object getInformation(String key) {
     return null;
   }

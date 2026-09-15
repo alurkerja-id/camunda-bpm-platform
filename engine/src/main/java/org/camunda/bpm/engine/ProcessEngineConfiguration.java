@@ -120,7 +120,8 @@ public abstract class ProcessEngineConfiguration {
   /**
    * Value for {@link #setHistory(String)} to ensure that only historic process instances,
    * historic activity instances and last process variable values are being recorded.
-   * <p><strong>NOTE:</strong> This history level has been deprecated. Use level {@link #HISTORY_ACTIVITY} instead.</p>
+   *
+   * @deprecated use level {@link #HISTORY_ACTIVITY} instead
    */
   @Deprecated
   public static final String HISTORY_VARIABLE = "variable";

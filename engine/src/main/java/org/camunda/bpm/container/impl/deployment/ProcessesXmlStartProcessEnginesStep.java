@@ -35,6 +35,7 @@ import org.camunda.bpm.container.impl.spi.DeploymentOperation;
  */
 public class ProcessesXmlStartProcessEnginesStep extends AbstractStartProcessEnginesStep {
 
+  @Override
   protected List<ProcessEngineXml> getProcessEnginesXmls(DeploymentOperation operationContext) {
 
     final Map<URL, ProcessesXml> processesXmls = operationContext.getAttachment(PROCESSES_XML_RESOURCES);

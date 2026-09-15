@@ -73,24 +73,24 @@ public class ValidatingMigrationInstructions {
   }
 
   public List<ValidatingMigrationInstruction> getInstructionsBySourceScope(ScopeImpl scope) {
-    List<ValidatingMigrationInstruction> instructions = instructionsBySourceScope.get(scope);
+    List<ValidatingMigrationInstruction> scopeInstructions = instructionsBySourceScope.get(scope);
 
-    if (instructions == null) {
+    if (scopeInstructions == null) {
       return Collections.emptyList();
     }
     else {
-      return instructions;
+      return scopeInstructions;
     }
   }
 
   public List<ValidatingMigrationInstruction> getInstructionsByTargetScope(ScopeImpl scope) {
-    List<ValidatingMigrationInstruction> instructions = instructionsByTargetScope.get(scope);
+    List<ValidatingMigrationInstruction> scopeInstructions = instructionsByTargetScope.get(scope);
 
-    if (instructions == null) {
+    if (scopeInstructions == null) {
       return Collections.emptyList();
     }
     else {
-      return instructions;
+      return scopeInstructions;
     }
   }
 
@@ -113,13 +113,13 @@ public class ValidatingMigrationInstructions {
   }
 
   public List<MigrationInstruction> asMigrationInstructions() {
-    List<MigrationInstruction> instructions = new ArrayList<MigrationInstruction>();
+    List<MigrationInstruction> migrationInstructions = new ArrayList<MigrationInstruction>();
 
     for (ValidatingMigrationInstruction instruction : this.instructions) {
-      instructions.add(instruction.toMigrationInstruction());
+      migrationInstructions.add(instruction.toMigrationInstruction());
     }
 
-    return instructions;
+    return migrationInstructions;
   }
 
   public boolean contains(ValidatingMigrationInstruction instruction) {

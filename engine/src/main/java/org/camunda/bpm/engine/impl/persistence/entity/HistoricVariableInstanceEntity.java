@@ -129,28 +129,32 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
       .delete(this);
   }
 
+  @Override
   public Object getPersistentState() {
-    List<Object> state = new ArrayList<>(8);
-    state.add(getSerializerName());
-    state.add(textValue);
-    state.add(textValue2);
-    state.add(this.state);
-    state.add(doubleValue);
-    state.add(longValue);
-    state.add(processDefinitionId);
-    state.add(processDefinitionKey);
-    state.add(getByteArrayId());
-    return state;
+    List<Object> persistentState = new ArrayList<>(8);
+    persistentState.add(getSerializerName());
+    persistentState.add(textValue);
+    persistentState.add(textValue2);
+    persistentState.add(this.state);
+    persistentState.add(doubleValue);
+    persistentState.add(longValue);
+    persistentState.add(processDefinitionId);
+    persistentState.add(processDefinitionKey);
+    persistentState.add(getByteArrayId());
+    return persistentState;
   }
 
+  @Override
   public int getRevisionNext() {
     return revision+1;
   }
 
+  @Override
   public Object getValue() {
     return typedValueField.getValue();
   }
 
+  @Override
   public TypedValue getTypedValue() {
     return typedValueField.getTypedValue(false);
   }
@@ -175,16 +179,19 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
     byteArrayField.setByteArrayId(byteArrayId);
   }
 
+  @Override
   public byte[] getByteArrayValue() {
     return byteArrayField.getByteArrayValue();
   }
 
+  @Override
   public void setByteArrayValue(byte[] bytes) {
     byteArrayField.setByteArrayValue(bytes);
   }
 
   // entity lifecycle /////////////////////////////////////////////////////////
 
+  @Override
   public void postLoad() {
     // make sure the serializer is initialized
     typedValueField.postLoad();
@@ -200,26 +207,32 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
     typedValueField.setSerializerName(serializerName);
   }
 
+  @Override
   public String getTypeName() {
     return typedValueField.getTypeName();
   }
 
+  @Override
   public String getVariableTypeName() {
     return getTypeName();
   }
 
+  @Override
   public String getVariableName() {
     return name;
   }
 
+  @Override
   public int getRevision() {
     return revision;
   }
 
+  @Override
   public void setRevision(int revision) {
     this.revision = revision;
   }
 
+  @Override
   public String getName() {
     return name;
   }
@@ -228,34 +241,42 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
     this.name = name;
   }
 
+  @Override
   public Long getLongValue() {
     return longValue;
   }
 
+  @Override
   public void setLongValue(Long longValue) {
     this.longValue = longValue;
   }
 
+  @Override
   public Double getDoubleValue() {
     return doubleValue;
   }
 
+  @Override
   public void setDoubleValue(Double doubleValue) {
     this.doubleValue = doubleValue;
   }
 
+  @Override
   public String getTextValue() {
     return textValue;
   }
 
+  @Override
   public void setTextValue(String textValue) {
     this.textValue = textValue;
   }
 
+  @Override
   public String getTextValue2() {
     return textValue2;
   }
 
+  @Override
   public void setTextValue2(String textValue2) {
     this.textValue2 = textValue2;
   }
@@ -264,14 +285,17 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
     byteArrayField.setByteArrayValue(byteArrayValue);
   }
 
+  @Override
   public String getId() {
     return id;
   }
 
+  @Override
   public void setId(String id) {
     this.id = id;
   }
 
+  @Override
   public String getProcessDefinitionKey() {
     return processDefinitionKey;
   }
@@ -280,6 +304,7 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
     this.processDefinitionKey = processDefinitionKey;
   }
 
+  @Override
   public String getProcessDefinitionId() {
     return processDefinitionId;
   }
@@ -288,6 +313,7 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
     this.processDefinitionId = processDefinitionId;
   }
 
+  @Override
   public String getProcessInstanceId() {
     return processInstanceId;
   }
@@ -296,6 +322,7 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
     this.processInstanceId = processInstanceId;
   }
 
+  @Override
   public String getTaskId() {
     return taskId;
   }
@@ -304,6 +331,7 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
     this.taskId = taskId;
   }
 
+  @Override
   public String getExecutionId() {
     return executionId;
   }
@@ -312,11 +340,16 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
     this.executionId = executionId;
   }
 
+  /**
+   * @deprecated the method name is misspelt; use {@link #getActivityInstanceId()}
+   */
   @Deprecated
+  @Override
   public String getActivtyInstanceId() {
     return activityInstanceId;
   }
 
+  @Override
   public String getActivityInstanceId() {
     return activityInstanceId;
   }
@@ -325,6 +358,7 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
     this.activityInstanceId = activityInstanceId;
   }
 
+  @Override
   public String getCaseDefinitionKey() {
     return caseDefinitionKey;
   }
@@ -333,6 +367,7 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
     this.caseDefinitionKey = caseDefinitionKey;
   }
 
+  @Override
   public String getCaseDefinitionId() {
     return caseDefinitionId;
   }
@@ -341,6 +376,7 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
     this.caseDefinitionId = caseDefinitionId;
   }
 
+  @Override
   public String getCaseInstanceId() {
     return caseInstanceId;
   }
@@ -349,6 +385,7 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
     this.caseInstanceId = caseInstanceId;
   }
 
+  @Override
   public String getCaseExecutionId() {
     return caseExecutionId;
   }
@@ -357,10 +394,12 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
     this.caseExecutionId = caseExecutionId;
   }
 
+  @Override
   public String getErrorMessage() {
     return typedValueField.getErrorMessage();
   }
 
+  @Override
   public String getTenantId() {
     return tenantId;
   }
@@ -369,6 +408,7 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
     this.tenantId = tenantId;
   }
 
+  @Override
   public String getState() {
     return state;
   }
@@ -377,6 +417,7 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
     this.state = state;
   }
 
+  @Override
   public Date getCreateTime() {
     return createTime;
   }
@@ -385,6 +426,7 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
     this.createTime = createTime;
   }
 
+  @Override
   public String getRootProcessInstanceId() {
     return rootProcessInstanceId;
   }
@@ -393,6 +435,7 @@ public class HistoricVariableInstanceEntity implements ValueFields, HistoricVari
     this.rootProcessInstanceId = rootProcessInstanceId;
   }
 
+  @Override
   public Date getRemovalTime() {
     return removalTime;
   }

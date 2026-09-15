@@ -38,14 +38,17 @@ public class PvmAtomicOperationActivityEnd implements PvmAtomicOperation {
     return execution.getActivity();
   }
 
+  @Override
   public boolean isAsync(PvmExecutionImpl execution) {
     return execution.getActivity().isAsyncAfter();
   }
 
+  @Override
   public boolean isAsyncCapable() {
     return false;
   }
 
+  @Override
   public void execute(PvmExecutionImpl execution) {
     // restore activity instance id
     if (execution.getActivityInstanceId() == null) {
@@ -57,14 +60,12 @@ public class PvmAtomicOperationActivityEnd implements PvmAtomicOperation {
 
     PvmExecutionImpl propagatingExecution = execution;
 
-    if(execution.isScope() && activity.isScope()) {
-      if (!LegacyBehavior.destroySecondNonScope(execution)) {
-        execution.destroy();
-        if(!execution.isConcurrent()) {
-          execution.remove();
-          propagatingExecution = execution.getParent();
-          propagatingExecution.setActivity(execution.getActivity());
-        }
+    if (execution.isScope() && activity.isScope() && !LegacyBehavior.destroySecondNonScope(execution)) {
+      execution.destroy();
+      if (!execution.isConcurrent()) {
+        execution.remove();
+        propagatingExecution = execution.getParent();
+        propagatingExecution.setActivity(execution.getActivity());
       }
     }
 
@@ -114,6 +115,7 @@ public class PvmAtomicOperationActivityEnd implements PvmAtomicOperation {
     }
   }
 
+  @Override
   public String getCanonicalName() {
     return "activity-end";
   }

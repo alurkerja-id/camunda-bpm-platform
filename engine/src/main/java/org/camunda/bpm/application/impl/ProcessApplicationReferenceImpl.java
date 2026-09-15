@@ -55,10 +55,12 @@ public class ProcessApplicationReferenceImpl implements ProcessApplicationRefere
     this.name = processApplication.getName();
   }
 
+  @Override
   public String getName() {
     return name;
   }
 
+  @Override
   public AbstractProcessApplication getProcessApplication() throws ProcessApplicationUnavailableException {
     AbstractProcessApplication application = processApplication.get();
     if (application == null) {
@@ -69,7 +71,7 @@ public class ProcessApplicationReferenceImpl implements ProcessApplicationRefere
     }
   }
 
-  public void processEngineStopping(ProcessEngine processEngine) throws ProcessApplicationUnavailableException {
+  public void processEngineStopping(ProcessEngine processEngine) {
     // do nothing
   }
 

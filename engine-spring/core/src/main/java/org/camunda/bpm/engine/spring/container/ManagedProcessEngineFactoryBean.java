@@ -31,8 +31,9 @@ import org.camunda.bpm.engine.spring.ProcessEngineFactoryBean;
  *
  */
 public class ManagedProcessEngineFactoryBean extends ProcessEngineFactoryBean {
-  
-  public ProcessEngine getObject() throws Exception {
+
+	@Override
+	public ProcessEngine getObject() throws Exception {
     ProcessEngine processEngine = super.getObject();
     
     RuntimeContainerDelegate runtimeContainerDelegate = getRuntimeContainerDelegate();
@@ -44,8 +45,9 @@ public class ManagedProcessEngineFactoryBean extends ProcessEngineFactoryBean {
   protected RuntimeContainerDelegate getRuntimeContainerDelegate() {
     return RuntimeContainerDelegate.INSTANCE.get();
   }
-  
-  public void destroy() throws Exception {
+
+	@Override
+	public void destroy() throws Exception {
     
     if(processEngine != null) {
       getRuntimeContainerDelegate().unregisterProcessEngine(processEngine);

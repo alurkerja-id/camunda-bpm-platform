@@ -24,7 +24,6 @@ import org.camunda.bpm.engine.impl.pvm.delegate.ActivityExecution;
 import org.camunda.bpm.engine.impl.pvm.delegate.ModificationObserverBehavior;
 import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
 import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
-import org.camunda.bpm.engine.impl.pvm.process.TransitionImpl;
 import org.camunda.bpm.engine.impl.pvm.runtime.ScopeInstantiationContext;
 import org.camunda.bpm.engine.impl.pvm.runtime.InstantiationStack;
 import org.camunda.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
@@ -35,10 +34,12 @@ import org.camunda.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
  */
 public class PvmAtomicOperationActivityInitStackNotifyListenerStart extends PvmAtomicOperationActivityInstanceStart {
 
+  @Override
   public String getCanonicalName() {
     return "activity-init-stack-notify-listener-start";
   }
 
+  @Override
   protected ScopeImpl getScope(PvmExecutionImpl execution) {
     ActivityImpl activity = execution.getActivity();
 
@@ -57,6 +58,7 @@ public class PvmAtomicOperationActivityInitStackNotifyListenerStart extends PvmA
     return ExecutionListener.EVENTNAME_START;
   }
 
+  @Override
   protected void eventNotificationsCompleted(PvmExecutionImpl execution) {
     super.eventNotificationsCompleted(execution);
 
@@ -93,7 +95,7 @@ public class PvmAtomicOperationActivityInitStackNotifyListenerStart extends PvmA
       PvmTransition transition = instantiationStack.getTargetTransition();
       startContext.applyVariables(propagatingExecution);
       propagatingExecution.setActivity(transition.getSource());
-      propagatingExecution.setTransition((TransitionImpl) transition);
+      propagatingExecution.setTransition(transition);
       propagatingExecution.disposeScopeInstantiationContext();
       propagatingExecution.performOperation(TRANSITION_START_NOTIFY_LISTENER_TAKE);
     }

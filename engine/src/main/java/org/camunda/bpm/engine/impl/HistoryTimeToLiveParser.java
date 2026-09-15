@@ -36,7 +36,7 @@ import org.camunda.bpm.model.dmn.instance.Decision;
  */
 public class HistoryTimeToLiveParser {
 
-  protected static final ConfigurationLogger LOG = ConfigurationLogger.CONFIG_LOGGER;
+  protected static final ConfigurationLogger LOG = ProcessEngineLogger.CONFIG_LOGGER;
 
   protected final boolean enforceNonNullValue;
   protected final String httlConfigValue;

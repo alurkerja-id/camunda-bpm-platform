@@ -27,7 +27,6 @@ import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_POTENTIAL_STARTER;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN potentialStarter camunda extension
@@ -41,11 +40,7 @@ public class CamundaPotentialStarterImpl extends BpmnModelElementInstanceImpl im
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaPotentialStarter.class, CAMUNDA_ELEMENT_POTENTIAL_STARTER)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<CamundaPotentialStarter>() {
-        public CamundaPotentialStarter newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CamundaPotentialStarterImpl(instanceContext);
-        }
-      });
+      .instanceProvider(CamundaPotentialStarterImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 
@@ -59,10 +54,12 @@ public class CamundaPotentialStarterImpl extends BpmnModelElementInstanceImpl im
     super(instanceContext);
   }
 
+  @Override
   public ResourceAssignmentExpression getResourceAssignmentExpression() {
     return resourceAssignmentExpressionChild.getChild(this);
   }
 
+  @Override
   public void setResourceAssignmentExpression(ResourceAssignmentExpression resourceAssignmentExpression) {
     resourceAssignmentExpressionChild.setChild(this, resourceAssignmentExpression);
   }

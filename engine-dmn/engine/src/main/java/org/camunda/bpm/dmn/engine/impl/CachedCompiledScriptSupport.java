@@ -17,6 +17,7 @@
 package org.camunda.bpm.dmn.engine.impl;
 
 import javax.script.CompiledScript;
+import javax.script.ScriptException;
 
 /**
  * @author Daniel Meyer
@@ -27,5 +28,30 @@ public interface CachedCompiledScriptSupport {
   void cacheCompiledScript(CompiledScript compiledScript);
 
   CompiledScript getCachedCompiledScript();
+
+  /**
+   * Returns the cached script, compiling and caching it on first use. The lock lives here rather
+   * than at the call site: callers used to synchronize on the support object they were handed as a
+   * method parameter, which puts the lock in the hands of whoever passes it.
+   */
+  default CompiledScript getOrCacheCompiledScript(CompiledScriptSupplier supplier) throws ScriptException {
+    CompiledScript compiledScript = getCachedCompiledScript();
+    if (compiledScript == null) {
+      synchronized (this) {
+        compiledScript = getCachedCompiledScript();
+        if (compiledScript == null) {
+          compiledScript = supplier.compile();
+          cacheCompiledScript(compiledScript);
+        }
+      }
+    }
+    return compiledScript;
+  }
+
+  /** Compiles a script; separate from {@link java.util.function.Supplier} because compiling throws. */
+  @FunctionalInterface
+  interface CompiledScriptSupplier {
+    CompiledScript compile() throws ScriptException;
+  }
 
 }

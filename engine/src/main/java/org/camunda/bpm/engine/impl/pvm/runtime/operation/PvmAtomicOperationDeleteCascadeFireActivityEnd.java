@@ -17,7 +17,6 @@
 package org.camunda.bpm.engine.impl.pvm.runtime.operation;
 
 import org.camunda.bpm.engine.delegate.ExecutionListener;
-import org.camunda.bpm.engine.impl.bpmn.behavior.EventBasedGatewayActivityBehavior;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
@@ -102,14 +101,10 @@ public class PvmAtomicOperationDeleteCascadeFireActivityEnd extends PvmAtomicOpe
           propagatingExecution = propagatingExecution.getParent();
         }
 
-        if (continueRemoval) {
-          if (propagatingExecution != null) {
-            // continue deletion with the next scope execution
-            // set activity on parent in case the parent is an inactive scope execution and activity has been set to 'null'.
-            if(propagatingExecution.getActivity() == null && activity != null && activity.getFlowScope() != null) {
-              propagatingExecution.setActivity(getFlowScopeActivity(activity));
-            }
-          }
+        // continue deletion with the next scope execution
+        // set activity on parent in case the parent is an inactive scope execution and activity has been set to 'null'.
+        if (continueRemoval && propagatingExecution != null && propagatingExecution.getActivity() == null && activity != null && activity.getFlowScope() != null) {
+          propagatingExecution.setActivity(getFlowScopeActivity(activity));
         }
       }
     }

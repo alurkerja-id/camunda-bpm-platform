@@ -28,7 +28,6 @@ import org.camunda.bpm.model.dmn.instance.Row;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 
@@ -41,10 +40,12 @@ public class RelationImpl extends ExpressionImpl implements Relation {
     super(instanceContext);
   }
 
+  @Override
   public Collection<Column> getColumns() {
     return columnCollection.get(this);
   }
 
+  @Override
   public Collection<Row> getRows() {
     return rowCollection.get(this);
   }
@@ -53,11 +54,7 @@ public class RelationImpl extends ExpressionImpl implements Relation {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Relation.class, DMN_ELEMENT_RELATION)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(Expression.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Relation>() {
-        public Relation newInstance(ModelTypeInstanceContext instanceContext) {
-          return new RelationImpl(instanceContext);
-        }
-      });
+      .instanceProvider(RelationImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

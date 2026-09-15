@@ -49,7 +49,6 @@ import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.impl.util.StringUtil;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
@@ -94,11 +93,7 @@ public class ProcessImpl extends CallableElementImpl implements Process {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Process.class, BPMN_ELEMENT_PROCESS)
       .namespaceUri(BPMN20_NS)
       .extendsType(CallableElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Process>() {
-        public Process newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ProcessImpl(instanceContext);
-        }
-      });
+      .instanceProvider(ProcessImpl::new);
 
     processTypeAttribute = typeBuilder.enumAttribute(BPMN_ATTRIBUTE_PROCESS_TYPE, ProcessType.class)
       .defaultValue(ProcessType.None)
@@ -186,116 +181,143 @@ public class ProcessImpl extends CallableElementImpl implements Process {
     return new ProcessBuilder((BpmnModelInstance) modelInstance, this);
   }
 
+  @Override
   public ProcessType getProcessType() {
     return processTypeAttribute.getValue(this);
   }
 
+  @Override
   public void setProcessType(ProcessType processType) {
     processTypeAttribute.setValue(this, processType);
   }
 
+  @Override
   public boolean isClosed() {
     return isClosedAttribute.getValue(this);
   }
 
+  @Override
   public void setClosed(boolean closed) {
     isClosedAttribute.setValue(this, closed);
   }
 
+  @Override
   public boolean isExecutable() {
     return isExecutableAttribute.getValue(this);
   }
 
+  @Override
   public void setExecutable(boolean executable) {
     isExecutableAttribute.setValue(this, executable);
   }
 
+  @Override
   public Auditing getAuditing() {
     return auditingChild.getChild(this);
   }
 
+  @Override
   public void setAuditing(Auditing auditing) {
     auditingChild.setChild(this, auditing);
   }
 
+  @Override
   public Monitoring getMonitoring() {
     return monitoringChild.getChild(this);
   }
 
+  @Override
   public void setMonitoring(Monitoring monitoring) {
     monitoringChild.setChild(this, monitoring);
   }
 
+  @Override
   public Collection<Property> getProperties() {
     return propertyCollection.get(this);
   }
 
+  @Override
   public Collection<LaneSet> getLaneSets() {
     return laneSetCollection.get(this);
   }
 
+  @Override
   public Collection<FlowElement> getFlowElements() {
     return flowElementCollection.get(this);
   }
 
+  @Override
   public Collection<Artifact> getArtifacts() {
     return artifactCollection.get(this);
   }
 
+  @Override
   public Collection<CorrelationSubscription> getCorrelationSubscriptions() {
     return correlationSubscriptionCollection.get(this);
   }
 
+  @Override
   public Collection<ResourceRole> getResourceRoles() {
     return resourceRoleCollection.get(this);
   }
 
+  @Override
   public Collection<Process> getSupports() {
     return supportsCollection.getReferenceTargetElements(this);
   }
 
   /** camunda extensions */
 
+  @Override
   public String getCamundaCandidateStarterGroups() {
     return camundaCandidateStarterGroupsAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaCandidateStarterGroups(String camundaCandidateStarterGroups) {
     camundaCandidateStarterGroupsAttribute.setValue(this, camundaCandidateStarterGroups);
   }
 
+  @Override
   public List<String> getCamundaCandidateStarterGroupsList() {
     String groupsString = camundaCandidateStarterGroupsAttribute.getValue(this);
     return StringUtil.splitCommaSeparatedList(groupsString);
   }
 
+  @Override
   public void setCamundaCandidateStarterGroupsList(List<String> camundaCandidateStarterGroupsList) {
     String candidateStarterGroups = StringUtil.joinCommaSeparatedList(camundaCandidateStarterGroupsList);
     camundaCandidateStarterGroupsAttribute.setValue(this, candidateStarterGroups);
   }
 
+  @Override
   public String getCamundaCandidateStarterUsers() {
     return camundaCandidateStarterUsersAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaCandidateStarterUsers(String camundaCandidateStarterUsers) {
     camundaCandidateStarterUsersAttribute.setValue(this, camundaCandidateStarterUsers);
   }
 
+  @Override
   public List<String> getCamundaCandidateStarterUsersList() {
     String candidateStarterUsers = camundaCandidateStarterUsersAttribute.getValue(this);
     return StringUtil.splitCommaSeparatedList(candidateStarterUsers);
   }
 
+  @Override
   public void setCamundaCandidateStarterUsersList(List<String> camundaCandidateStarterUsersList) {
     String candidateStarterUsers = StringUtil.joinCommaSeparatedList(camundaCandidateStarterUsersList);
     camundaCandidateStarterUsersAttribute.setValue(this, candidateStarterUsers);
   }
 
+  @Override
   public String getCamundaJobPriority() {
     return camundaJobPriorityAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaJobPriority(String jobPriority) {
     camundaJobPriorityAttribute.setValue(this, jobPriority);
   }

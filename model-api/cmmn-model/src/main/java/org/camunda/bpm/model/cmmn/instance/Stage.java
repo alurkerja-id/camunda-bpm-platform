@@ -28,6 +28,9 @@ public interface Stage extends PlanFragment {
 
   void setAutoComplete(boolean autoComplete);
 
+  /**
+   * @deprecated misspelt plural kept for CMMN 1.0 callers; use {@link #getExitCriteria()}
+   */
   @Deprecated
   Collection<Sentry> getExitCriterias();
 

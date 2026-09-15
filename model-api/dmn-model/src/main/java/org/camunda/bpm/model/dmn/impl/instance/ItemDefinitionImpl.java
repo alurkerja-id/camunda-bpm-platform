@@ -31,7 +31,6 @@ import org.camunda.bpm.model.dmn.instance.TypeRef;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
@@ -50,38 +49,47 @@ public class ItemDefinitionImpl extends NamedElementImpl implements ItemDefiniti
     super(instanceContext);
   }
 
+  @Override
   public String getTypeLanguage() {
     return typeLanguageAttribute.getValue(this);
   }
 
+  @Override
   public void setTypeLanguage(String typeLanguage) {
     typeLanguageAttribute.setValue(this, typeLanguage);
   }
 
+  @Override
   public boolean isCollection() {
     return isCollectionAttribute.getValue(this);
   }
 
+  @Override
   public void setCollection(boolean isCollection) {
     isCollectionAttribute.setValue(this, isCollection);
   }
 
+  @Override
   public TypeRef getTypeRef() {
     return typeRefChild.getChild(this);
   }
 
+  @Override
   public void setTypeRef(TypeRef typeRef) {
     typeRefChild.setChild(this, typeRef);
   }
 
+  @Override
   public AllowedValues getAllowedValues() {
     return allowedValuesChild.getChild(this);
   }
 
+  @Override
   public void setAllowedValues(AllowedValues allowedValues) {
     allowedValuesChild.setChild(this, allowedValues);
   }
 
+  @Override
   public Collection<ItemComponent> getItemComponents() {
     return itemComponentCollection.get(this);
   }
@@ -90,11 +98,7 @@ public class ItemDefinitionImpl extends NamedElementImpl implements ItemDefiniti
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ItemDefinition.class, DMN_ELEMENT_ITEM_DEFINITION)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(NamedElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ItemDefinition>() {
-        public ItemDefinition newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ItemDefinitionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(ItemDefinitionImpl::new);
 
     typeLanguageAttribute = typeBuilder.stringAttribute(DMN_ATTRIBUTE_TYPE_LANGUAGE)
       .build();

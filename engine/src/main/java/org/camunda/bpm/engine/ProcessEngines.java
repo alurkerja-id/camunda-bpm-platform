@@ -164,7 +164,11 @@ public abstract class ProcessEngines {
   }
 
   private static ProcessEngineInfo initProcessEngineFromResource(URL resourceUrl) {
-    ProcessEngineInfo processEngineInfo = processEngineInfosByResourceUrl.get(resourceUrl);
+    String resourceUrlString = resourceUrl.toString();
+    // the map is keyed by the url as a string, see the put at the end of this method; looking it
+    // up with the URL object never matched, so the cleanup below never ran and re-initialising the
+    // same resource kept piling up stale entries in processEngineInfos
+    ProcessEngineInfo processEngineInfo = processEngineInfosByResourceUrl.get(resourceUrlString);
     // if there is an existing process engine info
     if (processEngineInfo!=null) {
       // remove that process engine from the member fields
@@ -177,7 +181,6 @@ public abstract class ProcessEngines {
       processEngineInfosByResourceUrl.remove(processEngineInfo.getResourceUrl());
     }
 
-    String resourceUrlString = resourceUrl.toString();
     try {
       LOG.initializingProcessEngineForResource(resourceUrl);
       ProcessEngine processEngine = buildProcessEngine(resourceUrl);
@@ -273,13 +276,13 @@ public abstract class ProcessEngines {
       Map<String, ProcessEngine> engines = new HashMap<String, ProcessEngine>(processEngines);
       processEngines = new HashMap<String, ProcessEngine>();
 
-      for (String processEngineName: engines.keySet()) {
-        ProcessEngine processEngine = engines.get(processEngineName);
+      for (Map.Entry<String, ProcessEngine> entry : engines.entrySet()) {
+        ProcessEngine processEngine = entry.getValue();
         try {
           processEngine.close();
         }
         catch (Exception e) {
-          LOG.exceptionWhileClosingProcessEngine(processEngineName==null ? "the default process engine" : "process engine "+processEngineName, e);
+          LOG.exceptionWhileClosingProcessEngine(entry.getKey()==null ? "the default process engine" : "process engine "+entry.getKey(), e);
         }
       }
 

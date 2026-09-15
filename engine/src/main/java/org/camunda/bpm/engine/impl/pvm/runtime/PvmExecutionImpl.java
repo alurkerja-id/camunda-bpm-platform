@@ -69,10 +69,8 @@ import org.camunda.bpm.engine.impl.pvm.runtime.operation.PvmAtomicOperation;
 import org.camunda.bpm.engine.impl.tree.ExecutionWalker;
 import org.camunda.bpm.engine.impl.tree.FlowScopeWalker;
 import org.camunda.bpm.engine.impl.tree.LeafActivityInstanceExecutionCollector;
-import org.camunda.bpm.engine.impl.tree.ReferenceWalker;
 import org.camunda.bpm.engine.impl.tree.ScopeCollector;
 import org.camunda.bpm.engine.impl.tree.ScopeExecutionCollector;
-import org.camunda.bpm.engine.impl.tree.TreeVisitor;
 import org.camunda.bpm.engine.impl.util.EnsureUtil;
 import org.camunda.bpm.engine.runtime.Incident;
 import org.camunda.bpm.engine.variable.VariableMap;
@@ -201,12 +199,12 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
   public PvmExecutionImpl createSubProcessInstance(PvmProcessDefinition processDefinition, String businessKey) {
     PvmExecutionImpl processInstance = getProcessInstance();
 
-    String caseInstanceId = null;
+    String inheritedCaseInstanceId = null;
     if (processInstance != null) {
-      caseInstanceId = processInstance.getCaseInstanceId();
+      inheritedCaseInstanceId = processInstance.getCaseInstanceId();
     }
 
-    return createSubProcessInstance(processDefinition, businessKey, caseInstanceId);
+    return createSubProcessInstance(processDefinition, businessKey, inheritedCaseInstanceId);
   }
 
   @Override
@@ -360,8 +358,8 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
     }
 
     // fire activity end on active activity
-    PvmActivity activity = getActivity();
-    if ((isActive || externallyTerminated) && activity != null) {
+    PvmActivity currentActivity = getActivity();
+    if ((isActive || externallyTerminated) && currentActivity != null) {
       // set activity instance state to cancel
       if (activityInstanceState != ENDING.getStateCode() || activityInstanceEndListenersFailed) {
         setCanceled(true);
@@ -865,13 +863,11 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
    */
   protected void setDelayedPayloadToNewScope(PvmActivity activity) {
     String activityType = (String) activity.getProperty(BpmnProperties.TYPE.getName());
-    if (ActivityTypes.START_EVENT_MESSAGE.equals(activityType) // Event subprocess message start event
-        || ActivityTypes.BOUNDARY_MESSAGE.equals(activityType)) {
-      if (getProcessInstance().getPayloadForTriggeredScope() != null) {
-        this.setVariablesLocal(getProcessInstance().getPayloadForTriggeredScope());
-        // clear the process instance
-        getProcessInstance().setPayloadForTriggeredScope(null);
-      }
+    if ((ActivityTypes.START_EVENT_MESSAGE.equals(activityType) // Event subprocess message start event
+        || ActivityTypes.BOUNDARY_MESSAGE.equals(activityType)) && getProcessInstance().getPayloadForTriggeredScope() != null) {
+      this.setVariablesLocal(getProcessInstance().getPayloadForTriggeredScope());
+      // clear the process instance
+      getProcessInstance().setPayloadForTriggeredScope(null);
     }
   }
 
@@ -1119,6 +1115,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
 
   public abstract List<? extends PvmExecutionImpl> getExecutionsAsCopy();
 
+  @Override
   public List<? extends PvmExecutionImpl> getNonEventScopeExecutions() {
     List<? extends PvmExecutionImpl> children = getExecutions();
     List<PvmExecutionImpl> result = new ArrayList<>();
@@ -1189,9 +1186,9 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
   }
 
   protected void collectActiveActivityIds(List<String> activeActivityIds) {
-    ActivityImpl activity = getActivity();
-    if (isActive && activity != null) {
-      activeActivityIds.add(activity.getId());
+    ActivityImpl currentActivity = getActivity();
+    if (isActive && currentActivity != null) {
+      activeActivityIds.add(currentActivity.getId());
     }
 
     for (PvmExecutionImpl execution : getExecutions()) {
@@ -1272,9 +1269,9 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
   }
 
   public String getActivityId() {
-    ActivityImpl activity = getActivity();
-    if (activity != null) {
-      return activity.getId();
+    ActivityImpl currentActivity = getActivity();
+    if (currentActivity != null) {
+      return currentActivity.getId();
     } else {
       return null;
     }
@@ -1282,9 +1279,9 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
 
   @Override
   public String getCurrentActivityName() {
-    ActivityImpl activity = getActivity();
-    if (activity != null) {
-      return activity.getName();
+    ActivityImpl currentActivity = getActivity();
+    if (currentActivity != null) {
+      return currentActivity.getName();
     } else {
       return null;
     }
@@ -1302,8 +1299,8 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
 
   @Override
   public void enterActivityInstance() {
-    ActivityImpl activity = getActivity();
-    activityInstanceId = generateActivityInstanceId(activity.getId());
+    ActivityImpl currentActivity = getActivity();
+    activityInstanceId = generateActivityInstanceId(currentActivity.getId());
 
     LOG.debugEnterActivityInstance(this, getParentActivityInstanceId());
 
@@ -1313,7 +1310,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
     // anyway because the multi-instance body already ensures variable isolation
     executeIoMapping();
 
-    if (activity.isScope()) {
+    if (currentActivity.isScope()) {
       initializeTimerDeclarations();
     }
 
@@ -1389,6 +1386,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
     }
   }
 
+  @Override
   public boolean hasChildren() {
     return !getExecutions().isEmpty();
   }
@@ -1589,19 +1587,19 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
   }
 
   protected ScopeImpl getFlowScope() {
-    ActivityImpl activity = getActivity();
+    ActivityImpl currentActivity = getActivity();
 
-    if (!activity.isScope() || activityInstanceId == null
-      || (activity.isScope() && !isScope() && activity.getActivityBehavior() instanceof CompositeActivityBehavior)) {
+    if (!currentActivity.isScope() || activityInstanceId == null
+      || (currentActivity.isScope() && !isScope() && currentActivity.getActivityBehavior() instanceof CompositeActivityBehavior)) {
       // if
       // - this is a scope execution currently executing a non scope activity
       // - or it is not scope but the current activity is (e.g. can happen during activity end, when the actual
       //   scope execution has been removed and the concurrent parent has been set to the scope activity)
       // - or it is asyncBefore/asyncAfter
 
-      return activity.getFlowScope();
+      return currentActivity.getFlowScope();
     } else {
-      return activity;
+      return currentActivity;
     }
   }
 
@@ -1623,22 +1621,14 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
     ScopeExecutionCollector scopeExecutionCollector = new ScopeExecutionCollector();
     new ExecutionWalker(this)
       .addPreVisitor(scopeExecutionCollector)
-      .walkWhile(new ReferenceWalker.WalkCondition<PvmExecutionImpl>() {
-        public boolean isFulfilled(PvmExecutionImpl element) {
-          return element == null || mapping.containsValue(element);
-        }
-      });
+      .walkWhile(element -> element == null || mapping.containsValue(element));
     final List<PvmExecutionImpl> scopeExecutions = scopeExecutionCollector.getScopeExecutions();
 
     // collect all ancestor scopes unless one is encountered that is already in "mapping"
     ScopeCollector scopeCollector = new ScopeCollector();
     new FlowScopeWalker(currentScope)
       .addPreVisitor(scopeCollector)
-      .walkWhile(new ReferenceWalker.WalkCondition<ScopeImpl>() {
-        public boolean isFulfilled(ScopeImpl element) {
-          return element == null || mapping.containsKey(element);
-        }
-      });
+      .walkWhile(element -> element == null || mapping.containsKey(element));
 
     final List<ScopeImpl> scopes = scopeCollector.getScopes();
 
@@ -1646,14 +1636,12 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
     // and correspond to ancestors of the topmost previously collected scope
     ScopeImpl topMostScope = scopes.get(scopes.size() - 1);
     new FlowScopeWalker(topMostScope.getFlowScope())
-      .addPreVisitor(new TreeVisitor<ScopeImpl>() {
-        public void visit(ScopeImpl obj) {
-          scopes.add(obj);
-          PvmExecutionImpl priorMappingExecution = mapping.get(obj);
+      .addPreVisitor(obj -> {
+        scopes.add(obj);
+        PvmExecutionImpl priorMappingExecution = mapping.get(obj);
 
-          if (priorMappingExecution != null && !scopeExecutions.contains(priorMappingExecution)) {
-            scopeExecutions.add(priorMappingExecution);
-          }
+        if (priorMappingExecution != null && !scopeExecutions.contains(priorMappingExecution)) {
+          scopeExecutions.add(priorMappingExecution);
         }
       })
       .walkWhile();
@@ -1701,6 +1689,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
   /**
    * {@inheritDoc}
    */
+  @Override
   public void setVariable(String variableName, Object value, String targetActivityId) {
     String activityId = getActivityId();
     if (activityId != null && activityId.equals(targetActivityId)) {
@@ -1724,14 +1713,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
     EnsureUtil.ensureNotNull("activity of current execution", currentActivity);
 
     FlowScopeWalker walker = new FlowScopeWalker(currentActivity);
-    ScopeImpl targetFlowScope = walker.walkUntil(new ReferenceWalker.WalkCondition<ScopeImpl>() {
-
-      @Override
-      public boolean isFulfilled(ScopeImpl scope) {
-        return scope == null || scope.getId().equals(targetScopeId);
-      }
-
-    });
+    ScopeImpl targetFlowScope = walker.walkUntil(scope -> scope == null || scope.getId().equals(targetScopeId));
 
     if (targetFlowScope == null) {
       throw LOG.scopeNotFoundException(targetScopeId, this.getId());
@@ -1797,9 +1779,9 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
 
   @Override
   public String getCurrentTransitionId() {
-    TransitionImpl transition = getTransition();
-    if (transition != null) {
-      return transition.getId();
+    TransitionImpl currentTransition = getTransition();
+    if (currentTransition != null) {
+      return currentTransition.getId();
     } else {
       return null;
     }
@@ -1829,6 +1811,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
     this.isActive = isActive;
   }
 
+  @Override
   public void setEnded(boolean isEnded) {
     this.isEnded = isEnded;
   }
@@ -2042,12 +2025,9 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
    * @param atomicOperation the atomic operation which should be executed
    */
   public void dispatchDelayedEventsAndPerformOperation(final PvmAtomicOperation atomicOperation) {
-    dispatchDelayedEventsAndPerformOperation(new Callback<PvmExecutionImpl, Void>() {
-      @Override
-      public Void callback(PvmExecutionImpl param) {
-        param.performOperation(atomicOperation);
-        return null;
-      }
+    dispatchDelayedEventsAndPerformOperation(param -> {
+      param.performOperation(atomicOperation);
+      return null;
     });
   }
 
@@ -2239,7 +2219,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
                                    String currentActivityInstanceId, String currentActivityId) {
     return
       //activityInstanceId's can be null on transitions, so the activityId must be equal
-      ((lastActivityInstanceId == null && lastActivityInstanceId == currentActivityInstanceId && lastActivityId.equals(currentActivityId))
+      ((lastActivityInstanceId == null && currentActivityInstanceId == null && lastActivityId.equals(currentActivityId))
         //if activityInstanceId's are not null they must be equal -> otherwise execution changed
         || (lastActivityInstanceId != null && lastActivityInstanceId.equals(currentActivityInstanceId)
         && (lastActivityId == null || lastActivityId.equals(currentActivityId))));
@@ -2277,6 +2257,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
     return createIncident(incidentType, configuration, null);
   }
 
+  @Override
   public Incident createIncident(String incidentType, String configuration, String message) {
     IncidentContext incidentContext = createIncidentContext(configuration);
 

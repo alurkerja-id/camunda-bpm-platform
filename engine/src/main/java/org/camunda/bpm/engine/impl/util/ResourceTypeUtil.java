@@ -54,17 +54,16 @@ public class ResourceTypeUtil {
   protected static final Map<Integer, Class<? extends Enum<? extends Permission>>> PERMISSION_ENUMS;
 
   static {
-    PERMISSION_ENUMS = new HashMap<Integer, Class<? extends Enum<? extends Permission>>>() {{
-      put(BATCH.resourceType(), BatchPermissions.class);
-      put(PROCESS_DEFINITION.resourceType(), ProcessDefinitionPermissions.class);
-      put(PROCESS_INSTANCE.resourceType(), ProcessInstancePermissions.class);
-      put(TASK.resourceType(), TaskPermissions.class);
-      put(HISTORIC_TASK.resourceType(), HistoricTaskPermissions.class);
-      put(HISTORIC_PROCESS_INSTANCE.resourceType(), HistoricProcessInstancePermissions.class);
-      put(OPERATION_LOG_CATEGORY.resourceType(), UserOperationLogCategoryPermissions.class);
-      put(OPTIMIZE.resourceType(), OptimizePermissions.class);
-      put(SYSTEM.resourceType(), SystemPermissions.class);
-    }};
+    PERMISSION_ENUMS = new HashMap<>();
+    PERMISSION_ENUMS.put(BATCH.resourceType(), BatchPermissions.class);
+    PERMISSION_ENUMS.put(PROCESS_DEFINITION.resourceType(), ProcessDefinitionPermissions.class);
+    PERMISSION_ENUMS.put(PROCESS_INSTANCE.resourceType(), ProcessInstancePermissions.class);
+    PERMISSION_ENUMS.put(TASK.resourceType(), TaskPermissions.class);
+    PERMISSION_ENUMS.put(HISTORIC_TASK.resourceType(), HistoricTaskPermissions.class);
+    PERMISSION_ENUMS.put(HISTORIC_PROCESS_INSTANCE.resourceType(), HistoricProcessInstancePermissions.class);
+    PERMISSION_ENUMS.put(OPERATION_LOG_CATEGORY.resourceType(), UserOperationLogCategoryPermissions.class);
+    PERMISSION_ENUMS.put(OPTIMIZE.resourceType(), OptimizePermissions.class);
+    PERMISSION_ENUMS.put(SYSTEM.resourceType(), SystemPermissions.class);
 
     // the rest
     for (Permission permission : Permissions.values()) {

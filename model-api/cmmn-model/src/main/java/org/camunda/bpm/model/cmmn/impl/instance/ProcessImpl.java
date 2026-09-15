@@ -30,7 +30,6 @@ import org.camunda.bpm.model.cmmn.instance.Process;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
@@ -51,26 +50,32 @@ public class ProcessImpl extends CmmnElementImpl implements Process {
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public String getImplementationType() {
     return implementationTypeAttribute.getValue(this);
   }
 
+  @Override
   public void setImplementationType(String implementationType) {
     implementationTypeAttribute.setValue(this, implementationType);
   }
 
+  @Override
   public Collection<InputProcessParameter> getInputs() {
     return inputCollection.get(this);
   }
 
+  @Override
   public Collection<OutputProcessParameter> getOutputs() {
     return outputCollection.get(this);
   }
@@ -79,11 +84,7 @@ public class ProcessImpl extends CmmnElementImpl implements Process {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Process.class, CMMN_ELEMENT_PROCESS)
         .extendsType(CmmnElement.class)
         .namespaceUri(CMMN11_NS)
-        .instanceProvider(new ModelTypeInstanceProvider<Process>() {
-          public Process newInstance(ModelTypeInstanceContext instanceContext) {
-            return new ProcessImpl(instanceContext);
-          }
-        });
+        .instanceProvider(ProcessImpl::new);
 
     nameAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_NAME)
         .build();

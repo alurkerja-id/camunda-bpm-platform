@@ -41,10 +41,13 @@ public class ServiceTaskJavaDelegateActivityBehavior extends TaskActivityBehavio
 
   @Override
   public void performExecution(ActivityExecution execution) throws Exception {
+    // the cast picks execute(DelegateExecution), which runs the delegate; without it the call
+    // binds to the inherited execute(ActivityExecution), which calls performExecution again
     execute((DelegateExecution) execution);
     leave(execution);
   }
 
+  @Override
   public void notify(DelegateExecution execution) throws Exception {
     execute(execution);
   }

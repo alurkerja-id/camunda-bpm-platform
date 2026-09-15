@@ -27,7 +27,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN task element
@@ -45,11 +44,7 @@ public class TaskImpl extends ActivityImpl implements Task {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Task.class, BPMN_ELEMENT_TASK)
       .namespaceUri(BPMN20_NS)
       .extendsType(Activity.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Task>() {
-        public Task newInstance(ModelTypeInstanceContext instanceContext) {
-          return new TaskImpl(instanceContext);
-        }
-      });
+      .instanceProvider(TaskImpl::new);
 
     /** camunda extensions */
 
@@ -65,6 +60,7 @@ public class TaskImpl extends ActivityImpl implements Task {
     super(context);
   }
 
+  @Override
   @SuppressWarnings("rawtypes")
   public AbstractTaskBuilder builder() {
     throw new ModelTypeException("No builder implemented.");
@@ -76,6 +72,7 @@ public class TaskImpl extends ActivityImpl implements Task {
    * @deprecated use isCamundaAsyncBefore() instead.
    */
   @Deprecated
+  @Override
   public boolean isCamundaAsync() {
     return camundaAsyncAttribute.getValue(this);
   }
@@ -84,11 +81,13 @@ public class TaskImpl extends ActivityImpl implements Task {
    * @deprecated use setCamundaAsyncBefore(isCamundaAsyncBefore) instead.
    */
   @Deprecated
+  @Override
   public void setCamundaAsync(boolean isCamundaAsync) {
     camundaAsyncAttribute.setValue(this, isCamundaAsync);
   }
 
 
+  @Override
   public BpmnShape getDiagramElement() {
     return (BpmnShape) super.getDiagramElement();
   }

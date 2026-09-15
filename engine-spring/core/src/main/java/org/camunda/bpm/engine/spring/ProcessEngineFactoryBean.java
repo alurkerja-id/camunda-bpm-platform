@@ -36,18 +36,21 @@ public class ProcessEngineFactoryBean implements FactoryBean<ProcessEngine>, Dis
   protected ProcessEngineConfigurationImpl processEngineConfiguration;
   protected ApplicationContext applicationContext;
   protected ProcessEngineImpl processEngine;
-  
-  public void destroy() throws Exception {
+
+	@Override
+	public void destroy() throws Exception {
     if (processEngine != null) {
       processEngine.close();
     }
   }
 
-  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
     this.applicationContext = applicationContext;
   }
 
-  public ProcessEngine getObject() throws Exception {
+	@Override
+	public ProcessEngine getObject() throws Exception {
     if (processEngine == null) {
       initializeExpressionManager();
       initializeTransactionExternallyManaged();
@@ -73,12 +76,14 @@ public class ProcessEngineFactoryBean implements FactoryBean<ProcessEngine>, Dis
       }
     }
   }
-  
-  public Class<ProcessEngine> getObjectType() {
+
+	@Override
+	public Class<ProcessEngine> getObjectType() {
     return ProcessEngine.class;
   }
 
-  public boolean isSingleton() {
+	@Override
+	public boolean isSingleton() {
     return true;
   }
 

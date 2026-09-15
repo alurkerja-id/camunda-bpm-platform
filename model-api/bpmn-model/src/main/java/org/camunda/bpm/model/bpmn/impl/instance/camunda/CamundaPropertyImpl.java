@@ -24,7 +24,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN property camunda extension element
@@ -40,11 +39,7 @@ public class CamundaPropertyImpl extends BpmnModelElementInstanceImpl implements
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaProperty.class, CAMUNDA_ELEMENT_PROPERTY)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<CamundaProperty>() {
-        public CamundaProperty newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CamundaPropertyImpl(instanceContext);
-        }
-      });
+      .instanceProvider(CamundaPropertyImpl::new);
 
     camundaIdAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_ID)
       .namespace(CAMUNDA_NS)
@@ -65,26 +60,32 @@ public class CamundaPropertyImpl extends BpmnModelElementInstanceImpl implements
     super(instanceContext);
   }
 
+  @Override
   public String getCamundaId() {
     return camundaIdAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaId(String camundaId) {
     camundaIdAttribute.setValue(this, camundaId);
   }
 
+  @Override
   public String getCamundaName() {
     return camundaNameAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaName(String camundaName) {
     camundaNameAttribute.setValue(this, camundaName);
   }
 
+  @Override
   public String getCamundaValue() {
     return camundaValueAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaValue(String camundaValue) {
     camundaValueAttribute.setValue(this, camundaValue);
   }

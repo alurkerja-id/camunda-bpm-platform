@@ -53,14 +53,14 @@ public class AstFunction extends AstRightValue implements FunctionNode {
 	protected Object invoke(Bindings bindings, ELContext context, Object base, Method method)
 		throws InvocationTargetException, IllegalAccessException {
 		Class<?>[] types = method.getParameterTypes();
-		Object[] params = null;
+		Object[] args = null;
 		if (types.length > 0) {
-			params = new Object[types.length];
+			args = new Object[types.length];
 			if (varargs && method.isVarArgs()) {
-				for (int i = 0; i < params.length - 1; i++) {
+				for (int i = 0; i < args.length - 1; i++) {
 					Object param = getParam(i).eval(bindings, context);
 					if (param != null || types[i].isPrimitive()) {
-						params[i] = bindings.convert(param, types[i]);
+						args[i] = bindings.convert(param, types[i]);
 					}
 				}
 				int varargIndex = types.length - 1;
@@ -97,17 +97,17 @@ public class AstFunction extends AstRightValue implements FunctionNode {
 						}
 					}
 				}
-				params[varargIndex] = array;
+				args[varargIndex] = array;
 			} else {
-				for (int i = 0; i < params.length; i++) {
+				for (int i = 0; i < args.length; i++) {
 					Object param = getParam(i).eval(bindings, context);
 					if (param != null || types[i].isPrimitive()) {
-						params[i] = bindings.convert(param, types[i]);
+						args[i] = bindings.convert(param, types[i]);
 					}
 				}
 			}
 		}
-		return method.invoke(base, params);
+		return method.invoke(base, args);
 	}
 
 	@Override 

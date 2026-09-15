@@ -252,16 +252,16 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   public void propagateParentTaskTenantId() {
     if (parentTaskId != null) {
 
-      final TaskEntity parentTask = Context
+      final TaskEntity parentTaskEntity = Context
           .getCommandContext()
           .getTaskManager()
           .findTaskById(parentTaskId);
 
-      if(tenantId != null && !tenantIdIsSame(parentTask)) {
-        throw LOG.cannotSetDifferentTenantIdOnSubtask(parentTaskId, parentTask.getTenantId(), tenantId);
+      if(tenantId != null && !tenantIdIsSame(parentTaskEntity)) {
+        throw LOG.cannotSetDifferentTenantIdOnSubtask(parentTaskId, parentTaskEntity.getTenantId(), tenantId);
       }
 
-      setTenantId(parentTask.getTenantId());
+      setTenantId(parentTaskEntity.getTenantId());
     }
   }
 
@@ -343,9 +343,9 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
       // then call signal an the associated
       // execution.
       if (executionId !=null) {
-        ExecutionEntity execution = getExecution();
-        execution.removeTask(this);
-        execution.signal(null, null);
+        ExecutionEntity taskExecution = getExecution();
+        taskExecution.removeTask(this);
+        taskExecution.signal(null, null);
       }
     }
   }
@@ -379,8 +379,8 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
     .deleteTask(this, deleteReason, cascade, skipCustomListeners);
 
     if (executionId != null) {
-      ExecutionEntity execution = getExecution();
-      execution.removeTask(this);
+      ExecutionEntity taskExecution = getExecution();
+      taskExecution.removeTask(this);
     }
   }
 
@@ -465,14 +465,14 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
 
   public void ensureParentTaskActive() {
     if (parentTaskId != null) {
-      TaskEntity parentTask = Context
+      TaskEntity parentTaskEntity = Context
           .getCommandContext()
           .getTaskManager()
           .findTaskById(parentTaskId);
 
-      ensureNotNull(NullValueException.class, "Parent task with id '"+parentTaskId+"' does not exist", "parentTask", parentTask);
+      ensureNotNull(NullValueException.class, "Parent task with id '"+parentTaskId+"' does not exist", "parentTask", parentTaskEntity);
 
-      if (parentTask.suspensionState == SuspensionState.SUSPENDED.getStateCode()) {
+      if (parentTaskEntity.suspensionState == SuspensionState.SUSPENDED.getStateCode()) {
         throw LOG.suspendedEntityException("parent task", id);
       }
     }
@@ -863,7 +863,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
     if (execution!=null) {
       return execution.getVariables();
     }
-    return Collections.EMPTY_MAP;
+    return Collections.emptyMap();
   }
 
   public void setExecutionVariables(Map<String, Object> parameters) {
@@ -1078,19 +1078,19 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   protected boolean invokeListener(String taskEventName, TaskListener taskListener) {
     boolean popProcessDataContext = false;
     CommandInvocationContext commandInvocationContext = Context.getCommandInvocationContext();
-    CoreExecution execution = getExecution();
-    if (execution == null) {
-      execution = getCaseExecution();
+    CoreExecution taskExecution = getExecution();
+    if (taskExecution == null) {
+      taskExecution = getCaseExecution();
     } else {
       if (commandInvocationContext != null) {
-        popProcessDataContext = commandInvocationContext.getProcessDataContext().pushSection((ExecutionEntity) execution);
+        popProcessDataContext = commandInvocationContext.getProcessDataContext().pushSection((ExecutionEntity) taskExecution);
       }
     }
-    if (execution != null) {
+    if (taskExecution != null) {
       setEventName(taskEventName);
     }
     try {
-      boolean result = invokeListener(execution, taskEventName, taskListener);
+      boolean result = invokeListener(taskExecution, taskEventName, taskListener);
       if (popProcessDataContext) {
         commandInvocationContext.getProcessDataContext().popSection();
       }
@@ -1398,6 +1398,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
     this.createTime = createTime;
   }
 
+  @Override
   public Date getLastUpdated() {
     return lastUpdated;
   }
@@ -1438,17 +1439,17 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   public void initializeFormKey() {
     isFormKeyInitialized = true;
     if(taskDefinitionKey != null) {
-      TaskDefinition taskDefinition = getTaskDefinition();
-      if(taskDefinition != null) {
+      TaskDefinition definition = getTaskDefinition();
+      if(definition != null) {
         // initialize formKey
-        Expression formKey = taskDefinition.getFormKey();
-        if(formKey != null) {
-          this.formKey = (String) formKey.getValue(this);
+        Expression formKeyExpression = definition.getFormKey();
+        if(formKeyExpression != null) {
+          this.formKey = (String) formKeyExpression.getValue(this);
         } else {
           // initialize form reference
-          Expression formRef = taskDefinition.getCamundaFormDefinitionKey();
-          String formRefBinding = taskDefinition.getCamundaFormDefinitionBinding();
-          Expression formRefVersion = taskDefinition.getCamundaFormDefinitionVersion();
+          Expression formRef = definition.getCamundaFormDefinitionKey();
+          String formRefBinding = definition.getCamundaFormDefinitionBinding();
+          Expression formRefVersion = definition.getCamundaFormDefinitionVersion();
           if (formRef != null && formRefBinding != null) {
             String formRefValue = (String) formRef.getValue(this);
             if (formRefValue != null) {

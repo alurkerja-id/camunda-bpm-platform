@@ -24,6 +24,7 @@ import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
 
 public class SameEventScopeInstructionValidator implements MigrationInstructionValidator {
 
+  @Override
   public void validate(ValidatingMigrationInstruction instruction, ValidatingMigrationInstructions instructions, MigrationInstructionValidationReportImpl report) {
     ActivityImpl sourceActivity = instruction.getSourceActivity();
     if (isCompensationBoundaryEvent(sourceActivity)) {
@@ -78,7 +79,7 @@ public class SameEventScopeInstructionValidator implements MigrationInstructionV
       }
       else {
         List<ValidatingMigrationInstruction> eventScopeInstructions = instructions.getInstructionsBySourceScope(sourceEventScope);
-        if (eventScopeInstructions.size() > 0) {
+        if (!eventScopeInstructions.isEmpty()) {
           return eventScopeInstructions.get(0).getTargetActivity();
         }
       }

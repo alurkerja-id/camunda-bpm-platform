@@ -159,6 +159,8 @@ public interface ExecutionQuery extends Query<ExecutionQuery, Execution> {
 
   /**
    * @see #signalEventSubscriptionName(String)
+   *
+   * @deprecated use {@link #signalEventSubscriptionName(String)}
    */
   @Deprecated
   ExecutionQuery signalEventSubscription(String signalName);

@@ -32,7 +32,6 @@ import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.impl.util.ModelUtil;
 import org.camunda.bpm.model.xml.instance.DomElement;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * @author Sebastian Menski
@@ -42,11 +41,7 @@ public class CamundaListImpl extends BpmnModelElementInstanceImpl implements Cam
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaList.class, CAMUNDA_ELEMENT_LIST)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<CamundaList>() {
-        public CamundaList newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CamundaListImpl(instanceContext);
-        }
-      });
+      .instanceProvider(CamundaListImpl::new);
 
     typeBuilder.build();
   }
@@ -55,6 +50,7 @@ public class CamundaListImpl extends BpmnModelElementInstanceImpl implements Cam
     super(instanceContext);
   }
 
+  @Override
   @SuppressWarnings("unchecked")
   public <T extends BpmnModelElementInstance> Collection<T> getValues() {
 
@@ -64,22 +60,27 @@ public class CamundaListImpl extends BpmnModelElementInstanceImpl implements Cam
         return ModelUtil.getModelElementCollection(getDomElement().getChildElements(), getModelInstance());
       }
 
+      @Override
       public int size() {
         return getElements().size();
       }
 
+      @Override
       public boolean isEmpty() {
         return getElements().isEmpty();
       }
 
+      @Override
       public boolean contains(Object o) {
         return getElements().contains(o);
       }
 
+      @Override
       public Iterator<T> iterator() {
-        return (Iterator<T>) getElements().iterator();
+        return getElements().iterator();
       }
 
+      @Override
       public Object[] toArray() {
         return getElements().toArray();
       }
@@ -88,16 +89,19 @@ public class CamundaListImpl extends BpmnModelElementInstanceImpl implements Cam
         return getElements().toArray(a);
       }
 
+      @Override
       public boolean add(T t) {
         getDomElement().appendChild(t.getDomElement());
         return true;
       }
 
+      @Override
       public boolean remove(Object o) {
         ModelUtil.ensureInstanceOf(o, BpmnModelElementInstance.class);
         return getDomElement().removeChild(((BpmnModelElementInstance) o).getDomElement());
       }
 
+      @Override
       public boolean containsAll(Collection<?> c) {
         for (Object o : c) {
           if (!contains(o)) {
@@ -114,6 +118,7 @@ public class CamundaListImpl extends BpmnModelElementInstanceImpl implements Cam
         return true;
       }
 
+      @Override
       public boolean removeAll(Collection<?> c) {
         boolean result = false;
         for (Object o : c) {
@@ -122,10 +127,12 @@ public class CamundaListImpl extends BpmnModelElementInstanceImpl implements Cam
         return result;
       }
 
+      @Override
       public boolean retainAll(Collection<?> c) {
         throw new UnsupportedModelOperationException("retainAll()", "not implemented");
       }
 
+      @Override
       public void clear() {
         DomElement domElement = getDomElement();
         List<DomElement> childElements = domElement.getChildElements();

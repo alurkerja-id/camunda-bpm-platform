@@ -112,97 +112,115 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     super(commandExecutor);
   }
 
+  @Override
   public HistoricProcessInstanceQueryImpl processInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery processInstanceIds(Set<String> processInstanceIds) {
     ensureNotEmpty("Set of process instance ids", processInstanceIds);
     this.processInstanceIds = processInstanceIds;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery processInstanceIdNotIn(String... processInstanceIdNotIn){
     ensureNotNull("processInstanceIdNotIn", (Object[]) processInstanceIdNotIn);
     this.processInstanceIdNotIn = processInstanceIdNotIn;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery rootProcessInstanceId(String rootProcessInstanceId) {
     ensureNotNull("Root process instance id", rootProcessInstanceId);
     this.rootProcessInstanceId = rootProcessInstanceId;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQueryImpl processDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery processDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery processDefinitionKeyIn(String... processDefinitionKeys) {
     ensureNotNull("processDefinitionKeys", (Object[]) processDefinitionKeys);
     this.processDefinitionKeys = processDefinitionKeys;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery processDefinitionName(String processDefinitionName) {
     this.processDefinitionName = processDefinitionName;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery processDefinitionNameLike(String nameLike) {
     this.processDefinitionNameLike = nameLike;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery processInstanceBusinessKey(String businessKey) {
     this.businessKey = businessKey;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery processInstanceBusinessKeyIn(String... businessKeyIn) {
     this.businessKeyIn = businessKeyIn;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery processInstanceBusinessKeyLike(String businessKeyLike) {
     this.businessKeyLike = businessKeyLike;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery finished() {
     this.finished = true;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery unfinished() {
     this.unfinished = true;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery withIncidents() {
     this.withIncidents = true;
 
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery withRootIncidents() {
     this.withRootIncidents = true;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery incidentIdIn(String... incidentIds) {
     ensureNotNull("incidentIds", (Object[]) incidentIds);
     this.incidentIds = incidentIds;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery incidentType(String incidentType) {
     ensureNotNull("incident type", incidentType);
     this.incidentType = incidentType;
@@ -215,6 +233,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery incidentMessage(String incidentMessage) {
     ensureNotNull("incidentMessage", incidentMessage);
     this.incidentMessage = incidentMessage;
@@ -222,6 +241,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery incidentMessageLike(String incidentMessageLike) {
     ensureNotNull("incidentMessageLike", incidentMessageLike);
     this.incidentMessageLike = incidentMessageLike;
@@ -235,11 +255,13 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery startedBy(String userId) {
     this.startedBy = userId;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery processDefinitionKeyNotIn(List<String> processDefinitionKeys) {
     ensureNotContainsNull("processDefinitionKeys", processDefinitionKeys);
     ensureNotContainsEmptyString("processDefinitionKeys", processDefinitionKeys);
@@ -247,28 +269,33 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery startedAfter(Date date) {
     startedAfter = date;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery startedBefore(Date date) {
     startedBefore = date;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery finishedAfter(Date date) {
     finishedAfter = date;
     finished = true;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery finishedBefore(Date date) {
     finishedBefore = date;
     finished = true;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery rootProcessInstances() {
     if (superProcessInstanceId != null) {
       throw new BadUserRequestException("Invalid query usage: cannot set both rootProcessInstances and superProcessInstanceId");
@@ -280,6 +307,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery superProcessInstanceId(String superProcessInstanceId) {
     if (isRootProcessInstances) {
       throw new BadUserRequestException("Invalid query usage: cannot set both rootProcessInstances and superProcessInstanceId");
@@ -288,11 +316,13 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery subProcessInstanceId(String subProcessInstanceId) {
     this.subProcessInstanceId = subProcessInstanceId;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery superCaseInstanceId(String superCaseInstanceId) {
     if (isRootProcessInstances) {
       throw new BadUserRequestException("Invalid query usage: cannot set both rootProcessInstances and superCaseInstanceId");
@@ -301,16 +331,19 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery subCaseInstanceId(String subCaseInstanceId) {
     this.subCaseInstanceId = subCaseInstanceId;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery caseInstanceId(String caseInstanceId) {
     this.caseInstanceId = caseInstanceId;
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery tenantIdIn(String... tenantIds) {
     ensureNotNull("tenantIds", (Object[]) tenantIds);
     this.tenantIds = tenantIds;
@@ -318,6 +351,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return this;
   }
 
+  @Override
   public HistoricProcessInstanceQuery withoutTenantId() {
     tenantIds = null;
     isTenantIdSet = true;
@@ -336,13 +370,15 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
       || CompareUtil.elementsAreContainedInArray(processInstanceIds, processInstanceIdNotIn);
   }
 
-	public HistoricProcessInstanceQuery orderByProcessInstanceBusinessKey() {
+  @Override
+  public HistoricProcessInstanceQuery orderByProcessInstanceBusinessKey() {
     if (isOrQueryActive) {
       throw new ProcessEngineException("Invalid query usage: cannot set orderByProcessInstanceBusinessKey() within 'or' query");
     }
     return orderBy(HistoricProcessInstanceQueryProperty.BUSINESS_KEY);
   }
 
+  @Override
   public HistoricProcessInstanceQuery orderByProcessInstanceDuration() {
     if (isOrQueryActive) {
       throw new ProcessEngineException("Invalid query usage: cannot set orderByProcessInstanceDuration() within 'or' query");
@@ -350,6 +386,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return orderBy(HistoricProcessInstanceQueryProperty.DURATION);
   }
 
+  @Override
   public HistoricProcessInstanceQuery orderByProcessInstanceStartTime() {
     if (isOrQueryActive) {
       throw new ProcessEngineException("Invalid query usage: cannot set orderByProcessInstanceStartTime() within 'or' query");
@@ -357,6 +394,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return orderBy(HistoricProcessInstanceQueryProperty.START_TIME);
   }
 
+  @Override
   public HistoricProcessInstanceQuery orderByProcessInstanceEndTime() {
     if (isOrQueryActive) {
       throw new ProcessEngineException("Invalid query usage: cannot set orderByProcessInstanceEndTime() within 'or' query");
@@ -364,6 +402,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return orderBy(HistoricProcessInstanceQueryProperty.END_TIME);
   }
 
+  @Override
   public HistoricProcessInstanceQuery orderByProcessDefinitionId() {
     if (isOrQueryActive) {
       throw new ProcessEngineException("Invalid query usage: cannot set orderByProcessDefinitionId() within 'or' query");
@@ -371,6 +410,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return orderBy(HistoricProcessInstanceQueryProperty.PROCESS_DEFINITION_ID);
   }
 
+  @Override
   public HistoricProcessInstanceQuery orderByProcessDefinitionKey() {
     if (isOrQueryActive) {
       throw new ProcessEngineException("Invalid query usage: cannot set orderByProcessDefinitionKey() within 'or' query");
@@ -378,6 +418,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return orderBy(HistoricProcessInstanceQueryProperty.PROCESS_DEFINITION_KEY);
   }
 
+  @Override
   public HistoricProcessInstanceQuery orderByProcessDefinitionName() {
     if (isOrQueryActive) {
       throw new ProcessEngineException("Invalid query usage: cannot set orderByProcessDefinitionName() within 'or' query");
@@ -385,6 +426,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return orderBy(HistoricProcessInstanceQueryProperty.PROCESS_DEFINITION_NAME);
   }
 
+  @Override
   public HistoricProcessInstanceQuery orderByProcessDefinitionVersion() {
     if (isOrQueryActive) {
       throw new ProcessEngineException("Invalid query usage: cannot set orderByProcessDefinitionVersion() within 'or' query");
@@ -392,6 +434,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return orderBy(HistoricProcessInstanceQueryProperty.PROCESS_DEFINITION_VERSION);
   }
 
+  @Override
   public HistoricProcessInstanceQuery orderByProcessInstanceId() {
     if (isOrQueryActive) {
       throw new ProcessEngineException("Invalid query usage: cannot set orderByProcessInstanceId() within 'or' query");
@@ -399,6 +442,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return orderBy(HistoricProcessInstanceQueryProperty.PROCESS_INSTANCE_ID_);
   }
 
+  @Override
   public HistoricProcessInstanceQuery orderByTenantId() {
     if (isOrQueryActive) {
       throw new ProcessEngineException("Invalid query usage: cannot set orderByTenantId() within 'or' query");
@@ -406,6 +450,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return orderBy(HistoricProcessInstanceQueryProperty.TENANT_ID);
   }
 
+  @Override
   public long executeCount(CommandContext commandContext) {
     checkQueryOk();
     ensureVariablesInitialized();
@@ -414,6 +459,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
       .findHistoricProcessInstanceCountByQueryCriteria(this);
   }
 
+  @Override
   public List<HistoricProcessInstance> executeList(CommandContext commandContext, Page page) {
     checkQueryOk();
     ensureVariablesInitialized();
@@ -422,6 +468,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
       .findHistoricProcessInstancesByQueryCriteria(this, page);
   }
 
+  @Override
   public List<String> executeIdsList(CommandContext commandContext) {
     checkQueryOk();
     ensureVariablesInitialized();
@@ -439,6 +486,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
         .findDeploymentIdMappingsByQueryCriteria(this);
   }
 
+  @Override
   public List<QueryVariableValue> getQueryVariableValues() {
     return queryVariableNameToValuesMap.values()
         .stream()
@@ -709,13 +757,22 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
   protected Date finishDateOnBegin;
   protected Date finishDateOnEnd;
 
+  /**
+   * @deprecated the whole-day granularity is gone; use {@link #startedBefore(Date)}
+   */
   @Deprecated
+  @Override
   public HistoricProcessInstanceQuery startDateBy(Date date) {
     this.startDateBy = this.calculateMidnight(date);
     return this;
   }
 
+  /**
+   * @deprecated the whole-day granularity is gone; use {@link #startedAfter(Date)} together with
+   *             {@link #startedBefore(Date)}
+   */
   @Deprecated
+  @Override
   public HistoricProcessInstanceQuery startDateOn(Date date) {
     this.startDateOn = date;
     this.startDateOnBegin = this.calculateMidnight(date);
@@ -723,13 +780,22 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return this;
   }
 
+  /**
+   * @deprecated the whole-day granularity is gone; use {@link #finishedBefore(Date)}
+   */
   @Deprecated
+  @Override
   public HistoricProcessInstanceQuery finishDateBy(Date date) {
     this.finishDateBy = this.calculateBeforeMidnight(date);
     return this;
   }
 
+  /**
+   * @deprecated the whole-day granularity is gone; use {@link #finishedAfter(Date)} together with
+   *             {@link #finishedBefore(Date)}
+   */
   @Deprecated
+  @Override
   public HistoricProcessInstanceQuery finishDateOn(Date date) {
     this.finishDateOn = date;
     this.finishDateOnBegin = this.calculateMidnight(date);
@@ -737,6 +803,9 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return this;
   }
 
+  /**
+   * @deprecated only used by the whole-day query methods above, which are deprecated themselves
+   */
   @Deprecated
   private Date calculateBeforeMidnight(Date date){
     Calendar cal = Calendar.getInstance();
@@ -746,6 +815,9 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
     return cal.getTime();
   }
 
+  /**
+   * @deprecated only used by the whole-day query methods above, which are deprecated themselves
+   */
   @Deprecated
   private Date calculateMidnight(Date date){
     Calendar cal = Calendar.getInstance();

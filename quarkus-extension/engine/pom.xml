@@ -43,7 +43,8 @@
         <configuration>
           <redirectTestOutputToFile>true</redirectTestOutputToFile>
           <trimStackTrace>false</trimStackTrace>
-          <argLine>-Xmx2048m</argLine>
+          <!-- @{argLine} = JaCoCo agent, see parent/pom.xml -->
+          <argLine>@{argLine} -Xmx2048m</argLine>
         </configuration>
       </plugin>
     </plugins>

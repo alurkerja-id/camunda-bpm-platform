@@ -23,7 +23,7 @@ import org.camunda.bpm.engine.impl.interceptor.CommandContext;
 import org.camunda.bpm.engine.impl.persistence.entity.ByteArrayEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.IdentityInfoEntity;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.*;
+import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 
 /**
@@ -39,6 +39,7 @@ public class GetUserPictureCmd implements Command<Picture>, Serializable {
     this.userId = userId;
   }
 
+  @Override
   public Picture execute(CommandContext commandContext) {
     ensureNotNull("userId", userId);
 

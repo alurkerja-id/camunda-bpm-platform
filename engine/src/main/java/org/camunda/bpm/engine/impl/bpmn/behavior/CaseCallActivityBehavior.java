@@ -39,6 +39,7 @@ import org.camunda.bpm.engine.variable.VariableMap;
  */
 public class CaseCallActivityBehavior extends CallableElementActivityBehavior implements MigrationObserverBehavior {
 
+  @Override
   protected void startInstance(ActivityExecution execution, VariableMap variables, String businessKey) {
     ExecutionEntity executionEntity = (ExecutionEntity) execution;
 

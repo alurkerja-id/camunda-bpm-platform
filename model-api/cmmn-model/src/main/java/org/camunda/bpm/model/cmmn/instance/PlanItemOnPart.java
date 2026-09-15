@@ -24,9 +24,17 @@ import org.camunda.bpm.model.cmmn.PlanItemTransition;
  */
 public interface PlanItemOnPart extends OnPart {
 
+  /**
+   * @deprecated CMMN 1.0 pointed at the sentry itself; CMMN 1.1 points at a criterion, see
+   *             {@link #getExitCriterion()}
+   */
   @Deprecated
   Sentry getSentry();
 
+  /**
+   * @deprecated CMMN 1.0 pointed at the sentry itself; CMMN 1.1 points at a criterion, see
+   *             {@link #setExitCriterion(ExitCriterion)}
+   */
   @Deprecated
   void setSentry(Sentry sentry);
 

@@ -154,20 +154,21 @@ public class EventSubscriptionEntity implements EventSubscription, DbEntity, Has
 
   protected void addToExecution() {
     // add reference in execution
-    ExecutionEntity execution = getExecution();
-    if(execution != null) {
-      execution.addEventSubscription(this);
+    ExecutionEntity subscribedExecution = getExecution();
+    if(subscribedExecution != null) {
+      subscribedExecution.addEventSubscription(this);
     }
   }
 
   protected void removeFromExecution() {
     // remove reference in execution
-    ExecutionEntity execution = getExecution();
-    if(execution != null) {
-      execution.removeEventSubscription(this);
+    ExecutionEntity subscribedExecution = getExecution();
+    if(subscribedExecution != null) {
+      subscribedExecution.removeEventSubscription(this);
     }
   }
 
+  @Override
   public Object getPersistentState() {
     HashMap<String, Object> persistentState = new HashMap<String, Object>();
     persistentState.put("executionId", executionId);
@@ -211,8 +212,7 @@ public class EventSubscriptionEntity implements EventSubscription, DbEntity, Has
 
   public ProcessDefinitionEntity getProcessDefinition() {
     if (executionId != null) {
-      ExecutionEntity execution = getExecution();
-      return execution.getProcessDefinition();
+      return getExecution().getProcessDefinition();
     }
     else {
       // this assumes that start event subscriptions have the process definition id
@@ -239,22 +239,27 @@ public class EventSubscriptionEntity implements EventSubscription, DbEntity, Has
     return jobDeclaration;
   }
 
+  @Override
   public String getId() {
     return id;
   }
 
+  @Override
   public void setId(String id) {
     this.id = id;
   }
 
+  @Override
   public int getRevision() {
     return revision;
   }
 
+  @Override
   public void setRevision(int revision) {
     this.revision = revision;
   }
 
+  @Override
   public int getRevisionNext() {
     return revision +1;
   }
@@ -263,6 +268,7 @@ public class EventSubscriptionEntity implements EventSubscription, DbEntity, Has
     return this.eventType.equals(eventType.name());
   }
 
+  @Override
   public String getEventType() {
     return eventType;
   }
@@ -271,6 +277,7 @@ public class EventSubscriptionEntity implements EventSubscription, DbEntity, Has
     this.eventType = eventType;
   }
 
+  @Override
   public String getEventName() {
     return this.eventName;
   }
@@ -279,6 +286,7 @@ public class EventSubscriptionEntity implements EventSubscription, DbEntity, Has
     this.eventName = eventName;
   }
 
+  @Override
   public String getExecutionId() {
     return executionId;
   }
@@ -287,6 +295,7 @@ public class EventSubscriptionEntity implements EventSubscription, DbEntity, Has
     this.executionId = executionId;
   }
 
+  @Override
   public String getProcessInstanceId() {
     return processInstanceId;
   }
@@ -303,6 +312,7 @@ public class EventSubscriptionEntity implements EventSubscription, DbEntity, Has
     this.configuration = configuration;
   }
 
+  @Override
   public String getActivityId() {
     return activityId;
   }
@@ -312,6 +322,7 @@ public class EventSubscriptionEntity implements EventSubscription, DbEntity, Has
     this.activity = null;
   }
 
+  @Override
   public Date getCreated() {
     return created;
   }
@@ -320,6 +331,7 @@ public class EventSubscriptionEntity implements EventSubscription, DbEntity, Has
     this.created = created;
   }
 
+  @Override
   public String getTenantId() {
     return tenantId;
   }

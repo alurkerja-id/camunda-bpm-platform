@@ -16,6 +16,7 @@
  */
 package org.camunda.bpm.engine.impl.pvm.runtime;
 
+import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.pvm.PvmLogger;
 import org.camunda.bpm.engine.impl.pvm.PvmTransition;
 
@@ -26,7 +27,7 @@ import org.camunda.bpm.engine.impl.pvm.PvmTransition;
  */
 public class OutgoingExecution {
 
-  private final static PvmLogger LOG = PvmLogger.PVM_LOGGER;
+  private final static PvmLogger LOG = ProcessEngineLogger.PVM_LOGGER;
 
   protected PvmExecutionImpl outgoingExecution;
   protected PvmTransition outgoingTransition;

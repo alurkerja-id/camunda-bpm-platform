@@ -49,10 +49,12 @@ public class UndeployProcessArchiveStep extends DeploymentOperationStep {
     this.processEngineName = processEngineName;
   }
 
+  @Override
   public String getName() {
     return "Undeploying process archvie "+processArchvieName;
   }
 
+  @Override
   public void performOperationStep(DeploymentOperation operationContext) {
 
     final PlatformServiceContainer serviceContainer = operationContext.getServiceContainer();
@@ -65,11 +67,9 @@ public class UndeployProcessArchiveStep extends DeploymentOperationStep {
     processEngine.getManagementService().unregisterProcessApplication(deployedProcessArchive.getAllDeploymentIds(), true);
 
     // delete the deployment if not disabled
-    if (PropertyHelper.getBooleanProperty(processArchive.getProperties(), ProcessArchiveXml.PROP_IS_DELETE_UPON_UNDEPLOY, false)) {
-      if (processEngine != null) {
-        // always cascade & skip custom listeners
-        deleteDeployment(deployedProcessArchive.getPrimaryDeploymentId(), processEngine.getRepositoryService());
-      }
+    if (PropertyHelper.getBooleanProperty(processArchive.getProperties(), ProcessArchiveXml.PROP_IS_DELETE_UPON_UNDEPLOY, false) && processEngine != null) {
+      // always cascade & skip custom listeners
+      deleteDeployment(deployedProcessArchive.getPrimaryDeploymentId(), processEngine.getRepositoryService());
     }
 
   }

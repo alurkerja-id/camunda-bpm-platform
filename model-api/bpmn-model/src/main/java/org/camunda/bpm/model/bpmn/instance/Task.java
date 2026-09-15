@@ -39,6 +39,7 @@ public interface Task extends Activity {
   @Deprecated
   void setCamundaAsync(boolean isCamundaAsync);
 
+  @Override
   BpmnShape getDiagramElement();
 
 }

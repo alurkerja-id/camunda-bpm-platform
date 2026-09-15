@@ -87,17 +87,17 @@ public class VariableUtil {
   public static void setVariables(Map<String, ?> variables,
                                   SetVariableFunction setVariableFunction) {
     if (variables != null) {
-      for (String variableName : variables.keySet()) {
+      for (Map.Entry<String, ?> entry : variables.entrySet()) {
         Object value = null;
         if (variables instanceof VariableMap) {
-          value = ((VariableMap) variables).getValueTyped(variableName);
+          value = ((VariableMap) variables).getValueTyped(entry.getKey());
 
         } else {
-          value = variables.get(variableName);
+          value = entry.getValue();
 
         }
 
-        setVariableFunction.apply(variableName, value);
+        setVariableFunction.apply(entry.getKey(), value);
       }
     }
   }

@@ -22,7 +22,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_SOURCE_REF;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN sourceRef element of the BPMN tDataAssociation type
@@ -34,11 +33,7 @@ public class SourceRef extends BpmnModelElementInstanceImpl {
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(SourceRef.class, BPMN_ELEMENT_SOURCE_REF)
       .namespaceUri(BPMN20_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<SourceRef>() {
-        public SourceRef newInstance(ModelTypeInstanceContext instanceContext) {
-          return new SourceRef(instanceContext);
-        }
-      });
+      .instanceProvider(SourceRef::new);
 
     typeBuilder.build();
   }

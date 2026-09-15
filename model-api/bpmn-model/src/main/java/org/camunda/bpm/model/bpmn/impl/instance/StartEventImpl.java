@@ -51,11 +51,7 @@ public class StartEventImpl extends CatchEventImpl implements StartEvent {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(StartEvent.class, BPMN_ELEMENT_START_EVENT)
       .namespaceUri(BPMN20_NS)
       .extendsType(CatchEvent.class)
-      .instanceProvider(new ModelElementTypeBuilder.ModelTypeInstanceProvider<StartEvent>() {
-        public StartEvent newInstance(ModelTypeInstanceContext instanceContext) {
-          return new StartEventImpl(instanceContext);
-        }
-      });
+      .instanceProvider(StartEventImpl::new);
 
     isInterruptingAttribute = typeBuilder.booleanAttribute(BPMN_ATTRIBUTE_IS_INTERRUPTING)
       .defaultValue(true)
@@ -104,10 +100,12 @@ public class StartEventImpl extends CatchEventImpl implements StartEvent {
     return new StartEventBuilder((BpmnModelInstance) modelInstance, this);
   }
 
+  @Override
   public boolean isInterrupting() {
     return isInterruptingAttribute.getValue(this);
   }
 
+  @Override
   public void setInterrupting(boolean isInterrupting) {
     isInterruptingAttribute.setValue(this, isInterrupting);
   }
@@ -118,6 +116,7 @@ public class StartEventImpl extends CatchEventImpl implements StartEvent {
    * @deprecated use isCamundaAsyncBefore() instead.
    */
   @Deprecated
+  @Override
   public boolean isCamundaAsync() {
     return camundaAsyncAttribute.getValue(this);
   }
@@ -126,55 +125,68 @@ public class StartEventImpl extends CatchEventImpl implements StartEvent {
    * @deprecated use setCamundaAsyncBefore(isCamundaAsyncBefore) instead.
    */
   @Deprecated
+  @Override
   public void setCamundaAsync(boolean isCamundaAsync) {
     camundaAsyncAttribute.setValue(this, isCamundaAsync);
   }
 
+  @Override
   public String getCamundaFormHandlerClass() {
     return camundaFormHandlerClassAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaFormHandlerClass(String camundaFormHandlerClass) {
     camundaFormHandlerClassAttribute.setValue(this, camundaFormHandlerClass);
   }
 
+  @Override
   public String getCamundaFormKey() {
     return camundaFormKeyAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaFormKey(String camundaFormKey) {
     camundaFormKeyAttribute.setValue(this, camundaFormKey);
   }
 
 
+  @Override
   public String getCamundaFormRef() {
     return camundaFormRefAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaFormRef(String camundaFormRef) {
     camundaFormRefAttribute.setValue(this, camundaFormRef);
   }
 
+  @Override
   public String getCamundaFormRefBinding() {
     return camundaFormRefBindingAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaFormRefBinding(String camundaFormRefBinding) {
     camundaFormRefBindingAttribute.setValue(this, camundaFormRefBinding);
   }
 
+  @Override
   public String getCamundaFormRefVersion() {
     return camundaFormRefVersionAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaFormRefVersion(String camundaFormRefVersion) {
     camundaFormRefVersionAttribute.setValue(this, camundaFormRefVersion);
   }
 
+  @Override
   public String getCamundaInitiator() {
     return camundaInitiatorAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaInitiator(String camundaInitiator) {
     camundaInitiatorAttribute.setValue(this, camundaInitiator);
   }

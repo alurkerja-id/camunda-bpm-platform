@@ -44,7 +44,8 @@ public class TimerEntity extends JobEntity {
 
   protected static final String CYCLE_EXPRESSION_START_TYPE_1 = TimerDeclarationType.CYCLE + ": #";
   protected static final String CYCLE_EXPRESSION_START_TYPE_2 = TimerDeclarationType.CYCLE + ": $";
-  public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+  // a shared SimpleDateFormat is not thread-safe, so only the pattern is shared
+  public static final String SIMPLE_DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
 
   public static final String TYPE = "timer";
 
@@ -177,7 +178,7 @@ public class TimerEntity extends JobEntity {
 
   public static String replaceRepeatCycleAndDate(String repeatExpression) {
     if (repeatExpression.split("/").length == 2) {
-      return repeatExpression.replace("/", "/" + SIMPLE_DATE_FORMAT.format(ClockUtil.getCurrentTime()) + "/");
+      return repeatExpression.replace("/", "/" + new SimpleDateFormat(SIMPLE_DATE_PATTERN).format(ClockUtil.getCurrentTime()) + "/");
     }
     return repeatExpression; // expression include start date
   }

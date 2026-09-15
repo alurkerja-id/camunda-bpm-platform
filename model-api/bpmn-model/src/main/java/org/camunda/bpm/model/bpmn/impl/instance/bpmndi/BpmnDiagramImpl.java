@@ -32,7 +32,6 @@ import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMNDI_ELEMENT_BPMN_DIAGRAM;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMNDI_NS;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMNDI BPMNDiagram element
@@ -48,11 +47,7 @@ public class BpmnDiagramImpl extends DiagramImpl implements BpmnDiagram {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(BpmnDiagram.class, BPMNDI_ELEMENT_BPMN_DIAGRAM)
       .namespaceUri(BPMNDI_NS)
       .extendsType(Diagram.class)
-      .instanceProvider(new ModelTypeInstanceProvider<BpmnDiagram>(){
-        public BpmnDiagram newInstance(ModelTypeInstanceContext instanceContext) {
-          return new BpmnDiagramImpl(instanceContext);
-        }
-      });
+      .instanceProvider(BpmnDiagramImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 
@@ -70,14 +65,17 @@ public class BpmnDiagramImpl extends DiagramImpl implements BpmnDiagram {
     super(instanceContext);
   }
 
+  @Override
   public BpmnPlane getBpmnPlane() {
     return bpmnPlaneChild.getChild(this);
   }
 
+  @Override
   public void setBpmnPlane(BpmnPlane bpmnPlane) {
     bpmnPlaneChild.setChild(this, bpmnPlane);
   }
 
+  @Override
   public Collection<BpmnLabelStyle> getBpmnLabelStyles() {
     return bpmnLabelStyleCollection.get(this);
   }

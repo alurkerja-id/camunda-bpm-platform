@@ -23,7 +23,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_DATA_PATH;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN dataPath element of the BPMN tCorrelationPropertyBinding type
@@ -36,11 +35,7 @@ public class DataPath extends FormalExpressionImpl {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(DataPath.class, BPMN_ELEMENT_DATA_PATH)
       .namespaceUri(BPMN20_NS)
       .extendsType(FormalExpression.class)
-      .instanceProvider(new ModelTypeInstanceProvider<DataPath>() {
-        public DataPath newInstance(ModelTypeInstanceContext instanceContext) {
-          return new DataPath(instanceContext);
-        }
-      });
+      .instanceProvider(DataPath::new);
 
     typeBuilder.build();
   }

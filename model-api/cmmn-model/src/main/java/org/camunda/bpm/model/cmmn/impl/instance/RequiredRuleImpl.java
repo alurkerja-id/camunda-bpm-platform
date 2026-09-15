@@ -28,7 +28,6 @@ import org.camunda.bpm.model.cmmn.instance.RequiredRule;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
@@ -48,26 +47,32 @@ public class RequiredRuleImpl extends CmmnElementImpl implements RequiredRule {
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public CaseFileItem getContext() {
     return contextRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setContext(CaseFileItem caseFileItem) {
     contextRefAttribute.setReferenceTargetElement(this, caseFileItem);
   }
 
+  @Override
   public ConditionExpression getCondition() {
     return conditionChild.getChild(this);
   }
 
+  @Override
   public void setCondition(ConditionExpression condition) {
     conditionChild.setChild(this, condition);
   }
@@ -76,11 +81,7 @@ public class RequiredRuleImpl extends CmmnElementImpl implements RequiredRule {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(RequiredRule.class, CMMN_ELEMENT_REQUIRED_RULE)
         .namespaceUri(CMMN11_NS)
         .extendsType(CmmnElement.class)
-        .instanceProvider(new ModelTypeInstanceProvider<RequiredRule>() {
-          public RequiredRule newInstance(ModelTypeInstanceContext instanceContext) {
-            return new RequiredRuleImpl(instanceContext);
-          }
-        });
+        .instanceProvider(RequiredRuleImpl::new);
 
     nameAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_NAME)
         .build();

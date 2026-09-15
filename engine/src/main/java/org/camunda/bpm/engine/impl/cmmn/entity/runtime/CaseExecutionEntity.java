@@ -138,16 +138,19 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
 
   // case definition ///////////////////////////////////////////////////////////
 
+  @Override
   public String getCaseDefinitionId() {
     return caseDefinitionId;
   }
 
   /** ensures initialization and returns the case definition. */
+  @Override
   public CmmnCaseDefinition getCaseDefinition() {
     ensureCaseDefinitionInitialized();
     return caseDefinition;
   }
 
+  @Override
   public void setCaseDefinition(CmmnCaseDefinition caseDefinition) {
     super.setCaseDefinition(caseDefinition);
 
@@ -172,11 +175,13 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
 
   // parent ////////////////////////////////////////////////////////////////////
 
+  @Override
   public CaseExecutionEntity getParent() {
     ensureParentInitialized();
     return parent;
   }
 
+  @Override
   public void setParent(CmmnExecution parent) {
     this.parent = (CaseExecutionEntity) parent;
 
@@ -210,24 +215,24 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
       .getCaseExecutionManager()
       .findChildCaseExecutionsByCaseInstanceId(caseInstanceId);
 
-    CaseExecutionEntity caseInstance = null;
+    CaseExecutionEntity treeCaseInstance = null;
 
     Map<String, CaseExecutionEntity> executionMap = new HashMap<String, CaseExecutionEntity>();
     for (CaseExecutionEntity execution : executions) {
       execution.caseExecutions = new ArrayList<CaseExecutionEntity>();
       executionMap.put(execution.getId(), execution);
       if(execution.isCaseInstanceExecution()) {
-        caseInstance = execution;
+        treeCaseInstance = execution;
       }
     }
 
     for (CaseExecutionEntity execution : executions) {
-      String parentId = execution.getParentId();
-      CaseExecutionEntity parent = executionMap.get(parentId);
+      String executionParentId = execution.getParentId();
+      CaseExecutionEntity executionParent = executionMap.get(executionParentId);
       if(!execution.isCaseInstanceExecution()) {
-        execution.caseInstance = caseInstance;
-        execution.parent = parent;
-        parent.caseExecutions.add(execution);
+        execution.caseInstance = treeCaseInstance;
+        execution.parent = executionParent;
+        executionParent.caseExecutions.add(execution);
       } else {
         execution.caseInstance = execution;
       }
@@ -242,17 +247,20 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
       .isExecutionTreePrefetchEnabled();
   }
 
+  @Override
   public String getParentId() {
     return parentId;
   }
 
   // activity //////////////////////////////////////////////////////////////////
 
+  @Override
   public CmmnActivity getActivity() {
     ensureActivityInitialized();
     return super.getActivity();
   }
 
+  @Override
   public void setActivity(CmmnActivity activity) {
     super.setActivity(activity);
     if (activity != null) {
@@ -279,7 +287,7 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
 
     if (activity != null) {
       Object value = activity.getProperty(property);
-      if (value != null && value instanceof String) {
+      if (value instanceof String) {
         result = (String) value;
       }
     }
@@ -289,24 +297,29 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
 
   // activity properties //////////////////////////////////////////////////////
 
+  @Override
   public String getActivityId() {
     return activityId;
   }
 
+  @Override
   public String getActivityName() {
     return activityName;
   }
 
+  @Override
   public String getActivityType() {
     return activityType;
   }
 
+  @Override
   public String getActivityDescription() {
     return activityDescription;
   }
 
   // case executions ////////////////////////////////////////////////////////////////
 
+  @Override
   public List<CaseExecutionEntity> getCaseExecutions() {
     return new ArrayList<CaseExecutionEntity>(getCaseExecutionsInternal());
   }
@@ -327,6 +340,7 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
 
   // task ///////////////////////////////////////////////////////////////////
 
+  @Override
   public TaskEntity getTask() {
     ensureTaskInitialized();
     return task;
@@ -341,6 +355,7 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
     }
   }
 
+  @Override
   public TaskEntity createTask(TaskDecorator taskDecorator) {
     TaskEntity task = super.createTask(taskDecorator);
     fireHistoricCaseActivityInstanceUpdate();
@@ -349,15 +364,18 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
 
   // case instance /////////////////////////////////////////////////////////
 
+  @Override
   public String getCaseInstanceId() {
     return caseInstanceId;
   }
 
+  @Override
   public CaseExecutionEntity getCaseInstance() {
     ensureCaseInstanceInitialized();
     return caseInstance;
   }
 
+  @Override
   public void setCaseInstance(CmmnExecution caseInstance) {
     this.caseInstance = (CaseExecutionEntity) caseInstance;
 
@@ -459,11 +477,13 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
     this.superExecutionId = superProcessExecutionId;
   }
 
+  @Override
   public ExecutionEntity getSuperExecution() {
     ensureSuperExecutionInstanceInitialized();
     return superExecution;
   }
 
+  @Override
   public void setSuperExecution(PvmExecutionImpl superExecution) {
     if (this.superExecutionId != null) {
       ensureSuperExecutionInstanceInitialized();
@@ -491,43 +511,48 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
 
   // sub process instance ///////////////////////////////////////////////////
 
+  @Override
   public ExecutionEntity getSubProcessInstance() {
     ensureSubProcessInstanceInitialized();
     return subProcessInstance;
   }
 
+  @Override
   public void setSubProcessInstance(PvmExecutionImpl subProcessInstance) {
     this.subProcessInstance = (ExecutionEntity) subProcessInstance;
   }
 
+  @Override
   public ExecutionEntity createSubProcessInstance(PvmProcessDefinition processDefinition) {
     return createSubProcessInstance(processDefinition, null);
   }
 
+  @Override
   public ExecutionEntity createSubProcessInstance(PvmProcessDefinition processDefinition, String businessKey) {
     return createSubProcessInstance(processDefinition, businessKey, getCaseInstanceId());
   }
 
+  @Override
   public ExecutionEntity createSubProcessInstance(PvmProcessDefinition processDefinition, String businessKey, String caseInstanceId) {
-    ExecutionEntity subProcessInstance = (ExecutionEntity) processDefinition.createProcessInstance(businessKey, caseInstanceId);
+    ExecutionEntity createdSubProcessInstance = (ExecutionEntity) processDefinition.createProcessInstance(businessKey, caseInstanceId);
 
     // inherit the tenant-id from the process definition
-    String tenantId = ((ProcessDefinitionEntity) processDefinition).getTenantId();
-    if (tenantId != null) {
-      subProcessInstance.setTenantId(tenantId);
+    String definitionTenantId = ((ProcessDefinitionEntity) processDefinition).getTenantId();
+    if (definitionTenantId != null) {
+      createdSubProcessInstance.setTenantId(definitionTenantId);
     }
     else {
       // if process definition has no tenant id, inherit this case instance's tenant id
-      subProcessInstance.setTenantId(this.tenantId);
+      createdSubProcessInstance.setTenantId(this.tenantId);
     }
 
     // manage bidirectional super-subprocess relation
-    subProcessInstance.setSuperCaseExecution(this);
-    setSubProcessInstance(subProcessInstance);
+    createdSubProcessInstance.setSuperCaseExecution(this);
+    setSubProcessInstance(createdSubProcessInstance);
 
     fireHistoricCaseActivityInstanceUpdate();
 
-    return subProcessInstance;
+    return createdSubProcessInstance;
   }
 
   protected void ensureSubProcessInstanceInitialized() {
@@ -541,39 +566,43 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
 
   // sub-/super- case instance ////////////////////////////////////////////////////
 
+  @Override
   public CaseExecutionEntity getSubCaseInstance() {
     ensureSubCaseInstanceInitialized();
     return subCaseInstance;
   }
 
+  @Override
   public void setSubCaseInstance(CmmnExecution subCaseInstance) {
     this.subCaseInstance = (CaseExecutionEntity) subCaseInstance;
   }
 
+  @Override
   public CaseExecutionEntity createSubCaseInstance(CmmnCaseDefinition caseDefinition) {
     return createSubCaseInstance(caseDefinition, null);
   }
 
+  @Override
   public CaseExecutionEntity createSubCaseInstance(CmmnCaseDefinition caseDefinition, String businessKey) {
-    CaseExecutionEntity subCaseInstance = (CaseExecutionEntity) caseDefinition.createCaseInstance(businessKey);
+    CaseExecutionEntity createdSubCaseInstance = (CaseExecutionEntity) caseDefinition.createCaseInstance(businessKey);
 
     // inherit the tenant-id from the case definition
-    String tenantId = ((CaseDefinitionEntity) caseDefinition).getTenantId();
-    if (tenantId != null) {
-      subCaseInstance.setTenantId(tenantId);
+    String definitionTenantId = ((CaseDefinitionEntity) caseDefinition).getTenantId();
+    if (definitionTenantId != null) {
+      createdSubCaseInstance.setTenantId(definitionTenantId);
     }
     else {
       // if case definition has no tenant id, inherit this case instance's tenant id
-      subCaseInstance.setTenantId(this.tenantId);
+      createdSubCaseInstance.setTenantId(this.tenantId);
     }
 
     // manage bidirectional super-sub-case-instances relation
-    subCaseInstance.setSuperCaseExecution(this);
-    setSubCaseInstance(subCaseInstance);
+    createdSubCaseInstance.setSuperCaseExecution(this);
+    setSubCaseInstance(createdSubCaseInstance);
 
     fireHistoricCaseActivityInstanceUpdate();
 
-    return subCaseInstance;
+    return createdSubCaseInstance;
   }
 
   public void fireHistoricCaseActivityInstanceUpdate() {
@@ -605,11 +634,13 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
     this.superCaseExecutionId = superCaseExecutionId;
   }
 
+  @Override
   public CmmnExecution getSuperCaseExecution() {
     ensureSuperCaseExecutionInitialized();
     return superCaseExecution;
   }
 
+  @Override
   public void setSuperCaseExecution(CmmnExecution superCaseExecution) {
     this.superCaseExecution = (CaseExecutionEntity) superCaseExecution;
 
@@ -631,6 +662,7 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
 
   // sentry /////////////////////////////////////////////////////////////////////////
 
+  @Override
   public List<CaseSentryPartEntity> getCaseSentryParts() {
     ensureCaseSentryPartsInitialized();
     return caseSentryParts;
@@ -651,14 +683,7 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
       for (CaseSentryPartEntity sentryPart : caseSentryParts) {
 
         String sentryId = sentryPart.getSentryId();
-        List<CmmnSentryPart> parts = sentries.get(sentryId);
-
-        if (parts == null) {
-          parts = new ArrayList<CmmnSentryPart>();
-          sentries.put(sentryId, parts);
-        }
-
-        parts.add(sentryPart);
+        sentries.computeIfAbsent(sentryId, k -> new ArrayList<CmmnSentryPart>()).add(sentryPart);
       }
     }
   }
@@ -669,14 +694,7 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
     getCaseSentryParts().add(entity);
 
     String sentryId = sentryPart.getSentryId();
-    List<CmmnSentryPart> parts = sentries.get(sentryId);
-
-    if (parts == null) {
-      parts = new ArrayList<CmmnSentryPart>();
-      sentries.put(sentryId, parts);
-    }
-
-    parts.add(entity);
+    sentries.computeIfAbsent(sentryId, k -> new ArrayList<CmmnSentryPart>()).add(entity);
   }
 
   protected Map<String, List<CmmnSentryPart>> getSentries() {
@@ -733,6 +751,7 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
       .findVariableInstancesByCaseExecutionId(id);
   }
 
+  @Override
   public Collection<VariableInstanceEntity> provideVariables(Collection<String> variableNames) {
     return Context
       .getCommandContext()
@@ -742,6 +761,7 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
 
   // toString /////////////////////////////////////////////////////////////
 
+  @Override
   public String toString() {
     if (isCaseInstanceExecution()) {
       return "CaseInstance["+getToStringIdentity()+"]";
@@ -756,7 +776,8 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
 
   // delete/remove ///////////////////////////////////////////////////////
 
-  @SuppressWarnings({ "unchecked", "rawtypes" })
+  @Override
+  @SuppressWarnings({"unchecked", "rawtypes"})
   public void remove() {
     super.remove();
 
@@ -782,14 +803,17 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
 
   // persistence /////////////////////////////////////////////////////////
 
+  @Override
   public int getRevision() {
     return revision;
   }
 
+  @Override
   public void setRevision(int revision) {
     this.revision = revision;
   }
 
+  @Override
   public int getRevisionNext() {
     return revision + 1;
   }
@@ -831,6 +855,7 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
     return referenceIdAndClass;
   }
 
+  @Override
   public Object getPersistentState() {
     Map<String, Object> persistentState = new HashMap<String, Object>();
     persistentState.put("caseDefinitionId", caseDefinitionId);
@@ -843,6 +868,7 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
     return persistentState;
   }
 
+  @Override
   public CmmnModelInstance getCmmnModelInstance() {
     if(caseDefinitionId != null) {
 
@@ -856,6 +882,7 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
     }
   }
 
+  @Override
   public CmmnElement getCmmnModelElementInstance() {
     CmmnModelInstance cmmnModelInstance = getCmmnModelInstance();
     if(cmmnModelInstance != null) {
@@ -877,12 +904,14 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
     }
   }
 
+  @Override
   public ProcessEngineServices getProcessEngineServices() {
     return Context
         .getProcessEngineConfiguration()
         .getProcessEngine();
   }
 
+  @Override
   public ProcessEngine getProcessEngine() {
     return Context.getProcessEngineConfiguration().getProcessEngine();
   }
@@ -892,11 +921,13 @@ public class CaseExecutionEntity extends CmmnExecution implements CaseExecution,
     return caseDefinition.getTenantId();
   }
 
+  @Override
   public <T extends CoreExecution> void performOperation(CoreAtomicOperation<T> operation) {
     Context.getCommandContext()
       .performOperation((CmmnAtomicOperation) operation, this);
   }
 
+  @Override
   public <T extends CoreExecution> void performOperationSync(CoreAtomicOperation<T> operation) {
     Context.getCommandContext()
       .performOperation((CmmnAtomicOperation) operation, this);

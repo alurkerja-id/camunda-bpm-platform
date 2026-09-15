@@ -65,6 +65,7 @@ public class JobExecutorHelper {
           }
         }
       } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
       } finally {
         timer.cancel();
       }
@@ -93,6 +94,7 @@ public class JobExecutorHelper {
           conditionIsViolated = !condition.call();
         }
       } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
       } catch (Exception e) {
         throw new ProcessEngineException("Exception while waiting on condition: "+e.getMessage(), e);
       } finally {
@@ -130,6 +132,8 @@ public class JobExecutorHelper {
     public boolean isTimeLimitExceeded() {
       return timeLimitExceeded;
     }
+
+    @Override
     public void run() {
       timeLimitExceeded = true;
       thread.interrupt();

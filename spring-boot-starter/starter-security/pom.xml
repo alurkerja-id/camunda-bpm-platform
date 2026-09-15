@@ -57,6 +57,15 @@
       <artifactId>spring-boot-resttestclient</artifactId>
       <scope>test</scope>
     </dependency>
+    <!-- Alurkerja fork: and RestTemplateBuilder moved with it, into spring-boot-restclient.
+         Without this one every integration test here died on
+         NoClassDefFoundError: org/springframework/boot/restclient/RestTemplateBuilder
+         before the Spring context could even start. -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-restclient</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-webmvc-test</artifactId>

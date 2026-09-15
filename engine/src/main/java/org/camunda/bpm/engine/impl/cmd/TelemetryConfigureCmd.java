@@ -24,6 +24,7 @@ import org.camunda.bpm.engine.impl.interceptor.CommandContext;
  * The sending telemetry data feature is removed.
  * Please any remove usages of the command.
  */
+@Deprecated(forRemoval = true)
 public class TelemetryConfigureCmd implements Command<Void> {
 
   protected boolean telemetryEnabled;

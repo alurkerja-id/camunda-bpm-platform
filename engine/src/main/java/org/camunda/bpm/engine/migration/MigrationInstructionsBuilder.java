@@ -16,8 +16,6 @@
  */
 package org.camunda.bpm.engine.migration;
 
-import org.camunda.bpm.engine.migration.MigrationInstructionBuilder;
-
 /**
  * @author Thorben Lindhauer
  *

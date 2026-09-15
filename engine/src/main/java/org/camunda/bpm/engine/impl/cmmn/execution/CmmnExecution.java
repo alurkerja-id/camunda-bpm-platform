@@ -141,10 +141,12 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
 
   // plan items ///////////////////////////////////////////////////////////////
 
+  @Override
   public abstract List<? extends CmmnExecution> getCaseExecutions();
 
   protected abstract List<? extends CmmnExecution> getCaseExecutionsInternal();
 
+  @Override
   public CmmnExecution findCaseExecution(String activityId) {
     if ((getActivity()!=null) && (getActivity().getId().equals(activityId))) {
      return this;
@@ -168,18 +170,19 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
     this.task = (TaskEntity) task;
   }
 
+  @Override
   public TaskEntity createTask(TaskDecorator taskDecorator) {
-    TaskEntity task = new TaskEntity((CaseExecutionEntity) this);
-    task.insert();
+    TaskEntity newTask = new TaskEntity((CaseExecutionEntity) this);
+    newTask.insert();
 
-    setTask(task);
-    taskDecorator.decorate(task, this);
+    setTask(newTask);
+    taskDecorator.decorate(newTask, this);
 
     // task decoration is part of the initialization of the task,
     // so we transition to CREATED only afterwards
-    task.transitionTo(TaskState.STATE_CREATED);
+    newTask.transitionTo(TaskState.STATE_CREATED);
 
-    return task;
+    return newTask;
   }
 
   // super execution  ////////////////////////////////////////////////////////
@@ -194,10 +197,13 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
 
   public abstract void setSubProcessInstance(PvmExecutionImpl subProcessInstance);
 
+  @Override
   public abstract PvmExecutionImpl createSubProcessInstance(PvmProcessDefinition processDefinition);
 
+  @Override
   public abstract PvmExecutionImpl createSubProcessInstance(PvmProcessDefinition processDefinition, String businessKey);
 
+  @Override
   public abstract PvmExecutionImpl createSubProcessInstance(PvmProcessDefinition processDefinition, String businessKey, String caseInstanceId);
 
   // sub-/super- case instance ////////////////////////////////////////////////////
@@ -206,8 +212,10 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
 
   public abstract void setSubCaseInstance(CmmnExecution subCaseInstance);
 
+  @Override
   public abstract CmmnExecution createSubCaseInstance(CmmnCaseDefinition caseDefinition);
 
+  @Override
   public abstract CmmnExecution createSubCaseInstance(CmmnCaseDefinition caseDefinition, String businessKey);
 
   public abstract CmmnExecution getSuperCaseExecution();
@@ -222,11 +230,12 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
 
   protected abstract void addSentryPart(CmmnSentryPart sentryPart);
 
+  @Override
   public void createSentryParts() {
-    CmmnActivity activity = getActivity();
-    ensureNotNull("Case execution '"+id+"': has no current activity", "activity", activity);
+    CmmnActivity currentActivity = getActivity();
+    ensureNotNull("Case execution '"+id+"': has no current activity", "activity", currentActivity);
 
-    List<CmmnSentryDeclaration> sentries = activity.getSentries();
+    List<CmmnSentryDeclaration> sentries = currentActivity.getSentries();
 
     if (sentries != null && !sentries.isEmpty()) {
 
@@ -332,6 +341,7 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
 
   }
 
+  @Override
   public void fireIfOnlySentryParts() {
     // the following steps are a workaround, because setVariable()
     // does not check nor fire a sentry!!!
@@ -470,8 +480,8 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
 
   protected List<CmmnSentryPart> collectSentryParts(Map<String,List<CmmnSentryPart>> sentries) {
     List<CmmnSentryPart> sentryParts = new ArrayList<CmmnSentryPart>();
-    for(String sentryId: sentries.keySet()) {
-      sentryParts.addAll(sentries.get(sentryId));
+    for (Map.Entry<String, List<CmmnSentryPart>> entry : sentries.entrySet()) {
+      sentryParts.addAll(entry.getValue());
     }
     return sentryParts;
   }
@@ -596,11 +606,11 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
 
   protected void checkAndFireExitCriteria(List<String> satisfiedSentries) {
     if (isActive()) {
-      CmmnActivity activity = getActivity();
-      ensureNotNull(PvmException.class, "Case execution '"+getId()+"': has no current activity.", "activity", activity);
+      CmmnActivity currentActivity = getActivity();
+      ensureNotNull(PvmException.class, "Case execution '"+getId()+"': has no current activity.", "activity", currentActivity);
 
       // trigger first exitCriteria
-      List<CmmnSentryDeclaration> exitCriteria = activity.getExitCriteria();
+      List<CmmnSentryDeclaration> exitCriteria = currentActivity.getExitCriteria();
       for (CmmnSentryDeclaration sentryDeclaration : exitCriteria) {
 
         if (sentryDeclaration != null && satisfiedSentries.contains(sentryDeclaration.getId())) {
@@ -616,10 +626,10 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
       // do that only, when this child case execution
       // is available
 
-      CmmnActivity activity = getActivity();
-      ensureNotNull(PvmException.class, "Case execution '"+getId()+"': has no current activity.", "activity", activity);
+      CmmnActivity currentActivity = getActivity();
+      ensureNotNull(PvmException.class, "Case execution '"+getId()+"': has no current activity.", "activity", currentActivity);
 
-      List<CmmnSentryDeclaration> criteria = activity.getEntryCriteria();
+      List<CmmnSentryDeclaration> criteria = currentActivity.getEntryCriteria();
       for (CmmnSentryDeclaration sentryDeclaration : criteria) {
         if (sentryDeclaration != null && satisfiedSentries.contains(sentryDeclaration.getId())) {
           if (isAvailable()) {
@@ -650,6 +660,7 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
 
   protected abstract Map<String, List<CmmnSentryPart>> getSentries();
 
+  @Override
   public boolean isSentrySatisfied(String sentryId) {
     List<? extends CmmnSentryPart> sentryParts = findSentry(sentryId);
     return isSentryPartsSatisfied(sentryId, sentryParts);
@@ -692,10 +703,10 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
       CmmnExecution execution = ifPart.getCaseExecution();
       ensureNotNull("Case execution of sentry '"+ifPart.getSentryId() +"': is null", execution);
 
-      CmmnActivity activity = ifPart.getCaseExecution().getActivity();
-      ensureNotNull("Case execution '"+id+"': has no current activity", "activity", activity);
+      CmmnActivity ifPartActivity = ifPart.getCaseExecution().getActivity();
+      ensureNotNull("Case execution '"+id+"': has no current activity", "activity", ifPartActivity);
 
-      CmmnSentryDeclaration sentryDeclaration = activity.getSentry(sentryId);
+      CmmnSentryDeclaration sentryDeclaration = ifPartActivity.getSentry(sentryId);
       ensureNotNull("Case execution '"+id+"': has no declaration for sentry '"+sentryId+"'", "sentryDeclaration", sentryDeclaration);
 
       CmmnIfPartDeclaration ifPartDeclaration = sentryDeclaration.getIfPart();
@@ -732,12 +743,14 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
     return false;
   }
 
+  @Override
   public boolean isEntryCriterionSatisfied() {
     return entryCriterionSatisfied;
   }
 
   // business key ////////////////////////////////////////////////////////////
 
+  @Override
   public String getCaseBusinessKey() {
     return getCaseInstance().getBusinessKey();
   }
@@ -767,6 +780,7 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
 
   public abstract void setCaseInstance(CmmnExecution caseInstance);
 
+  @Override
   public boolean isCaseInstanceExecution() {
     return getParent() == null;
   }
@@ -774,6 +788,7 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
   // case instance id /////////////////////////////////////////////////////////
 
   /** ensures initialization and returns the process instance. */
+  @Override
   public String getCaseInstanceId() {
     return getCaseInstance().getId();
   }
@@ -781,6 +796,7 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
   // parent ///////////////////////////////////////////////////////////////////
 
   /** ensures initialization and returns the parent */
+  @Override
   public abstract CmmnExecution getParent();
 
   public abstract void setParent(CmmnExecution parent);
@@ -788,6 +804,7 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
   // activity /////////////////////////////////////////////////////////////////
 
   /** ensures initialization and returns the activity */
+  @Override
   public CmmnActivity getActivity() {
     return activity;
   }
@@ -803,6 +820,7 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
     return "caseExecution";
   }
 
+  @Override
   public AbstractVariableScope getParentVariableScope() {
     return getParent();
   }
@@ -813,6 +831,7 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
    performOperation(CASE_EXECUTION_DELETE_CASCADE);
   }
 
+  @Override
   public void remove() {
    CmmnExecution parent = getParent();
    if (parent!=null) {
@@ -822,20 +841,24 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
 
   // required //////////////////////////////////////////////////
 
+  @Override
   public boolean isRequired() {
     return required;
   }
 
+  @Override
   public void setRequired(boolean required) {
     this.required = required;
   }
 
   // state /////////////////////////////////////////////////////
 
+  @Override
   public CaseExecutionState getCurrentState() {
     return CaseExecutionState.CASE_EXECUTION_STATES.get(getState());
   }
 
+  @Override
   public void setCurrentState(CaseExecutionState currentState) {
     if (!isSuspending() && !isTerminating()) {
       // do not reset the previous state, if this case execution
@@ -854,59 +877,72 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
     this.currentState = state;
   }
 
+  @Override
   public boolean isNew() {
     return currentState == NEW.getStateCode();
   }
 
+  @Override
   public boolean isAvailable() {
     return currentState == AVAILABLE.getStateCode();
   }
 
+  @Override
   public boolean isEnabled() {
     return currentState == ENABLED.getStateCode();
   }
 
+  @Override
   public boolean isDisabled() {
     return currentState == DISABLED.getStateCode();
   }
 
+  @Override
   public boolean isActive() {
     return currentState == ACTIVE.getStateCode();
   }
 
+  @Override
   public boolean isCompleted() {
     return currentState == COMPLETED.getStateCode();
   }
 
+  @Override
   public boolean isSuspended() {
     return currentState == SUSPENDED.getStateCode();
   }
 
+  @Override
   public boolean isSuspending() {
     return currentState == SUSPENDING_ON_SUSPENSION.getStateCode()
         || currentState == SUSPENDING_ON_PARENT_SUSPENSION.getStateCode();
   }
 
+  @Override
   public boolean isTerminated() {
     return currentState == TERMINATED.getStateCode();
   }
 
+  @Override
   public boolean isTerminating() {
     return currentState == TERMINATING_ON_TERMINATION.getStateCode()
         || currentState == TERMINATING_ON_PARENT_TERMINATION.getStateCode()
         || currentState == TERMINATING_ON_EXIT.getStateCode();
   }
 
+  @Override
   public boolean isFailed() {
     return currentState == FAILED.getStateCode();
   }
 
+  @Override
   public boolean isClosed() {
     return currentState == CLOSED.getStateCode();
   }
 
   // previous state /////////////////////////////////////////////
 
+  @Override
   public CaseExecutionState getPreviousState() {
     return CaseExecutionState.CASE_EXECUTION_STATES.get(getPrevious());
   }
@@ -921,10 +957,12 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
 
   // state transition ///////////////////////////////////////////
 
+  @Override
   public void create() {
     create(null);
   }
 
+  @Override
   public void create(Map<String, Object> variables) {
     if(variables != null) {
       setVariables(variables);
@@ -933,6 +971,7 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
     performOperation(CASE_INSTANCE_CREATE);
   }
 
+  @Override
   public List<CmmnExecution> createChildExecutions(List<CmmnActivity> activities) {
     List<CmmnExecution> children = new ArrayList<CmmnExecution>();
 
@@ -946,6 +985,7 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
   }
 
 
+  @Override
   public void triggerChildExecutionsLifecycle(List<CmmnExecution> children) {
     // then notify create listener for each created
     // child case execution
@@ -968,99 +1008,123 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
 
   protected abstract CmmnExecution newCaseExecution();
 
+  @Override
   public void enable() {
     performOperation(CASE_EXECUTION_ENABLE);
   }
 
+  @Override
   public void disable() {
     performOperation(CASE_EXECUTION_DISABLE);
   }
 
+  @Override
   public void reenable() {
     performOperation(CASE_EXECUTION_RE_ENABLE);
   }
 
+  @Override
   public void manualStart() {
     performOperation(CASE_EXECUTION_MANUAL_START);
   }
 
+  @Override
   public void start() {
     performOperation(CASE_EXECUTION_START);
   }
 
+  @Override
   public void complete() {
     performOperation(CASE_EXECUTION_COMPLETE);
   }
 
+  @Override
   public void manualComplete() {
     performOperation(CASE_EXECUTION_MANUAL_COMPLETE);
   }
 
+  @Override
   public void occur() {
     performOperation(CASE_EXECUTION_OCCUR);
   }
 
+  @Override
   public void terminate() {
     performOperation(CASE_EXECUTION_TERMINATING_ON_TERMINATION);
   }
 
+  @Override
   public void performTerminate() {
     performOperation(CASE_EXECUTION_TERMINATE);
   }
 
+  @Override
   public void parentTerminate() {
     performOperation(CASE_EXECUTION_TERMINATING_ON_PARENT_TERMINATION);
   }
 
+  @Override
   public void performParentTerminate() {
     performOperation(CASE_EXECUTION_PARENT_TERMINATE);
   }
 
+  @Override
   public void exit() {
     performOperation(CASE_EXECUTION_TERMINATING_ON_EXIT);
   }
 
+  @Override
   public void parentComplete() {
     performOperation(CmmnAtomicOperation.CASE_EXECUTION_PARENT_COMPLETE);
   }
 
+  @Override
   public void performExit() {
     performOperation(CASE_EXECUTION_EXIT);
   }
 
+  @Override
   public void suspend() {
     performOperation(CASE_EXECUTION_SUSPENDING_ON_SUSPENSION);
   }
 
+  @Override
   public void performSuspension() {
     performOperation(CASE_EXECUTION_SUSPEND);
   }
 
+  @Override
   public void parentSuspend() {
     performOperation(CASE_EXECUTION_SUSPENDING_ON_PARENT_SUSPENSION);
   }
 
+  @Override
   public void performParentSuspension() {
     performOperation(CASE_EXECUTION_PARENT_SUSPEND);
   }
 
+  @Override
   public void resume() {
     performOperation(CASE_EXECUTION_RESUME);
   }
 
+  @Override
   public void parentResume() {
     performOperation(CASE_EXECUTION_PARENT_RESUME);
   }
 
+  @Override
   public void reactivate() {
     performOperation(CASE_EXECUTION_RE_ACTIVATE);
   }
 
+  @Override
   public void close() {
     performOperation(CASE_INSTANCE_CLOSE);
   }
 
   // variable listeners
+  @Override
   public void dispatchEvent(VariableEvent variableEvent) {
     boolean invokeCustomListeners =
         Context
@@ -1078,22 +1142,22 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
 
   protected void queueVariableEvent(VariableEvent variableEvent, boolean includeCustomerListeners) {
 
-    Queue<VariableEvent> variableEventsQueue = getVariableEventQueue();
+    Queue<VariableEvent> eventQueue = getVariableEventQueue();
 
-    variableEventsQueue.add(variableEvent);
+    eventQueue.add(variableEvent);
 
     // if this is the first event added, trigger listener invocation
-    if (variableEventsQueue.size() == 1) {
+    if (eventQueue.size() == 1) {
       invokeVariableListeners(includeCustomerListeners);
     }
   }
 
   protected void invokeVariableListeners(boolean includeCustomerListeners) {
-    Queue<VariableEvent> variableEventsQueue = getVariableEventQueue();
+    Queue<VariableEvent> eventQueue = getVariableEventQueue();
 
-    while (!variableEventsQueue.isEmpty()) {
+    while (!eventQueue.isEmpty()) {
       // do not remove the event yet, as otherwise new events will immediately be dispatched
-      VariableEvent nextEvent = variableEventsQueue.peek();
+      VariableEvent nextEvent = eventQueue.peek();
 
       CmmnExecution sourceExecution = (CmmnExecution) nextEvent.getSourceScope();
 
@@ -1132,7 +1196,7 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
       }
 
       // finally remove the event from the queue
-      variableEventsQueue.remove();
+      eventQueue.remove();
     }
   }
 
@@ -1146,6 +1210,7 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
 
   // toString() //////////////////////////////////////  ///////////
 
+  @Override
   public String toString() {
     if (isCaseInstanceExecution()) {
       return "CaseInstance["+getToStringIdentity()+"]";

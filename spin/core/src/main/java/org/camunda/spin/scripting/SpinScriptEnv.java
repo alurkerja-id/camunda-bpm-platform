@@ -19,7 +19,7 @@ package org.camunda.spin.scripting;
 import org.camunda.spin.SpinScriptException;
 import org.camunda.spin.impl.logging.SpinCoreLogger;
 import org.camunda.spin.impl.logging.SpinLogger;
-import org.camunda.spin.impl.util.SpinIoUtil;
+import org.camunda.commons.utils.IoUtil;
 
 import javax.script.ScriptEngine;
 
@@ -99,10 +99,10 @@ public class SpinScriptEnv {
 
     } else {
       try {
-        return SpinIoUtil.inputStreamAsString(envResource);
+        return IoUtil.inputStreamAsString(envResource);
 
       } finally {
-        SpinIoUtil.closeSilently(envResource);
+        IoUtil.closeSilently(envResource);
 
       }
     }

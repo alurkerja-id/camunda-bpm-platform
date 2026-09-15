@@ -297,7 +297,7 @@ public abstract class AbstractFlowNodeBuilder<B extends AbstractFlowNodeBuilder<
   @SuppressWarnings("rawtypes")
   public AbstractFlowNodeBuilder moveToNode(String identifier) {
     ModelElementInstance instance = modelInstance.getModelElementById(identifier);
-    if (instance != null && instance instanceof FlowNode) {
+    if (instance instanceof FlowNode) {
       return ((FlowNode) instance).builder();
     } else {
       throw new BpmnModelException("Flow node not found for id " + identifier);
@@ -307,7 +307,7 @@ public abstract class AbstractFlowNodeBuilder<B extends AbstractFlowNodeBuilder<
   @SuppressWarnings({ "rawtypes", "unchecked" })
   public <T extends AbstractActivityBuilder> T moveToActivity(String identifier) {
     ModelElementInstance instance = modelInstance.getModelElementById(identifier);
-    if (instance != null && instance instanceof Activity) {
+    if (instance instanceof Activity) {
       return (T) ((Activity) instance).builder();
     } else {
       throw new BpmnModelException("Activity not found for id " + identifier);

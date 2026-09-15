@@ -28,7 +28,6 @@ import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN serviceTask element
@@ -54,11 +53,7 @@ public class ServiceTaskImpl extends TaskImpl implements ServiceTask {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ServiceTask.class, BPMN_ELEMENT_SERVICE_TASK)
       .namespaceUri(BPMN20_NS)
       .extendsType(Task.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ServiceTask>() {
-        public ServiceTask newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ServiceTaskImpl(instanceContext);
-        }
-      });
+      .instanceProvider(ServiceTaskImpl::new);
 
     implementationAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_IMPLEMENTATION)
       .defaultValue("##WebService")
@@ -110,68 +105,84 @@ public class ServiceTaskImpl extends TaskImpl implements ServiceTask {
     return new ServiceTaskBuilder((BpmnModelInstance) modelInstance, this);
   }
 
+  @Override
   public String getImplementation() {
     return implementationAttribute.getValue(this);
   }
 
+  @Override
   public void setImplementation(String implementation) {
     implementationAttribute.setValue(this, implementation);
   }
 
+  @Override
   public Operation getOperation() {
     return operationRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setOperation(Operation operation) {
     operationRefAttribute.setReferenceTargetElement(this, operation);
   }
 
   /** camunda extensions */
 
+  @Override
   public String getCamundaClass() {
     return camundaClassAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaClass(String camundaClass) {
     camundaClassAttribute.setValue(this, camundaClass);
   }
 
+  @Override
   public String getCamundaDelegateExpression() {
     return camundaDelegateExpressionAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaDelegateExpression(String camundaExpression) {
     camundaDelegateExpressionAttribute.setValue(this, camundaExpression);
   }
 
+  @Override
   public String getCamundaExpression() {
     return camundaExpressionAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaExpression(String camundaExpression) {
     camundaExpressionAttribute.setValue(this, camundaExpression);
   }
 
+  @Override
   public String getCamundaResultVariable() {
     return camundaResultVariableAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaResultVariable(String camundaResultVariable) {
     camundaResultVariableAttribute.setValue(this, camundaResultVariable);
   }
 
+  @Override
   public String getCamundaTopic() {
     return camundaTopicAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaTopic(String camundaTopic) {
     camundaTopicAttribute.setValue(this, camundaTopic);
   }
 
+  @Override
   public String getCamundaType() {
     return camundaTypeAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaType(String camundaType) {
     camundaTypeAttribute.setValue(this, camundaType);
   }

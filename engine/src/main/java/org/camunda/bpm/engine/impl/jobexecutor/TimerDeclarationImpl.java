@@ -75,6 +75,7 @@ public class TimerDeclarationImpl extends JobDeclaration<ExecutionEntity, TimerE
     return eventScopeActivityId;
   }
 
+  @Override
   protected TimerEntity newJobInstance(ExecutionEntity execution) {
 
     TimerEntity timer = new TimerEntity(this);
@@ -96,13 +97,10 @@ public class TimerDeclarationImpl extends JobDeclaration<ExecutionEntity, TimerE
   protected void initializeConfiguration(ExecutionEntity context, TimerEntity job) {
     String dueDateString = resolveAndSetDuedate(context, job, false);
 
-    if (type == TimerDeclarationType.CYCLE && jobHandlerType != TimerCatchIntermediateEventJobHandler.TYPE) {
-
-      // See ACT-1427: A boundary timer with a cancelActivity='true', doesn't need to repeat itself
-      if (!isInterruptingTimer) {
-        String prepared = prepareRepeat(dueDateString);
-        job.setRepeat(prepared);
-      }
+    // See ACT-1427: A boundary timer with a cancelActivity='true', doesn't need to repeat itself
+    if (type == TimerDeclarationType.CYCLE && !TimerCatchIntermediateEventJobHandler.TYPE.equals(jobHandlerType) && !isInterruptingTimer) {
+      String prepared = prepareRepeat(dueDateString);
+      job.setRepeat(prepared);
     }
   }
 
@@ -112,8 +110,13 @@ public class TimerDeclarationImpl extends JobDeclaration<ExecutionEntity, TimerE
         .getBusinessCalendarManager()
         .getBusinessCalendar(type.calendarName);
 
+    // context is null for timers on a start event, see the shared variable scope below, so the
+    // activity id has to be read defensively - the error messages here used to fail with a
+    // NullPointerException in exactly the cases they were meant to explain
+    String activityId = context == null ? null : context.getActivityId();
+
     if (description==null) {
-      throw new ProcessEngineException("Timer '"+context.getActivityId()+"' was not configured with a valid duration/time");
+      throw new ProcessEngineException("Timer '"+activityId+"' was not configured with a valid duration/time");
     }
 
     String dueDateString = null;
@@ -134,13 +137,13 @@ public class TimerDeclarationImpl extends JobDeclaration<ExecutionEntity, TimerE
       duedate = (Date)dueDateValue;
     }
     else {
-      throw new ProcessEngineException("Timer '"+context.getActivityId()+"' was not configured with a valid duration/time, either hand in a java.util.Date or a String in format 'yyyy-MM-dd'T'hh:mm:ss'");
+      throw new ProcessEngineException("Timer '"+activityId+"' was not configured with a valid duration/time, either hand in a java.util.Date or a String in format 'yyyy-MM-dd'T'hh:mm:ss'");
     }
 
     if (duedate==null) {
       if (creationDateBased) {
         if (job.getCreateTime() == null) {
-          throw new ProcessEngineException("Timer '"+context.getActivityId()+"' has no creation time and cannot be recalculated based on creation date. Either recalculate on your own or trigger recalculation with creationDateBased set to false.");
+          throw new ProcessEngineException("Timer '"+activityId+"' has no creation time and cannot be recalculated based on creation date. Either recalculate on your own or trigger recalculation with creationDateBased set to false.");
         }
         duedate = businessCalendar.resolveDuedate(dueDateString, job.getCreateTime());
       } else {
@@ -152,6 +155,7 @@ public class TimerDeclarationImpl extends JobDeclaration<ExecutionEntity, TimerE
     return dueDateString;
   }
 
+  @Override
   protected void postInitialize(ExecutionEntity execution, TimerEntity timer) {
     initializeConfiguration(execution, timer);
   }
@@ -172,7 +176,7 @@ public class TimerDeclarationImpl extends JobDeclaration<ExecutionEntity, TimerE
   }
 
   public TimerEntity createTimer(String deploymentId) {
-    TimerEntity timer = super.createJobInstance((ExecutionEntity) null);
+    TimerEntity timer = super.createJobInstance(null);
     timer.setDeploymentId(deploymentId);
     scheduleTimer(timer);
     return timer;
@@ -191,6 +195,7 @@ public class TimerDeclarationImpl extends JobDeclaration<ExecutionEntity, TimerE
       .schedule(timer);
   }
 
+  @Override
   protected ExecutionEntity resolveExecution(ExecutionEntity context) {
     return context;
   }

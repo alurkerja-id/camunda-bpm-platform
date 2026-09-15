@@ -32,7 +32,6 @@ import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMNDI BPMNEdge element
@@ -51,11 +50,7 @@ public class BpmnEdgeImpl extends LabeledEdgeImpl implements BpmnEdge {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(BpmnEdge.class, BPMNDI_ELEMENT_BPMN_EDGE)
       .namespaceUri(BPMNDI_NS)
       .extendsType(LabeledEdge.class)
-      .instanceProvider(new ModelTypeInstanceProvider<BpmnEdge>() {
-        public BpmnEdge newInstance(ModelTypeInstanceContext instanceContext) {
-          return new BpmnEdgeImpl(instanceContext);
-        }
-      });
+      .instanceProvider(BpmnEdgeImpl::new);
 
     bpmnElementAttribute = typeBuilder.stringAttribute(BPMNDI_ATTRIBUTE_BPMN_ELEMENT)
       .qNameAttributeReference(BaseElement.class)
@@ -84,42 +79,52 @@ public class BpmnEdgeImpl extends LabeledEdgeImpl implements BpmnEdge {
     super(instanceContext);
   }
 
+  @Override
   public BaseElement getBpmnElement() {
     return bpmnElementAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setBpmnElement(BaseElement bpmnElement) {
     bpmnElementAttribute.setReferenceTargetElement(this, bpmnElement);
   }
 
+  @Override
   public DiagramElement getSourceElement() {
     return sourceElementAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setSourceElement(DiagramElement sourceElement) {
     sourceElementAttribute.setReferenceTargetElement(this, sourceElement);
   }
 
+  @Override
   public DiagramElement getTargetElement() {
     return targetElementAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setTargetElement(DiagramElement targetElement) {
     targetElementAttribute.setReferenceTargetElement(this, targetElement);
   }
 
+  @Override
   public MessageVisibleKind getMessageVisibleKind() {
     return messageVisibleKindAttribute.getValue(this);
   }
 
+  @Override
   public void setMessageVisibleKind(MessageVisibleKind messageVisibleKind) {
     messageVisibleKindAttribute.setValue(this, messageVisibleKind);
   }
 
+  @Override
   public BpmnLabel getBpmnLabel() {
     return bpmnLabelChild.getChild(this);
   }
 
+  @Override
   public void setBpmnLabel(BpmnLabel bpmnLabel) {
     bpmnLabelChild.setChild(this, bpmnLabel);
   }

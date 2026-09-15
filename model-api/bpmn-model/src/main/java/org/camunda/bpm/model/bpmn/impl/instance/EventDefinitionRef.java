@@ -33,11 +33,7 @@ public class EventDefinitionRef extends BpmnModelElementInstanceImpl {
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(EventDefinitionRef.class, BPMN_ELEMENT_EVENT_DEFINITION_REF)
       .namespaceUri(BPMN20_NS)
-      .instanceProvider(new ModelElementTypeBuilder.ModelTypeInstanceProvider<EventDefinitionRef>() {
-        public EventDefinitionRef newInstance(ModelTypeInstanceContext instanceContext) {
-          return new EventDefinitionRef(instanceContext);
-        }
-      });
+      .instanceProvider(EventDefinitionRef::new);
 
     typeBuilder.build();
   }

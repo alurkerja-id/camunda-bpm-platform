@@ -32,7 +32,6 @@ import org.camunda.bpm.model.cmmn.instance.TableItem;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
@@ -57,34 +56,42 @@ public class DiscretionaryItemImpl extends TableItemImpl implements Discretionar
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public PlanItemDefinition getDefinition() {
     return definitionRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setDefinition(PlanItemDefinition definition) {
     definitionRefAttribute.setReferenceTargetElement(this, definition);
   }
 
+  @Override
   public ItemControl getItemControl() {
     return itemControlChild.getChild(this);
   }
 
+  @Override
   public void setItemControl(ItemControl itemControl) {
     itemControlChild.setChild(this, itemControl);
   }
 
+  @Override
   public Collection<EntryCriterion> getEntryCriterions() {
     return entryCriterionCollection.get(this);
   }
 
+  @Override
   public Collection<ExitCriterion> getExitCriterions() {
     return exitCriterionCollection.get(this);
   }
@@ -93,11 +100,7 @@ public class DiscretionaryItemImpl extends TableItemImpl implements Discretionar
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(DiscretionaryItem.class, CMMN_ELEMENT_DISCRETIONARY_ITEM)
         .namespaceUri(CMMN11_NS)
         .extendsType(TableItem.class)
-        .instanceProvider(new ModelTypeInstanceProvider<DiscretionaryItem>() {
-          public DiscretionaryItem newInstance(ModelTypeInstanceContext instanceContext) {
-            return new DiscretionaryItemImpl(instanceContext);
-          }
-        });
+        .instanceProvider(DiscretionaryItemImpl::new);
 
     nameAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_NAME)
         .build();

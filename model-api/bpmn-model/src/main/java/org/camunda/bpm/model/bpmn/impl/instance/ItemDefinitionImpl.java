@@ -26,7 +26,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * @author Sebastian Menski
@@ -41,11 +40,7 @@ public class ItemDefinitionImpl extends RootElementImpl implements ItemDefinitio
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ItemDefinition.class,BpmnModelConstants.BPMN_ELEMENT_ITEM_DEFINITION)
       .namespaceUri(BpmnModelConstants.BPMN20_NS)
       .extendsType(RootElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ItemDefinition>() {
-        public ItemDefinition newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ItemDefinitionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(ItemDefinitionImpl::new);
 
     structureRefAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_STRUCTURE_REF)
       .build();
@@ -65,26 +60,32 @@ public class ItemDefinitionImpl extends RootElementImpl implements ItemDefinitio
     super(context);
   }
 
+  @Override
   public String getStructureRef() {
     return structureRefAttribute.getValue(this);
   }
 
+  @Override
   public void setStructureRef(String structureRef) {
     structureRefAttribute.setValue(this, structureRef);
   }
 
+  @Override
   public boolean isCollection() {
     return isCollectionAttribute.getValue(this);
   }
 
+  @Override
   public void setCollection(boolean isCollection) {
     isCollectionAttribute.setValue(this, isCollection);
   }
 
+  @Override
   public ItemKind getItemKind() {
     return itemKindAttribute.getValue(this);
   }
 
+  @Override
   public void setItemKind(ItemKind itemKind) {
     itemKindAttribute.setValue(this, itemKind);
   }

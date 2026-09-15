@@ -67,10 +67,10 @@ public class CookieConfigurator {
 
     } else if (!ServletFilterUtil.isEmpty(sameSiteCookieOption)) {
 
-      if (SameSiteOption.LAX.compareTo(sameSiteCookieOption)) {
+      if (SameSiteOption.LAX.matches(sameSiteCookieOption)) {
         this.sameSiteCookieValue = SameSiteOption.LAX.getValue();
 
-      } else if (SameSiteOption.STRICT.compareTo(sameSiteCookieOption)) {
+      } else if (SameSiteOption.STRICT.matches(sameSiteCookieOption)) {
         this.sameSiteCookieValue = SameSiteOption.STRICT.getValue();
 
       } else {
@@ -92,18 +92,14 @@ public class CookieConfigurator {
   public String getConfig(String currentHeader) {
     StringBuilder stringBuilder = new StringBuilder(currentHeader == null ? "" : currentHeader);
 
-    if (isSameSiteCookieEnabled) {
-      if (currentHeader == null || !CookieConstants.SAME_SITE_FIELD_NAME_REGEX.matcher(currentHeader).find()) {
-        stringBuilder
+    if (isSameSiteCookieEnabled && (currentHeader == null || !CookieConstants.SAME_SITE_FIELD_NAME_REGEX.matcher(currentHeader).find())) {
+      stringBuilder
           .append(CookieConstants.SAME_SITE_FIELD_NAME)
           .append(sameSiteCookieValue);
-      }
     }
 
-    if (isSecureCookieEnabled) {
-      if (currentHeader == null || !CookieConstants.SECURE_FLAG_NAME_REGEX.matcher(currentHeader).find()) {
-        stringBuilder.append(CookieConstants.SECURE_FLAG_NAME);
-      }
+    if (isSecureCookieEnabled && (currentHeader == null || !CookieConstants.SECURE_FLAG_NAME_REGEX.matcher(currentHeader).find())) {
+      stringBuilder.append(CookieConstants.SECURE_FLAG_NAME);
     }
 
     return stringBuilder.toString();
@@ -136,7 +132,9 @@ public class CookieConfigurator {
       return this.name();
     }
 
-    public boolean compareTo(String value) {
+    // named matches, not compareTo: an overload of Comparable#compareTo taking a String and
+    // returning a boolean reads like the ordering method but is not one
+    public boolean matches(String value) {
       return this.value.equalsIgnoreCase(value);
     }
 

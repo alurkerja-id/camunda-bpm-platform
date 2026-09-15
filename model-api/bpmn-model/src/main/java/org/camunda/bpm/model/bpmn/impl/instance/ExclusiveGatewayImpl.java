@@ -27,7 +27,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN exclusiveGateway element
@@ -42,11 +41,7 @@ public class ExclusiveGatewayImpl extends GatewayImpl implements ExclusiveGatewa
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ExclusiveGateway.class, BPMN_ELEMENT_EXCLUSIVE_GATEWAY)
       .namespaceUri(BPMN20_NS)
       .extendsType(Gateway.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ExclusiveGateway>() {
-        public ExclusiveGateway newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ExclusiveGatewayImpl(instanceContext);
-        }
-      });
+      .instanceProvider(ExclusiveGatewayImpl::new);
 
     defaultAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_DEFAULT)
       .idAttributeReference(SequenceFlow.class)
@@ -64,10 +59,12 @@ public class ExclusiveGatewayImpl extends GatewayImpl implements ExclusiveGatewa
     return new ExclusiveGatewayBuilder((BpmnModelInstance) modelInstance, this);
   }
 
+  @Override
   public SequenceFlow getDefault() {
     return defaultAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setDefault(SequenceFlow defaultFlow) {
     defaultAttribute.setReferenceTargetElement(this, defaultFlow);
   }

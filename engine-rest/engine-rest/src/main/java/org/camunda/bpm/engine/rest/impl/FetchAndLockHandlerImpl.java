@@ -203,6 +203,7 @@ public class FetchAndLockHandlerImpl implements Runnable, FetchAndLockHandler {
       handlerThread.join();
     } catch (InterruptedException e) {
       LOG.log(Level.WARNING, "Shutting down the handler thread failed", e);
+      Thread.currentThread().interrupt();
     }
   }
 
@@ -341,6 +342,7 @@ public class FetchAndLockHandlerImpl implements Runnable, FetchAndLockHandler {
     }
   }
 
+  @Override
   public void contextInitialized(ServletContextEvent servletContextEvent) {
     ServletContext servletContext;
     int queueCapacity = DEFAULT_BLOCKING_QUEUE_CAPACITY;

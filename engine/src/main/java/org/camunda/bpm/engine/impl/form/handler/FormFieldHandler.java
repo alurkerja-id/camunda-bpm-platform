@@ -27,7 +27,6 @@ import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.FormFieldValidationConstraint;
 import org.camunda.bpm.engine.form.FormType;
 import org.camunda.bpm.engine.impl.el.StartProcessVariableScope;
-import org.camunda.bpm.engine.impl.form.FormDataImpl;
 import org.camunda.bpm.engine.impl.form.FormFieldImpl;
 import org.camunda.bpm.engine.impl.form.type.AbstractFormFieldType;
 import org.camunda.bpm.engine.impl.form.validator.FormFieldValidationException;
@@ -118,7 +117,7 @@ public class FormFieldHandler {
   // submit /////////////////////////////////////////////
 
   public void handleSubmit(VariableScope variableScope, VariableMap values, VariableMap allValues) {
-    TypedValue submittedValue = (TypedValue) values.getValueTyped(id);
+    TypedValue submittedValue = values.getValueTyped(id);
     values.remove(id);
 
     // perform validation
@@ -151,10 +150,8 @@ public class FormFieldHandler {
       }
     }
 
-    if (modelValue != null) {
-      if (id != null) {
-        variableScope.setVariable(id, modelValue);
-      }
+    if (modelValue != null && id != null) {
+      variableScope.setVariable(id, modelValue);
     }
   }
 

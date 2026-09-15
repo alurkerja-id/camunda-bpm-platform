@@ -62,8 +62,7 @@ public interface HistoricVariableInstance {
   /**
    * Returns the name of this variable instance.
    *
-   * <p>Deprecated since 7.2: use {@link #getName()} instead.</p>
-   *
+   * @deprecated since 7.2, use {@link #getName()} instead
    */
    @Deprecated
   String getVariableName();
@@ -71,8 +70,7 @@ public interface HistoricVariableInstance {
   /**
    * <p>Returns the name of the type of this variable instance</p>
    *
-   * <p>Deprecated since 7.2: use {@link #getTypeName()} instead.</p>
-   *
+   * @deprecated since 7.2, use {@link #getTypeName()} instead
    */
   @Deprecated
   String getVariableTypeName();
@@ -104,6 +102,8 @@ public interface HistoricVariableInstance {
 
   /**
    * Returns the corresponding activity instance id.
+   *
+   * @deprecated the method name is misspelt; use {@link #getActivityInstanceId()}
    */
   @Deprecated
   String getActivtyInstanceId();

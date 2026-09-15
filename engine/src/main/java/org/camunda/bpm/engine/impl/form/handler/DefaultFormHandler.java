@@ -31,7 +31,6 @@ import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.el.ExpressionManager;
 import org.camunda.bpm.engine.impl.form.FormDataImpl;
-import org.camunda.bpm.engine.impl.form.FormDefinition;
 import org.camunda.bpm.engine.impl.form.type.AbstractFormFieldType;
 import org.camunda.bpm.engine.impl.form.type.FormTypes;
 import org.camunda.bpm.engine.impl.form.validator.FormFieldValidator;
@@ -73,6 +72,7 @@ public class DefaultFormHandler implements FormHandler {
 
   protected List<FormFieldHandler> formFieldHandlers = new ArrayList<>();
 
+  @Override
   public void parseConfiguration(Element activityElement, DeploymentEntity deployment, ProcessDefinitionEntity processDefinition, BpmnParse bpmnParse) {
     this.deploymentId = deployment.getId();
 
@@ -117,10 +117,12 @@ public class DefaultFormHandler implements FormHandler {
       bpmnParse.addError("attribute id must be set for FormFieldGroup and must have a non-empty value", formField);
     } else {
       formFieldHandler.setId(id);
-    }
 
-    if (id.equals(businessKeyFieldId)) {
-      formFieldHandler.setBusinessKey(true);
+      // addError only records the problem and parsing continues, so comparing the id here used to
+      // throw a NullPointerException over the error message meant to explain the missing id
+      if (id.equals(businessKeyFieldId)) {
+        formFieldHandler.setBusinessKey(true);
+      }
     }
 
     // parse name
@@ -287,6 +289,7 @@ public class DefaultFormHandler implements FormHandler {
     }
   }
 
+  @Override
   public void submitFormVariables(VariableMap properties, VariableScope variableScope) {
     boolean userOperationLogEnabled = Context.getCommandContext().isUserOperationLogEnabled();
     Context.getCommandContext().enableUserOperationLog();
@@ -344,8 +347,7 @@ public class DefaultFormHandler implements FormHandler {
           final TypedValue value = properties.getValueTyped(variableName);
 
           // NOTE: SerializableValues are never stored as form properties
-          if (!(value instanceof SerializableValue)
-              && value.getValue() != null && value.getValue() instanceof String) {
+          if (!(value instanceof SerializableValue) && value.getValue() instanceof String) {
             final String stringValue = (String) value.getValue();
 
             HistoryEventProcessor.processHistoryEvents(new HistoryEventProcessor.HistoryEventCreator() {

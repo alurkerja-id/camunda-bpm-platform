@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 import org.camunda.bpm.engine.authorization.Permissions;
 import org.camunda.bpm.engine.authorization.Resources;
@@ -92,17 +91,14 @@ public class DbIdentityServiceProvider extends DbReadOnlyIdentityServiceProvider
 
       deleteAuthorizations(Resources.USER, userId);
 
-      Context.getCommandContext().runWithoutAuthorization(new Callable<Void>() {
-        @Override
-        public Void call() throws Exception {
-          final List<Tenant> tenants = createTenantQuery().userMember(userId).list();
-          if (tenants != null && !tenants.isEmpty()) {
-            for (Tenant tenant : tenants) {
-              deleteAuthorizationsForUser(Resources.TENANT, tenant.getId(), userId);
-            }
+      Context.getCommandContext().runWithoutAuthorization(() -> {
+        final List<Tenant> tenants = createTenantQuery().userMember(userId).list();
+        if (tenants != null && !tenants.isEmpty()) {
+          for (Tenant tenant : tenants) {
+            deleteAuthorizationsForUser(Resources.TENANT, tenant.getId(), userId);
           }
-          return null;
         }
+        return null;
       });
 
       getDbEntityManager().delete(user);
@@ -156,7 +152,7 @@ public class DbIdentityServiceProvider extends DbReadOnlyIdentityServiceProvider
     int factor = processEngineConfiguration.getLoginDelayFactor();
     int attempts = user.getAttempts() + 1;
 
-    long delay = (long) (baseTime * Math.pow(factor, attempts - 1));
+    long delay = (long) (baseTime * Math.pow(factor, attempts - 1.0));
     delay = Math.min(delay, max) * 1000;
 
     long currentTime = ClockUtil.getCurrentTime().getTime();
@@ -222,17 +218,14 @@ public class DbIdentityServiceProvider extends DbReadOnlyIdentityServiceProvider
 
       deleteAuthorizations(Resources.GROUP, groupId);
 
-      Context.getCommandContext().runWithoutAuthorization(new Callable<Void>() {
-        @Override
-        public Void call() throws Exception {
-          final List<Tenant> tenants = createTenantQuery().groupMember(groupId).list();
-          if (tenants != null && !tenants.isEmpty()) {
-            for (Tenant tenant : tenants) {
-              deleteAuthorizationsForGroup(Resources.TENANT, tenant.getId(), groupId);
-            }
+      Context.getCommandContext().runWithoutAuthorization(() -> {
+        final List<Tenant> tenants = createTenantQuery().groupMember(groupId).list();
+        if (tenants != null && !tenants.isEmpty()) {
+          for (Tenant tenant : tenants) {
+            deleteAuthorizationsForGroup(Resources.TENANT, tenant.getId(), groupId);
           }
-          return null;
         }
+        return null;
       });
       getDbEntityManager().delete(group);
       return new IdentityOperationResult(null, IdentityOperationResult.OPERATION_DELETE);

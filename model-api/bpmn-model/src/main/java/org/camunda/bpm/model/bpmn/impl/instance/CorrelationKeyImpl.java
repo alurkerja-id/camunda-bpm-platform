@@ -29,7 +29,6 @@ import org.camunda.bpm.model.xml.type.reference.ElementReferenceCollection;
 import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN correlationKey element
@@ -45,11 +44,7 @@ public class CorrelationKeyImpl extends BaseElementImpl implements CorrelationKe
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CorrelationKey.class, BPMN_ELEMENT_CORRELATION_KEY)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<CorrelationKey>() {
-        public CorrelationKey newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CorrelationKeyImpl(instanceContext);
-        }
-      });
+      .instanceProvider(CorrelationKeyImpl::new);
 
     nameAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_NAME)
       .build();
@@ -68,14 +63,17 @@ public class CorrelationKeyImpl extends BaseElementImpl implements CorrelationKe
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public Collection<CorrelationProperty> getCorrelationProperties() {
     return correlationPropertyRefCollection.getReferenceTargetElements(this);
   }

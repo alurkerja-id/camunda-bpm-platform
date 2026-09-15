@@ -70,7 +70,7 @@ public class FilterRestServiceImpl extends AbstractAuthorizedRestResource implem
     List<FilterDto> filters = new ArrayList<FilterDto>();
     for (Filter filter : matchingFilters) {
       FilterDto dto = FilterDto.fromFilter(filter);
-      if (itemCount != null && itemCount) {
+      if (Boolean.TRUE.equals(itemCount)) {
         dto.setItemCount(filterService.count(filter.getId()));
       }
       filters.add(dto);

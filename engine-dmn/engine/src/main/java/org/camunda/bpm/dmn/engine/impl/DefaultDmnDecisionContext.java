@@ -43,7 +43,7 @@ import org.camunda.bpm.model.dmn.HitPolicy;
  */
 public class DefaultDmnDecisionContext {
 
-  protected static final DmnEngineLogger LOG = DmnEngineLogger.ENGINE_LOGGER;
+  protected static final DmnEngineLogger LOG = DmnLogger.ENGINE_LOGGER;
 
   protected static final HitPolicyEntry COLLECT_HIT_POLICY = new HitPolicyEntry(HitPolicy.COLLECT, null);
   protected static final HitPolicyEntry RULE_ORDER_HIT_POLICY = new HitPolicyEntry(HitPolicy.RULE_ORDER, null);

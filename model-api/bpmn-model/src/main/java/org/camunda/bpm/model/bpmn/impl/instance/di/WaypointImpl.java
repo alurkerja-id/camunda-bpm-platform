@@ -25,7 +25,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.DI_ELEMENT_WAYPOINT;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.DI_NS;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The DI waypoint element of the DI Edge type
@@ -38,11 +37,7 @@ public class WaypointImpl extends PointImpl implements Waypoint {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Waypoint.class, DI_ELEMENT_WAYPOINT)
       .namespaceUri(DI_NS)
       .extendsType(Point.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Waypoint>() {
-        public Waypoint newInstance(ModelTypeInstanceContext instanceContext) {
-          return new WaypointImpl(instanceContext);
-        }
-      });
+      .instanceProvider(WaypointImpl::new);
 
     typeBuilder.build();
   }

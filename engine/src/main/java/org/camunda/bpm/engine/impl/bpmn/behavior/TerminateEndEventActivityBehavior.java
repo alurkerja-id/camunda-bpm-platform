@@ -32,6 +32,7 @@ import org.camunda.bpm.engine.impl.pvm.process.ActivityStartBehavior;
  */
 public class TerminateEndEventActivityBehavior extends FlowNodeActivityBehavior {
 
+  @Override
   public void execute(ActivityExecution execution) throws Exception {
     // we are the last execution inside this scope: calling end() ends this scope.
     execution.end(true);

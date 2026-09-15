@@ -27,7 +27,6 @@ import org.camunda.bpm.model.dmn.instance.RequiredInputReference;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import org.camunda.bpm.model.xml.type.reference.ElementReference;
 
@@ -40,18 +39,22 @@ public class InformationRequirementImpl extends DmnModelElementInstanceImpl impl
     super(instanceContext);
   }
 
+  @Override
   public Decision getRequiredDecision() {
     return requiredDecisionRef.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setRequiredDecision(Decision requiredDecision) {
     requiredDecisionRef.setReferenceTargetElement(this, requiredDecision);
   }
 
+  @Override
   public InputData getRequiredInput() {
     return requiredInputRef.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setRequiredInput(InputData requiredInput) {
     requiredInputRef.setReferenceTargetElement(this, requiredInput);
   }
@@ -59,11 +62,7 @@ public class InformationRequirementImpl extends DmnModelElementInstanceImpl impl
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(InformationRequirement.class, DMN_ELEMENT_INFORMATION_REQUIREMENT)
       .namespaceUri(LATEST_DMN_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<InformationRequirement>() {
-        public InformationRequirement newInstance(ModelTypeInstanceContext instanceContext) {
-          return new InformationRequirementImpl(instanceContext);
-        }
-      });
+      .instanceProvider(InformationRequirementImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

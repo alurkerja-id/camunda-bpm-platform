@@ -27,7 +27,6 @@ import org.camunda.bpm.model.dmn.instance.FunctionDefinition;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
@@ -41,14 +40,17 @@ public class FunctionDefinitionImpl extends ExpressionImpl implements FunctionDe
     super(instanceContext);
   }
 
+  @Override
   public Collection<FormalParameter> getFormalParameters() {
     return formalParameterCollection.get(this);
   }
 
+  @Override
   public Expression getExpression() {
     return expressionChild.getChild(this);
   }
 
+  @Override
   public void setExpression(Expression expression) {
     expressionChild.setChild(this, expression);
   }
@@ -57,11 +59,7 @@ public class FunctionDefinitionImpl extends ExpressionImpl implements FunctionDe
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(FunctionDefinition.class, DMN_ELEMENT_FUNCTION_DEFINITION)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(Expression.class)
-      .instanceProvider(new ModelTypeInstanceProvider<FunctionDefinition>() {
-        public FunctionDefinition newInstance(ModelTypeInstanceContext instanceContext) {
-          return new FunctionDefinitionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(FunctionDefinitionImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

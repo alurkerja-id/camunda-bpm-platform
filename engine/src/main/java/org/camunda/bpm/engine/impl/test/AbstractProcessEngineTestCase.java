@@ -40,9 +40,8 @@ import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
+import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
 import org.camunda.bpm.engine.impl.jobexecutor.JobExecutor;
 import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
 import org.camunda.bpm.engine.impl.util.ClockUtil;
@@ -72,7 +71,7 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
    * It should be removed once those Test classes are migrated to JUnit 4.
    */
 
-  private final static Logger LOG = TestLogger.TEST_LOGGER.getLogger();
+  private final static Logger LOG = ProcessEngineLogger.TEST_LOGGER.getLogger();
 
   static {
     // this ensures that mybatis uses slf4j logging
@@ -162,11 +161,9 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
   protected void deleteHistoryCleanupJobs() {
     final List<Job> jobs = historyService.findHistoryCleanupJobs();
     for (final Job job: jobs) {
-      processEngineConfiguration.getCommandExecutorTxRequired().execute(new Command<Void>() {
-        public Void execute(CommandContext commandContext) {
-            commandContext.getJobManager().deleteJob((JobEntity) job);
-          return null;
-        }
+      processEngineConfiguration.getCommandExecutorTxRequired().execute(commandContext -> {
+        commandContext.getJobManager().deleteJob((JobEntity) job);
+        return null;
       });
     }
   }
@@ -176,8 +173,8 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
       deploymentIds.add(deploymentId);
     }
 
-    for(String deploymentId : deploymentIds) {
-      TestHelper.annotationDeploymentTearDown(processEngine, deploymentId, getClass(), getName());
+    for(String id : deploymentIds) {
+      TestHelper.annotationDeploymentTearDown(processEngine, id, getClass(), getName());
     }
 
     deploymentId = null;
@@ -252,6 +249,10 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
     }
   }
 
+  /**
+   * @deprecated the interval is chosen internally; use
+   *             {@link #waitForJobExecutorToProcessAllJobs(long)}
+   */
   @Deprecated
   public void waitForJobExecutorToProcessAllJobs(long maxMillisToWait, long intervalMillis) {
     waitForJobExecutorToProcessAllJobs(maxMillisToWait);
@@ -283,6 +284,7 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
           }
         }
       } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
       } finally {
         timer.cancel();
       }
@@ -295,6 +297,10 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
     }
   }
 
+  /**
+   * @deprecated the interval is chosen internally; use
+   *             {@link #waitForJobExecutorOnCondition(long, Callable)}
+   */
   @Deprecated
   public void waitForJobExecutorOnCondition(long maxMillisToWait, long intervalMillis, Callable<Boolean> condition) {
     waitForJobExecutorOnCondition(maxMillisToWait, condition);
@@ -320,6 +326,7 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
           conditionIsViolated = !condition.call();
         }
       } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
       } catch (Exception e) {
         throw new ProcessEngineException("Exception while waiting on condition: "+e.getMessage(), e);
       } finally {
@@ -408,6 +415,10 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
     }
   }
 
+  /**
+   * @deprecated the method name is misspelt; use
+   *             {@link #getInstancesForActivityId(ActivityInstance, String)}
+   */
   @Deprecated
   protected List<ActivityInstance> getInstancesForActivitiyId(ActivityInstance activityInstance, String activityId) {
     return getInstancesForActivityId(activityInstance, activityId);

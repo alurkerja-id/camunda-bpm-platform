@@ -19,6 +19,11 @@
   </parent>
 
   <properties>
+    <!-- Alurkerja fork: these modules are test scaffolding (upgrade fixtures, performance
+         harnesses, container integration tests), not shipped code, so they are left out of the
+         SonarQube analysis entirely. -->
+    <sonar.skip>true</sonar.skip>
+
     <!--
       all maven properties used in QA/CI
     -->

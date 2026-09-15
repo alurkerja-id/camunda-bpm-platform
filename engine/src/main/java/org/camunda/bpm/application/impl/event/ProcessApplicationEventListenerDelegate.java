@@ -23,6 +23,7 @@ import org.camunda.bpm.application.ProcessApplicationInterface;
 import org.camunda.bpm.application.ProcessApplicationReference;
 import org.camunda.bpm.application.ProcessApplicationUnavailableException;
 import org.camunda.bpm.application.impl.ProcessApplicationLogger;
+import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.camunda.bpm.engine.delegate.ExecutionListener;
@@ -52,28 +53,26 @@ import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
  */
 public class ProcessApplicationEventListenerDelegate implements ExecutionListener, TaskListener {
 
-  private static ProcessApplicationLogger LOG = ProcessApplicationLogger.PROCESS_APPLICATION_LOGGER;
+  private static ProcessApplicationLogger LOG = ProcessEngineLogger.PROCESS_APPLICATION_LOGGER;
 
+  @Override
   public void notify(final DelegateExecution execution) throws Exception {
-    Callable<Void> notification = new Callable<Void>() {
-      public Void call() throws Exception {
-        notifyExecutionListener(execution);
-        return null;
-      }
+    Callable<Void> notification = () -> {
+      notifyExecutionListener(execution);
+      return null;
     };
     performNotification(execution, notification);
   }
 
+  @Override
   public void notify(final DelegateTask delegateTask){
     if(delegateTask.getExecution() == null) {
       LOG.taskNotRelatedToExecution(delegateTask);
     } else {
       final DelegateExecution execution = delegateTask.getExecution();
-      Callable<Void> notification = new Callable<Void>() {
-        public Void call() throws Exception {
-          notifyTaskListener(delegateTask);
-          return null;
-        }
+      Callable<Void> notification = () -> {
+        notifyTaskListener(delegateTask);
+        return null;
       };
       try {
         performNotification(execution, notification);

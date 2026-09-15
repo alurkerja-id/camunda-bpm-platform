@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
+import javax.activation.FileTypeMap;
 import javax.activation.MimetypesFileTypeMap;
 
 import org.camunda.bpm.engine.variable.context.VariableContext;
@@ -128,6 +129,7 @@ public class Variables {
       this.name = name;
     }
 
+    @Override
     public String getName() {
       return name;
     }
@@ -417,7 +419,7 @@ public class Variables {
    * The name is set to the file name and the mime type is detected via {@link MimetypesFileTypeMap}.
    */
   public static FileValue fileValue(File file){
-    String contentType = MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(file);
+    String contentType = FileTypeMap.getDefaultFileTypeMap().getContentType(file);
     return new FileValueBuilderImpl(file.getName()).file(file).mimeType(contentType).create();
   }
 
@@ -426,7 +428,7 @@ public class Variables {
    * The name is set to the file name and the mime type is detected via {@link MimetypesFileTypeMap}.
    */
   public static FileValue fileValue(File file, boolean isTransient){
-    String contentType = MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(file);
+    String contentType = FileTypeMap.getDefaultFileTypeMap().getContentType(file);
     return new FileValueBuilderImpl(file.getName()).file(file).mimeType(contentType).setTransient(isTransient).create();
   }
 

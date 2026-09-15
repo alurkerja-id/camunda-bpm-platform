@@ -29,6 +29,9 @@ public interface HumanTask extends Task {
 
   void setPerformer(Role performerRef);
 
+  /**
+   * @deprecated CMMN 1.0 allowed several planning tables; use {@link #getPlanningTable()}
+   */
   @Deprecated
   Collection<PlanningTable> getPlanningTables();
 

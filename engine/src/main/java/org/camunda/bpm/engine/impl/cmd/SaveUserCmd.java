@@ -46,6 +46,7 @@ public class SaveUserCmd extends AbstractWritableIdentityServiceCmd<Void> implem
     this.skipPasswordPolicy = skipPasswordPolicy;
   }
 
+  @Override
   protected Void executeCmd(CommandContext commandContext) {
     ensureNotNull("user", user);
     ensureWhitelistedResourceId(commandContext, "User", user.getId());
@@ -64,10 +65,8 @@ public class SaveUserCmd extends AbstractWritableIdentityServiceCmd<Void> implem
   }
 
   private void validateUserEntity(CommandContext commandContext) {
-    if(shouldCheckPasswordPolicy(commandContext)) {
-      if(!((UserEntity) user).checkPasswordAgainstPolicy()) {
-        throw new ProcessEngineException("Password does not match policy");
-      }
+    if (shouldCheckPasswordPolicy(commandContext) && !((UserEntity) user).checkPasswordAgainstPolicy()) {
+      throw new ProcessEngineException("Password does not match policy");
     }
   }
 

@@ -148,6 +148,11 @@
           <version>2.22.1</version>
           <configuration>
             <redirectTestOutputToFile>true</redirectTestOutputToFile>
+            <!-- Alurkerja fork: pinning a different surefire version here also detaches this
+                 configuration from the one in camunda-parent, so the @{argLine} that carries the
+                 JaCoCo agent was lost and every spin module ran its tests without recording any
+                 coverage - jacoco:report then said "missing execution data file". -->
+            <argLine>@{argLine}</argLine>
           </configuration>
         </plugin>
         <plugin>

@@ -29,7 +29,6 @@ import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN scriptTask element
@@ -50,11 +49,7 @@ public class ScriptTaskImpl extends TaskImpl implements ScriptTask {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ScriptTask.class, BPMN_ELEMENT_SCRIPT_TASK)
       .namespaceUri(BPMN20_NS)
       .extendsType(Task.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ScriptTask>() {
-        public ScriptTask newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ScriptTaskImpl(instanceContext);
-        }
-      });
+      .instanceProvider(ScriptTaskImpl::new);
 
     scriptFormatAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_SCRIPT_FORMAT)
       .build();
@@ -86,36 +81,44 @@ public class ScriptTaskImpl extends TaskImpl implements ScriptTask {
     return new ScriptTaskBuilder((BpmnModelInstance) modelInstance, this);
   }
 
+  @Override
   public String getScriptFormat() {
     return scriptFormatAttribute.getValue(this);
   }
 
+  @Override
   public void setScriptFormat(String scriptFormat) {
     scriptFormatAttribute.setValue(this, scriptFormat);
   }
 
+  @Override
   public Script getScript() {
     return scriptChild.getChild(this);
   }
 
+  @Override
   public void setScript(Script script) {
     scriptChild.setChild(this, script);
   }
 
   /** camunda extensions */
 
+  @Override
   public String getCamundaResultVariable() {
     return camundaResultVariableAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaResultVariable(String camundaResultVariable) {
     camundaResultVariableAttribute.setValue(this, camundaResultVariable);
   }
 
+  @Override
   public String getCamundaResource() {
     return camundaResourceAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaResource(String camundaResource) {
     camundaResourceAttribute.setValue(this, camundaResource);
   }

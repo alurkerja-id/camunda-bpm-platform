@@ -24,7 +24,6 @@ import org.camunda.bpm.model.dmn.instance.ItemDefinitionReference;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class ItemDefinitionReferenceImpl extends DmnElementReferenceImpl implements ItemDefinitionReference {
 
@@ -36,11 +35,7 @@ public class ItemDefinitionReferenceImpl extends DmnElementReferenceImpl impleme
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ItemDefinitionReference.class, DMN_ELEMENT_ITEM_DEFINITION_REFERENCE)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(DmnElementReference.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ItemDefinitionReference>() {
-        public ItemDefinitionReference newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ItemDefinitionReferenceImpl(instanceContext);
-        }
-      });
+      .instanceProvider(ItemDefinitionReferenceImpl::new);
 
     typeBuilder.build();
   }

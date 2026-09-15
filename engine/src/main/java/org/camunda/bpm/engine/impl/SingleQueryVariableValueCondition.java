@@ -16,7 +16,8 @@
  */
 package org.camunda.bpm.engine.impl;
 
-import static org.camunda.bpm.engine.impl.QueryOperator.*;
+import static org.camunda.bpm.engine.impl.QueryOperator.EQUALS;
+import static org.camunda.bpm.engine.impl.QueryOperator.NOT_EQUALS;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -49,6 +50,7 @@ public class SingleQueryVariableValueCondition extends AbstractQueryVariableValu
     super(variableValue);
   }
 
+  @Override
   public void initializeValue(VariableSerializers serializers, String dbType) {
     TypedValue typedValue = wrappedQueryValue.getTypedValue();
     initializeValue(serializers, typedValue, dbType);
@@ -63,10 +65,8 @@ public class SingleQueryVariableValueCondition extends AbstractQueryVariableValu
     }
     serializer.writeValue(typedValue, this);
     this.type = serializer.getName();
-    if (ValueType.STRING.getName().equals(type) && DbSqlSessionFactory.ORACLE.equals(dbType)) {
-      if ("".equals(textValue) && Arrays.asList(EQUALS, NOT_EQUALS).contains(wrappedQueryValue.getOperator())) {
-        this.findNulledEmptyStrings = true;
-      }
+    if (ValueType.STRING.getName().equals(type) && DbSqlSessionFactory.ORACLE.equals(dbType) && "".equals(textValue) && Arrays.asList(EQUALS, NOT_EQUALS).contains(wrappedQueryValue.getOperator())) {
+      this.findNulledEmptyStrings = true;
     }
   }
 
@@ -89,43 +89,62 @@ public class SingleQueryVariableValueCondition extends AbstractQueryVariableValu
     return serializer;
   }
 
+  @Override
   public List<SingleQueryVariableValueCondition> getDisjunctiveConditions() {
     return Collections.singletonList(this);
   }
 
+  @Override
   public String getName() {
     return wrappedQueryValue.getName();
   }
 
+  @Override
   public String getTextValue() {
     return textValue;
   }
+
+  @Override
   public void setTextValue(String textValue) {
     this.textValue = textValue;
   }
+
+  @Override
   public String getTextValue2() {
     return textValue2;
   }
+
+  @Override
   public void setTextValue2(String textValue2) {
     this.textValue2 = textValue2;
   }
+
+  @Override
   public Long getLongValue() {
     return longValue;
   }
+
+  @Override
   public void setLongValue(Long longValue) {
     this.longValue = longValue;
   }
+
+  @Override
   public Double getDoubleValue() {
     return doubleValue;
   }
+
+  @Override
   public void setDoubleValue(Double doubleValue) {
     this.doubleValue = doubleValue;
   }
 
+  @Override
   public byte[] getByteArrayValue() {
     return null;
   }
 
+  @Override
   public void setByteArrayValue(byte[] bytes) {
   }
 

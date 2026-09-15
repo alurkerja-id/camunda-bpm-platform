@@ -24,7 +24,6 @@ import org.camunda.bpm.model.dmn.instance.SourceRef;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class SourceRefImpl extends DmnElementReferenceImpl implements SourceRef {
 
@@ -36,11 +35,7 @@ public class SourceRefImpl extends DmnElementReferenceImpl implements SourceRef 
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(SourceRef.class, DMN_ELEMENT_SOURCE_REF)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(DmnElementReference.class)
-      .instanceProvider(new ModelTypeInstanceProvider<SourceRef>() {
-        public SourceRef newInstance(ModelTypeInstanceContext instanceContext) {
-          return new SourceRefImpl(instanceContext);
-        }
-      });
+      .instanceProvider(SourceRefImpl::new);
 
     typeBuilder.build();
   }

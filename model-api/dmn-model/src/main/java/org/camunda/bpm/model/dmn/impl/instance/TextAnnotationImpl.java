@@ -26,7 +26,6 @@ import org.camunda.bpm.model.dmn.instance.TextAnnotation;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
@@ -37,18 +36,22 @@ public class TextAnnotationImpl extends ArtifactImpl implements TextAnnotation {
 
   protected static ChildElement<Text> textChild;
 
+  @Override
   public String getTextFormat() {
     return textFormatAttribute.getValue(this);
   }
 
+  @Override
   public void setTextFormat(String textFormat) {
     textFormatAttribute.setValue(this, textFormat);
   }
 
+  @Override
   public Text getText() {
     return textChild.getChild(this);
   }
 
+  @Override
   public void setText(Text text) {
     textChild.setChild(this, text);
   }
@@ -61,11 +64,7 @@ public class TextAnnotationImpl extends ArtifactImpl implements TextAnnotation {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(TextAnnotation.class, DMN_ELEMENT_TEXT_ANNOTATION)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(Artifact.class)
-      .instanceProvider(new ModelTypeInstanceProvider<TextAnnotation>() {
-        public TextAnnotation newInstance(ModelTypeInstanceContext instanceContext) {
-          return new TextAnnotationImpl(instanceContext);
-        }
-      });
+      .instanceProvider(TextAnnotationImpl::new);
 
     textFormatAttribute = typeBuilder.stringAttribute(DMN_ATTRIBUTE_TEXT_FORMAT)
       .defaultValue("text/plain")

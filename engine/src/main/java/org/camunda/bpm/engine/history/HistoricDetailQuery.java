@@ -59,6 +59,7 @@ public interface HistoricDetailQuery extends Query<HistoricDetailQuery, Historic
 
   /** Only select historic variable updates associated to the given {@link HistoricActivityInstance activity instance}.
    * @deprecated since 5.2, use {@link #activityInstanceId(String)} instead */
+  @Deprecated(since = "5.2")
   HistoricDetailQuery activityId(String activityId);
 
   /** Only select historic variable updates associated to the given {@link HistoricActivityInstance activity instance}. */
@@ -79,7 +80,8 @@ public interface HistoricDetailQuery extends Query<HistoricDetailQuery, Historic
    */
   HistoricDetailQuery variableNameLike(String variableNameLike);
 
-  /** Only select {@link HistoricFormProperty}s. */
+  /** Only select {@link HistoricFormProperty}s.
+   * @deprecated form properties were replaced by form fields; use {@link #formFields()} */
   @Deprecated
   HistoricDetailQuery formProperties();
 

@@ -44,6 +44,7 @@ public class DefaultJobExecutor extends ThreadPoolJobExecutor {
   protected int corePoolSize = 3;
   protected int maxPoolSize = 10;
 
+  @Override
   protected void startExecutingJobs() {
 
     if (threadPoolExecutor==null || threadPoolExecutor.isShutdown()) {
@@ -55,6 +56,7 @@ public class DefaultJobExecutor extends ThreadPoolJobExecutor {
     super.startExecutingJobs();
   }
 
+  @Override
   protected void stopExecutingJobs() {
 
     super.stopExecutingJobs();
@@ -69,6 +71,7 @@ public class DefaultJobExecutor extends ThreadPoolJobExecutor {
       }
     } catch (InterruptedException e) {
       LOG.interruptedWhileShuttingDownjobExecutor(e);
+      Thread.currentThread().interrupt();
     }
   }
 

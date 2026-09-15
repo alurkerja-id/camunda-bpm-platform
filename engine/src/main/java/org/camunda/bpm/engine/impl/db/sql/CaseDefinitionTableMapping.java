@@ -23,14 +23,17 @@ package org.camunda.bpm.engine.impl.db.sql;
  */
 public class CaseDefinitionTableMapping implements MyBatisTableMapping {
 
+  @Override
   public String getTableName() {
     return "ACT_RE_CASEDEF";
   }
 
+  @Override
   public String getTableAlias() {
     return "P";
   }
 
+  @Override
   public boolean isOneToOneRelation() {
     return true;
   }

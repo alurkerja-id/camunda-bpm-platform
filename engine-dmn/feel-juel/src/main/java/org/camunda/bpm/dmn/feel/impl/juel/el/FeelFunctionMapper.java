@@ -31,7 +31,8 @@ public class FeelFunctionMapper extends FunctionMapper {
 
   public static final FeelEngineLogger LOG = FeelLogger.ENGINE_LOGGER;
 
-  protected static final SimpleDateFormat FEEL_DATE_AND_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+  // the format was cloned on every call anyway, since SimpleDateFormat is not thread-safe
+  protected static final String FEEL_DATE_AND_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
   public static final String JUEL_DATE_AND_TIME_METHOD = "dateAndTime";
 
   protected static final Map<String, Method> methods = new HashMap<String, Method>();
@@ -54,8 +55,7 @@ public class FeelFunctionMapper extends FunctionMapper {
 
   public static Date parseDateAndTime(String dateAndTimeString) {
     try {
-      SimpleDateFormat clonedDateFormat = (SimpleDateFormat) FEEL_DATE_AND_TIME_FORMAT.clone();
-      return clonedDateFormat.parse(dateAndTimeString);
+      return new SimpleDateFormat(FEEL_DATE_AND_TIME_PATTERN).parse(dateAndTimeString);
     } catch (ParseException e) {
       throw LOG.invalidDateAndTimeFormat(dateAndTimeString, e);
     }

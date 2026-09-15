@@ -17,6 +17,7 @@
 package org.camunda.spin.impl.util;
 
 import org.camunda.spin.impl.logging.SpinCoreLogger;
+import org.camunda.spin.impl.logging.SpinLogger;
 import org.camunda.spin.spi.DataFormat;
 
 /**
@@ -25,7 +26,7 @@ import org.camunda.spin.spi.DataFormat;
  */
 public class SpinReflectUtil {
 
-  private final static SpinCoreLogger LOG = SpinCoreLogger.CORE_LOGGER;
+  private final static SpinCoreLogger LOG = SpinLogger.CORE_LOGGER;
 
   /**
    * Used by dataformats if they need to load a class

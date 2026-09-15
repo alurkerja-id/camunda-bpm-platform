@@ -36,6 +36,7 @@ public class EnumFormType extends SimpleFormFieldType {
     this.values = values;
   }
 
+  @Override
   public String getName() {
     return TYPE_NAME;
   }
@@ -48,6 +49,7 @@ public class EnumFormType extends SimpleFormFieldType {
     return null;
   }
 
+  @Override
   public TypedValue convertValue(TypedValue propertyValue) {
     Object value = propertyValue.getValue();
     if(value == null || String.class.isInstance(value)) {
@@ -60,10 +62,8 @@ public class EnumFormType extends SimpleFormFieldType {
   }
 
   protected void validateValue(Object value) {
-    if(value != null) {
-      if(values != null && !values.containsKey(value)) {
-        throw new ProcessEngineException("Invalid value for enum form property: " + value);
-      }
+    if (value != null && values != null && !values.containsKey(value)) {
+      throw new ProcessEngineException("Invalid value for enum form property: " + value);
     }
   }
 

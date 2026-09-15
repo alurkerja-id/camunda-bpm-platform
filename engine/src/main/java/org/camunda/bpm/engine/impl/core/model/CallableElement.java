@@ -86,8 +86,7 @@ public class CallableElement extends BaseCallableElement {
   }
 
   public VariableMap getInputVariables(VariableScope variableScope) {
-    List<CallableElementParameter> inputs = getInputs();
-    return getVariables(inputs, variableScope);
+    return getVariables(getInputs(), variableScope);
   }
 
   // outputs /////////////////////////////////////////////////////////////////////
@@ -113,13 +112,11 @@ public class CallableElement extends BaseCallableElement {
   }
 
   public VariableMap getOutputVariables(VariableScope calledElementScope) {
-    List<CallableElementParameter> outputs = getOutputs();
-    return getVariables(outputs, calledElementScope);
+    return getVariables(getOutputs(), calledElementScope);
   }
 
   public VariableMap getOutputVariablesLocal(VariableScope calledElementScope) {
-    List<CallableElementParameter> outputs = getOutputsLocal();
-    return getVariables(outputs, calledElementScope);
+    return getVariables(getOutputsLocal(), calledElementScope);
   }
 
   // variables //////////////////////////////////////////////////////////////////

@@ -18,6 +18,7 @@ package org.camunda.bpm.engine.impl.interceptor;
 
 
 import org.camunda.bpm.engine.delegate.ProcessEngineServicesAware;
+import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.cmd.CommandLogger;
 import org.camunda.bpm.engine.impl.context.Context;
@@ -54,7 +55,7 @@ import org.camunda.bpm.engine.impl.context.ProcessEngineContextImpl;
  */
 public class CommandContextInterceptor extends CommandInterceptor {
 
-  private final static CommandLogger LOG = CommandLogger.CMD_LOGGER;
+  private final static CommandLogger LOG = ProcessEngineLogger.CMD_LOGGER;
 
   protected CommandContextFactory commandContextFactory;
   protected ProcessEngineConfigurationImpl processEngineConfiguration;
@@ -75,6 +76,7 @@ public class CommandContextInterceptor extends CommandInterceptor {
     this.alwaysOpenNew = alwaysOpenNew;
   }
 
+  @Override
   public <T> T execute(Command<T> command) {
     CommandContext context = null;
 
@@ -115,10 +117,12 @@ public class CommandContextInterceptor extends CommandInterceptor {
 
     } finally {
       try {
-        if (openNew) {
+        if (openNew && context != null) {
           LOG.closingCommandContext();
           context.close(commandInvocationContext);
         } else {
+          // context stays null when creating it threw; there is nothing to close then, and the
+          // NullPointerException that used to happen here buried the failure that caused it
           commandInvocationContext.rethrow();
         }
       } finally {

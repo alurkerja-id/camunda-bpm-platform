@@ -24,7 +24,6 @@ import org.camunda.bpm.model.dmn.instance.RequiredAuthorityReference;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class RequiredAuthorityReferenceImpl extends DmnElementReferenceImpl implements RequiredAuthorityReference {
 
@@ -36,11 +35,7 @@ public class RequiredAuthorityReferenceImpl extends DmnElementReferenceImpl impl
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(RequiredAuthorityReference.class, DMN_ELEMENT_REQUIRED_AUTHORITY)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(DmnElementReference.class)
-      .instanceProvider(new ModelTypeInstanceProvider<RequiredAuthorityReference>() {
-        public RequiredAuthorityReference newInstance(ModelTypeInstanceContext instanceContext) {
-          return new RequiredAuthorityReferenceImpl(instanceContext);
-        }
-      });
+      .instanceProvider(RequiredAuthorityReferenceImpl::new);
 
     typeBuilder.build();
   }

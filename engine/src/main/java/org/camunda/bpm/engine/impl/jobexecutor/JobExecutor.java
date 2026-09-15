@@ -59,7 +59,7 @@ public abstract class JobExecutor {
   // waiting when job acquisition is idle
   protected int waitTimeInMillis = 5 * 1000;
   protected float waitIncreaseFactor = 2;
-  protected long maxWait = 60 * 1000;
+  protected long maxWait = 60L * 1000;
 
   // backoff when job acquisition fails to lock all jobs
   protected int backoffTimeInMillis = 0;
@@ -136,8 +136,9 @@ public abstract class JobExecutor {
   public abstract void executeJobs(List<String> jobIds, ProcessEngineImpl processEngine);
 
   /**
-   * Deprecated: use {@link #executeJobs(List, ProcessEngineImpl)} instead
    * @param jobIds
+   *
+   * @deprecated use {@link #executeJobs(List, ProcessEngineImpl)} instead
    */
   @Deprecated
   public void executeJobs(List<String> jobIds) {
@@ -232,7 +233,7 @@ public abstract class JobExecutor {
   }
 
   /**
-   * Deprecated: use {@link #getProcessEngines()} instead
+   * @deprecated use {@link #getProcessEngines()} instead
    */
   @Deprecated
   public CommandExecutor getCommandExecutor() {
@@ -244,8 +245,9 @@ public abstract class JobExecutor {
   }
 
   /**
-   * Deprecated: use {@link #registerProcessEngine(ProcessEngineImpl)} instead
    * @param commandExecutorTxRequired
+   *
+   * @deprecated use {@link #registerProcessEngine(ProcessEngineImpl)} instead
    */
   @Deprecated
   public void setCommandExecutor(CommandExecutor commandExecutorTxRequired) {
@@ -377,6 +379,7 @@ public abstract class JobExecutor {
 		}
 		catch (InterruptedException e) {
 		  LOG.interruptedWhileShuttingDownjobExecutor(e);
+		  Thread.currentThread().interrupt();
 		}
 		jobAcquisitionThread = null;
 	}

@@ -47,7 +47,6 @@ import org.camunda.bpm.engine.rest.spi.ProcessEngineProvider;
 import org.camunda.bpm.engine.rest.util.ProvidersUtil;
 import org.camunda.bpm.webapp.impl.WebappLogger;
 import org.camunda.bpm.webapp.impl.security.SecurityActions;
-import org.camunda.bpm.webapp.impl.security.SecurityActions.SecurityAction;
 
 /**
  * <p>Jax RS resource allowing to perform the setup steps.</p>
@@ -77,11 +76,9 @@ public class SetupResource {
       throw LOGGER.invalidRequestEngineNotFoundForName(processEngineName);
     }
 
-    SecurityActions.runWithoutAuthentication(new SecurityAction<Void>() {
-      public Void execute() {
-        createInitialUserInternal(processEngineName, user, processEngine);
-        return null;
-      }
+    SecurityActions.runWithoutAuthentication(() -> {
+      createInitialUserInternal(processEngineName, user, processEngine);
+      return null;
     }, processEngine);
 
   }

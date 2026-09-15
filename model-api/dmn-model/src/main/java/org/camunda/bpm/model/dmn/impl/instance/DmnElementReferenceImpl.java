@@ -24,7 +24,6 @@ import org.camunda.bpm.model.dmn.instance.DmnElementReference;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
 public class DmnElementReferenceImpl extends DmnModelElementInstanceImpl implements DmnElementReference {
@@ -35,10 +34,12 @@ public class DmnElementReferenceImpl extends DmnModelElementInstanceImpl impleme
     super(instanceContext);
   }
 
+  @Override
   public String getHref() {
     return hrefAttribute.getValue(this);
   }
 
+  @Override
   public void setHref(String href) {
     hrefAttribute.setValue(this, href);
   }
@@ -46,11 +47,7 @@ public class DmnElementReferenceImpl extends DmnModelElementInstanceImpl impleme
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(DmnElementReference.class, DMN_ELEMENT_REFERENCE)
       .namespaceUri(LATEST_DMN_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<DmnElementReference>() {
-        public DmnElementReference newInstance(ModelTypeInstanceContext instanceContext) {
-          return new DmnElementReferenceImpl(instanceContext);
-        }
-      });
+      .instanceProvider(DmnElementReferenceImpl::new);
 
     hrefAttribute = typeBuilder.stringAttribute(DMN_ATTRIBUTE_HREF)
       .required()

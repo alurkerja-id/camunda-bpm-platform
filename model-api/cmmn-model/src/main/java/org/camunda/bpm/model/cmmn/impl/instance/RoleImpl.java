@@ -25,7 +25,6 @@ import org.camunda.bpm.model.cmmn.instance.Role;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
 /**
@@ -40,10 +39,12 @@ public class RoleImpl extends CmmnElementImpl implements Role {
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
@@ -52,11 +53,7 @@ public class RoleImpl extends CmmnElementImpl implements Role {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Role.class, CMMN_ELEMENT_ROLE)
         .extendsType(CmmnElement.class)
         .namespaceUri(CMMN11_NS)
-        .instanceProvider(new ModelTypeInstanceProvider<Role>() {
-          public Role newInstance(ModelTypeInstanceContext instanceContext) {
-            return new RoleImpl(instanceContext);
-          }
-        });
+        .instanceProvider(RoleImpl::new);
 
     nameAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_NAME)
         .build();

@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 
 import org.camunda.bpm.engine.variable.impl.value.FileValueImpl;
-import org.camunda.bpm.engine.variable.type.PrimitiveValueType;
+import org.camunda.bpm.engine.variable.type.ValueType;
 import org.camunda.bpm.engine.variable.value.FileValue;
 import org.camunda.bpm.engine.variable.value.builder.FileValueBuilder;
 import org.camunda.commons.utils.EnsureUtil;
@@ -39,7 +39,7 @@ public class FileValueBuilderImpl implements FileValueBuilder {
 
   public FileValueBuilderImpl(String filename) {
     EnsureUtil.ensureNotNull("filename", filename);
-    fileValue = new FileValueImpl(PrimitiveValueType.FILE, filename);
+    fileValue = new FileValueImpl(ValueType.FILE, filename);
   }
 
   @Override

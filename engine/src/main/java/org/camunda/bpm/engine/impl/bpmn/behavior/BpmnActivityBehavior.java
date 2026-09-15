@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.impl.Condition;
 import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.bpmn.parser.BpmnParse;
@@ -100,7 +99,7 @@ public class BpmnActivityBehavior {
 
       execution.leaveActivityViaTransition(transitionsToTake.get(0));
 
-    } else if (transitionsToTake.size() >= 1) {
+    } else if (!transitionsToTake.isEmpty()) {
       execution.leaveActivityViaTransitions(transitionsToTake, Arrays.asList(execution));
     } else {
 

@@ -28,7 +28,6 @@ import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN boundaryEvent element
@@ -44,11 +43,7 @@ public class BoundaryEventImpl extends CatchEventImpl implements BoundaryEvent {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(BoundaryEvent.class, BPMN_ELEMENT_BOUNDARY_EVENT)
       .namespaceUri(BPMN20_NS)
       .extendsType(CatchEvent.class)
-      .instanceProvider(new ModelTypeInstanceProvider<BoundaryEvent>() {
-        public BoundaryEvent newInstance(ModelTypeInstanceContext instanceContext) {
-          return new BoundaryEventImpl(instanceContext);
-        }
-      });
+      .instanceProvider(BoundaryEventImpl::new);
 
     cancelActivityAttribute = typeBuilder.booleanAttribute(BPMN_ATTRIBUTE_CANCEL_ACTIVITY)
       .defaultValue(true)
@@ -71,18 +66,22 @@ public class BoundaryEventImpl extends CatchEventImpl implements BoundaryEvent {
     return new BoundaryEventBuilder((BpmnModelInstance) modelInstance, this);
   }
 
+  @Override
   public boolean cancelActivity() {
     return cancelActivityAttribute.getValue(this);
   }
 
+  @Override
   public void setCancelActivity(boolean cancelActivity) {
     cancelActivityAttribute.setValue(this, cancelActivity);
   }
 
+  @Override
   public Activity getAttachedTo() {
     return attachedToRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setAttachedTo(Activity attachedTo) {
     attachedToRefAttribute.setReferenceTargetElement(this, attachedTo);
   }

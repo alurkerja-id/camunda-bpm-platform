@@ -52,4 +52,11 @@ public class CamundaBpmRunLogger extends BaseLogger {
                          pluginName, e.getMessage(), e));
   }
 
+  public void failedToReadDeploymentDir(String deploymentDir, Exception e) {
+    logError("004",
+             "The deployment directory '{}' could not be read, so nothing is deployed from it. " +
+                 "Please check that the directory exists and is readable. More details: {}",
+             deploymentDir, e.getMessage(), e);
+  }
+
 }

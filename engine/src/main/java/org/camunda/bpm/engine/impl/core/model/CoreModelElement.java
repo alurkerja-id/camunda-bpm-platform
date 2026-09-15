@@ -152,15 +152,11 @@ public abstract class CoreModelElement implements Serializable {
   }
 
   protected <T> void addListenerToMap(Map<String, List<T>> listenerMap, String eventName, T listener, int index) {
-    List<T> listeners = listenerMap.get(eventName);
-    if (listeners == null) {
-      listeners = new ArrayList<T>();
-      listenerMap.put(eventName, listeners);
-    }
+    List<T> eventListeners = listenerMap.computeIfAbsent(eventName, k -> new ArrayList<T>());
     if (index < 0) {
-      listeners.add(listener);
+      eventListeners.add(listener);
     } else {
-      listeners.add(index, listener);
+      eventListeners.add(index, listener);
     }
   }
 

@@ -126,10 +126,10 @@ public class BatchBuilder {
     Map<String, JobHandler> jobHandlers = engineConfig.getJobHandlers();
     BatchJobHandler jobHandler = (BatchJobHandler) jobHandlers.get(type);
 
-    String type = jobHandler.getType();
-    batch.setType(type);
+    String handlerType = jobHandler.getType();
+    batch.setType(handlerType);
 
-    int invocationPerBatchJobCount = jobHandler.calculateInvocationsPerBatchJob(type, config);
+    int invocationPerBatchJobCount = jobHandler.calculateInvocationsPerBatchJob(handlerType, config);
     batch.setInvocationsPerBatchJob(invocationPerBatchJobCount);
 
     batch.setTenantId(tenantId);
@@ -154,9 +154,9 @@ public class BatchBuilder {
       List<String> instanceIds = config.getIds();
 
       int instanceCount = instanceIds.size();
-      int totalJobsCount = calculateTotalJobs(instanceCount, invocationPerBatchJobCount);
+      int calculatedTotalJobs = calculateTotalJobs(instanceCount, invocationPerBatchJobCount);
 
-      batch.setTotalJobs(totalJobsCount);
+      batch.setTotalJobs(calculatedTotalJobs);
     }
   }
 

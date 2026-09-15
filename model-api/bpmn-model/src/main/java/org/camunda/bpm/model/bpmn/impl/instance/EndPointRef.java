@@ -22,7 +22,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_END_POINT_REF;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN interfaceRef element of the BPMN tParticipant type
@@ -34,11 +33,7 @@ public class EndPointRef extends BpmnModelElementInstanceImpl {
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(EndPointRef.class, BPMN_ELEMENT_END_POINT_REF)
       .namespaceUri(BPMN20_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<EndPointRef>() {
-        public EndPointRef newInstance(ModelTypeInstanceContext instanceContext) {
-          return new EndPointRef(instanceContext);
-        }
-      });
+      .instanceProvider(EndPointRef::new);
 
     typeBuilder.build();
   }

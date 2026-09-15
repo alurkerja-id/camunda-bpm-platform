@@ -199,10 +199,8 @@ public class DeployProcessArchiveStep extends DeploymentOperationStep {
 
     // delete deployment if we were able to create one AND if
     // isDeleteUponUndeploy is set.
-    if (deployment != null && PropertyHelper.getBooleanProperty(processArchive.getProperties(), ProcessArchiveXml.PROP_IS_DELETE_UPON_UNDEPLOY, false)) {
-      if (processEngine != null) {
-        processEngine.getRepositoryService().deleteDeployment(deployment.getId(), true);
-      }
+    if (deployment != null && PropertyHelper.getBooleanProperty(processArchive.getProperties(), ProcessArchiveXml.PROP_IS_DELETE_UPON_UNDEPLOY, false) && processEngine != null) {
+      processEngine.getRepositoryService().deleteDeployment(deployment.getId(), true);
     }
 
   }

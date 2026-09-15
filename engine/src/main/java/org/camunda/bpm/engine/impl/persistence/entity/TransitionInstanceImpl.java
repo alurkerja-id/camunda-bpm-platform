@@ -36,6 +36,7 @@ public class TransitionInstanceImpl extends ProcessElementInstanceImpl implement
   protected String[] incidentIds = NO_IDS;
   protected Incident[] incidents = new Incident[0];
 
+  @Override
   public String getActivityId() {
     return activityId;
   }
@@ -44,10 +45,12 @@ public class TransitionInstanceImpl extends ProcessElementInstanceImpl implement
     this.activityId = activityId;
   }
 
+  @Override
   public String getTargetActivityId() {
     return activityId;
   }
 
+  @Override
   public String getExecutionId() {
     return executionId;
   }
@@ -56,6 +59,7 @@ public class TransitionInstanceImpl extends ProcessElementInstanceImpl implement
     this.executionId = executionId;
   }
 
+  @Override
   public String getActivityType() {
     return activityType;
   }
@@ -64,6 +68,7 @@ public class TransitionInstanceImpl extends ProcessElementInstanceImpl implement
     this.activityType = activityType;
   }
 
+  @Override
   public String getActivityName() {
     return activityName;
   }
@@ -98,6 +103,7 @@ public class TransitionInstanceImpl extends ProcessElementInstanceImpl implement
     return subProcessInstanceId;
   }
 
+  @Override
   public String toString() {
     return this.getClass().getSimpleName()
            + "[executionId=" + executionId

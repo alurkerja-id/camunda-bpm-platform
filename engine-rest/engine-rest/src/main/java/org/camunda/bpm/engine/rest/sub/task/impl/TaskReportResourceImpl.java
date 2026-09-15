@@ -44,6 +44,7 @@ public class TaskReportResourceImpl implements TaskReportResource {
     this.engine = engine;
   }
 
+  @Override
   public Response getTaskCountByCandidateGroupReport(Request request) {
     Variant variant = request.selectVariant(VARIANTS);
     if (variant != null) {
@@ -67,7 +68,7 @@ public class TaskReportResourceImpl implements TaskReportResource {
   @SuppressWarnings("unchecked")
   protected List<TaskCountByCandidateGroupResult> queryTaskCountByCandidateGroupReport() {
     TaskCountByCandidateGroupResultDto reportDto = new TaskCountByCandidateGroupResultDto();
-    return (List<TaskCountByCandidateGroupResult>) reportDto.executeTaskCountByCandidateGroupReport(engine);
+    return reportDto.executeTaskCountByCandidateGroupReport(engine);
   }
 
   protected List<TaskCountByCandidateGroupResultDto> getTaskCountByCandidateGroupResultAsJson() {

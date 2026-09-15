@@ -134,32 +134,32 @@ public class ClientConfiguration {
   }
 
   public void fromAnnotation(EnableExternalTaskClient annotation) {
-    String baseUrl = annotation.baseUrl();
-    setBaseUrl(isNull(baseUrl) ? null : baseUrl);
+    String annotatedBaseUrl = annotation.baseUrl();
+    setBaseUrl(isNull(annotatedBaseUrl) ? null : annotatedBaseUrl);
 
-    int maxTasks = annotation.maxTasks();
-    setMaxTasks(isNull(maxTasks) ? null : maxTasks);
+    int annotatedMaxTasks = annotation.maxTasks();
+    setMaxTasks(isNull(annotatedMaxTasks) ? null : annotatedMaxTasks);
 
-    String workerId = annotation.workerId();
-    setWorkerId(isNull(workerId) ? null : workerId);
+    String annotatedWorkerId = annotation.workerId();
+    setWorkerId(isNull(annotatedWorkerId) ? null : annotatedWorkerId);
 
     setUsePriority(annotation.usePriority());
 
     setUseCreateTime(annotation.useCreateTime());
     configureOrderByCreateTime(annotation);
 
-    long asyncResponseTimeout = annotation.asyncResponseTimeout();
-    setAsyncResponseTimeout(isNull(asyncResponseTimeout) ? null : asyncResponseTimeout);
+    long annotatedAsyncResponseTimeout = annotation.asyncResponseTimeout();
+    setAsyncResponseTimeout(isNull(annotatedAsyncResponseTimeout) ? null : annotatedAsyncResponseTimeout);
 
     setDisableAutoFetching(annotation.disableAutoFetching());
 
     setDisableBackoffStrategy(annotation.disableBackoffStrategy());
 
-    long lockDuration = annotation.lockDuration();
-    setLockDuration(isNull(lockDuration) ? null : lockDuration);
+    long annotatedLockDuration = annotation.lockDuration();
+    setLockDuration(isNull(annotatedLockDuration) ? null : annotatedLockDuration);
 
-    String dateFormat = annotation.dateFormat();
-    setDateFormat(isNull(dateFormat) ? null : dateFormat);
+    String annotatedDateFormat = annotation.dateFormat();
+    setDateFormat(isNull(annotatedDateFormat) ? null : annotatedDateFormat);
 
     String serializationFormat = annotation.defaultSerializationFormat();
     setDefaultSerializationFormat(isNull(serializationFormat) ? null : serializationFormat);

@@ -27,7 +27,6 @@ import org.camunda.bpm.model.cmmn.instance.Parameter;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
@@ -45,18 +44,22 @@ public class CaseParameterImpl extends ParameterImpl implements CaseParameter {
     super(instanceContext);
   }
 
+  @Override
   public CaseFileItem getBinding() {
     return bindingRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setBinding(CaseFileItem bindingRef) {
     bindingRefAttribute.setReferenceTargetElement(this, bindingRef);
   }
 
+  @Override
   public BindingRefinementExpression getBindingRefinement() {
     return bindingRefinementChild.getChild(this);
   }
 
+  @Override
   public void setBindingRefinement(BindingRefinementExpression bindingRefinement) {
     bindingRefinementChild.setChild(this, bindingRefinement);
   }
@@ -65,11 +68,7 @@ public class CaseParameterImpl extends ParameterImpl implements CaseParameter {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CaseParameter.class, CMMN_ELEMENT_CASE_PARAMETER)
         .namespaceUri(CMMN11_NS)
         .extendsType(Parameter.class)
-        .instanceProvider(new ModelTypeInstanceProvider<CaseParameter>() {
-          public CaseParameter newInstance(ModelTypeInstanceContext instanceContext) {
-            return new CaseParameterImpl(instanceContext);
-          }
-        });
+        .instanceProvider(CaseParameterImpl::new);
 
     bindingRefAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_BINDING_REF)
          .idAttributeReference(CaseFileItem.class)

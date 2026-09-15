@@ -24,7 +24,6 @@ import org.camunda.bpm.application.AbstractProcessApplication;
 import org.camunda.bpm.application.ProcessApplicationInterface;
 import org.camunda.bpm.application.ProcessApplicationReference;
 import org.camunda.bpm.application.ProcessApplicationUnavailableException;
-import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.db.DbEntityLifecycleAware;
@@ -86,7 +85,7 @@ public class TypedValueField implements DbEntityLifecycleAware, CommandContextLi
     if (Context.getCommandContext() != null) {
       // in some circumstances we must invalidate the cached value instead of returning it
 
-      if (cachedValue != null && cachedValue instanceof SerializableValue) {
+      if (cachedValue instanceof SerializableValue) {
         SerializableValue serializableValue = (SerializableValue) cachedValue;
         if(deserializeValue && !serializableValue.isDeserialized()) {
           // clear cached value in case it is not deserialized and user requests deserialized value

@@ -51,6 +51,9 @@ public class TransitionInstanceDto {
     return processDefinitionId;
   }
 
+  /**
+   * @deprecated the field was renamed; use {@link #getActivityId()}
+   */
   @Deprecated
   public String getTargetActivityId() {
     return activityId;

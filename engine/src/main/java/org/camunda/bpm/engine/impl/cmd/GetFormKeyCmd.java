@@ -22,9 +22,6 @@ import org.camunda.bpm.engine.impl.cfg.CommandChecker;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.form.FormDefinition;
-import org.camunda.bpm.engine.impl.form.handler.DefaultStartFormHandler;
-import org.camunda.bpm.engine.impl.form.handler.DelegateStartFormHandler;
-import org.camunda.bpm.engine.impl.form.handler.FormHandler;
 import org.camunda.bpm.engine.impl.interceptor.Command;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
 import org.camunda.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
@@ -67,6 +64,7 @@ public class GetFormKeyCmd implements Command<String> {
     this.processDefinitionId = processDefinitionId;
   }
 
+  @Override
   public String execute(CommandContext commandContext) {
     ProcessEngineConfigurationImpl processEngineConfiguration = Context.getProcessEngineConfiguration();
     DeploymentCache deploymentCache = processEngineConfiguration.getDeploymentCache();

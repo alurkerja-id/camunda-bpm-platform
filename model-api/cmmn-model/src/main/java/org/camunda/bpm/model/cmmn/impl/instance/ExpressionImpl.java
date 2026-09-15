@@ -26,7 +26,6 @@ import org.camunda.bpm.model.cmmn.instance.Expression;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
@@ -39,6 +38,9 @@ public class ExpressionImpl extends CmmnElementImpl implements Expression {
 
   protected static Attribute<String> languageAttribute;
 
+  /**
+   * @deprecated CMMN 1.0 only; CMMN 1.1 holds the expression as text on the element itself
+   */
   // cmmn 1.0
   @Deprecated
   protected static ChildElement<Body> bodyChild;
@@ -47,6 +49,7 @@ public class ExpressionImpl extends CmmnElementImpl implements Expression {
     super(instanceContext);
   }
 
+  @Override
   public String getText() {
     if (isCmmn11()) {
       return getTextContent();
@@ -56,6 +59,7 @@ public class ExpressionImpl extends CmmnElementImpl implements Expression {
     }
   }
 
+  @Override
   public void setText(String text) {
     if (isCmmn11()) {
       setTextContent(text);
@@ -65,6 +69,7 @@ public class ExpressionImpl extends CmmnElementImpl implements Expression {
     }
   }
 
+  @Override
   public String getBody() {
     Body body = bodyChild.getChild(this);
     if (body != null) {
@@ -73,14 +78,17 @@ public class ExpressionImpl extends CmmnElementImpl implements Expression {
     return null;
   }
 
+  @Override
   public void setBody(String body) {
     bodyChild.getChild(this).setTextContent(body);
   }
 
+  @Override
   public String getLanguage() {
     return languageAttribute.getValue(this);
   }
 
+  @Override
   public void setLanguage(String language) {
     languageAttribute.setValue(this, language);
   }
@@ -89,11 +97,7 @@ public class ExpressionImpl extends CmmnElementImpl implements Expression {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Expression.class, CMMN_ELEMENT_EXPRESSION)
         .namespaceUri(CMMN11_NS)
         .extendsType(CmmnElement.class)
-        .instanceProvider(new ModelTypeInstanceProvider<Expression>() {
-          public Expression newInstance(ModelTypeInstanceContext instanceContext) {
-            return new ExpressionImpl(instanceContext);
-          }
-        });
+        .instanceProvider(ExpressionImpl::new);
 
     languageAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_LANGUAGE)
         .defaultValue("http://www.w3.org/1999/XPath")

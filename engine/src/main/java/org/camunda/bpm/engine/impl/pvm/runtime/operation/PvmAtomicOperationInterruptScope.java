@@ -26,10 +26,11 @@ import org.camunda.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
  */
 public abstract class PvmAtomicOperationInterruptScope implements PvmAtomicOperation {
 
+  @Override
   public void execute(PvmExecutionImpl execution) {
     PvmActivity interruptingActivity = getInterruptingActivity(execution);
 
-    PvmExecutionImpl scopeExecution = !execution.isScope() ? execution.getParent() : execution;
+    PvmExecutionImpl scopeExecution = execution.isScope() ? execution : execution.getParent();
 
     if (scopeExecution != execution) {
       // remove the current execution before interrupting and continuing executing the interrupted activity
@@ -51,10 +52,12 @@ public abstract class PvmAtomicOperationInterruptScope implements PvmAtomicOpera
 
   protected abstract PvmActivity getInterruptingActivity(PvmExecutionImpl execution);
 
+  @Override
   public boolean isAsync(PvmExecutionImpl execution) {
     return false;
   }
 
+  @Override
   public boolean isAsyncCapable() {
     return false;
   }

@@ -27,7 +27,6 @@ import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_IO_SPECIFICATION;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN IoSpecification element
@@ -45,11 +44,7 @@ public class IoSpecificationImpl extends BaseElementImpl implements IoSpecificat
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(IoSpecification.class, BPMN_ELEMENT_IO_SPECIFICATION)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<IoSpecification>() {
-        public IoSpecification newInstance(ModelTypeInstanceContext instanceContext) {
-          return new IoSpecificationImpl(instanceContext);
-        }
-      });
+      .instanceProvider(IoSpecificationImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 
@@ -74,18 +69,22 @@ public class IoSpecificationImpl extends BaseElementImpl implements IoSpecificat
     super(instanceContext);
   }
 
+  @Override
   public Collection<DataInput> getDataInputs() {
     return dataInputCollection.get(this);
   }
 
+  @Override
   public Collection<DataOutput> getDataOutputs() {
     return dataOutputCollection.get(this);
   }
 
+  @Override
   public Collection<InputSet> getInputSets() {
     return inputSetCollection.get(this);
   }
 
+  @Override
   public Collection<OutputSet> getOutputSets() {
     return outputSetCollection.get(this);
   }

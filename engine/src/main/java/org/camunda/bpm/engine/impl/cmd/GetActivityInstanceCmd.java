@@ -33,7 +33,6 @@ import org.camunda.bpm.engine.impl.persistence.entity.ActivityInstanceImpl;
 import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.IncidentEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.TransitionInstanceImpl;
-import org.camunda.bpm.engine.impl.pvm.PvmActivity;
 import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
 import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
 import org.camunda.bpm.engine.impl.pvm.runtime.CompensationBehavior;
@@ -72,6 +71,7 @@ public class GetActivityInstanceCmd implements Command<ActivityInstance> {
     this.processInstanceId = processInstanceId;
   }
 
+  @Override
   public ActivityInstance execute(CommandContext commandContext) {
 
     ensureNotNull("processInstanceId", processInstanceId);
@@ -168,10 +168,7 @@ public class GetActivityInstanceCmd implements Command<ActivityInstance> {
             .get(scope.getFlowScope())
             .getParentActivityInstanceId();
 
-        if (activityInstances.containsKey(activityInstanceId)) {
-          continue;
-        }
-        else {
+        if (!activityInstances.containsKey(activityInstanceId)) {
           // regardless of the tree structure (compacted or not), the scope's activity instance id
           // is the activity instance id of the parent execution and the parent activity instance id
           // of that is the actual parent activity instance id
@@ -345,12 +342,7 @@ public class GetActivityInstanceCmd implements Command<ActivityInstance> {
   }
 
   protected <S, T> void putListElement(Map<S, List<T>> mapOfLists, S key, T listElement) {
-    List<T> list = mapOfLists.get(key);
-    if (list == null) {
-      list = new ArrayList<T>();
-      mapOfLists.put(key, list);
-    }
-    list.add(listElement);
+    mapOfLists.computeIfAbsent(key, k -> new ArrayList<T>()).add(listElement);
   }
 
   protected ExecutionEntity filterProcessInstance(List<ExecutionEntity> executionList) {

@@ -29,6 +29,15 @@
         <scope>import</scope>
         <type>pom</type>
       </dependency>
+      <!-- Alurkerja fork: hibernate-core 7.4.5 compiles against Jakarta Persistence 3.2 and calls
+           jakarta.persistence.FindOption, which does not exist in 3.1. The 3.1 API was winning the
+           mediation here, so building an EntityManagerFactory died with NoClassDefFoundError. It
+           went unnoticed because surefire could not start this module's tests at all. -->
+      <dependency>
+        <groupId>jakarta.persistence</groupId>
+        <artifactId>jakarta.persistence-api</artifactId>
+        <version>3.2.0</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   
@@ -81,14 +90,24 @@
         <module>starter-security</module>
         <module>starter-client/spring-boot</module>
         <module>starter-webapp-core</module>
+
+        <!-- Alurkerja fork: activating this profile switches off the distro and distro-ce profiles
+             below, because they are active-by-default in this same pom. The three modules they
+             contribute have no integration tests of their own, but leaving them out drops them
+             from the reactor - and with them their coverage in the Sonar report. -->
+        <module>starter-test</module>
+        <module>starter-client/spring</module>
+        <module>starter-webapp</module>
       </modules>
       <build>
         <plugins>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>
-            <!-- 3.0.0-M3 provides support for Junit Jupiter tests -->
-            <version>3.0.0-M3</version>
+            <!-- Alurkerja fork: 3.0.0-M3 was picked here for JUnit Jupiter support, but it
+                 predates JUnit Platform 6 and simply finds no tests against it - failsafe reported
+                 "Tests run: 0" for every module in this profile. Same version as surefire uses. -->
+            <version>${plugin.version.surefire-junit-platform}</version>
             <executions>
               <execution>
                 <goals>
@@ -135,10 +154,28 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-failsafe-plugin</artifactId>
+          <!-- Alurkerja fork: modules like starter-security keep all of their tests as *IT, so
+               failsafe runs them, not surefire. The failsafe configuration in camunda-parent sets
+               a plain -Xmx968m argLine without @{argLine}, so the JaCoCo agent never attached and
+               those modules reported no coverage at all. The version has to move with it: the
+               @{...} late replacement only exists from failsafe 2.17 onwards. -->
+          <version>${plugin.version.surefire-junit-platform}</version>
           <configuration>
             <redirectTestOutputToFile>true</redirectTestOutputToFile>
             <trimStackTrace>false</trimStackTrace>
+            <argLine>@{argLine} -Xmx968m</argLine>
           </configuration>
+        </plugin>
+        <!-- Alurkerja fork: surefire 2.22.2 from camunda-parent calls
+             org.junit.platform.commons.util.PreconditionViolationException, a class removed in
+             JUnit Platform 6 - which spring-boot-starter-test drags in here. The fork died with
+             NoClassDefFoundError and every module below reported "Tests run: 0", so their tests
+             had stopped running altogether and the coverage read 0%. Surefire 3 speaks to the
+             platform through the Launcher API and runs them again. -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${plugin.version.surefire-junit-platform}</version>
         </plugin>
       </plugins>
     </pluginManagement>

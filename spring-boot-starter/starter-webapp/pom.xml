@@ -34,6 +34,14 @@
       <artifactId>spring-boot-resttestclient</artifactId>
       <scope>test</scope>
     </dependency>
+    <!-- Alurkerja fork: RestTemplateBuilder moved to spring-boot-restclient in Spring Boot 4, and
+         spring-boot-resttestclient needs it. Without it the tests here die on
+         NoClassDefFoundError: org/springframework/boot/restclient/RestTemplateBuilder -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-restclient</artifactId>
+      <scope>test</scope>
+    </dependency>
 
     <dependency>
       <groupId>alurkerja.camunda.bpm.webapp</groupId>

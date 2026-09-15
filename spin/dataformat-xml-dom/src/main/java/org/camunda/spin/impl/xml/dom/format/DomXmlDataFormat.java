@@ -22,6 +22,7 @@ import java.util.Map;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
 import org.camunda.spin.impl.xml.dom.DomXmlAttribute;
 import org.camunda.spin.impl.xml.dom.DomXmlElement;
@@ -204,7 +205,34 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
   }
 
   public static TransformerFactory defaultTransformerFactory() {
-    return TransformerFactory.newInstance();
+    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+    denyExternalAccess(transformerFactory);
+    return transformerFactory;
+  }
+
+  /*
+   * Keeps the transformer from reaching for an external DTD or stylesheet, so a document being
+   * written cannot pull in a remote or local file. A formatting configuration that imports another
+   * stylesheet is refused as a result; the built-in one is self-contained.
+   *
+   * Every control is best effort on purpose. The two JAXP 1.5 attributes are unknown to Xalan 2.7,
+   * which sits on the classpath of the process engine and throws for them, so a rejected control
+   * must not take the writer down with it.
+   *
+   * @param transformerFactory The factory to configure.
+   */
+  protected static void denyExternalAccess(TransformerFactory transformerFactory) {
+    try {
+      transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+    } catch (TransformerConfigurationException | IllegalArgumentException ignored) {
+      // not supported by this implementation
+    }
+    try {
+      transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+      transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+    } catch (IllegalArgumentException ignored) {
+      // not supported by this implementation, e.g. Xalan 2.7
+    }
   }
 
   public static DocumentBuilderFactory defaultDocumentBuilderFactory() {
@@ -227,11 +255,11 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
     documentBuilderFactory.setIgnoringElementContentWhitespace(false);
     LOG.documentBuilderFactoryConfiguration("ignoringElementContentWhitespace", "false");
 
-    if ((boolean) configurationProperties.getOrDefault(XXE_PROPERTY, false) == false) {
+    if (!((boolean) configurationProperties.getOrDefault(XXE_PROPERTY, false))) {
       disableXxeProcessing(documentBuilderFactory);
     }
 
-    if ((boolean) configurationProperties.getOrDefault(SP_PROPERTY, true) == true) {
+    if ((boolean) configurationProperties.getOrDefault(SP_PROPERTY, true)) {
       enableSecureProcessing(documentBuilderFactory);
     }
 

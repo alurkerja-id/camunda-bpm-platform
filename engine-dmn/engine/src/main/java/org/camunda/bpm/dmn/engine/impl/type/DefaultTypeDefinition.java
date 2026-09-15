@@ -51,4 +51,10 @@ public class DefaultTypeDefinition implements DmnTypeDefinition {
     return true;
   }
 
+  @Override
+  public int hashCode() {
+    // equals holds for any two instances of the same class, so the hash may only depend on it
+    return getClass().hashCode();
+  }
+
 }

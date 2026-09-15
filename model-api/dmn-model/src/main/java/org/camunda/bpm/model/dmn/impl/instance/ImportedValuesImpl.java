@@ -26,7 +26,6 @@ import org.camunda.bpm.model.dmn.instance.ImportedValues;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
@@ -41,18 +40,22 @@ public class ImportedValuesImpl extends ImportImpl implements ImportedValues {
     super(instanceContext);
   }
 
+  @Override
   public String getExpressionLanguage() {
     return expressionLanguageAttribute.getValue(this);
   }
 
+  @Override
   public void setExpressionLanguage(String expressionLanguage) {
     expressionLanguageAttribute.setValue(this, expressionLanguage);
   }
 
+  @Override
   public ImportedElement getImportedElement() {
     return importedElementChild.getChild(this);
   }
 
+  @Override
   public void setImportedElement(ImportedElement importedElement) {
     importedElementChild.setChild(this, importedElement);
   }
@@ -61,11 +64,7 @@ public class ImportedValuesImpl extends ImportImpl implements ImportedValues {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ImportedValues.class, DMN_ELEMENT_IMPORTED_VALUES)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(Import.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ImportedValues>() {
-        public ImportedValues newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ImportedValuesImpl(instanceContext);
-        }
-      });
+      .instanceProvider(ImportedValuesImpl::new);
 
     expressionLanguageAttribute = typeBuilder.stringAttribute(DMN_ATTRIBUTE_EXPRESSION_LANGUAGE)
       .build();

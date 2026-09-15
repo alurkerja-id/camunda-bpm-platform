@@ -24,7 +24,6 @@ import org.camunda.bpm.model.dmn.instance.LiteralExpression;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class DefaultOutputEntryImpl extends LiteralExpressionImpl implements DefaultOutputEntry {
 
@@ -36,11 +35,7 @@ public class DefaultOutputEntryImpl extends LiteralExpressionImpl implements Def
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(DefaultOutputEntry.class, DMN_ELEMENT_DEFAULT_OUTPUT_ENTRY)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(LiteralExpression.class)
-      .instanceProvider(new ModelTypeInstanceProvider<DefaultOutputEntry>() {
-        public DefaultOutputEntry newInstance(ModelTypeInstanceContext instanceContext) {
-          return new DefaultOutputEntryImpl(instanceContext);
-        }
-      });
+      .instanceProvider(DefaultOutputEntryImpl::new);
 
     typeBuilder.build();
   }

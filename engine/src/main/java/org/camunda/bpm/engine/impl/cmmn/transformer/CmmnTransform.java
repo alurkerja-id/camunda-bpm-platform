@@ -95,6 +95,7 @@ public class CmmnTransform implements Transform<CaseDefinitionEntity> {
     return this;
   }
 
+  @Override
   public List<CaseDefinitionEntity> transform() {
     // get name of resource
     String resourceName = resource.getName();
@@ -179,14 +180,14 @@ public class CmmnTransform implements Transform<CaseDefinitionEntity> {
   }
 
   protected void transformCasePlanModel(CasePlanModel casePlanModel) {
-    CasePlanModelHandler transformer = (CasePlanModelHandler) getPlanItemHandler(CasePlanModel.class);
-    CmmnActivity newActivity = transformer.handleElement(casePlanModel, context);
+    CasePlanModelHandler handler = (CasePlanModelHandler) getPlanItemHandler(CasePlanModel.class);
+    CmmnActivity newActivity = handler.handleElement(casePlanModel, context);
     context.setParent(newActivity);
 
     transformStage(casePlanModel, newActivity);
 
     context.setParent(newActivity);
-    transformer.initializeExitCriterias(casePlanModel, newActivity, context);
+    handler.initializeExitCriterias(casePlanModel, newActivity, context);
 
     for (CmmnTransformListener transformListener : transformListeners) {
       transformListener.transformCasePlanModel((org.camunda.bpm.model.cmmn.impl.instance.CasePlanModel) casePlanModel, newActivity);

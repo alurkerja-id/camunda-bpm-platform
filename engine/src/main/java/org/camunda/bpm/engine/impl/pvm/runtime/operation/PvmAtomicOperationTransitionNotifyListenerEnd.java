@@ -19,7 +19,6 @@ package org.camunda.bpm.engine.impl.pvm.runtime.operation;
 import org.camunda.bpm.engine.delegate.ExecutionListener;
 import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
 import org.camunda.bpm.engine.impl.pvm.runtime.Callback;
-import org.camunda.bpm.engine.impl.pvm.runtime.ScopeInstantiationContext;
 import org.camunda.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
 
 
@@ -28,6 +27,7 @@ import org.camunda.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
  */
 public class PvmAtomicOperationTransitionNotifyListenerEnd extends PvmAtomicOperationActivityInstanceEnd {
 
+  @Override
   protected ScopeImpl getScope(PvmExecutionImpl execution) {
     return execution.getActivity();
   }
@@ -57,6 +57,7 @@ public class PvmAtomicOperationTransitionNotifyListenerEnd extends PvmAtomicOper
     });
   }
 
+  @Override
   public String getCanonicalName() {
     return "transition-notify-listener-end";
   }

@@ -18,7 +18,6 @@ package org.camunda.bpm.engine.impl.bpmn.helper;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.bpmn.helper.BpmnProperties;
 import org.camunda.bpm.engine.impl.bpmn.parser.ErrorEventDefinition;
 import org.camunda.bpm.engine.impl.pvm.PvmActivity;
 import org.camunda.bpm.engine.impl.pvm.PvmScope;
@@ -41,13 +40,13 @@ public class ErrorDeclarationForProcessInstanceFinder implements TreeVisitor<Pvm
   @Override
   public void visit(PvmScope scope) {
     List<ErrorEventDefinition> errorEventDefinitions = scope.getProperties().get(BpmnProperties.ERROR_EVENT_DEFINITIONS);
-    for (ErrorEventDefinition errorEventDefinition : errorEventDefinitions) {
-      PvmActivity activityHandler = scope.getProcessDefinition().findActivity(errorEventDefinition.getHandlerActivityId());
-      if ((!isReThrowingErrorEventSubprocess(activityHandler)) && ((exception != null && errorEventDefinition.catchesException(exception))
-        || (exception == null && errorEventDefinition.catchesError(errorCode)))) {
+    for (ErrorEventDefinition candidate : errorEventDefinitions) {
+      PvmActivity activityHandler = scope.getProcessDefinition().findActivity(candidate.getHandlerActivityId());
+      if ((!isReThrowingErrorEventSubprocess(activityHandler)) && ((exception != null && candidate.catchesException(exception))
+        || (exception == null && candidate.catchesError(errorCode)))) {
 
         errorHandlerActivity = activityHandler;
-        this.errorEventDefinition = errorEventDefinition;
+        this.errorEventDefinition = candidate;
         break;
       }
     }

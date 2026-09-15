@@ -17,222 +17,114 @@
 package org.camunda.bpm.webapp.impl.security.auth;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import java.util.Date;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import org.camunda.bpm.engine.AuthorizationService;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.authorization.Authorization;
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.webapp.impl.util.ServletContextUtil;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
+import org.camunda.bpm.engine.identity.Group;
+import org.camunda.bpm.engine.identity.GroupQuery;
+import org.camunda.bpm.engine.identity.Tenant;
+import org.camunda.bpm.engine.identity.TenantQuery;
 import org.junit.Test;
-import org.mockito.MockedStatic;
-import org.springframework.mock.web.MockHttpServletRequest;
 
 /**
- * @author Thorben Lindhauer
+ * Covers the parts of {@link UserAuthenticationResource} that stand on their own: the three
+ * canned error responses, and the two lookups that flatten a query result into a list of ids.
  *
+ * <p>Login and logout need a registered process engine and the current Authentications, so they
+ * stay with the integration tests.
  */
 public class UserAuthenticationResourceTest {
 
-  @Rule
-  public ProcessEngineRule processEngineRule = new ProcessEngineRule("camunda-test-engine.cfg.xml");
+  protected final UserAuthenticationResource resource = new UserAuthenticationResource();
 
-  protected ProcessEngine processEngine;
-  protected ProcessEngineConfiguration processEngineConfiguration;
-  protected IdentityService identityService;
-  protected AuthorizationService authorizationService;
+  // canned responses -------------------------------------------------------------------------
 
-  @Before
-  public void setUp() {
-    this.processEngine = processEngineRule.getProcessEngine();
-    this.processEngineConfiguration = processEngine.getProcessEngineConfiguration();
-    this.identityService = processEngine.getIdentityService();
-    this.authorizationService = processEngine.getAuthorizationService();
+  @Test
+  public void shouldAnswerWithTheExpectedStatusCodes() {
+    assertThat(resource.unauthorized().getStatus())
+        .isEqualTo(Response.Status.UNAUTHORIZED.getStatusCode());
+    assertThat(resource.forbidden().getStatus())
+        .isEqualTo(Response.Status.FORBIDDEN.getStatusCode());
+    assertThat(resource.notFound().getStatus())
+        .isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
   }
 
-  @After
-  public void tearDown() {
-    ClockUtil.reset();
-    processEngineConfiguration.setAuthorizationEnabled(false);
+  @Test
+  public void shouldCarryNoEntityOnTheErrorResponses() {
+    assertThat(resource.unauthorized().getEntity()).isNull();
+    assertThat(resource.forbidden().getEntity()).isNull();
+    assertThat(resource.notFound().getEntity()).isNull();
+  }
 
-    for (User user : identityService.createUserQuery().list()) {
-      identityService.deleteUser(user.getId());
+  // lookups -----------------------------------------------------------------------------------
+
+  @Test
+  public void shouldListTheGroupIdsOfAUser() {
+    // the mocked entries are built first: Mockito refuses stubbing nested inside a when(...) call
+    List<Group> found = Arrays.asList(group("admin"), group("sales"));
+
+    assertThat(resource.getGroupsOfUser(engineReturning(found, null), "ana"))
+        .containsExactly("admin", "sales");
+  }
+
+  @Test
+  public void shouldAnswerAnEmptyListWhenTheUserHasNoGroups() {
+    assertThat(resource.getGroupsOfUser(engineReturning(Collections.<Group>emptyList(), null),
+        "ana")).isEmpty();
+  }
+
+  @Test
+  public void shouldListTheTenantIdsOfAUser() {
+    List<Tenant> found = Arrays.asList(tenant("acme"), tenant("globex"));
+
+    assertThat(resource.getTenantsOfUser(engineReturning(null, found), "ana"))
+        .containsExactly("acme", "globex");
+  }
+
+  @Test
+  public void shouldAnswerAnEmptyListWhenTheUserBelongsToNoTenant() {
+    assertThat(resource.getTenantsOfUser(engineReturning(null, Collections.<Tenant>emptyList()),
+        "ana")).isEmpty();
+  }
+
+  protected ProcessEngine engineReturning(List<Group> groups, List<Tenant> tenants) {
+    ProcessEngine engine = mock(ProcessEngine.class);
+    IdentityService identityService = mock(IdentityService.class);
+    when(engine.getIdentityService()).thenReturn(identityService);
+
+    if (groups != null) {
+      GroupQuery groupQuery = mock(GroupQuery.class);
+      when(identityService.createGroupQuery()).thenReturn(groupQuery);
+      when(groupQuery.groupMember("ana")).thenReturn(groupQuery);
+      when(groupQuery.list()).thenReturn(groups);
     }
-    for (Authorization authorization : authorizationService.createAuthorizationQuery().list()) {
-      authorizationService.deleteAuthorization(authorization.getId());
+
+    if (tenants != null) {
+      TenantQuery tenantQuery = mock(TenantQuery.class);
+      when(identityService.createTenantQuery()).thenReturn(tenantQuery);
+      when(tenantQuery.userMember("ana")).thenReturn(tenantQuery);
+      when(tenantQuery.includingGroupsOfUser(true)).thenReturn(tenantQuery);
+      when(tenantQuery.list()).thenReturn(tenants);
     }
 
-    clearAuthentication();
+    return engine;
   }
 
-  @Test
-  public void testAuthorizationCheckGranted() {
-    // given
-    User jonny = identityService.newUser("jonny");
-    jonny.setPassword("jonnyspassword");
-    identityService.saveUser(jonny);
-
-    Authorization authorization = authorizationService.createNewAuthorization(Authorization.AUTH_TYPE_GRANT);
-    authorization.setResource(Resources.APPLICATION);
-    authorization.setResourceId("tasklist");
-    authorization.setPermissions(new Permissions[] {Permissions.ACCESS});
-    authorization.setUserId(jonny.getId());
-    authorizationService.saveAuthorization(authorization);
-
-    processEngineConfiguration.setAuthorizationEnabled(true);
-    setAuthentication("jonny", "webapps-test-engine");
-
-    // when
-    UserAuthenticationResource authResource = new UserAuthenticationResource();
-    authResource.request = new MockHttpServletRequest();
-    Response response = authResource.doLogin("webapps-test-engine", "tasklist", "jonny", "jonnyspassword");
-
-    // then
-    Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
+  protected Group group(String id) {
+    Group group = mock(Group.class);
+    when(group.getId()).thenReturn(id);
+    return group;
   }
 
-  @Test
-  public void testSessionRevalidationOnAuthorization() {
-    // given
-    User jonny = identityService.newUser("jonny");
-    jonny.setPassword("jonnyspassword");
-    identityService.saveUser(jonny);
-
-    Authorization authorization = authorizationService.createNewAuthorization(Authorization.AUTH_TYPE_GRANT);
-    authorization.setResource(Resources.APPLICATION);
-    authorization.setResourceId("tasklist");
-    authorization.setPermissions(new Permissions[] {Permissions.ACCESS});
-    authorization.setUserId(jonny.getId());
-    authorizationService.saveAuthorization(authorization);
-
-    processEngineConfiguration.setAuthorizationEnabled(true);
-    setAuthentication("jonny", "webapps-test-engine");
-
-    // when
-    UserAuthenticationResource authResource = new UserAuthenticationResource();
-    authResource.request = new MockHttpServletRequest();
-    String oldSessionId = authResource.request.getSession().getId();
-
-    // first login session
-    Response response = authResource.doLogin("webapps-test-engine", "tasklist", "jonny", "jonnyspassword");
-    String newSessionId = authResource.request.getSession().getId();
-
-    authResource.doLogout("webapps-test-engine");
-
-    // second login session
-    response = authResource.doLogin("webapps-test-engine", "tasklist", "jonny", "jonnyspassword");
-    String newestSessionId = authResource.request.getSession().getId();
-
-    // then
-    Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
-    Assert.assertNotEquals(oldSessionId, newSessionId);
-    Assert.assertNotEquals(newSessionId, newestSessionId);
+  protected Tenant tenant(String id) {
+    Tenant tenant = mock(Tenant.class);
+    when(tenant.getId()).thenReturn(id);
+    return tenant;
   }
-
-  @Test
-  public void testAuthorizationCheckNotGranted() {
-    // given
-    User jonny = identityService.newUser("jonny");
-    jonny.setPassword("jonnyspassword");
-    identityService.saveUser(jonny);
-
-    processEngineConfiguration.setAuthorizationEnabled(true);
-    setAuthentication("jonny", "webapps-test-engine");
-
-    // when
-    UserAuthenticationResource authResource = new UserAuthenticationResource();
-    authResource.request = new MockHttpServletRequest();
-    Response response = authResource.doLogin("webapps-test-engine", "tasklist", "jonny", "jonnyspassword");
-
-    // then
-    Assert.assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
-  }
-
-  @Test
-  public void testAuthorizationCheckDeactivated() {
-    // given
-    User jonny = identityService.newUser("jonny");
-    jonny.setPassword("jonnyspassword");
-    identityService.saveUser(jonny);
-
-    processEngineConfiguration.setAuthorizationEnabled(false);
-    setAuthentication("jonny", "webapps-test-engine");
-
-    // when
-    UserAuthenticationResource authResource = new UserAuthenticationResource();
-    authResource.request = new MockHttpServletRequest();
-    Response response = authResource.doLogin("webapps-test-engine", "tasklist", "jonny", "jonnyspassword");
-
-    // then
-    Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
-  }
-
-  @Test
-  public void shouldSetAuthCacheValidationTime() {
-    // given
-    ClockUtil.setCurrentTime(ClockUtil.getCurrentTime());
-    User jonny = identityService.newUser("jonny");
-    jonny.setPassword("jonnyspassword");
-    identityService.saveUser(jonny);
-
-    MockHttpServletRequest request = new MockHttpServletRequest();
-    ServletContextUtil.setCacheTTLForLogin(1000 * 60 * 5, request.getServletContext());
-
-    // when
-    UserAuthenticationResource authResource = new UserAuthenticationResource();
-    authResource.request = request;
-    authResource.doLogin("webapps-test-engine", "tasklist", "jonny", "jonnyspassword");
-
-    // then
-    UserAuthentication userAuthentication = AuthenticationUtil.getAuthsFromSession(request.getSession())
-      .getAuthentications()
-      .get(0);
-    assertThat(userAuthentication.getCacheValidationTime())
-      .isEqualTo(new Date(ClockUtil.getCurrentTime().getTime() + 1000 * 60 * 5));
-  }
-
-  @Test
-  public void shouldReturnUnauthorizedOnNullAuthentication() {
-    // given
-    User jonny = identityService.newUser("jonny");
-    jonny.setPassword("jonnyspassword");
-    identityService.saveUser(jonny);
-    UserAuthenticationResource authResource = new UserAuthenticationResource();
-    authResource.request = new MockHttpServletRequest();
-
-    try (MockedStatic<AuthenticationUtil> authenticationUtilMock = mockStatic(AuthenticationUtil.class)) {
-      authenticationUtilMock.when(() -> AuthenticationUtil.createAuthentication("webapps-test-engine", "jonny")).thenReturn(null);
-
-      // when
-      Response response = authResource.doLogin("webapps-test-engine", "tasklist", "jonny", "jonnyspassword");
-
-      // then
-      Assert.assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
-    }
-  }
-
-  protected void setAuthentication(String user, String engineName) {
-    Authentications authentications = new Authentications();
-    authentications.addOrReplace(new UserAuthentication(user, engineName));
-    Authentications.setCurrent(authentications);
-  }
-
-  protected void clearAuthentication() {
-    Authentications.clearCurrent();
-  }
-
-
 }

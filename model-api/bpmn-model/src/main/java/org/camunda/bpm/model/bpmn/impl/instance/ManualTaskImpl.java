@@ -26,7 +26,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_MANUAL_TASK;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN manualTask element
@@ -39,11 +38,7 @@ public class ManualTaskImpl extends TaskImpl implements ManualTask {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ManualTask.class, BPMN_ELEMENT_MANUAL_TASK)
       .namespaceUri(BPMN20_NS)
       .extendsType(Task.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ManualTask>() {
-        public ManualTask newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ManualTaskImpl(instanceContext);
-        }
-      });
+      .instanceProvider(ManualTaskImpl::new);
 
     typeBuilder.build();
   }
@@ -52,6 +47,7 @@ public class ManualTaskImpl extends TaskImpl implements ManualTask {
     super(context);
   }
 
+  @Override
   public ManualTaskBuilder builder() {
     return new ManualTaskBuilder((BpmnModelInstance) modelInstance, this);
   }

@@ -18,6 +18,7 @@ package org.camunda.bpm.engine.impl.cfg;
 
 import java.text.ParseException;
 import java.util.Date;
+import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupHelper;
 
 /**
@@ -25,7 +26,7 @@ import org.camunda.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupHelp
  */
 public class BatchWindowConfiguration {
 
-  protected final static ConfigurationLogger LOG = ConfigurationLogger.CONFIG_LOGGER;
+  protected final static ConfigurationLogger LOG = ProcessEngineLogger.CONFIG_LOGGER;
 
   private String startTime;
 

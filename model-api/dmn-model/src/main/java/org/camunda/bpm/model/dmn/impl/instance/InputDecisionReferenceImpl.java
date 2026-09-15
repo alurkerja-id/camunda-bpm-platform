@@ -24,7 +24,6 @@ import org.camunda.bpm.model.dmn.instance.InputDecisionReference;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class InputDecisionReferenceImpl extends DmnElementReferenceImpl implements InputDecisionReference {
 
@@ -36,11 +35,7 @@ public class InputDecisionReferenceImpl extends DmnElementReferenceImpl implemen
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(InputDecisionReference.class, DMN_ELEMENT_INPUT_DECISION_REFERENCE)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(DmnElementReference.class)
-      .instanceProvider(new ModelTypeInstanceProvider<InputDecisionReference>() {
-        public InputDecisionReference newInstance(ModelTypeInstanceContext instanceContext) {
-          return new InputDecisionReferenceImpl(instanceContext);
-        }
-      });
+      .instanceProvider(InputDecisionReferenceImpl::new);
 
     typeBuilder.build();
   }

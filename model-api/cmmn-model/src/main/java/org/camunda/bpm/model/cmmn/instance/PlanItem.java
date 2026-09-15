@@ -32,9 +32,15 @@ public interface PlanItem extends CmmnElement {
 
   void setDefinition(PlanItemDefinition definition);
 
+  /**
+   * @deprecated misspelt plural kept for CMMN 1.0 callers; use {@link #getEntryCriteria()}
+   */
   @Deprecated
   Collection<Sentry> getEntryCriterias();
 
+  /**
+   * @deprecated misspelt plural kept for CMMN 1.0 callers; use {@link #getExitCriteria()}
+   */
   @Deprecated
   Collection<Sentry> getExitCriterias();
 

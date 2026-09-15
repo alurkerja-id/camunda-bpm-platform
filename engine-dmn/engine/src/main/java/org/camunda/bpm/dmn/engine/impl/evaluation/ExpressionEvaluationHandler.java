@@ -28,6 +28,7 @@ import org.camunda.bpm.dmn.engine.impl.CachedCompiledScriptSupport;
 import org.camunda.bpm.dmn.engine.impl.CachedExpressionSupport;
 import org.camunda.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
 import org.camunda.bpm.dmn.engine.impl.DmnEngineLogger;
+import org.camunda.bpm.dmn.engine.impl.DmnLogger;
 import org.camunda.bpm.dmn.engine.impl.DmnExpressionImpl;
 import org.camunda.bpm.dmn.engine.impl.el.VariableContextScriptBindings;
 import org.camunda.bpm.dmn.engine.impl.spi.el.DmnScriptEngineResolver;
@@ -39,7 +40,7 @@ import org.camunda.commons.utils.StringUtil;
 
 public class ExpressionEvaluationHandler {
 
-  protected static final DmnEngineLogger LOG = DmnEngineLogger.ENGINE_LOGGER;
+  protected static final DmnEngineLogger LOG = DmnLogger.ENGINE_LOGGER;
 
   protected final DmnScriptEngineResolver scriptEngineResolver;
   protected final ElProvider elProvider;
@@ -79,19 +80,8 @@ public class ExpressionEvaluationHandler {
     try {
       if (scriptEngine instanceof Compilable) {
 
-        CompiledScript compiledScript = cachedCompiledScriptSupport.getCachedCompiledScript();
-        if (compiledScript == null) {
-          synchronized (cachedCompiledScriptSupport) {
-            compiledScript = cachedCompiledScriptSupport.getCachedCompiledScript();
-
-            if(compiledScript == null) {
-              Compilable compilableScriptEngine = (Compilable) scriptEngine;
-              compiledScript = compilableScriptEngine.compile(expressionText);
-
-              cachedCompiledScriptSupport.cacheCompiledScript(compiledScript);
-            }
-          }
-        }
+        CompiledScript compiledScript = cachedCompiledScriptSupport
+            .getOrCacheCompiledScript(() -> ((Compilable) scriptEngine).compile(expressionText));
 
         return compiledScript.eval(bindings);
       }
@@ -106,17 +96,8 @@ public class ExpressionEvaluationHandler {
 
   protected Object evaluateElExpression(String expressionLanguage, String expressionText, VariableContext variableContext, CachedExpressionSupport cachedExpressionSupport) {
     try {
-      ElExpression elExpression = cachedExpressionSupport.getCachedExpression();
-
-      if (elExpression == null) {
-        synchronized (cachedExpressionSupport) {
-          elExpression = cachedExpressionSupport.getCachedExpression();
-          if(elExpression == null) {
-            elExpression = elProvider.createExpression(expressionText);
-            cachedExpressionSupport.setCachedExpression(elExpression);
-          }
-        }
-      }
+      ElExpression elExpression = cachedExpressionSupport
+          .getOrCacheExpression(() -> elProvider.createExpression(expressionText));
 
       return elExpression.getValue(variableContext);
     }

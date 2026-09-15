@@ -27,6 +27,7 @@ import org.camunda.bpm.engine.management.Metrics;
  */
 public class MetricsCaseExecutionListener implements CaseExecutionListener {
 
+  @Override
   public void notify(DelegateCaseExecution caseExecution) throws Exception {
     Context.getProcessEngineConfiguration()
       .getMetricsRegistry()

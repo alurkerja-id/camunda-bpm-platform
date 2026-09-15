@@ -18,6 +18,7 @@ package org.camunda.bpm.engine.impl.context;
 
 import org.camunda.bpm.application.ProcessApplicationReference;
 import org.camunda.bpm.application.impl.ProcessApplicationLogger;
+import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.application.ProcessApplicationManager;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
@@ -29,11 +30,9 @@ import org.camunda.bpm.engine.impl.persistence.entity.TaskEntity;
 import org.camunda.bpm.engine.impl.repository.ResourceDefinitionEntity;
 import org.camunda.bpm.engine.impl.util.ClassLoaderUtil;
 
-import java.util.concurrent.Callable;
-
 public class ProcessApplicationContextUtil {
 
-  private final static ProcessApplicationLogger LOG = ProcessApplicationLogger.PROCESS_APPLICATION_LOGGER;
+  private final static ProcessApplicationLogger LOG = ProcessEngineLogger.PROCESS_APPLICATION_LOGGER;
 
   public static ProcessApplicationReference getTargetProcessApplication(CoreExecution execution) {
     if (execution instanceof ExecutionEntity) {
@@ -177,13 +176,9 @@ public class ProcessApplicationContextUtil {
   public static void doContextSwitch(final Runnable runnable, ProcessDefinitionEntity contextDefinition) {
     ProcessApplicationReference processApplication = getTargetProcessApplication(contextDefinition);
     if (requiresContextSwitch(processApplication)) {
-      Context.executeWithinProcessApplication(new Callable<Void>() {
-
-        @Override
-        public Void call() throws Exception {
-          runnable.run();
-          return null;
-        }
+      Context.executeWithinProcessApplication(() -> {
+        runnable.run();
+        return null;
       }, processApplication);
     }
     else {

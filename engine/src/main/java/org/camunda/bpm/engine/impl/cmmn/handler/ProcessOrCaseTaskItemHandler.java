@@ -35,10 +35,12 @@ import org.camunda.bpm.model.cmmn.instance.camunda.CamundaOut;
  */
 public abstract class ProcessOrCaseTaskItemHandler extends CallingTaskItemHandler {
 
+  @Override
   protected CallableElement createCallableElement() {
     return new CallableElement();
   }
 
+  @Override
   protected void initializeCallableElement(CmmnElement element, CmmnActivity activity, CmmnHandlerContext context) {
     super.initializeCallableElement(element, activity, context);
 

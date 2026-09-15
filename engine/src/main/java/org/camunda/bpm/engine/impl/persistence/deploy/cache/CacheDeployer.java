@@ -22,13 +22,9 @@ import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.persistence.deploy.Deployer;
 import org.camunda.bpm.engine.impl.persistence.entity.DeploymentEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.ResourceEntity;
-import org.camunda.bpm.engine.impl.repository.ResourceDefinitionEntity;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.Callable;
 
 /**
  * @author: Johannes Heinemann
@@ -48,25 +44,21 @@ public class CacheDeployer {
   }
 
   public void deploy(final DeploymentEntity deployment) {
-    Context.getCommandContext().runWithoutAuthorization(new Callable<Void>() {
-      public Void call() throws Exception {
-        for (Deployer deployer : deployers) {
-          deployer.deploy(deployment);
-        }
-        return null;
+    Context.getCommandContext().runWithoutAuthorization(() -> {
+      for (Deployer deployer : deployers) {
+        deployer.deploy(deployment);
       }
+      return null;
     });
   }
 
   public void deployOnlyGivenResourcesOfDeployment(final DeploymentEntity deployment, String... resourceNames) {
     initDeployment(deployment, resourceNames);
-    Context.getCommandContext().runWithoutAuthorization(new Callable<Void>() {
-      public Void call() throws Exception {
-        for (Deployer deployer : deployers) {
-          deployer.deploy(deployment);
-        }
-        return null;
+    Context.getCommandContext().runWithoutAuthorization(() -> {
+      for (Deployer deployer : deployers) {
+        deployer.deploy(deployment);
       }
+      return null;
     });
     deployment.setResources(null);
   }

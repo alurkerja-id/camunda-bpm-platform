@@ -26,6 +26,7 @@ import org.camunda.spin.spi.DataFormat;
  */
 public interface SpinValue extends SerializableValue {
 
+  @Override
   public Spin<?> getValue();
 
   public DataFormat<? extends Spin<?>> getDataFormat();

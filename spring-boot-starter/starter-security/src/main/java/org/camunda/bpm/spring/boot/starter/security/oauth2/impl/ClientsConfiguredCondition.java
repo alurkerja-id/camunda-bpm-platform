@@ -22,6 +22,7 @@ import java.util.Map;
 import org.springframework.boot.autoconfigure.condition.ConditionMessage;
 import org.springframework.boot.autoconfigure.condition.ConditionOutcome;
 import org.springframework.boot.autoconfigure.condition.SpringBootCondition;
+import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.boot.security.oauth2.client.autoconfigure.OAuth2ClientProperties;
@@ -42,9 +43,11 @@ public class ClientsConfiguredCondition extends SpringBootCondition {
   @Override
   public ConditionOutcome getMatchOutcome(ConditionContext context, AnnotatedTypeMetadata metadata) {
     ConditionMessage.Builder message = ConditionMessage.forCondition("OAuth2 Clients Configured Condition");
-    Map<String, OAuth2ClientProperties.Registration> registrations = Binder.get(context.getEnvironment())
-        .bind("spring.security.oauth2.client.registration", STRING_REGISTRATION_MAP)
-        .orElse(Collections.emptyMap());
+    // orElse is declared as returning a nullable value, so the empty map is picked explicitly
+    BindResult<Map<String, OAuth2ClientProperties.Registration>> bound = Binder.get(context.getEnvironment())
+        .bind("spring.security.oauth2.client.registration", STRING_REGISTRATION_MAP);
+    Map<String, OAuth2ClientProperties.Registration> registrations =
+        bound.isBound() ? bound.get() : Collections.emptyMap();
     if (!registrations.isEmpty()) {
       return ConditionOutcome.match(message.foundExactly("registered clients " + String.join(", ", registrations.keySet())));
     }

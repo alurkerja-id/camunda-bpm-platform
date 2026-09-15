@@ -43,6 +43,7 @@ public class InclusiveGatewayActivityBehavior extends GatewayActivityBehavior {
 
   protected static BpmnBehaviorLogger LOG = ProcessEngineLogger.BPMN_BEHAVIOR_LOGGER;
 
+  @Override
   public void execute(ActivityExecution execution) throws Exception {
 
     execution.inactivate();
@@ -93,7 +94,7 @@ public class InclusiveGatewayActivityBehavior extends GatewayActivityBehavior {
   protected Collection<ActivityExecution> getLeafExecutions(ActivityExecution parent) {
     List<ActivityExecution> executionlist = new ArrayList<ActivityExecution>();
     List<? extends ActivityExecution> subExecutions = parent.getNonEventScopeExecutions();
-    if (subExecutions.size() == 0) {
+    if (subExecutions.isEmpty()) {
       executionlist.add(parent);
     } else {
       for (ActivityExecution concurrentExecution : subExecutions) {
@@ -172,7 +173,7 @@ public class InclusiveGatewayActivityBehavior extends GatewayActivityBehavior {
       else {
 
         ScopeImpl flowScope = srcActivity.getFlowScope();
-        if (flowScope != null && flowScope instanceof PvmActivity) {
+        if (flowScope instanceof PvmActivity) {
           return isReachable((PvmActivity) flowScope, targetActivity, visitedActivities);
         }
 

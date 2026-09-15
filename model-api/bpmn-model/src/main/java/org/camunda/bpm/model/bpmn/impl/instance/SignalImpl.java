@@ -26,7 +26,6 @@ import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN signal element
@@ -42,11 +41,7 @@ public class SignalImpl extends BaseElementImpl implements Signal {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Signal.class, BPMN_ELEMENT_SIGNAL)
       .namespaceUri(BPMN20_NS)
       .extendsType(RootElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Signal>() {
-        public Signal newInstance(ModelTypeInstanceContext instanceContext) {
-          return new SignalImpl(instanceContext);
-        }
-      });
+      .instanceProvider(SignalImpl::new);
 
     nameAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_NAME)
       .build();
@@ -62,18 +57,22 @@ public class SignalImpl extends BaseElementImpl implements Signal {
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public ItemDefinition getStructure() {
     return structureRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setStructure(ItemDefinition structure) {
     structureRefAttribute.setReferenceTargetElement(this, structure);
   }

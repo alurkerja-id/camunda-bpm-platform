@@ -46,10 +46,12 @@ public class DefaultVariableSerializers implements Serializable, VariableSeriali
     this.serializerMap.putAll(serializers.serializerMap);
   }
 
+  @Override
   public TypedValueSerializer<?> getSerializerByName(String serializerName) {
      return serializerMap.get(serializerName);
   }
 
+  @Override
   public TypedValueSerializer<?> findSerializerForValue(TypedValue value, VariableSerializerFactory fallBackSerializerFactory) {
 
     String defaultSerializationFormat = Context.getProcessEngineConfiguration().getDefaultSerializationFormat();
@@ -62,22 +64,18 @@ public class DefaultVariableSerializers implements Serializable, VariableSeriali
     }
 
     for (TypedValueSerializer<?> serializer : serializerList) {
-      if(type == null || serializer.getType().equals(type)) {
-
-        // if type is null => ask handler whether it can handle the value
-        // OR if types match, this handler can handle values of this type
-        //    => BUT we still need to ask as the handler may not be able to handle ALL values of this type.
-
-        if(serializer.canHandle(value)) {
-          matchedSerializers.add(serializer);
-          if(serializer.getType().isPrimitiveValueType()) {
-            break;
-          }
+      // if type is null => ask handler whether it can handle the value
+      // OR if types match, this handler can handle values of this type
+      //    => BUT we still need to ask as the handler may not be able to handle ALL values of this type.
+      if ((type == null || serializer.getType().equals(type)) && serializer.canHandle(value)) {
+        matchedSerializers.add(serializer);
+        if (serializer.getType().isPrimitiveValueType()) {
+          break;
         }
       }
     }
 
-    if(matchedSerializers.size() == 0) {
+    if(matchedSerializers.isEmpty()) {
       if (fallBackSerializerFactory != null) {
         TypedValueSerializer<?> serializer = fallBackSerializerFactory.getSerializer(value);
         if (serializer != null) {
@@ -105,14 +103,17 @@ public class DefaultVariableSerializers implements Serializable, VariableSeriali
 
   }
 
+  @Override
   public TypedValueSerializer<?> findSerializerForValue(TypedValue value) {
     return findSerializerForValue(value, null);
   }
 
+  @Override
   public DefaultVariableSerializers addSerializer(TypedValueSerializer<?> serializer) {
     return addSerializer(serializer, serializerList.size());
   }
 
+  @Override
   public DefaultVariableSerializers addSerializer(TypedValueSerializer<?> serializer, int index) {
     serializerList.add(index, serializer);
     serializerMap.put(serializer.getName(), serializer);
@@ -128,10 +129,12 @@ public class DefaultVariableSerializers implements Serializable, VariableSeriali
     }
   }
 
+  @Override
   public int getSerializerIndex(TypedValueSerializer<?> serializer) {
     return serializerList.indexOf(serializer);
   }
 
+  @Override
   public int getSerializerIndexByName(String serializerName) {
     TypedValueSerializer<?> serializer = serializerMap.get(serializerName);
     if(serializer != null) {
@@ -141,12 +144,14 @@ public class DefaultVariableSerializers implements Serializable, VariableSeriali
     }
   }
 
+  @Override
   public VariableSerializers removeSerializer(TypedValueSerializer<?> serializer) {
     serializerList.remove(serializer);
     serializerMap.remove(serializer.getName());
     return this;
   }
 
+  @Override
   public VariableSerializers join(VariableSerializers other) {
     DefaultVariableSerializers copy = new DefaultVariableSerializers();
 
@@ -172,6 +177,7 @@ public class DefaultVariableSerializers implements Serializable, VariableSeriali
     return copy;
   }
 
+  @Override
   public List<TypedValueSerializer<?>> getSerializers() {
     return new ArrayList<TypedValueSerializer<?>>(serializerList);
   }

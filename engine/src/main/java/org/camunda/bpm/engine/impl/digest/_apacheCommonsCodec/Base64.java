@@ -455,26 +455,22 @@ public class Base64 {
             if (buffer == null || buffer.length - pos < encodeSize) {
                 resizeBuffer();
             }
-            switch (modulus) {
-                case 1 :
-                    buffer[pos++] = encodeTable[(x >> 2) & MASK_6BITS];
-                    buffer[pos++] = encodeTable[(x << 4) & MASK_6BITS];
-                    // URL-SAFE skips the padding to further reduce size.
-                    if (encodeTable == STANDARD_ENCODE_TABLE) {
-                        buffer[pos++] = PAD;
-                        buffer[pos++] = PAD;
-                    }
-                    break;
-
-                case 2 :
-                    buffer[pos++] = encodeTable[(x >> 10) & MASK_6BITS];
-                    buffer[pos++] = encodeTable[(x >> 4) & MASK_6BITS];
-                    buffer[pos++] = encodeTable[(x << 2) & MASK_6BITS];
-                    // URL-SAFE skips the padding to further reduce size.
-                    if (encodeTable == STANDARD_ENCODE_TABLE) {
-                        buffer[pos++] = PAD;
-                    }
-                    break;
+            if (modulus == 1) {
+                buffer[pos++] = encodeTable[(x >> 2) & MASK_6BITS];
+                buffer[pos++] = encodeTable[(x << 4) & MASK_6BITS];
+                // URL-SAFE skips the padding to further reduce size.
+                if (encodeTable == STANDARD_ENCODE_TABLE) {
+                    buffer[pos++] = PAD;
+                    buffer[pos++] = PAD;
+                }
+            } else if (modulus == 2) {
+                buffer[pos++] = encodeTable[(x >> 10) & MASK_6BITS];
+                buffer[pos++] = encodeTable[(x >> 4) & MASK_6BITS];
+                buffer[pos++] = encodeTable[(x << 2) & MASK_6BITS];
+                // URL-SAFE skips the padding to further reduce size.
+                if (encodeTable == STANDARD_ENCODE_TABLE) {
+                    buffer[pos++] = PAD;
+                }
             }
             if (lineLength > 0 && pos > 0) {
                 System.arraycopy(lineSeparator, 0, buffer, pos, lineSeparator.length);
@@ -567,15 +563,12 @@ public class Base64 {
         // This approach makes the '=' padding characters completely optional.
         if (eof && modulus != 0) {
             x = x << 6;
-            switch (modulus) {
-                case 2 :
-                    x = x << 6;
-                    buffer[pos++] = (byte) ((x >> 16) & MASK_8BITS);
-                    break;
-                case 3 :
-                    buffer[pos++] = (byte) ((x >> 16) & MASK_8BITS);
-                    buffer[pos++] = (byte) ((x >> 8) & MASK_8BITS);
-                    break;
+            if (modulus == 2) {
+                x = x << 6;
+                buffer[pos++] = (byte) ((x >> 16) & MASK_8BITS);
+            } else if (modulus == 3) {
+                buffer[pos++] = (byte) ((x >> 16) & MASK_8BITS);
+                buffer[pos++] = (byte) ((x >> 8) & MASK_8BITS);
             }
         }
     }
@@ -844,8 +837,9 @@ public class Base64 {
      * @return The data, less whitespace (see RFC 2045).
      * @deprecated This method is no longer needed
      */
+    @Deprecated(forRemoval = true)
     static byte[] discardWhitespace(byte[] data) {
-        byte groomedData[] = new byte[data.length];
+        byte[] groomedData = new byte[data.length];
         int bytesCopied = 0;
         for (int i = 0; i < data.length; i++) {
             switch (data[i]) {
@@ -858,7 +852,7 @@ public class Base64 {
                     groomedData[bytesCopied++] = data[i];
             }
         }
-        byte packedData[] = new byte[bytesCopied];
+        byte[] packedData = new byte[bytesCopied];
         System.arraycopy(groomedData, 0, packedData, 0, bytesCopied);
         return packedData;
     }

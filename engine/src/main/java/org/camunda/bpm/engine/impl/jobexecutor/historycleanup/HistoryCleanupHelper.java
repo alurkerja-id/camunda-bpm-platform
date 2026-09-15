@@ -22,8 +22,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import java.util.Optional;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
@@ -34,11 +32,13 @@ import org.camunda.bpm.engine.impl.util.ClockUtil;
  */
 public abstract class HistoryCleanupHelper {
 
-  private static final SimpleDateFormat TIME_FORMAT_WITHOUT_SECONDS = new SimpleDateFormat("yyyy-MM-ddHH:mm");
+  // SimpleDateFormat is not thread-safe, so these patterns are kept as strings and turned into a
+  // format inside the single method that uses them
+  private static final String TIME_PATTERN_WITHOUT_SECONDS = "yyyy-MM-ddHH:mm";
 
-  private static final SimpleDateFormat TIME_FORMAT_WITHOUT_SECONDS_WITH_TIMEZONE = new SimpleDateFormat("yyyy-MM-ddHH:mmZ");
+  private static final String TIME_PATTERN_WITHOUT_SECONDS_WITH_TIMEZONE = "yyyy-MM-ddHH:mmZ";
 
-  private static final SimpleDateFormat DATE_FORMAT_WITHOUT_TIME = new SimpleDateFormat("yyyy-MM-dd");
+  private static final String DATE_PATTERN_WITHOUT_TIME = "yyyy-MM-dd";
 
   /**
    * Returns the max retries used for cleanup jobs. If the configuration is null, the default value used will be
@@ -75,11 +75,11 @@ public abstract class HistoryCleanupHelper {
   }
 
   public static synchronized Date parseTimeConfiguration(String time) throws ParseException {
-    String today = DATE_FORMAT_WITHOUT_TIME.format(ClockUtil.getCurrentTime());
+    String today = new SimpleDateFormat(DATE_PATTERN_WITHOUT_TIME).format(ClockUtil.getCurrentTime());
     try {
-      return TIME_FORMAT_WITHOUT_SECONDS_WITH_TIMEZONE.parse(today+time);
+      return new SimpleDateFormat(TIME_PATTERN_WITHOUT_SECONDS_WITH_TIMEZONE).parse(today+time);
     } catch (ParseException ex) {
-      return TIME_FORMAT_WITHOUT_SECONDS.parse(today+time);
+      return new SimpleDateFormat(TIME_PATTERN_WITHOUT_SECONDS).parse(today+time);
     }
   }
 
@@ -103,7 +103,7 @@ public abstract class HistoryCleanupHelper {
     //add process instance ids
     final List<String> historicProcessInstanceIds = commandContext.getHistoricProcessInstanceManager()
         .findHistoricProcessInstanceIdsForCleanup(batchSize, configuration.getMinuteFrom(), configuration.getMinuteTo());
-    if (historicProcessInstanceIds.size() > 0) {
+    if (!historicProcessInstanceIds.isEmpty()) {
       historyCleanupBatch.setHistoricProcessInstanceIds(historicProcessInstanceIds);
     }
 
@@ -111,7 +111,7 @@ public abstract class HistoryCleanupHelper {
     if (historyCleanupBatch.size() < batchSize && processEngineConfiguration.isDmnEnabled()) {
       final List<String> historicDecisionInstanceIds = commandContext.getHistoricDecisionInstanceManager()
           .findHistoricDecisionInstanceIdsForCleanup(batchSize - historyCleanupBatch.size(), configuration.getMinuteFrom(), configuration.getMinuteTo());
-      if (historicDecisionInstanceIds.size() > 0) {
+      if (!historicDecisionInstanceIds.isEmpty()) {
         historyCleanupBatch.setHistoricDecisionInstanceIds(historicDecisionInstanceIds);
       }
     }
@@ -120,7 +120,7 @@ public abstract class HistoryCleanupHelper {
     if (historyCleanupBatch.size() < batchSize && processEngineConfiguration.isCmmnEnabled()) {
       final List<String> historicCaseInstanceIds = commandContext.getHistoricCaseInstanceManager()
           .findHistoricCaseInstanceIdsForCleanup(batchSize - historyCleanupBatch.size(), configuration.getMinuteFrom(), configuration.getMinuteTo());
-      if (historicCaseInstanceIds.size() > 0) {
+      if (!historicCaseInstanceIds.isEmpty()) {
         historyCleanupBatch.setHistoricCaseInstanceIds(historicCaseInstanceIds);
       }
     }
@@ -131,7 +131,7 @@ public abstract class HistoryCleanupHelper {
       List<String> historicBatchIds = commandContext
           .getHistoricBatchManager()
           .findHistoricBatchIdsForCleanup(batchSize - historyCleanupBatch.size(), batchOperationsForHistoryCleanup, configuration.getMinuteFrom(), configuration.getMinuteTo());
-      if (historicBatchIds.size() > 0) {
+      if (!historicBatchIds.isEmpty()) {
         historyCleanupBatch.setHistoricBatchIds(historicBatchIds);
       }
     }
@@ -141,7 +141,7 @@ public abstract class HistoryCleanupHelper {
     if (parsedTaskMetricsTimeToLive != null && historyCleanupBatch.size() < batchSize) {
       final List<String> taskMetricIds = commandContext.getMeterLogManager()
           .findTaskMetricsForCleanup(batchSize - historyCleanupBatch.size(), parsedTaskMetricsTimeToLive, configuration.getMinuteFrom(), configuration.getMinuteTo());
-      if (taskMetricIds.size() > 0) {
+      if (!taskMetricIds.isEmpty()) {
         historyCleanupBatch.setTaskMetricIds(taskMetricIds);
       }
     }

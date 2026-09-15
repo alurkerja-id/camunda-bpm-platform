@@ -29,7 +29,6 @@ import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_VALIDATION;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN validation camunda extension element
@@ -43,11 +42,7 @@ public class CamundaValidationImpl extends BpmnModelElementInstanceImpl implemen
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaValidation.class, CAMUNDA_ELEMENT_VALIDATION)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<CamundaValidation>() {
-        public CamundaValidation newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CamundaValidationImpl(instanceContext);
-        }
-      });
+      .instanceProvider(CamundaValidationImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 
@@ -61,6 +56,7 @@ public class CamundaValidationImpl extends BpmnModelElementInstanceImpl implemen
     super(instanceContext);
   }
 
+  @Override
   public Collection<CamundaConstraint> getCamundaConstraints() {
     return camundaConstraintCollection.get(this);
   }

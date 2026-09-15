@@ -50,6 +50,7 @@ public class UserResourceImpl extends AbstractIdentityResource implements UserRe
     this.rootResourcePath = rootResourcePath;
   }
 
+  @Override
   public UserProfileDto getUserProfile(UriInfo context) {
 
     User dbUser = findUserObject();
@@ -62,6 +63,7 @@ public class UserResourceImpl extends AbstractIdentityResource implements UserRe
     return user;
   }
 
+  @Override
   public ResourceOptionsDto availableOperations(UriInfo context) {
     ResourceOptionsDto dto = new ResourceOptionsDto();
 
@@ -85,24 +87,25 @@ public class UserResourceImpl extends AbstractIdentityResource implements UserRe
     return dto;
   }
 
+  @Override
   public void deleteUser() {
     ensureNotReadOnly();
     identityService.deleteUser(resourceId);
   }
 
+  @Override
   public void unlockUser() {
     ensureNotReadOnly();
     identityService.unlockUser(resourceId);
   }
 
+  @Override
   public void updateCredentials(UserCredentialsDto account) {
     ensureNotReadOnly();
 
     Authentication currentAuthentication = identityService.getCurrentAuthentication();
-    if(currentAuthentication != null && currentAuthentication.getUserId() != null) {
-      if(!identityService.checkPassword(currentAuthentication.getUserId(), account.getAuthenticatedUserPassword())) {
-        throw new InvalidRequestException(Status.BAD_REQUEST, "The given authenticated user password is not valid.");
-      }
+    if (currentAuthentication != null && currentAuthentication.getUserId() != null && !identityService.checkPassword(currentAuthentication.getUserId(), account.getAuthenticatedUserPassword())) {
+      throw new InvalidRequestException(Status.BAD_REQUEST, "The given authenticated user password is not valid.");
     }
 
     User dbUser = findUserObject();
@@ -115,6 +118,7 @@ public class UserResourceImpl extends AbstractIdentityResource implements UserRe
     identityService.saveUser(dbUser);
   }
 
+  @Override
   public void updateProfile(UserProfileDto profile) {
     ensureNotReadOnly();
 

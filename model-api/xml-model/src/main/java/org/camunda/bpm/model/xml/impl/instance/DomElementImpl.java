@@ -83,9 +83,9 @@ public class DomElementImpl implements DomElement {
 
   public DomElement getRootElement() {
     synchronized(document) {
-      DomDocument document = getDocument();
-      if (document != null) {
-        return document.getRootElement();
+      DomDocument domDocument = getDocument();
+      if (domDocument != null) {
+        return domDocument.getRootElement();
       }
       else {
         return null;
@@ -96,7 +96,7 @@ public class DomElementImpl implements DomElement {
   public DomElement getParentElement() {
     synchronized(document) {
       Node parentNode = element.getParentNode();
-      if (parentNode != null && parentNode instanceof Element) {
+      if (parentNode instanceof Element) {
         return new DomElementImpl((Element) parentNode);
       }
       else {

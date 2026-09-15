@@ -23,7 +23,7 @@ import java.util.List;
 import org.camunda.bpm.run.CamundaBpmRun;
 import org.camunda.bpm.run.test.AbstractRestTest;
 import org.camunda.bpm.run.test.util.TestUtils;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -43,8 +43,14 @@ public class HttpsConfigurationEnabledTest extends AbstractRestTest {
   @Rule
   public ExpectedException exceptionRule = ExpectedException.none();
 
-  @Before
-  public void init() throws Exception {
+  /**
+   * Alurkerja fork: this has to run before the Spring context comes up. The HTTP client behind
+   * TestRestTemplate is built together with the context and keeps the SSLContext it saw then, so
+   * trusting the self-signed certificate from an instance-level @Before was already too late and
+   * the handshake failed with "PKIX path building failed".
+   */
+  @BeforeClass
+  public static void init() throws Exception {
     TestUtils.trustSelfSignedSSL();
   }
 

@@ -40,10 +40,12 @@ public abstract class StageOrTaskActivityBehavior extends PlanItemDefinitionActi
 
   // creation /////////////////////////////////////////////////////////
 
+  @Override
   protected void creating(CmmnActivityExecution execution) {
     evaluateRequiredRule(execution);
   }
 
+  @Override
   public void created(CmmnActivityExecution execution) {
     if (execution.isAvailable() && isAtLeastOneEntryCriterionSatisfied(execution)) {
       fireEntryCriteria(execution);
@@ -52,6 +54,7 @@ public abstract class StageOrTaskActivityBehavior extends PlanItemDefinitionActi
 
   // enable ////////////////////////////////////////////////////////////
 
+  @Override
   public void onEnable(CmmnActivityExecution execution) {
     ensureNotCaseInstance(execution, "enable");
     ensureTransitionAllowed(execution, AVAILABLE, ENABLED, "enable");
@@ -59,6 +62,7 @@ public abstract class StageOrTaskActivityBehavior extends PlanItemDefinitionActi
 
   // re-enable /////////////////////////////////////////////////////////
 
+  @Override
   public void onReenable(CmmnActivityExecution execution) {
     ensureNotCaseInstance(execution, "re-enable");
     ensureTransitionAllowed(execution, DISABLED, ENABLED, "re-enable");
@@ -66,6 +70,7 @@ public abstract class StageOrTaskActivityBehavior extends PlanItemDefinitionActi
 
   // disable ///////////////////////////////////////////////////////////
 
+  @Override
   public void onDisable(CmmnActivityExecution execution) {
     ensureNotCaseInstance(execution, "disable");
     ensureTransitionAllowed(execution, ENABLED, DISABLED, "disable");
@@ -73,16 +78,19 @@ public abstract class StageOrTaskActivityBehavior extends PlanItemDefinitionActi
 
   // start /////////////////////////////////////////////////////////////
 
+  @Override
   public void onStart(CmmnActivityExecution execution) {
     ensureNotCaseInstance(execution, "start");
     ensureTransitionAllowed(execution, AVAILABLE, ACTIVE, "start");
   }
 
+  @Override
   public void onManualStart(CmmnActivityExecution execution) {
     ensureNotCaseInstance(execution, "manualStart");
     ensureTransitionAllowed(execution, ENABLED, ACTIVE, "start");
   }
 
+  @Override
   public void started(CmmnActivityExecution execution) {
     // only perform start behavior, when this case execution is
     // still active.
@@ -98,11 +106,13 @@ public abstract class StageOrTaskActivityBehavior extends PlanItemDefinitionActi
 
   // completion ////////////////////////////////////////////////////////
 
+  @Override
   public void onCompletion(CmmnActivityExecution execution) {
     ensureTransitionAllowed(execution, ACTIVE, COMPLETED, "complete");
     completing(execution);
   }
 
+  @Override
   public void onManualCompletion(CmmnActivityExecution execution) {
     ensureTransitionAllowed(execution, ACTIVE, COMPLETED, "complete");
     manualCompleting(execution);
@@ -110,16 +120,19 @@ public abstract class StageOrTaskActivityBehavior extends PlanItemDefinitionActi
 
   // termination //////////////////////////////////////////////////////
 
+  @Override
   public void onTermination(CmmnActivityExecution execution) {
     ensureTransitionAllowed(execution, ACTIVE, TERMINATED, "terminate");
     performTerminate(execution);
   }
 
+  @Override
   public void onParentTermination(CmmnActivityExecution execution) {
     String id = execution.getId();
     throw LOG.illegalStateTransitionException("parentTerminate", id, getTypeName());
   }
 
+  @Override
   public void onExit(CmmnActivityExecution execution) {
     String id = execution.getId();
 
@@ -136,11 +149,13 @@ public abstract class StageOrTaskActivityBehavior extends PlanItemDefinitionActi
 
   // suspension ///////////////////////////////////////////////////////////
 
+  @Override
   public void onSuspension(CmmnActivityExecution execution) {
     ensureTransitionAllowed(execution, ACTIVE, SUSPENDED, "suspend");
     performSuspension(execution);
   }
 
+  @Override
   public void onParentSuspension(CmmnActivityExecution execution) {
     ensureNotCaseInstance(execution, "parentSuspension");
 
@@ -160,22 +175,22 @@ public abstract class StageOrTaskActivityBehavior extends PlanItemDefinitionActi
 
   // resume /////////////////////////////////////////////////////////////////
 
+  @Override
   public void onResume(CmmnActivityExecution execution) {
     ensureNotCaseInstance(execution, "resume");
     ensureTransitionAllowed(execution, SUSPENDED, ACTIVE, "resume");
 
     CmmnActivityExecution parent = execution.getParent();
-    if (parent != null) {
-      if (!parent.isActive()) {
-        String id = execution.getId();
-        throw LOG.resumeInactiveCaseException("resume", id);
-      }
+    if (parent != null && !parent.isActive()) {
+      String id = execution.getId();
+      throw LOG.resumeInactiveCaseException("resume", id);
     }
 
     resuming(execution);
 
   }
 
+  @Override
   public void onParentResume(CmmnActivityExecution execution) {
     ensureNotCaseInstance(execution, "parentResume");
     String id = execution.getId();
@@ -185,10 +200,8 @@ public abstract class StageOrTaskActivityBehavior extends PlanItemDefinitionActi
     }
 
     CmmnActivityExecution parent = execution.getParent();
-    if (parent != null) {
-      if (!parent.isActive()) {
-        throw LOG.resumeInactiveCaseException("parentResume", id);
-      }
+    if (parent != null && !parent.isActive()) {
+      throw LOG.resumeInactiveCaseException("parentResume", id);
     }
 
     resuming(execution);
@@ -197,6 +210,7 @@ public abstract class StageOrTaskActivityBehavior extends PlanItemDefinitionActi
 
   // occur ////////////////////////////////////////////////////////
 
+  @Override
   public void onOccur(CmmnActivityExecution execution) {
     String id = execution.getId();
     throw LOG.illegalStateTransitionException("occur", id, getTypeName());
@@ -204,6 +218,7 @@ public abstract class StageOrTaskActivityBehavior extends PlanItemDefinitionActi
 
   // sentry ///////////////////////////////////////////////////////////////
 
+  @Override
   public void fireEntryCriteria(CmmnActivityExecution execution) {
     boolean manualActivation = evaluateManualActivationRule(execution);
     if (manualActivation) {

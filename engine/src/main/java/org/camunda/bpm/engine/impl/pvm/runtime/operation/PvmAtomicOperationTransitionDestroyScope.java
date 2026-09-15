@@ -38,14 +38,17 @@ public class PvmAtomicOperationTransitionDestroyScope implements PvmAtomicOperat
 
   private final static PvmLogger LOG = ProcessEngineLogger.PVM_LOGGER;
 
+  @Override
   public boolean isAsync(PvmExecutionImpl instance) {
     return false;
   }
 
+  @Override
   public boolean isAsyncCapable() {
     return false;
   }
 
+  @Override
   public void execute(PvmExecutionImpl execution) {
 
     // calculate the propagating execution
@@ -112,7 +115,7 @@ public class PvmAtomicOperationTransitionDestroyScope implements PvmAtomicOperat
             // get a hold of the concurrent execution that replaced the scope propagating execution
             PvmExecutionImpl replacingExecution = null;
             for (PvmExecutionImpl concurrentChild : scopeExecution.getNonEventScopeExecutions())  {
-              if (!(concurrentChild == propagatingExecution)) {
+              if (concurrentChild != propagatingExecution) {
                 replacingExecution = concurrentChild;
                 break;
               }
@@ -136,6 +139,7 @@ public class PvmAtomicOperationTransitionDestroyScope implements PvmAtomicOperat
 
   }
 
+  @Override
   public String getCanonicalName() {
     return "transition-destroy-scope";
   }

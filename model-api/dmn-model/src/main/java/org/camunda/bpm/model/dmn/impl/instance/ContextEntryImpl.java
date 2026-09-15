@@ -25,7 +25,6 @@ import org.camunda.bpm.model.dmn.instance.Variable;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 
@@ -38,18 +37,22 @@ public class ContextEntryImpl extends DmnModelElementInstanceImpl implements Con
     super(instanceContext);
   }
 
+  @Override
   public Variable getVariable() {
     return variableChild.getChild(this);
   }
 
+  @Override
   public void setVariable(Variable variable) {
     variableChild.setChild(this, variable);
   }
 
+  @Override
   public Expression getExpression() {
     return expressionChild.getChild(this);
   }
 
+  @Override
   public void setExpression(Expression expression) {
     expressionChild.setChild(this, expression);
   }
@@ -57,11 +60,7 @@ public class ContextEntryImpl extends DmnModelElementInstanceImpl implements Con
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ContextEntry.class, DMN_ELEMENT_CONTEXT_ENTRY)
       .namespaceUri(LATEST_DMN_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<ContextEntry>() {
-        public ContextEntry newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ContextEntryImpl(instanceContext);
-        }
-      });
+      .instanceProvider(ContextEntryImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

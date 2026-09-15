@@ -20,7 +20,6 @@ import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 import java.io.Serializable;
 
-import java.util.Objects;
 import org.camunda.bpm.engine.history.UserOperationLogEntry;
 import org.camunda.bpm.engine.impl.interceptor.Command;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
@@ -48,6 +47,7 @@ public class DeleteAttachmentCmd implements Command<Object>, Serializable {
     this.attachmentId = attachmentId;
   }
 
+  @Override
   public Object execute(CommandContext commandContext) {
     AttachmentEntity attachment = null;
     if (taskId != null && !taskId.isBlank()) {

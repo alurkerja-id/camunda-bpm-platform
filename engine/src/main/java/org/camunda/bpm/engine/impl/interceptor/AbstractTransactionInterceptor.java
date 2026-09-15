@@ -17,9 +17,7 @@
 package org.camunda.bpm.engine.impl.interceptor;
 
 import java.lang.reflect.UndeclaredThrowableException;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.db.sql.DbSqlSession;
 
 /**
  * Base interceptor class for handling transactions for a command. Provides a

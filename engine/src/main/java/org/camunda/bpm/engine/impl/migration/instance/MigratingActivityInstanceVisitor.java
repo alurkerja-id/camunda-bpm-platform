@@ -44,6 +44,7 @@ public class MigratingActivityInstanceVisitor extends MigratingProcessElementIns
         || instance instanceof MigratingTransitionInstance;
   }
 
+  @Override
   protected void instantiateScopes(
       MigratingScopeInstance ancestorScopeInstance,
       MigratingScopeInstanceBranch executionBranch,
@@ -62,6 +63,8 @@ public class MigratingActivityInstanceVisitor extends MigratingProcessElementIns
         newParentExecution.instantiateScopes((List) scopesToInstantiate, skipCustomListeners, skipIoMappings);
 
     for (ScopeImpl scope : scopesToInstantiate) {
+      // the map is keyed by PvmActivity and the scopes handed to instantiateScopes above are
+      // ActivityImpl, which implements it; without the cast the lookup was typed to always miss
       ExecutionEntity createdExecution = (ExecutionEntity) createdExecutions.get(scope);
       createdExecution.setActivity(null);
       createdExecution.setActive(false);

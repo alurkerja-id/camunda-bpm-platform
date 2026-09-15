@@ -30,7 +30,6 @@ import org.camunda.bpm.model.dmn.instance.Variable;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
@@ -46,26 +45,32 @@ public class BusinessKnowledgeModelImpl extends DrgElementImpl implements Busine
     super(instanceContext);
   }
 
+  @Override
   public EncapsulatedLogic getEncapsulatedLogic() {
     return encapsulatedLogicChild.getChild(this);
   }
 
+  @Override
   public void setEncapsulatedLogic(EncapsulatedLogic encapsulatedLogic) {
     encapsulatedLogicChild.setChild(this, encapsulatedLogic);
   }
 
+  @Override
   public Variable getVariable() {
     return variableChild.getChild(this);
   }
 
+  @Override
   public void setVariable(Variable variable) {
     variableChild.setChild(this, variable);
   }
 
+  @Override
   public Collection<KnowledgeRequirement> getKnowledgeRequirement() {
     return knowledgeRequirementCollection.get(this);
   }
 
+  @Override
   public Collection<AuthorityRequirement> getAuthorityRequirement() {
     return authorityRequirementCollection.get(this);
   }
@@ -74,11 +79,7 @@ public class BusinessKnowledgeModelImpl extends DrgElementImpl implements Busine
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(BusinessKnowledgeModel.class, DMN_ELEMENT_BUSINESS_KNOWLEDGE_MODEL)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(DrgElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<BusinessKnowledgeModel>() {
-        public BusinessKnowledgeModel newInstance(ModelTypeInstanceContext instanceContext) {
-          return new BusinessKnowledgeModelImpl(instanceContext);
-        }
-      });
+      .instanceProvider(BusinessKnowledgeModelImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 

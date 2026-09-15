@@ -55,6 +55,14 @@ public abstract class AcquireJobsRunnable implements Runnable {
     }
     catch (InterruptedException e) {
       LOG.jobExecutionWaitInterrupted();
+      // Interrupting the acquisition thread is a request to stop it: stop() itself only notifies
+      // the monitor, so an actual InterruptedException here comes from outside, usually a
+      // container shutting the thread down. Swallowing it left the executor running with the
+      // interrupt lost. The flag is restored for whoever else observes this thread, and the
+      // acquisition loop is told to end - without that it would call wait() again, get the
+      // exception again straight away from the still-set flag, and spin.
+      isInterrupted = true;
+      Thread.currentThread().interrupt();
     }
     finally {
       isWaiting.set(false);

@@ -22,7 +22,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_SUPPORTS;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN supports element of the BPMN tProcess type
@@ -34,11 +33,7 @@ public class Supports extends BpmnModelElementInstanceImpl {
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Supports.class, BPMN_ELEMENT_SUPPORTS)
       .namespaceUri(BPMN20_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<Supports>() {
-        public Supports newInstance(ModelTypeInstanceContext instanceContext) {
-          return new Supports(instanceContext);
-        }
-      });
+      .instanceProvider(Supports::new);
 
     typeBuilder.build();
   }

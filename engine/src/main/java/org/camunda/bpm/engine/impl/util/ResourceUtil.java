@@ -17,9 +17,7 @@
 package org.camunda.bpm.engine.impl.util;
 
 import java.io.InputStream;
-import java.nio.charset.Charset;
-
-import org.camunda.bpm.engine.exception.NotFoundException;
+import java.nio.charset.StandardCharsets;
 import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.persistence.entity.DeploymentEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.ResourceEntity;
@@ -73,7 +71,7 @@ public final class ResourceUtil {
     }
 
     if (resourceBytes != null) {
-      return new String(resourceBytes, Charset.forName("UTF-8"));
+      return new String(resourceBytes, StandardCharsets.UTF_8);
     }
     else {
       throw LOG.cannotFindResource(resourcePath);

@@ -76,6 +76,7 @@ public class ProcessEngineTestCase extends TestCase {
   protected RepositoryService repositoryService;
   protected RuntimeService runtimeService;
   protected TaskService taskService;
+  /** @deprecated use {@link #historyService} */
   @Deprecated protected HistoryService historicDataService;
   protected HistoryService historyService;
   protected IdentityService identityService;
@@ -124,7 +125,7 @@ public class ProcessEngineTestCase extends TestCase {
     try {
       processEngine = TestHelper.getProcessEngine(getConfigurationResource());
     } catch (RuntimeException ex) {
-      if (ex.getCause() != null && ex.getCause() instanceof FileNotFoundException) {
+      if (ex.getCause() instanceof FileNotFoundException) {
         processEngine = ProcessEngineConfiguration
             .createProcessEngineConfigurationFromResource(configurationResourceCompat)
             .buildProcessEngine();

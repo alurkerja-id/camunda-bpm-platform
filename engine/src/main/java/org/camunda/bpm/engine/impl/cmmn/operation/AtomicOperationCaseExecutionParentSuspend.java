@@ -24,6 +24,7 @@ import static org.camunda.bpm.engine.delegate.CaseExecutionListener.PARENT_SUSPE
  */
 public class AtomicOperationCaseExecutionParentSuspend extends AbstractAtomicOperationCaseExecutionSuspend {
 
+  @Override
   public String getCanonicalName() {
     return "case-execution-parent-suspend";
   }

@@ -85,10 +85,12 @@ public class AstMethod extends AstNode {
 			throw new PropertyNotFoundException(LocalMessages.get("error.property.method.notfound", "null", base));
 		}
 		String name = bindings.convert(method, String.class);
-		paramValues = params.eval(bindings, context);
+		// the parameter is ignored and its values come from the expression, so it gets its own name
+		// rather than being overwritten
+		Object[] evaluatedParamValues = params.eval(bindings, context);
 
 		context.setPropertyResolved(false);
-		Object result = context.getELResolver().invoke(context, base, name, paramTypes, paramValues);
+		Object result = context.getELResolver().invoke(context, base, name, paramTypes, evaluatedParamValues);
 		if (!context.isPropertyResolved()) {
 			throw new MethodNotFoundException(LocalMessages.get("error.property.method.notfound", name, base.getClass()));
 		}
@@ -103,7 +105,10 @@ public class AstMethod extends AstNode {
 	}
 
 	public Node getChild(int i) {
-		return i == 0 ? property : i == 1 ? params : null;
+		if (i == 0) {
+			return property;
+		}
+		return i == 1 ? params : null;
 	}
 
 	@Override

@@ -36,7 +36,8 @@ public class ProcessApplicationScriptEnvironment {
 
   protected ProcessApplicationInterface processApplication;
 
-  protected ScriptEngineResolver processApplicationScriptEngineResolver;
+  // volatile: lazily initialized under double-checked locking
+  protected volatile ScriptEngineResolver processApplicationScriptEngineResolver;
   protected Map<String, List<ExecutableScript>> environmentScripts = new HashMap<>();
 
   public ProcessApplicationScriptEnvironment(ProcessApplicationInterface processApplication) {

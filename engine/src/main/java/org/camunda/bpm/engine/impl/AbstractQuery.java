@@ -96,10 +96,12 @@ public abstract class AbstractQuery<T extends Query<?,?>, U> extends ListQueryPa
     return (T) this;
   }
 
+  @Override
   public T asc() {
     return direction(Direction.ASCENDING);
   }
 
+  @Override
   public T desc() {
     return direction(Direction.DESCENDING);
   }
@@ -130,18 +132,21 @@ public abstract class AbstractQuery<T extends Query<?,?>, U> extends ListQueryPa
 
   }
 
+  @Override
   @SuppressWarnings("unchecked")
   public U singleResult() {
     this.resultType = ResultType.SINGLE_RESULT;
     return (U) executeResult(resultType);
   }
 
+  @Override
   @SuppressWarnings("unchecked")
   public List<U> list() {
     this.resultType = ResultType.LIST;
     return (List<U>) executeResult(resultType);
   }
 
+  @Override
   @SuppressWarnings("unchecked")
   public List<U> listPage(int firstResult, int maxResults) {
     this.firstResult = firstResult;
@@ -171,6 +176,7 @@ public abstract class AbstractQuery<T extends Query<?,?>, U> extends ListQueryPa
     }
   }
 
+  @Override
   public long count() {
     this.resultType = ResultType.COUNT;
     if (commandExecutor!=null) {
@@ -179,6 +185,7 @@ public abstract class AbstractQuery<T extends Query<?,?>, U> extends ListQueryPa
     return evaluateExpressionsAndExecuteCount(Context.getCommandContext());
   }
 
+  @Override
   @SuppressWarnings("unchecked")
   public List<U> unlimitedList() {
     this.resultType = ResultType.LIST;
@@ -188,6 +195,7 @@ public abstract class AbstractQuery<T extends Query<?,?>, U> extends ListQueryPa
     return evaluateExpressionsAndExecuteList(Context.getCommandContext(), null);
   }
 
+  @Override
   public Object execute(CommandContext commandContext) {
     if (resultType==ResultType.LIST) {
       return evaluateExpressionsAndExecuteList(commandContext, null);
@@ -207,7 +215,7 @@ public abstract class AbstractQuery<T extends Query<?,?>, U> extends ListQueryPa
   public long evaluateExpressionsAndExecuteCount(CommandContext commandContext) {
     validate();
     evaluateExpressions();
-    return !hasExcludingConditions() ? executeCount(commandContext) : 0l;
+    return hasExcludingConditions() ? 0l : executeCount(commandContext);
   }
 
   public abstract long executeCount(CommandContext commandContext);
@@ -216,7 +224,7 @@ public abstract class AbstractQuery<T extends Query<?,?>, U> extends ListQueryPa
     checkMaxResultsLimit();
     validate();
     evaluateExpressions();
-    return !hasExcludingConditions() ? executeList(commandContext, page) : new ArrayList<>();
+    return hasExcludingConditions() ? new ArrayList<>() : executeList(commandContext, page);
   }
 
   /**
@@ -386,7 +394,7 @@ public abstract class AbstractQuery<T extends Query<?,?>, U> extends ListQueryPa
   public List<String> evaluateExpressionsAndExecuteIdsList(CommandContext commandContext) {
     validate();
     evaluateExpressions();
-    return !hasExcludingConditions() ? executeIdsList(commandContext) : new ArrayList<>();
+    return hasExcludingConditions() ? new ArrayList<>() : executeIdsList(commandContext);
   }
 
   public List<String> executeIdsList(CommandContext commandContext) {
@@ -396,7 +404,7 @@ public abstract class AbstractQuery<T extends Query<?,?>, U> extends ListQueryPa
   public List<ImmutablePair<String, String>> evaluateExpressionsAndExecuteDeploymentIdMappingsList(CommandContext commandContext) {
     validate();
     evaluateExpressions();
-    return !hasExcludingConditions() ? executeDeploymentIdMappingsList(commandContext) : new ArrayList<>();
+    return hasExcludingConditions() ? new ArrayList<>() : executeDeploymentIdMappingsList(commandContext);
   }
 
   public List<ImmutablePair<String, String>> executeDeploymentIdMappingsList(CommandContext commandContext) {

@@ -20,6 +20,8 @@ package org.camunda.bpm.engine.cdi.impl.event;
  * Backwards compatibility for old CdiExecutionListener usage.
  *
  * @author Sebastian Menski
+ *
+ * @deprecated kept for older configurations; use {@link CdiEventListener}
  */
 @Deprecated
 public class CdiExecutionListener extends CdiEventListener {

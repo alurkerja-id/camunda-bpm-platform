@@ -121,7 +121,7 @@ public class JsonTaskQueryConverter extends JsonObjectConverter<TaskQuery> {
   public static final String OR_QUERIES = "orQueries";
 
   /**
-   * Exists for backwards compatibility with 7.2; deprecated since 7.3
+   * @deprecated since 7.3; exists for backwards compatibility with 7.2
    */
   @Deprecated
   public static final String ORDER_BY = "orderBy";

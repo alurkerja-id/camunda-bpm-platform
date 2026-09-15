@@ -19,7 +19,6 @@ package org.camunda.bpm.engine.task;
 import java.util.Date;
 import java.util.List;
 
-import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.history.UserOperationLogEntry;
 import org.camunda.bpm.engine.history.UserOperationLogQuery;
 
@@ -32,6 +31,9 @@ import org.camunda.bpm.engine.history.UserOperationLogQuery;
  *
  * @see {@link TaskService#getTaskEvents(String)
  * @author Tom Baeyens
+ *
+ * @deprecated task events were replaced by the user operation log; see
+ *             {@link org.camunda.bpm.engine.history.UserOperationLogEntry}
  */
 @Deprecated
 public interface Event {

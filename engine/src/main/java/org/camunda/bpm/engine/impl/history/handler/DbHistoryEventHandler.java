@@ -39,6 +39,7 @@ import org.camunda.bpm.engine.repository.ResourceTypes;
  */
 public class DbHistoryEventHandler implements HistoryEventHandler {
 
+  @Override
   public void handleEvent(HistoryEvent historyEvent) {
 
     if (historyEvent instanceof HistoricVariableUpdateEventEntity) {
@@ -51,6 +52,7 @@ public class DbHistoryEventHandler implements HistoryEventHandler {
 
   }
 
+  @Override
   public void handleEvents(List<HistoryEvent> historyEvents) {
     for (HistoryEvent historyEvent : historyEvents) {
       handleEvent(historyEvent);

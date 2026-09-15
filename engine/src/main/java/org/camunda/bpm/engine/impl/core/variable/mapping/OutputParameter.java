@@ -16,6 +16,7 @@
  */
 package org.camunda.bpm.engine.impl.core.variable.mapping;
 
+import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.core.CoreLogger;
 import org.camunda.bpm.engine.impl.core.variable.mapping.value.ParameterValueProvider;
 import org.camunda.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
@@ -35,12 +36,13 @@ import org.camunda.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
  */
 public class OutputParameter extends IoParameter {
 
-  private final static CoreLogger LOG = CoreLogger.CORE_LOGGER;
+  private final static CoreLogger LOG = ProcessEngineLogger.CORE_LOGGER;
 
   public OutputParameter(String name, ParameterValueProvider valueProvider) {
     super(name, valueProvider);
   }
 
+  @Override
   protected void execute(AbstractVariableScope innerScope, AbstractVariableScope outerScope) {
 
     // get value from inner scope

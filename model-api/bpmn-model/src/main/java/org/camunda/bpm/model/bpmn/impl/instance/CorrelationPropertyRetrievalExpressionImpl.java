@@ -27,7 +27,6 @@ import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN correlationPropertyRetrievalExpression element
@@ -43,11 +42,7 @@ public class CorrelationPropertyRetrievalExpressionImpl extends BaseElementImpl 
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CorrelationPropertyRetrievalExpression.class, BPMN_ELEMENT_CORRELATION_PROPERTY_RETRIEVAL_EXPRESSION)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<CorrelationPropertyRetrievalExpression>() {
-        public CorrelationPropertyRetrievalExpression newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CorrelationPropertyRetrievalExpressionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(CorrelationPropertyRetrievalExpressionImpl::new);
 
     messageRefAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_MESSAGE_REF)
       .required()
@@ -67,18 +62,22 @@ public class CorrelationPropertyRetrievalExpressionImpl extends BaseElementImpl 
     super(instanceContext);
   }
 
+  @Override
   public Message getMessage() {
     return messageRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setMessage(Message message) {
     messageRefAttribute.setReferenceTargetElement(this, message);
   }
 
+  @Override
   public MessagePath getMessagePath() {
     return messagePathChild.getChild(this);
   }
 
+  @Override
   public void setMessagePath(MessagePath messagePath) {
     messagePathChild.setChild(this, messagePath);
   }

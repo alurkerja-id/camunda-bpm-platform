@@ -29,7 +29,6 @@ import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.interceptor.Command;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.interceptor.ProcessDataContext;
 import org.camunda.bpm.engine.impl.jobexecutor.JobExecutorContext;
 import org.camunda.bpm.engine.impl.jobexecutor.JobExecutorLogger;
 import org.camunda.bpm.engine.impl.jobexecutor.JobFailureCollector;
@@ -55,6 +54,7 @@ public class ExecuteJobsCmd implements Command<Void>, Serializable {
     this.jobFailureCollector = jobFailureCollector;
   }
 
+  @Override
   public Void execute(CommandContext commandContext) {
     ensureNotNull("jobId", jobId);
 

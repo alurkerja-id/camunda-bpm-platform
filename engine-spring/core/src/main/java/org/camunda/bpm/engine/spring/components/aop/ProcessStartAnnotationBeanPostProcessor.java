@@ -50,16 +50,20 @@ public class ProcessStartAnnotationBeanPostProcessor extends ProxyConfig impleme
 
 	private ProcessStartingPointcutAdvisor advisor;
 
-	private volatile ClassLoader beanClassLoader = ClassUtils.getDefaultClassLoader();
+	// set by the container while the bean is created and never touched again, see the same field in
+	// ActivitiStateAnnotationBeanPostProcessor
+	private ClassLoader beanClassLoader = ClassUtils.getDefaultClassLoader();
 
 	public void setProcessEngine(ProcessEngine processEngine) {
 		this.processEngine = processEngine;
 	}
 
+	@Override
 	public void afterPropertiesSet() throws Exception {
 		this.advisor = new ProcessStartingPointcutAdvisor(this.processEngine);
 	}
 
+	@Override
 	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
 	 	if (bean instanceof AopInfrastructureBean) {
 			// Ignore AOP infrastructure such as scoped proxies.
@@ -85,6 +89,7 @@ public class ProcessStartAnnotationBeanPostProcessor extends ProxyConfig impleme
 		}
 	}
 
+	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 		return bean;
 	}

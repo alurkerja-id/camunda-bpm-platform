@@ -28,9 +28,15 @@ public interface Task extends PlanItemDefinition {
 
   void setIsBlocking(boolean isBlocking);
 
+  /**
+   * @deprecated CMMN 1.0 element name; use {@link #getInputParameters()}
+   */
   @Deprecated
   Collection<InputsCaseParameter> getInputs();
 
+  /**
+   * @deprecated CMMN 1.0 element name; use {@link #getOutputParameters()}
+   */
   @Deprecated
   Collection<OutputsCaseParameter> getOutputs();
 

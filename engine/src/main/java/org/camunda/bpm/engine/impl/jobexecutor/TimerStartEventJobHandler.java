@@ -31,10 +31,12 @@ public class TimerStartEventJobHandler extends TimerEventJobHandler {
 
   public static final String TYPE = "timer-start-event";
 
+  @Override
   public String getType() {
     return TYPE;
   }
 
+  @Override
   public void execute(TimerJobConfiguration configuration, ExecutionEntity execution, CommandContext commandContext, String tenantId) {
     DeploymentCache deploymentCache = Context
             .getProcessEngineConfiguration()
@@ -42,13 +44,7 @@ public class TimerStartEventJobHandler extends TimerEventJobHandler {
 
     String definitionKey = configuration.getTimerElementKey();
     ProcessDefinition processDefinition = deploymentCache.findDeployedLatestProcessDefinitionByKeyAndTenantId(definitionKey, tenantId);
-
-    try {
-      startProcessInstance(commandContext, tenantId, processDefinition);
-    }
-    catch (RuntimeException e) {
-      throw e;
-    }
+    startProcessInstance(commandContext, tenantId, processDefinition);
   }
 
   protected void startProcessInstance(CommandContext commandContext, String tenantId, ProcessDefinition processDefinition) {

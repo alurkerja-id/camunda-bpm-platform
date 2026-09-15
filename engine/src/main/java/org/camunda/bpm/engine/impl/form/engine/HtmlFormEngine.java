@@ -136,14 +136,17 @@ public class HtmlFormEngine implements FormEngine {
   public static final String CONSTRAINT_REQUIRED = "required";
   public static final String CONSTRAINT_DISABLED = "disabled";
 
+  @Override
   public String getName() {
     return "html";
   }
 
+  @Override
   public Object renderStartForm(StartFormData startForm) {
     return renderFormData(startForm);
   }
 
+  @Override
   public Object renderTaskForm(TaskFormData taskForm) {
     return renderFormData(taskForm);
   }
@@ -315,7 +318,7 @@ public class HtmlFormEngine implements FormEngine {
     HtmlElementWriter inputField = new HtmlElementWriter(INPUT_ELEMENT, true);
     addCommonFormFieldAttributes(formField, inputField);
 
-    String inputType = !isBoolean(formField) ? TEXT_INPUT_TYPE : CHECKBOX_INPUT_TYPE;
+    String inputType = isBoolean(formField) ? CHECKBOX_INPUT_TYPE : TEXT_INPUT_TYPE;
 
     inputField.attribute(TYPE_ATTRIBUTE, inputType);
 

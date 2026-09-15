@@ -30,7 +30,6 @@ import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ATTRIBUTE_
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_SIGNAL_EVENT_DEFINITION;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_ASYNC;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN signalEventDefinition element
@@ -46,11 +45,7 @@ public class SignalEventDefinitionImpl extends EventDefinitionImpl implements Si
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(SignalEventDefinition.class, BPMN_ELEMENT_SIGNAL_EVENT_DEFINITION)
       .namespaceUri(BPMN20_NS)
       .extendsType(EventDefinition.class)
-      .instanceProvider(new ModelTypeInstanceProvider<SignalEventDefinition>() {
-        public SignalEventDefinition newInstance(ModelTypeInstanceContext instanceContext) {
-          return new SignalEventDefinitionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(SignalEventDefinitionImpl::new);
 
     signalRefAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_SIGNAL_REF)
       .qNameAttributeReference(Signal.class)
@@ -69,18 +64,22 @@ public class SignalEventDefinitionImpl extends EventDefinitionImpl implements Si
     super(context);
   }
 
+  @Override
   public Signal getSignal() {
     return signalRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setSignal(Signal signal) {
     signalRefAttribute.setReferenceTargetElement(this, signal);
   }
 
+  @Override
   public boolean isCamundaAsync() {
     return camundaAsyncAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaAsync(boolean camundaAsync) {
     camundaAsyncAttribute.setValue(this, camundaAsync);
   }

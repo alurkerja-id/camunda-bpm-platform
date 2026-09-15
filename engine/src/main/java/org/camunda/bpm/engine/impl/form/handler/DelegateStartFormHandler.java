@@ -16,8 +16,6 @@
  */
 package org.camunda.bpm.engine.impl.form.handler;
 
-import java.util.concurrent.Callable;
-
 import org.camunda.bpm.engine.form.StartFormData;
 import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.persistence.entity.DeploymentEntity;
@@ -33,18 +31,18 @@ public class DelegateStartFormHandler extends DelegateFormHandler implements Sta
     super(formHandler, deployment.getId());
   }
 
+  @Override
   public StartFormData createStartFormData(final ProcessDefinitionEntity processDefinition) {
-    return performContextSwitch(new Callable<StartFormData> () {
-      public StartFormData call() throws Exception {
-        CreateStartFormInvocation invocation = new CreateStartFormInvocation((StartFormHandler) formHandler, processDefinition);
-        Context.getProcessEngineConfiguration()
-            .getDelegateInterceptor()
-            .handleInvocation(invocation);
-        return (StartFormData) invocation.getInvocationResult();
-      }
+    return performContextSwitch(() -> {
+      CreateStartFormInvocation invocation = new CreateStartFormInvocation((StartFormHandler) formHandler, processDefinition);
+      Context.getProcessEngineConfiguration()
+          .getDelegateInterceptor()
+          .handleInvocation(invocation);
+      return (StartFormData) invocation.getInvocationResult();
     });
   }
 
+  @Override
   public StartFormHandler getFormHandler() {
     return (StartFormHandler) formHandler;
   }

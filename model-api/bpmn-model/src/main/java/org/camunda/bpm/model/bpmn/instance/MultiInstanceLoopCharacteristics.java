@@ -91,6 +91,7 @@ public interface MultiInstanceLoopCharacteristics extends LoopCharacteristics {
 
   void setCamundaExclusive(boolean isCamundaExclusive);
 
+  @Override
   MultiInstanceLoopCharacteristicsBuilder builder();
 
 }

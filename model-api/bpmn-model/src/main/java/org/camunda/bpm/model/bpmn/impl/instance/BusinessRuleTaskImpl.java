@@ -16,20 +16,7 @@
  */
 package org.camunda.bpm.model.bpmn.impl.instance;
 
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ATTRIBUTE_IMPLEMENTATION;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_BUSINESS_RULE_TASK;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_CLASS;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_DECISION_REF;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_DECISION_REF_BINDING;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_DECISION_REF_VERSION;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_DELEGATE_EXPRESSION;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_MAP_DECISION_RESULT;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_RESULT_VARIABLE;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_TOPIC;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_TYPE;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.builder.BusinessRuleTaskBuilder;
@@ -39,7 +26,6 @@ import org.camunda.bpm.model.bpmn.instance.Task;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
 
@@ -73,11 +59,7 @@ public class BusinessRuleTaskImpl extends TaskImpl implements BusinessRuleTask {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(BusinessRuleTask.class, BPMN_ELEMENT_BUSINESS_RULE_TASK)
       .namespaceUri(BPMN20_NS)
       .extendsType(Task.class)
-      .instanceProvider(new ModelTypeInstanceProvider<BusinessRuleTask>() {
-        public BusinessRuleTask newInstance(ModelTypeInstanceContext instanceContext) {
-          return new BusinessRuleTaskImpl(instanceContext);
-        }
-      });
+      .instanceProvider(BusinessRuleTaskImpl::new);
 
     implementationAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_IMPLEMENTATION)
       .defaultValue("##unspecified")
@@ -149,92 +131,114 @@ public class BusinessRuleTaskImpl extends TaskImpl implements BusinessRuleTask {
     return new BusinessRuleTaskBuilder((BpmnModelInstance) modelInstance, this);
   }
 
+  @Override
   public String getImplementation() {
     return implementationAttribute.getValue(this);
   }
 
+  @Override
   public void setImplementation(String implementation) {
     implementationAttribute.setValue(this, implementation);
   }
 
   /** camunda extensions */
 
+  @Override
   public String getCamundaClass() {
     return camundaClassAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaClass(String camundaClass) {
     camundaClassAttribute.setValue(this, camundaClass);
   }
 
+  @Override
   public String getCamundaDelegateExpression() {
     return camundaDelegateExpressionAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaDelegateExpression(String camundaExpression) {
     camundaDelegateExpressionAttribute.setValue(this, camundaExpression);
   }
 
+  @Override
   public String getCamundaExpression() {
     return camundaExpressionAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaExpression(String camundaExpression) {
     camundaExpressionAttribute.setValue(this, camundaExpression);
   }
 
+  @Override
   public String getCamundaResultVariable() {
     return camundaResultVariableAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaResultVariable(String camundaResultVariable) {
     camundaResultVariableAttribute.setValue(this, camundaResultVariable);
   }
 
+  @Override
   public String getCamundaTopic() {
     return camundaTopicAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaTopic(String camundaTopic) {
     camundaTopicAttribute.setValue(this, camundaTopic);
   }
 
+  @Override
   public String getCamundaType() {
     return camundaTypeAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaType(String camundaType) {
     camundaTypeAttribute.setValue(this, camundaType);
   }
 
+  @Override
   public String getCamundaDecisionRef() {
     return camundaDecisionRefAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaDecisionRef(String camundaDecisionRef) {
     camundaDecisionRefAttribute.setValue(this, camundaDecisionRef);
   }
 
+  @Override
   public String getCamundaDecisionRefBinding() {
     return camundaDecisionRefBindingAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaDecisionRefBinding(String camundaDecisionRefBinding) {
     camundaDecisionRefBindingAttribute.setValue(this, camundaDecisionRefBinding);
   }
 
+  @Override
   public String getCamundaDecisionRefVersion() {
     return camundaDecisionRefVersionAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaDecisionRefVersion(String camundaDecisionRefVersion) {
     camundaDecisionRefVersionAttribute.setValue(this, camundaDecisionRefVersion);
   }
 
+  @Override
   public String getCamundaDecisionRefVersionTag() {
     return camundaDecisionRefVersionTagAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaDecisionRefVersionTag(String camundaDecisionRefVersionTag) {
     camundaDecisionRefVersionTagAttribute.setValue(this, camundaDecisionRefVersionTag);
   }
@@ -249,10 +253,12 @@ public class BusinessRuleTaskImpl extends TaskImpl implements BusinessRuleTask {
     camundaMapDecisionResultAttribute.setValue(this, camundaMapDecisionResult);
   }
 
+  @Override
   public String getCamundaDecisionRefTenantId() {
     return camundaDecisionRefTenantIdAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaDecisionRefTenantId(String tenantId) {
     camundaDecisionRefTenantIdAttribute.setValue(this, tenantId);
   }

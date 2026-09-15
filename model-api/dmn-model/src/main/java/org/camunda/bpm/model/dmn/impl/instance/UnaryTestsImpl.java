@@ -26,7 +26,6 @@ import org.camunda.bpm.model.dmn.instance.UnaryTests;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
@@ -41,18 +40,22 @@ public class UnaryTestsImpl extends DmnElementImpl implements UnaryTests {
     super(instanceContext);
   }
 
+  @Override
   public String getExpressionLanguage() {
     return expressionLanguageAttribute.getValue(this);
   }
 
+  @Override
   public void setExpressionLanguage(String expressionLanguage) {
     expressionLanguageAttribute.setValue(this, expressionLanguage);
   }
 
+  @Override
   public Text getText() {
     return textChild.getChild(this);
   }
 
+  @Override
   public void setText(Text text) {
     textChild.setChild(this, text);
   }
@@ -61,11 +64,7 @@ public class UnaryTestsImpl extends DmnElementImpl implements UnaryTests {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(UnaryTests.class, DMN_ELEMENT_UNARY_TESTS)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(DmnElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<UnaryTests>() {
-        public UnaryTests newInstance(ModelTypeInstanceContext instanceContext) {
-          return new UnaryTestsImpl(instanceContext);
-        }
-      });
+      .instanceProvider(UnaryTestsImpl::new);
 
     expressionLanguageAttribute = typeBuilder.stringAttribute(DMN_ATTRIBUTE_EXPRESSION_LANGUAGE)
       .build();

@@ -98,11 +98,13 @@ public abstract class FlowNodeImpl extends FlowElementImpl implements FlowNode {
     super(context);
   }
 
+  @Override
   @SuppressWarnings("rawtypes")
   public AbstractFlowNodeBuilder builder() {
     throw new BpmnModelException("No builder implemented for type " + getElementType().getTypeNamespace() +":" + getElementType().getTypeName());
   }
 
+  @Override
   @SuppressWarnings("rawtypes")
   public void updateAfterReplacement() {
     super.updateAfterReplacement();
@@ -125,14 +127,17 @@ public abstract class FlowNodeImpl extends FlowElementImpl implements FlowNode {
     }
   }
 
+  @Override
   public Collection<SequenceFlow> getIncoming() {
     return incomingCollection.getReferenceTargetElements(this);
   }
 
+  @Override
   public Collection<SequenceFlow> getOutgoing() {
     return outgoingCollection.getReferenceTargetElements(this);
   }
 
+  @Override
   public Query<FlowNode> getPreviousNodes() {
     Collection<FlowNode> previousNodes = new HashSet<FlowNode>();
     for (SequenceFlow sequenceFlow : getIncoming()) {
@@ -141,6 +146,7 @@ public abstract class FlowNodeImpl extends FlowElementImpl implements FlowNode {
     return new QueryImpl<FlowNode>(previousNodes);
   }
 
+  @Override
   public Query<FlowNode> getSucceedingNodes() {
     Collection<FlowNode> succeedingNodes = new HashSet<FlowNode>();
     for (SequenceFlow sequenceFlow : getOutgoing()) {
@@ -151,34 +157,42 @@ public abstract class FlowNodeImpl extends FlowElementImpl implements FlowNode {
 
   /** Camunda Attributes */
 
+  @Override
   public boolean isCamundaAsyncBefore() {
     return camundaAsyncBefore.getValue(this);
   }
 
+  @Override
   public void setCamundaAsyncBefore(boolean isCamundaAsyncBefore) {
     camundaAsyncBefore.setValue(this, isCamundaAsyncBefore);
   }
 
+  @Override
   public boolean isCamundaAsyncAfter() {
     return camundaAsyncAfter.getValue(this);
   }
 
+  @Override
   public void setCamundaAsyncAfter(boolean isCamundaAsyncAfter) {
     camundaAsyncAfter.setValue(this, isCamundaAsyncAfter);
   }
 
+  @Override
   public boolean isCamundaExclusive() {
     return camundaExclusive.getValue(this);
   }
 
+  @Override
   public void setCamundaExclusive(boolean isCamundaExclusive) {
     camundaExclusive.setValue(this, isCamundaExclusive);
   }
 
+  @Override
   public String getCamundaJobPriority() {
     return camundaJobPriority.getValue(this);
   }
 
+  @Override
   public void setCamundaJobPriority(String jobPriority) {
     camundaJobPriority.setValue(this, jobPriority);
   }

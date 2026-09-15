@@ -32,7 +32,6 @@ import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN formField camunda extension element
@@ -53,11 +52,7 @@ public class CamundaFormFieldImpl extends BpmnModelElementInstanceImpl implement
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaFormField.class, CAMUNDA_ELEMENT_FORM_FIELD)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<CamundaFormField>() {
-        public CamundaFormField newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CamundaFormFieldImpl(instanceContext);
-        }
-      });
+      .instanceProvider(CamundaFormFieldImpl::new);
 
     camundaIdAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_ID)
       .namespace(CAMUNDA_NS)
@@ -97,62 +92,77 @@ public class CamundaFormFieldImpl extends BpmnModelElementInstanceImpl implement
     super(instanceContext);
   }
 
+  @Override
   public String getCamundaId() {
     return camundaIdAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaId(String camundaId) {
     camundaIdAttribute.setValue(this, camundaId);
   }
 
+  @Override
   public String getCamundaLabel() {
     return camundaLabelAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaLabel(String camundaLabel) {
     camundaLabelAttribute.setValue(this, camundaLabel);
   }
 
+  @Override
   public String getCamundaType() {
     return camundaTypeAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaType(String camundaType) {
     camundaTypeAttribute.setValue(this, camundaType);
   }
 
+  @Override
   public String getCamundaDatePattern() {
     return camundaDatePatternAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaDatePattern(String camundaDatePattern) {
     camundaDatePatternAttribute.setValue(this, camundaDatePattern);
   }
 
+  @Override
   public String getCamundaDefaultValue() {
     return camundaDefaultValueAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaDefaultValue(String camundaDefaultValue) {
     camundaDefaultValueAttribute.setValue(this, camundaDefaultValue);
   }
 
+  @Override
   public CamundaProperties getCamundaProperties() {
     return camundaPropertiesChild.getChild(this);
   }
 
+  @Override
   public void setCamundaProperties(CamundaProperties camundaProperties) {
     camundaPropertiesChild.setChild(this, camundaProperties);
   }
 
+  @Override
   public CamundaValidation getCamundaValidation() {
     return camundaValidationChild.getChild(this);
   }
 
+  @Override
   public void setCamundaValidation(CamundaValidation camundaValidation) {
     camundaValidationChild.setChild(this, camundaValidation);
   }
 
+  @Override
   public Collection<CamundaValue> getCamundaValues() {
     return camundaValueCollection.get(this);
   }

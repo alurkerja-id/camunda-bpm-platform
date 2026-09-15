@@ -39,15 +39,13 @@ import java.util.Map;
  */
 public class HttpHeaderSecurityFilter implements Filter {
 
-  protected final List<HeaderSecurityProvider> headerSecurityProviders = new ArrayList<HeaderSecurityProvider>() {{
+  protected final List<HeaderSecurityProvider> headerSecurityProviders = new ArrayList<>(List.of(
+      new XssProtectionProvider(),
+      new ContentSecurityPolicyProvider(),
+      new ContentTypeOptionsProvider(),
+      new StrictTransportSecurityProvider()));
 
-    add(new XssProtectionProvider());
-    add(new ContentSecurityPolicyProvider());
-    add(new ContentTypeOptionsProvider());
-    add(new StrictTransportSecurityProvider());
-
-  }};
-
+  @Override
   public void init(FilterConfig filterConfig) {
 
     for (HeaderSecurityProvider provider : headerSecurityProviders) {
@@ -68,6 +66,7 @@ public class HttpHeaderSecurityFilter implements Filter {
     }
   }
 
+  @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
     if (response instanceof HttpServletResponse) {
@@ -89,6 +88,7 @@ public class HttpHeaderSecurityFilter implements Filter {
     chain.doFilter(request, response);
   }
 
+  @Override
   public void destroy() {
   }
 

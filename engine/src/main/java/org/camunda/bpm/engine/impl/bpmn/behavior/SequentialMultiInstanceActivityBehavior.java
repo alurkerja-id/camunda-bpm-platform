@@ -44,6 +44,7 @@ public class SequentialMultiInstanceActivityBehavior extends MultiInstanceActivi
     performInstance(execution, innerActivity, 0, collection);
   }
 
+  @Override
   public void complete(ActivityExecution scopeExecution) {
     int loopCounter = getLoopVariable(scopeExecution, LOOP_COUNTER) + 1;
     int nrOfInstances = getLoopVariable(scopeExecution, NUMBER_OF_INSTANCES);
@@ -60,6 +61,7 @@ public class SequentialMultiInstanceActivityBehavior extends MultiInstanceActivi
     }
   }
 
+  @Override
   public void concurrentChildExecutionEnded(ActivityExecution scopeExecution, ActivityExecution endedExecution) {
     // cannot happen
   }
@@ -69,6 +71,7 @@ public class SequentialMultiInstanceActivityBehavior extends MultiInstanceActivi
     setLoopVariable(scopeExecution, NUMBER_OF_COMPLETED_INSTANCES, 0);
   }
 
+  @Override
   public List<ActivityExecution> initializeScope(ActivityExecution scopeExecution, int nrOfInstances) {
     if (nrOfInstances > 1) {
       LOG.unsupportedConcurrencyException(scopeExecution.toString(), this.getClass().getSimpleName());

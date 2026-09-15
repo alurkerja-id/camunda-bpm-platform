@@ -26,7 +26,6 @@ import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN formalExpression element
@@ -42,11 +41,7 @@ public class FormalExpressionImpl extends ExpressionImpl implements FormalExpres
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(FormalExpression.class, BPMN_ELEMENT_FORMAL_EXPRESSION)
       .namespaceUri(BPMN20_NS)
       .extendsType(Expression.class)
-      .instanceProvider(new ModelTypeInstanceProvider<FormalExpression>() {
-        public FormalExpression newInstance(ModelTypeInstanceContext instanceContext) {
-          return new FormalExpressionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(FormalExpressionImpl::new);
 
     languageAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_LANGUAGE)
       .build();
@@ -62,18 +57,22 @@ public class FormalExpressionImpl extends ExpressionImpl implements FormalExpres
     super(instanceContext);
   }
 
+  @Override
   public String getLanguage() {
     return languageAttribute.getValue(this);
   }
 
+  @Override
   public void setLanguage(String language) {
     languageAttribute.setValue(this, language);
   }
 
+  @Override
   public ItemDefinition getEvaluatesToType() {
     return evaluatesToTypeRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setEvaluatesToType(ItemDefinition evaluatesToType) {
     evaluatesToTypeRefAttribute.setReferenceTargetElement(this, evaluatesToType);
   }

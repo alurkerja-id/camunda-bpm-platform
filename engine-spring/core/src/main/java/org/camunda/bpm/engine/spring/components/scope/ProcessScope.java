@@ -21,7 +21,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.impl.context.Context;
@@ -81,6 +80,7 @@ public class ProcessScope implements Scope, InitializingBean, BeanFactoryPostPro
 		this.processEngine = processEngine;
 	}
 
+	@Override
 	public Object get(String name, ObjectFactory<?> objectFactory) {
 
 		ExecutionEntity executionEntity = null;
@@ -111,6 +111,7 @@ public class ProcessScope implements Scope, InitializingBean, BeanFactoryPostPro
 		return null;
 	}
 
+	@Override
 	public void registerDestructionCallback(String name, Runnable callback) {
 		logger.fine("no support for registering descruction callbacks implemented currently. registerDestructionCallback('" + name + "',callback) will do nothing.");
 	}
@@ -119,12 +120,14 @@ public class ProcessScope implements Scope, InitializingBean, BeanFactoryPostPro
 		return Context.getExecutionContext().getExecution().getId();
 	}
 
+	@Override
 	public Object remove(String name) {
 
 		logger.fine("remove '" + name + "'");
 		return runtimeService.getVariable(getExecutionId(), name);
 	}
 
+	@Override
 	public Object resolveContextualObject(String key) {
 
 		if ("executionId".equalsIgnoreCase(key))
@@ -145,25 +148,24 @@ public class ProcessScope implements Scope, InitializingBean, BeanFactoryPostPro
 	 * @return shareable {@link ProcessInstance}
 	 */
 	private Object createSharedProcessInstance()   {
-		ProxyFactory proxyFactoryBean = new ProxyFactory(ProcessInstance.class, new MethodInterceptor() {
-			public Object invoke(MethodInvocation methodInvocation) throws Throwable {
-				String methodName = methodInvocation.getMethod().getName() ;
+		ProxyFactory proxyFactoryBean = new ProxyFactory(ProcessInstance.class, (MethodInterceptor) methodInvocation -> {
+			String methodName = methodInvocation.getMethod().getName();
 
-				logger.info("method invocation for " + methodName+ ".");
-				if(methodName.equals("toString"))
-					return "SharedProcessInstance";
+			logger.info("method invocation for " + methodName + ".");
+			if (methodName.equals("toString"))
+				return "SharedProcessInstance";
 
 
-				ProcessInstance processInstance = Context.getExecutionContext().getProcessInstance();
-				Method method = methodInvocation.getMethod();
-				Object[] args = methodInvocation.getArguments();
-				Object result = method.invoke(processInstance, args);
-				return result;
-			}
+			ProcessInstance processInstance = Context.getExecutionContext().getProcessInstance();
+			Method method = methodInvocation.getMethod();
+			Object[] args = methodInvocation.getArguments();
+			Object result = method.invoke(processInstance, args);
+			return result;
 		});
 		return proxyFactoryBean.getProxy(this.classLoader);
 	}
 
+	@Override
 	public String getConversationId() {
 		return getExecutionId();
 	}
@@ -185,6 +187,7 @@ public class ProcessScope implements Scope, InitializingBean, BeanFactoryPostPro
 		}
 	};
 
+	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
 
 		beanFactory.registerScope(ProcessScope.PROCESS_SCOPE_NAME, this);
@@ -208,10 +211,12 @@ public class ProcessScope implements Scope, InitializingBean, BeanFactoryPostPro
 		beanFactory.registerResolvableDependency(ProcessInstance.class,  createSharedProcessInstance());
 	}
 
+	@Override
 	public void destroy() throws Exception {
 		logger.info(ProcessScope.class.getName() + "#destroy() called ...");
 	}
 
+	@Override
 	public void afterPropertiesSet() throws Exception {
 		Assert.notNull(this.processEngine, "the 'processEngine' must not be null!");
 		this.runtimeService = this.processEngine.getRuntimeService();
@@ -220,12 +225,10 @@ public class ProcessScope implements Scope, InitializingBean, BeanFactoryPostPro
 	private Object createDirtyCheckingProxy(final String name, final Object scopedObject) throws Throwable {
 		ProxyFactory proxyFactoryBean = new ProxyFactory(scopedObject);
 		proxyFactoryBean.setProxyTargetClass(this.proxyTargetClass);
-		proxyFactoryBean.addAdvice(new MethodInterceptor() {
-			public Object invoke(MethodInvocation methodInvocation) throws Throwable {
-				Object result = methodInvocation.proceed();
-				persistVariable(name, scopedObject);
-				return result;
-			}
+		proxyFactoryBean.addAdvice((MethodInterceptor) methodInvocation -> {
+			Object result = methodInvocation.proceed();
+			persistVariable(name, scopedObject);
+			return result;
 		});
 		return proxyFactoryBean.getProxy(this.classLoader);
 	}

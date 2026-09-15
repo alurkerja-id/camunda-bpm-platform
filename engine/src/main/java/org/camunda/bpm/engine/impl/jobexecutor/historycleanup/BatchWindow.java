@@ -16,9 +16,7 @@
  */
 package org.camunda.bpm.engine.impl.jobexecutor.historycleanup;
 
-import java.util.Calendar;
 import java.util.Date;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 
 /**
  * @author Svetlana Dorokhova.

@@ -37,6 +37,7 @@ public class QueryServiceImpl implements QueryService {
     this.commandExecutor = commandExecutor;
   }
 
+  @Override
   public <T> List<T> executeQuery(final String statement, final QueryParameters parameter) {
     return commandExecutor.executeCommand(new ExecuteListQueryCmd<T>(statement, parameter));
   }
@@ -45,6 +46,7 @@ public class QueryServiceImpl implements QueryService {
     return commandExecutor.executeCommand(new ExecuteSingleQueryCmd<T>(statement, parameter, clazz));
   }
 
+  @Override
   public Long executeQueryRowCount(String statement, ListQueryParameterObject parameter) {
     return commandExecutor.executeCommand(new QueryServiceRowCountCmd(statement, parameter));
   }

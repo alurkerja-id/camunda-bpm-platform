@@ -24,7 +24,6 @@ import org.camunda.bpm.model.cmmn.instance.PlanItemControl;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * @author Roman Smirnov
@@ -40,11 +39,7 @@ public class DefaultControlImpl extends PlanItemControlImpl implements DefaultCo
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(DefaultControl.class, CMMN_ELEMENT_DEFAULT_CONTROL)
       .namespaceUri(CMMN11_NS)
       .extendsType(PlanItemControl.class)
-      .instanceProvider(new ModelTypeInstanceProvider<DefaultControl>() {
-        public DefaultControl newInstance(ModelTypeInstanceContext instanceContext) {
-          return new DefaultControlImpl(instanceContext);
-        }
-      });
+      .instanceProvider(DefaultControlImpl::new);
 
     typeBuilder.build();
   }

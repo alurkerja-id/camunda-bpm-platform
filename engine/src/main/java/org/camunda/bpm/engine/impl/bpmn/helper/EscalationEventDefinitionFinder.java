@@ -42,17 +42,17 @@ public class EscalationEventDefinitionFinder implements TreeVisitor<PvmScope> {
   }
 
   protected EscalationEventDefinition findMatchingEscalationEventDefinition(List<EscalationEventDefinition> escalationEventDefinitions) {
-    for (EscalationEventDefinition escalationEventDefinition : escalationEventDefinitions) {
-      if (isMatchingEscalationCode(escalationEventDefinition) && !isReThrowingEscalationEventSubprocess(escalationEventDefinition)) {
-        return escalationEventDefinition;
+    for (EscalationEventDefinition candidate : escalationEventDefinitions) {
+      if (isMatchingEscalationCode(candidate) && !isReThrowingEscalationEventSubprocess(candidate)) {
+        return candidate;
       }
     }
     return null;
   }
 
   protected boolean isMatchingEscalationCode(EscalationEventDefinition escalationEventDefinition) {
-    String escalationCode = escalationEventDefinition.getEscalationCode();
-    return escalationCode == null || escalationCode.equals(this.escalationCode);
+    String definitionCode = escalationEventDefinition.getEscalationCode();
+    return definitionCode == null || definitionCode.equals(this.escalationCode);
   }
 
   protected boolean isReThrowingEscalationEventSubprocess(EscalationEventDefinition escalationEventDefinition) {

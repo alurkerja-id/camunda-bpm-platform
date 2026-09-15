@@ -25,8 +25,10 @@ import org.camunda.spin.plugin.variable.value.JsonValue;
  */
 public interface JsonValueBuilder extends SpinValueBuilder<JsonValue> {
 
+  @Override
   JsonValueBuilder serializationDataFormat(String dataFormatName);
 
+  @Override
   JsonValueBuilder serializationDataFormat(SerializationDataFormat dataFormat);
 
 }

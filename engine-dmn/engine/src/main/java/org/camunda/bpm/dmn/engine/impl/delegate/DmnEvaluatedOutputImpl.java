@@ -33,6 +33,8 @@ public class DmnEvaluatedOutputImpl implements DmnEvaluatedOutput {
     this.outputName = decisionTableOutput.getOutputName();
     this.value = value;
   }
+
+  @Override
   public String getId() {
     return id;
   }
@@ -41,6 +43,7 @@ public class DmnEvaluatedOutputImpl implements DmnEvaluatedOutput {
     this.id = id;
   }
 
+  @Override
   public String getName() {
     return name;
   }
@@ -49,6 +52,7 @@ public class DmnEvaluatedOutputImpl implements DmnEvaluatedOutput {
     this.name = name;
   }
 
+  @Override
   public String getOutputName() {
     return outputName;
   }
@@ -57,6 +61,7 @@ public class DmnEvaluatedOutputImpl implements DmnEvaluatedOutput {
     this.outputName = outputName;
   }
 
+  @Override
   public TypedValue getValue() {
     return value;
   }
@@ -75,7 +80,7 @@ public class DmnEvaluatedOutputImpl implements DmnEvaluatedOutput {
     if (id != null ? !id.equals(that.id) : that.id != null) return false;
     if (name != null ? !name.equals(that.name) : that.name != null) return false;
     if (outputName != null ? !outputName.equals(that.outputName) : that.outputName != null) return false;
-    return !(value != null ? !value.equals(that.value) : that.value != null);
+    return value != null ? value.equals(that.value) : that.value == null;
 
   }
 

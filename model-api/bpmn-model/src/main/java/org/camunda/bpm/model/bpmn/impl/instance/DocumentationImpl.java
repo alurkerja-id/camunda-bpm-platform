@@ -20,7 +20,6 @@ import org.camunda.bpm.model.bpmn.instance.Documentation;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
@@ -40,11 +39,7 @@ public class DocumentationImpl extends BpmnModelElementInstanceImpl implements D
 
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Documentation.class, BPMN_ELEMENT_DOCUMENTATION)
       .namespaceUri(BPMN20_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<Documentation>() {
-        public Documentation newInstance(ModelTypeInstanceContext instanceContext) {
-          return new DocumentationImpl(instanceContext);
-        }
-      });
+      .instanceProvider(DocumentationImpl::new);
 
     idAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_ID)
       .idAttribute()
@@ -61,18 +56,22 @@ public class DocumentationImpl extends BpmnModelElementInstanceImpl implements D
     super(context);
   }
 
+  @Override
   public String getId() {
     return idAttribute.getValue(this);
   }
 
+  @Override
   public void setId(String id) {
     idAttribute.setValue(this, id);
   }
 
+  @Override
   public String getTextFormat() {
     return textFormatAttribute.getValue(this);
   }
 
+  @Override
   public void setTextFormat(String textFormat) {
     textFormatAttribute.setValue(this, textFormat);
   }

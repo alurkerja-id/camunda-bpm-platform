@@ -18,9 +18,12 @@ package org.camunda.bpm.engine.rest.dto.history;
 
 import java.util.Date;
 
+import javax.ws.rs.core.Response.Status;
+
 import org.camunda.bpm.engine.history.HistoricDetail;
 import org.camunda.bpm.engine.history.HistoricFormField;
 import org.camunda.bpm.engine.history.HistoricVariableUpdate;
+import org.camunda.bpm.engine.rest.exception.RestException;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
@@ -131,6 +134,10 @@ public abstract class HistoricDetailDto {
     } else if (historicDetail instanceof HistoricVariableUpdate) {
       HistoricVariableUpdate historicVariableUpdate = (HistoricVariableUpdate) historicDetail;
       dto = HistoricVariableUpdateDto.fromHistoricVariableUpdate(historicVariableUpdate);
+    } else {
+      // any other implementation used to fall through and fail with a bare NullPointerException
+      throw new RestException(Status.INTERNAL_SERVER_ERROR, String.format("Unsupported historic detail type '%s'",
+          historicDetail == null ? null : historicDetail.getClass().getName()));
     }
 
     fromHistoricDetail(historicDetail, dto);

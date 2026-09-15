@@ -30,7 +30,6 @@ import org.camunda.bpm.model.xml.type.reference.AttributeReference;
 import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN correlationSubscription element
@@ -46,11 +45,7 @@ public class CorrelationSubscriptionImpl extends BaseElementImpl implements Corr
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CorrelationSubscription.class, BPMN_ELEMENT_CORRELATION_SUBSCRIPTION)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<CorrelationSubscription>() {
-        public CorrelationSubscription newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CorrelationSubscriptionImpl(instanceContext);
-        }
-      });
+      .instanceProvider(CorrelationSubscriptionImpl::new);
 
     correlationKeyAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_CORRELATION_KEY_REF)
       .required()
@@ -69,14 +64,17 @@ public class CorrelationSubscriptionImpl extends BaseElementImpl implements Corr
     super(instanceContext);
   }
 
+  @Override
   public CorrelationKey getCorrelationKey() {
     return correlationKeyAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setCorrelationKey(CorrelationKey correlationKey) {
     correlationKeyAttribute.setReferenceTargetElement(this, correlationKey);
   }
 
+  @Override
   public Collection<CorrelationPropertyBinding> getCorrelationPropertyBindings() {
     return correlationPropertyBindingCollection.get(this);
   }

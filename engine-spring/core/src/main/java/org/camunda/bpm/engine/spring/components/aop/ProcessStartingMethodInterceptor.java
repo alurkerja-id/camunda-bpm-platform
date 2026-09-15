@@ -70,11 +70,15 @@ public class ProcessStartingMethodInterceptor implements MethodInterceptor {
 		return (result instanceof Future || methodInvocation.getMethod().getReturnType().isAssignableFrom(Future.class));
 	}
 
+	@Override
 	public Object invoke(MethodInvocation invocation) throws Throwable {
 
 		Method method = invocation.getMethod();
 
 		StartProcess startProcess = AnnotationUtils.getAnnotation(method, StartProcess.class);
+		// the advisor only matches methods carrying @StartProcess, so this holds - but only the
+		// pointcut knew it, and a bare NullPointerException would be a poor way to find out
+		Assert.notNull(startProcess, "the intercepted method must be annotated with @StartProcess");
 
 		String processKey = startProcess.processKey();
 
@@ -163,8 +167,8 @@ public class ProcessStartingMethodInterceptor implements MethodInterceptor {
 		Map<ProcessVariable, Object> vars = this.mapOfAnnotationValues(ProcessVariable.class, invocation);
 
 		Map<String, Object> varNameToValueMap = new HashMap<String, Object>();
-		for (ProcessVariable processVariable : vars.keySet()) {
-			varNameToValueMap.put(processVariable.value(), vars.get(processVariable));
+		for (Map.Entry<ProcessVariable, Object> entry : vars.entrySet()) {
+			varNameToValueMap.put(entry.getKey().value(), entry.getValue());
 		}
 		return varNameToValueMap;
 

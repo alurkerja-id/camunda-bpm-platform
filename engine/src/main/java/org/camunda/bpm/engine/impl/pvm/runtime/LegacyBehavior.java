@@ -54,7 +54,6 @@ import org.camunda.bpm.engine.impl.pvm.delegate.CompositeActivityBehavior;
 import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
 import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
 import org.camunda.bpm.engine.impl.tree.ExecutionWalker;
-import org.camunda.bpm.engine.impl.tree.ReferenceWalker;
 
 /**
  * This class encapsulates legacy runtime behavior for the process engine.
@@ -627,11 +626,7 @@ public class LegacyBehavior {
 
   protected static PvmExecutionImpl findCompensationThrowingAncestorExecution(PvmExecutionImpl execution) {
     ExecutionWalker walker = new ExecutionWalker(execution);
-    walker.walkUntil(new ReferenceWalker.WalkCondition<PvmExecutionImpl>() {
-      public boolean isFulfilled(PvmExecutionImpl element) {
-        return element == null || CompensationBehavior.isCompensationThrowing(element);
-      }
-    });
+    walker.walkUntil(element -> element == null || CompensationBehavior.isCompensationThrowing(element));
 
     return walker.getCurrentElement();
   }
@@ -649,7 +644,7 @@ public class LegacyBehavior {
   public static void createMissingHistoricVariables(PvmExecutionImpl execution) {
     Collection<VariableInstanceEntity> variables = ((ExecutionEntity) execution).getVariablesInternal();
 
-    if (variables != null && variables.size() > 0) {
+    if (variables != null && !variables.isEmpty()) {
       // trigger historic creation if the history is not presented already
       for (VariableInstanceEntity variable : variables) {
 

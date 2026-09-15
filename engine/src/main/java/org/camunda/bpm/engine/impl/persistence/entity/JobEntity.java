@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
@@ -39,7 +40,7 @@ import org.camunda.bpm.engine.impl.db.HasDbRevision;
 import org.camunda.bpm.engine.impl.incident.IncidentContext;
 import org.camunda.bpm.engine.impl.incident.IncidentHandling;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.jobexecutor.DefaultJobPriorityProvider;
+import org.camunda.bpm.engine.impl.DefaultPriorityProvider;
 import org.camunda.bpm.engine.impl.jobexecutor.JobHandler;
 import org.camunda.bpm.engine.impl.jobexecutor.JobHandlerConfiguration;
 import org.camunda.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupHelper;
@@ -92,7 +93,7 @@ public abstract class JobEntity extends AcquirableJobEntity
 
   protected String jobDefinitionId;
 
-  protected long priority = DefaultJobPriorityProvider.DEFAULT_PRIORITY;
+  protected long priority = DefaultPriorityProvider.DEFAULT_PRIORITY;
 
   protected String tenantId;
 
@@ -118,8 +119,7 @@ public abstract class JobEntity extends AcquirableJobEntity
 
   public void execute(CommandContext commandContext) {
     if (executionId != null) {
-      ExecutionEntity execution = getExecution();
-      ensureNotNull("Cannot find execution with id '" + executionId + "' referenced from job '" + this + "'", "execution", execution);
+      ensureNotNull("Cannot find execution with id '" + executionId + "' referenced from job '" + this + "'", "execution", getExecution());
     }
 
     // initialize activity id
@@ -160,8 +160,7 @@ public abstract class JobEntity extends AcquirableJobEntity
     }
 
     // cancel the retries -> will resolve job incident if present
-    int retries = HistoryCleanupHelper.getMaxRetries();
-    setRetries(retries);
+    setRetries(HistoryCleanupHelper.getMaxRetries());
 
     // delete the job's exception byte array and exception message
     if (exceptionByteArrayId != null) {
@@ -179,11 +178,11 @@ public abstract class JobEntity extends AcquirableJobEntity
     CommandContext commandContext = Context.getCommandContext();
 
     // add link to execution and deployment
-    ExecutionEntity execution = getExecution();
-    if (execution != null) {
-      execution.addJob(this);
+    ExecutionEntity jobExecution = getExecution();
+    if (jobExecution != null) {
+      jobExecution.addJob(this);
 
-      ProcessDefinitionImpl processDefinition = execution.getProcessDefinition();
+      ProcessDefinitionImpl processDefinition = jobExecution.getProcessDefinition();
       this.deploymentId = processDefinition.getDeploymentId();
     }
 
@@ -217,9 +216,9 @@ public abstract class JobEntity extends AcquirableJobEntity
     }
 
     // remove link to execution
-    ExecutionEntity execution = getExecution();
-    if (execution != null) {
-      execution.removeJob(this);
+    ExecutionEntity jobExecution = getExecution();
+    if (jobExecution != null) {
+      jobExecution.removeJob(this);
     }
 
     removeFailedJobIncident(incidentResolved);
@@ -614,14 +613,14 @@ public abstract class JobEntity extends AcquirableJobEntity
 
   protected void ensureActivityIdInitialized() {
     if (activityId == null) {
-      JobDefinition jobDefinition = getJobDefinition();
-      if (jobDefinition != null) {
-        activityId = jobDefinition.getActivityId();
+      JobDefinition definition = getJobDefinition();
+      if (definition != null) {
+        activityId = definition.getActivityId();
       }
       else {
-        ExecutionEntity execution = getExecution();
-        if (execution != null) {
-          activityId = execution.getActivityId();
+        ExecutionEntity jobExecution = getExecution();
+        if (jobExecution != null) {
+          activityId = jobExecution.getActivityId();
         }
       }
     }
@@ -658,6 +657,12 @@ public abstract class JobEntity extends AcquirableJobEntity
   }
 
   @Override
+  public int hashCode() {
+    // equals compares the class and the id, so those two are what the hash may be built from
+    return Objects.hash(getClass(), id);
+  }
+
+  @Override
   public Set<String> getReferencedEntityIds() {
     Set<String> referencedEntityIds = new HashSet<>();
     return referencedEntityIds;
@@ -686,7 +691,7 @@ public abstract class JobEntity extends AcquirableJobEntity
       persistedDependentEntities.put(exceptionByteArrayId, ByteArrayEntity.class);
     }
     else {
-      persistedDependentEntities = Collections.EMPTY_MAP;
+      persistedDependentEntities = Collections.emptyMap();
     }
   }
 
@@ -707,6 +712,7 @@ public abstract class JobEntity extends AcquirableJobEntity
     this.failedActivityId = failedActivityId;
   }
 
+  @Override
   public String getBatchId() {
     return batchId;
   }

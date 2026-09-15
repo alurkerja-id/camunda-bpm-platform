@@ -26,6 +26,7 @@ import javax.ws.rs.core.Response.Status;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.rest.dto.AbstractQueryDto;
 import org.camunda.bpm.engine.rest.dto.CamundaQueryParam;
+import org.camunda.bpm.engine.rest.dto.ConditionQueryParameterDto;
 import org.camunda.bpm.engine.rest.dto.VariableQueryParameterDto;
 import org.camunda.bpm.engine.rest.dto.converter.BooleanConverter;
 import org.camunda.bpm.engine.rest.dto.converter.StringArrayConverter;
@@ -176,24 +177,24 @@ public class VariableInstanceQueryDto extends AbstractQueryDto<VariableInstanceQ
 
     if (variableValues != null) {
       for (VariableQueryParameterDto variableQueryParam : variableValues) {
-        String variableName = variableQueryParam.getName();
+        String paramName = variableQueryParam.getName();
         String op = variableQueryParam.getOperator();
         Object variableValue = variableQueryParam.resolveValue(objectMapper);
 
-        if (op.equals(VariableQueryParameterDto.EQUALS_OPERATOR_NAME)) {
-          query.variableValueEquals(variableName, variableValue);
-        } else if (op.equals(VariableQueryParameterDto.GREATER_THAN_OPERATOR_NAME)) {
-          query.variableValueGreaterThan(variableName, variableValue);
-        } else if (op.equals(VariableQueryParameterDto.GREATER_THAN_OR_EQUALS_OPERATOR_NAME)) {
-          query.variableValueGreaterThanOrEqual(variableName, variableValue);
-        } else if (op.equals(VariableQueryParameterDto.LESS_THAN_OPERATOR_NAME)) {
-          query.variableValueLessThan(variableName, variableValue);
-        } else if (op.equals(VariableQueryParameterDto.LESS_THAN_OR_EQUALS_OPERATOR_NAME)) {
-          query.variableValueLessThanOrEqual(variableName, variableValue);
-        } else if (op.equals(VariableQueryParameterDto.NOT_EQUALS_OPERATOR_NAME)) {
-          query.variableValueNotEquals(variableName, variableValue);
-        } else if (op.equals(VariableQueryParameterDto.LIKE_OPERATOR_NAME)) {
-          query.variableValueLike(variableName, String.valueOf(variableValue));
+        if (op.equals(ConditionQueryParameterDto.EQUALS_OPERATOR_NAME)) {
+          query.variableValueEquals(paramName, variableValue);
+        } else if (op.equals(ConditionQueryParameterDto.GREATER_THAN_OPERATOR_NAME)) {
+          query.variableValueGreaterThan(paramName, variableValue);
+        } else if (op.equals(ConditionQueryParameterDto.GREATER_THAN_OR_EQUALS_OPERATOR_NAME)) {
+          query.variableValueGreaterThanOrEqual(paramName, variableValue);
+        } else if (op.equals(ConditionQueryParameterDto.LESS_THAN_OPERATOR_NAME)) {
+          query.variableValueLessThan(paramName, variableValue);
+        } else if (op.equals(ConditionQueryParameterDto.LESS_THAN_OR_EQUALS_OPERATOR_NAME)) {
+          query.variableValueLessThanOrEqual(paramName, variableValue);
+        } else if (op.equals(ConditionQueryParameterDto.NOT_EQUALS_OPERATOR_NAME)) {
+          query.variableValueNotEquals(paramName, variableValue);
+        } else if (op.equals(ConditionQueryParameterDto.LIKE_OPERATOR_NAME)) {
+          query.variableValueLike(paramName, String.valueOf(variableValue));
         } else {
           throw new InvalidRequestException(Status.BAD_REQUEST, "Invalid variable comparator specified: " + op);
         }

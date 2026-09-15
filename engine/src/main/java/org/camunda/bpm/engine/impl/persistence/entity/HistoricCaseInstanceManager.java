@@ -24,11 +24,8 @@ import java.util.Map;
 import org.camunda.bpm.engine.history.HistoricCaseInstance;
 import org.camunda.bpm.engine.history.CleanableHistoricCaseInstanceReportResult;
 import org.camunda.bpm.engine.impl.CleanableHistoricCaseInstanceReportImpl;
-import org.camunda.bpm.engine.impl.Direction;
 import org.camunda.bpm.engine.impl.HistoricCaseInstanceQueryImpl;
 import org.camunda.bpm.engine.impl.Page;
-import org.camunda.bpm.engine.impl.QueryOrderingProperty;
-import org.camunda.bpm.engine.impl.QueryPropertyImpl;
 import org.camunda.bpm.engine.impl.db.ListQueryParameterObject;
 import org.camunda.bpm.engine.impl.history.event.HistoricCaseInstanceEventEntity;
 import org.camunda.bpm.engine.impl.persistence.AbstractHistoricManager;
@@ -94,7 +91,7 @@ public class HistoricCaseInstanceManager extends AbstractHistoricManager {
       configureHistoricCaseInstanceQuery(historicCaseInstanceQuery);
       return getDbEntityManager().selectList("selectHistoricCaseInstancesByQueryCriteria", historicCaseInstanceQuery, page);
     }
-    return Collections.EMPTY_LIST;
+    return Collections.emptyList();
   }
 
   @SuppressWarnings("unchecked")

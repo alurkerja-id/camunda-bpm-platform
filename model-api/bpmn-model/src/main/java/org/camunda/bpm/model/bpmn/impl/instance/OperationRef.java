@@ -22,7 +22,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_OPERATION_REF;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN operationRef element of the BPMN tMessageEventDefinition type
@@ -34,11 +33,7 @@ public class OperationRef extends BpmnModelElementInstanceImpl {
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OperationRef.class, BPMN_ELEMENT_OPERATION_REF)
       .namespaceUri(BPMN20_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<OperationRef>() {
-        public OperationRef newInstance(ModelTypeInstanceContext instanceContext) {
-          return new OperationRef(instanceContext);
-        }
-      });
+      .instanceProvider(OperationRef::new);
 
     typeBuilder.build();
   }

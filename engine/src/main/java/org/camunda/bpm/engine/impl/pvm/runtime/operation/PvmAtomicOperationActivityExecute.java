@@ -17,6 +17,7 @@
 package org.camunda.bpm.engine.impl.pvm.runtime.operation;
 
 import org.camunda.bpm.engine.impl.pvm.PvmException;
+import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.pvm.PvmLogger;
 import org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior;
 import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
@@ -30,12 +31,14 @@ import static org.camunda.bpm.engine.impl.util.ActivityBehaviorUtil.getActivityB
  */
 public class PvmAtomicOperationActivityExecute implements PvmAtomicOperation {
 
-  private final static PvmLogger LOG = PvmLogger.PVM_LOGGER;
+  private final static PvmLogger LOG = ProcessEngineLogger.PVM_LOGGER;
 
+  @Override
   public boolean isAsync(PvmExecutionImpl execution) {
     return false;
   }
 
+  @Override
   public void execute(PvmExecutionImpl execution) {
     execution.activityInstanceStarted();
 
@@ -69,10 +72,12 @@ public class PvmAtomicOperationActivityExecute implements PvmAtomicOperation {
     }, execution);
   }
 
+  @Override
   public String getCanonicalName() {
     return "activity-execute";
   }
 
+  @Override
   public boolean isAsyncCapable() {
     return false;
   }

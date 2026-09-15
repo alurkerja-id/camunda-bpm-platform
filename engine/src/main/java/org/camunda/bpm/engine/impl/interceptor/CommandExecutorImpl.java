@@ -24,6 +24,7 @@ import org.camunda.bpm.engine.impl.context.Context;
  */
 public class CommandExecutorImpl extends CommandInterceptor {
 
+  @Override
   public <T> T execute(Command<T> command) {
     return command.execute(Context.getCommandContext());
   }

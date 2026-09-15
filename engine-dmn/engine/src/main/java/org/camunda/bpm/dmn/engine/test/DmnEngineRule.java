@@ -18,7 +18,6 @@ package org.camunda.bpm.dmn.engine.test;
 
 import org.camunda.bpm.dmn.engine.DmnEngine;
 import org.camunda.bpm.dmn.engine.DmnEngineConfiguration;
-import org.camunda.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 

@@ -28,7 +28,6 @@ import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_SUB_CONVERSATION;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN subConversation element
@@ -43,11 +42,7 @@ public class SubConversationImpl extends ConversationNodeImpl implements SubConv
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(SubConversation.class, BPMN_ELEMENT_SUB_CONVERSATION)
       .namespaceUri(BPMN20_NS)
       .extendsType(ConversationNode.class)
-      .instanceProvider(new ModelTypeInstanceProvider<SubConversation>() {
-        public SubConversation newInstance(ModelTypeInstanceContext instanceContext) {
-          return new SubConversationImpl(instanceContext);
-        }
-      });
+      .instanceProvider(SubConversationImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 
@@ -61,6 +56,7 @@ public class SubConversationImpl extends ConversationNodeImpl implements SubConv
     super(instanceContext);
   }
 
+  @Override
   public Collection<ConversationNode> getConversationNodes() {
     return conversationNodeCollection.get(this);
   }

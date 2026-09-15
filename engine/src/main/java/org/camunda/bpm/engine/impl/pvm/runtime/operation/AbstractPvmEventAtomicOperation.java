@@ -33,6 +33,7 @@ public abstract class AbstractPvmEventAtomicOperation extends AbstractEventAtomi
 
   protected abstract CoreModelElement getScope(PvmExecutionImpl execution);
 
+  @Override
   public boolean isAsyncCapable() {
     return false;
   }
@@ -41,7 +42,7 @@ public abstract class AbstractPvmEventAtomicOperation extends AbstractEventAtomi
   protected void eventNotificationsFailed(PvmExecutionImpl execution, Exception exception) {
 
     if (shouldHandleFailureAsBpmnError()) {
-      ActivityExecution activityExecution = (ActivityExecution) execution;
+      ActivityExecution activityExecution = execution;
       try {
         resetListeners(execution);
         BpmnExceptionHandler.propagateException(activityExecution, exception);

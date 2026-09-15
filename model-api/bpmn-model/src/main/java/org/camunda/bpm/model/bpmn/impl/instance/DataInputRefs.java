@@ -22,7 +22,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_DATA_INPUT_REFS;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN element dataInputRef of the BPMN tInputSet type
@@ -34,11 +33,7 @@ public class DataInputRefs extends BpmnModelElementInstanceImpl {
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(DataInputRefs.class, BPMN_ELEMENT_DATA_INPUT_REFS)
       .namespaceUri(BPMN20_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<DataInputRefs>() {
-        public DataInputRefs newInstance(ModelTypeInstanceContext instanceContext) {
-          return new DataInputRefs(instanceContext);
-        }
-      });
+      .instanceProvider(DataInputRefs::new);
 
     typeBuilder.build();
   }

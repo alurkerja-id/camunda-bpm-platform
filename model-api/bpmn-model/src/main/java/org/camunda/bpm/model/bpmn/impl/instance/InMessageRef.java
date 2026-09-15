@@ -22,7 +22,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_IN_MESSAGE_REF;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN inMessageRef element of the BPMN tOperation type
@@ -34,11 +33,7 @@ public class InMessageRef extends BpmnModelElementInstanceImpl {
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(InMessageRef.class, BPMN_ELEMENT_IN_MESSAGE_REF)
       .namespaceUri(BPMN20_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<InMessageRef>() {
-        public InMessageRef newInstance(ModelTypeInstanceContext instanceContext) {
-          return new InMessageRef(instanceContext);
-        }
-      });
+      .instanceProvider(InMessageRef::new);
 
     typeBuilder.build();
   }

@@ -30,6 +30,7 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -266,7 +267,25 @@ public class DomXmlDataFormat implements DataFormat {
   }
 
   public static TransformerFactory defaultTransformerFactory() {
-    return TransformerFactory.newInstance();
+    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+
+    // This transformer only serializes a document that is already in memory, so it never needs an
+    // external DTD or stylesheet. Every control is best effort on purpose: the two JAXP 1.5
+    // attributes are unknown to Xalan 2.7 and it throws for them, so a rejected control must not
+    // take the writer down with it.
+    try {
+      transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+    } catch (TransformerConfigurationException | IllegalArgumentException ignored) {
+      // not supported by this implementation
+    }
+    try {
+      transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+      transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+    } catch (IllegalArgumentException ignored) {
+      // not supported by this implementation, e.g. Xalan 2.7
+    }
+
+    return transformerFactory;
   }
 
   public static DocumentBuilderFactory defaultDocumentBuilderFactory() {
@@ -283,6 +302,23 @@ public class DomXmlDataFormat implements DataFormat {
 
     documentBuilderFactory.setIgnoringElementContentWhitespace(false);
     LOG.documentBuilderFactoryConfiguration("ignoringElementContentWhitespace", "false");
+
+    // Protect against XML External Entity attacks, matching what the process engine does by
+    // default (enableXxeProcessing is false there). Variables reaching the client are XML the
+    // engine accepted, so a document type declaration is refused here as well. A parser that does
+    // not know a feature leaves that feature unset and might not be protected.
+    // https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
+    try {
+      documentBuilderFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+      documentBuilderFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+      documentBuilderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+      documentBuilderFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+      documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+    } catch (ParserConfigurationException ignored) {
+      // ignored
+    }
+    documentBuilderFactory.setXIncludeAware(false);
+    documentBuilderFactory.setExpandEntityReferences(false);
 
     return documentBuilderFactory;
   }

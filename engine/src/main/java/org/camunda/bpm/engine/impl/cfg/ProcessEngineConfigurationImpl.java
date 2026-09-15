@@ -224,6 +224,7 @@ import org.camunda.bpm.engine.impl.interceptor.SessionFactory;
 import org.camunda.bpm.engine.impl.jobexecutor.AsyncContinuationJobHandler;
 import org.camunda.bpm.engine.impl.jobexecutor.DefaultFailedJobCommandFactory;
 import org.camunda.bpm.engine.impl.jobexecutor.DefaultJobExecutor;
+import org.camunda.bpm.engine.impl.DefaultPriorityProvider;
 import org.camunda.bpm.engine.impl.jobexecutor.DefaultJobPriorityProvider;
 import org.camunda.bpm.engine.impl.jobexecutor.FailedJobCommandFactory;
 import org.camunda.bpm.engine.impl.jobexecutor.JobDeclaration;
@@ -390,7 +391,7 @@ import org.camunda.bpm.engine.variable.Variables;
  */
 public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfiguration {
 
-  protected static ConfigurationLogger LOG = ConfigurationLogger.CONFIG_LOGGER;
+  protected static ConfigurationLogger LOG = ProcessEngineLogger.CONFIG_LOGGER;
 
   public static final String DB_SCHEMA_UPDATE_CREATE = "create";
   public static final String DB_SCHEMA_UPDATE_DROP_CREATE = "drop-create";
@@ -566,7 +567,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   /**
    * default priority for batch jobs
    */
-  protected long batchJobPriority = DefaultJobPriorityProvider.DEFAULT_PRIORITY;
+  protected long batchJobPriority = DefaultPriorityProvider.DEFAULT_PRIORITY;
 
   // OTHER ////////////////////////////////////////////////////////////////////
   protected List<FormEngine> customFormEngines;
@@ -950,7 +951,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   /**
    * Default priority for history cleanup jobs. */
-  protected long historyCleanupJobPriority = DefaultJobPriorityProvider.DEFAULT_PRIORITY;
+  protected long historyCleanupJobPriority = DefaultPriorityProvider.DEFAULT_PRIORITY;
 
   /**
    * Specifies how often a cleanup job will be executed before an incident is raised.
@@ -1357,16 +1358,16 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     if (batchOperationsForHistoryCleanup == null) {
       batchOperationsForHistoryCleanup = new HashMap<>();
     } else {
-      for (String batchOperation : batchOperationsForHistoryCleanup.keySet()) {
-        String timeToLive = batchOperationsForHistoryCleanup.get(batchOperation);
-        if (!batchHandlers.keySet().contains(batchOperation)) {
-          LOG.invalidBatchOperation(batchOperation, timeToLive);
+      for (Map.Entry<String, String> entry : batchOperationsForHistoryCleanup.entrySet()) {
+        String timeToLive = entry.getValue();
+        if (!batchHandlers.keySet().contains(entry.getKey())) {
+          LOG.invalidBatchOperation(entry.getKey(), timeToLive);
         }
 
         try {
           ParseUtil.parseHistoryTimeToLive(timeToLive);
         } catch (Exception e) {
-          throw LOG.invalidPropertyValue("history time to live for " + batchOperation + " batch operations", timeToLive, e);
+          throw LOG.invalidPropertyValue("history time to live for " + entry.getKey() + " batch operations", timeToLive, e);
         }
       }
     }
@@ -1374,17 +1375,15 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     if (batchHandlers != null && batchOperationHistoryTimeToLive != null) {
 
       for (String batchOperation : batchHandlers.keySet()) {
-        if (!batchOperationsForHistoryCleanup.containsKey(batchOperation)) {
-          batchOperationsForHistoryCleanup.put(batchOperation, batchOperationHistoryTimeToLive);
-        }
+        batchOperationsForHistoryCleanup.putIfAbsent(batchOperation, batchOperationHistoryTimeToLive);
       }
     }
 
     parsedBatchOperationsForHistoryCleanup = new HashMap<>();
     if (batchOperationsForHistoryCleanup != null) {
-      for (String operation : batchOperationsForHistoryCleanup.keySet()) {
-        Integer historyTimeToLive = ParseUtil.parseHistoryTimeToLive(batchOperationsForHistoryCleanup.get(operation));
-        parsedBatchOperationsForHistoryCleanup.put(operation, historyTimeToLive);
+      for (Map.Entry<String, String> entry : batchOperationsForHistoryCleanup.entrySet()) {
+        Integer parsedTimeToLive = ParseUtil.parseHistoryTimeToLive(entry.getValue());
+        parsedBatchOperationsForHistoryCleanup.put(entry.getKey(), parsedTimeToLive);
       }
     }
   }
@@ -1678,7 +1677,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
         if (jdbcMaxWaitTime > 0) {
           pooledDataSource.setPoolTimeToWait(jdbcMaxWaitTime);
         }
-        if (jdbcPingEnabled == true) {
+        if (jdbcPingEnabled) {
           pooledDataSource.setPoolPingEnabled(true);
           if (jdbcPingQuery != null) {
             pooledDataSource.setPoolPingQuery(jdbcPingQuery);
@@ -2136,18 +2135,18 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
       }
     }
     if (deploymentCache == null) {
-      List<Deployer> deployers = new ArrayList<>();
+      List<Deployer> cacheDeployers = new ArrayList<>();
       if (customPreDeployers != null) {
-        deployers.addAll(customPreDeployers);
+        cacheDeployers.addAll(customPreDeployers);
       }
-      deployers.addAll(getDefaultDeployers());
+      cacheDeployers.addAll(getDefaultDeployers());
       if (customPostDeployers != null) {
-        deployers.addAll(customPostDeployers);
+        cacheDeployers.addAll(customPostDeployers);
       }
 
       initCacheFactory();
       deploymentCache = new DeploymentCache(cacheFactory, cacheCapacity);
-      deploymentCache.setDeployers(deployers);
+      deploymentCache.setDeployers(cacheDeployers);
     }
   }
 
@@ -2407,9 +2406,9 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
       historyLevel = HistoryLevel.HISTORY_LEVEL_ACTIVITY;
       LOG.usingDeprecatedHistoryLevelVariable();
     } else {
-      for (HistoryLevel historyLevel : historyLevels) {
-        if (historyLevel.getName().equalsIgnoreCase(history)) {
-          this.historyLevel = historyLevel;
+      for (HistoryLevel level : historyLevels) {
+        if (level.getName().equalsIgnoreCase(history)) {
+          this.historyLevel = level;
         }
       }
     }
@@ -2932,9 +2931,9 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   public HistoryLevel getDefaultHistoryLevel() {
     if (historyLevels != null) {
-      for (HistoryLevel historyLevel : historyLevels) {
-        if (HISTORY_DEFAULT != null && HISTORY_DEFAULT.equalsIgnoreCase(historyLevel.getName())) {
-          return historyLevel;
+      for (HistoryLevel level : historyLevels) {
+        if (HISTORY_DEFAULT != null && HISTORY_DEFAULT.equalsIgnoreCase(level.getName())) {
+          return level;
         }
       }
     }
@@ -4648,19 +4647,19 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   }
 
   public List<MigrationInstructionValidator> getDefaultMigrationInstructionValidators() {
-    List<MigrationInstructionValidator> migrationInstructionValidators = new ArrayList<>();
-    migrationInstructionValidators.add(new SameBehaviorInstructionValidator());
-    migrationInstructionValidators.add(new SameEventTypeValidator());
-    migrationInstructionValidators.add(new OnlyOnceMappedActivityInstructionValidator());
-    migrationInstructionValidators.add(new CannotAddMultiInstanceBodyValidator());
-    migrationInstructionValidators.add(new CannotAddMultiInstanceInnerActivityValidator());
-    migrationInstructionValidators.add(new CannotRemoveMultiInstanceInnerActivityValidator());
-    migrationInstructionValidators.add(new GatewayMappingValidator());
-    migrationInstructionValidators.add(new SameEventScopeInstructionValidator());
-    migrationInstructionValidators.add(new UpdateEventTriggersValidator());
-    migrationInstructionValidators.add(new AdditionalFlowScopeInstructionValidator());
-    migrationInstructionValidators.add(new ConditionalEventUpdateEventTriggerValidator());
-    return migrationInstructionValidators;
+    List<MigrationInstructionValidator> defaultValidators = new ArrayList<>();
+    defaultValidators.add(new SameBehaviorInstructionValidator());
+    defaultValidators.add(new SameEventTypeValidator());
+    defaultValidators.add(new OnlyOnceMappedActivityInstructionValidator());
+    defaultValidators.add(new CannotAddMultiInstanceBodyValidator());
+    defaultValidators.add(new CannotAddMultiInstanceInnerActivityValidator());
+    defaultValidators.add(new CannotRemoveMultiInstanceInnerActivityValidator());
+    defaultValidators.add(new GatewayMappingValidator());
+    defaultValidators.add(new SameEventScopeInstructionValidator());
+    defaultValidators.add(new UpdateEventTriggersValidator());
+    defaultValidators.add(new AdditionalFlowScopeInstructionValidator());
+    defaultValidators.add(new ConditionalEventUpdateEventTriggerValidator());
+    return defaultValidators;
   }
 
   public void setMigratingActivityInstanceValidators(List<MigratingActivityInstanceValidator> migratingActivityInstanceValidators) {
@@ -4696,24 +4695,24 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   }
 
   public List<MigratingActivityInstanceValidator> getDefaultMigratingActivityInstanceValidators() {
-    List<MigratingActivityInstanceValidator> migratingActivityInstanceValidators = new ArrayList<>();
+    List<MigratingActivityInstanceValidator> defaultValidators = new ArrayList<>();
 
-    migratingActivityInstanceValidators.add(new NoUnmappedLeafInstanceValidator());
-    migratingActivityInstanceValidators.add(new VariableConflictActivityInstanceValidator());
-    migratingActivityInstanceValidators.add(new SupportedActivityInstanceValidator());
+    defaultValidators.add(new NoUnmappedLeafInstanceValidator());
+    defaultValidators.add(new VariableConflictActivityInstanceValidator());
+    defaultValidators.add(new SupportedActivityInstanceValidator());
 
-    return migratingActivityInstanceValidators;
+    return defaultValidators;
   }
 
   public List<MigratingTransitionInstanceValidator> getDefaultMigratingTransitionInstanceValidators() {
-    List<MigratingTransitionInstanceValidator> migratingTransitionInstanceValidators = new ArrayList<>();
+    List<MigratingTransitionInstanceValidator> defaultValidators = new ArrayList<>();
 
-    migratingTransitionInstanceValidators.add(new NoUnmappedLeafInstanceValidator());
-    migratingTransitionInstanceValidators.add(new AsyncAfterMigrationValidator());
-    migratingTransitionInstanceValidators.add(new AsyncProcessStartMigrationValidator());
-    migratingTransitionInstanceValidators.add(new AsyncMigrationValidator());
+    defaultValidators.add(new NoUnmappedLeafInstanceValidator());
+    defaultValidators.add(new AsyncAfterMigrationValidator());
+    defaultValidators.add(new AsyncProcessStartMigrationValidator());
+    defaultValidators.add(new AsyncMigrationValidator());
 
-    return migratingTransitionInstanceValidators;
+    return defaultValidators;
   }
 
   public List<CommandChecker> getCommandCheckers() {

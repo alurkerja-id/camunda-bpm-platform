@@ -25,6 +25,7 @@ import org.camunda.bpm.model.bpmn.builder.ExclusiveGatewayBuilder;
  */
 public interface ExclusiveGateway extends Gateway {
 
+  @Override
   ExclusiveGatewayBuilder builder();
 
   SequenceFlow getDefault();

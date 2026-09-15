@@ -29,7 +29,6 @@ import org.camunda.bpm.model.cmmn.instance.Sentry;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
@@ -49,22 +48,27 @@ public class SentryImpl extends CmmnElementImpl implements Sentry {
     super(instanceContext);
   }
 
+  @Override
   public String getName() {
     return nameAttribute.getValue(this);
   }
 
+  @Override
   public void setName(String name) {
     nameAttribute.setValue(this, name);
   }
 
+  @Override
   public Collection<OnPart> getOnParts() {
     return onPartCollection.get(this);
   }
 
+  @Override
   public IfPart getIfPart() {
     return ifPartChild.getChild(this);
   }
 
+  @Override
   public void setIfPart(IfPart ifPart) {
     ifPartChild.setChild(this, ifPart);
   }
@@ -73,11 +77,7 @@ public class SentryImpl extends CmmnElementImpl implements Sentry {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Sentry.class, CMMN_ELEMENT_SENTRY)
         .extendsType(CmmnElement.class)
         .namespaceUri(CMMN11_NS)
-        .instanceProvider(new ModelTypeInstanceProvider<Sentry>() {
-          public Sentry newInstance(ModelTypeInstanceContext instanceContext) {
-            return new SentryImpl(instanceContext);
-          }
-        });
+        .instanceProvider(SentryImpl::new);
 
     nameAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_NAME)
         .build();

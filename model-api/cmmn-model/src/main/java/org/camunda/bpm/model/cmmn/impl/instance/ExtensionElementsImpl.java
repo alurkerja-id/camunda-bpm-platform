@@ -41,11 +41,7 @@ public class ExtensionElementsImpl extends CmmnModelElementInstanceImpl implemen
 
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ExtensionElements.class, CMMN_ELEMENT_EXTENSION_ELEMENTS)
       .namespaceUri(CMMN11_NS)
-      .instanceProvider(new ModelElementTypeBuilder.ModelTypeInstanceProvider<ExtensionElements>() {
-        public ExtensionElements newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ExtensionElementsImpl(instanceContext);
-        }
-      });
+      .instanceProvider(ExtensionElementsImpl::new);
 
     typeBuilder.build();
   }
@@ -54,14 +50,17 @@ public class ExtensionElementsImpl extends CmmnModelElementInstanceImpl implemen
     super(context);
   }
 
+  @Override
   public Collection<ModelElementInstance> getElements() {
     return ModelUtil.getModelElementCollection(getDomElement().getChildElements(), modelInstance);
   }
 
+  @Override
   public Query<ModelElementInstance> getElementsQuery() {
     return new QueryImpl<ModelElementInstance>(getElements());
   }
 
+  @Override
   public ModelElementInstance addExtensionElement(String namespaceUri, String localName) {
     ModelElementType extensionElementType = modelInstance.registerGenericType(namespaceUri, localName);
     ModelElementInstance extensionElement = extensionElementType.newInstance(modelInstance);
@@ -69,6 +68,7 @@ public class ExtensionElementsImpl extends CmmnModelElementInstanceImpl implemen
     return extensionElement;
   }
 
+  @Override
   public <T extends ModelElementInstance> T addExtensionElement(Class<T> extensionElementClass) {
     ModelElementInstance extensionElement = modelInstance.newInstance(extensionElementClass);
     addChildElement(extensionElement);

@@ -19,7 +19,6 @@ package org.camunda.bpm.cockpit.rest.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.camunda.bpm.cockpit.db.QueryParameters;
-import org.camunda.bpm.engine.impl.db.sql.MybatisJoinHelper;
 import org.camunda.bpm.engine.rest.dto.CamundaQueryParam;
 import org.camunda.bpm.engine.rest.dto.converter.StringToTypeConverter;
 import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
@@ -98,6 +97,9 @@ public abstract class AbstractRestQueryParametersDto<T> extends QueryParameters 
     return getOrderBy();
   }
 
+  /**
+   * @deprecated part of the old sorting parameters; use {@link #getInternalOrderBy()}
+   */
   @Deprecated
   public String getOrderBy() {
     if (sortBy != null) {

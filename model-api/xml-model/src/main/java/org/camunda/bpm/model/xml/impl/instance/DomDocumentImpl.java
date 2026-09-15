@@ -100,6 +100,12 @@ public class DomDocumentImpl implements DomDocument {
     return new DOMSource(document);
   }
 
+  @Override
+  public Object getDomLock() {
+    // the same monitor every method in this class locks
+    return document;
+  }
+
   public String registerNamespace(String namespaceUri) {
     synchronized(document) {
       DomElement rootElement = getRootElement();

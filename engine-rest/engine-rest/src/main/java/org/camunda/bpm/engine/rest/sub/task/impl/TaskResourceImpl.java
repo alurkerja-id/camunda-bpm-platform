@@ -23,7 +23,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 import javax.ws.rs.core.MediaType;
@@ -241,10 +240,8 @@ public class TaskResourceImpl implements TaskResource {
     }
 
     FormDto dto = FormDto.fromFormData(formData);
-    if(dto.getKey() == null || dto.getKey().isEmpty()) {
-      if(formData != null && formData.getFormFields() != null && !formData.getFormFields().isEmpty()) {
-        dto.setKey("embedded:engine://engine/:engine/task/"+taskId+"/rendered-form");
-      }
+    if ((dto.getKey() == null || dto.getKey().isEmpty()) && formData != null && formData.getFormFields() != null && !formData.getFormFields().isEmpty()) {
+      dto.setKey("embedded:engine://engine/:engine/task/" + taskId + "/rendered-form");
     }
 
     // to get the application context path it is necessary to
@@ -304,6 +301,7 @@ public class TaskResourceImpl implements TaskResource {
 
   }
 
+  @Override
   public void setAssignee(UserIdDto dto) {
     TaskService taskService = engine.getTaskService();
     taskService.setAssignee(taskId, dto.getUserId());
@@ -352,22 +350,27 @@ public class TaskResourceImpl implements TaskResource {
 
   }
 
+  @Override
   public TaskCommentResource getTaskCommentResource() {
     return new TaskCommentResourceImpl(engine, taskId, rootResourcePath);
   }
 
+  @Override
   public TaskAttachmentResource getAttachmentResource() {
     return new TaskAttachmentResourceImpl(engine, taskId, rootResourcePath);
   }
 
+  @Override
   public VariableResource getLocalVariables() {
     return new LocalTaskVariablesResource(engine, taskId, objectMapper);
   }
 
+  @Override
   public VariableResource getVariables() {
     return new TaskVariablesResource(engine, taskId, objectMapper);
   }
 
+  @Override
   public Map<String, VariableValueDto> getFormVariables(String variableNames, boolean deserializeValues) {
 
     final FormService formService = engine.getFormService();
@@ -383,6 +386,7 @@ public class TaskResourceImpl implements TaskResource {
     return VariableValueDto.fromMap(startFormVariables);
   }
 
+  @Override
   public void updateTask(TaskDto taskDto) {
     TaskService taskService = engine.getTaskService();
 
@@ -478,8 +482,6 @@ public class TaskResourceImpl implements TaskResource {
     try {
       identityService.clearAuthentication();
       return action.get();
-    } catch (Exception e) {
-      throw e;
     } finally {
       identityService.setAuthentication(currentAuthentication);
     }

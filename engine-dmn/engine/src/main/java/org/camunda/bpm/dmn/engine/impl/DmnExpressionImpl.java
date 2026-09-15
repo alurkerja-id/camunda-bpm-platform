@@ -30,8 +30,10 @@ public class DmnExpressionImpl implements CachedCompiledScriptSupport, CachedExp
   protected String expressionLanguage;
   protected String expression;
 
-  protected CompiledScript cachedCompiledScript;
-  protected ElExpression cachedExpression;
+  // volatile: both are read outside the lock first, see the default methods on the support
+  // interfaces, so the write has to be visible to a thread that never took that lock
+  protected volatile CompiledScript cachedCompiledScript;
+  protected volatile ElExpression cachedExpression;
 
   public String getId() {
     return id;
@@ -84,18 +86,22 @@ public class DmnExpressionImpl implements CachedCompiledScriptSupport, CachedExp
       '}';
   }
 
+  @Override
   public void cacheCompiledScript(CompiledScript compiledScript) {
     this.cachedCompiledScript = compiledScript;
   }
 
+  @Override
   public CompiledScript getCachedCompiledScript() {
     return this.cachedCompiledScript;
   }
 
+  @Override
   public ElExpression getCachedExpression() {
     return this.cachedExpression;
   }
 
+  @Override
   public void setCachedExpression(ElExpression expression) {
     this.cachedExpression = expression;
   }

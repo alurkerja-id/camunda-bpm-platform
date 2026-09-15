@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.camunda.bpm.application.impl.metadata.spi.ProcessArchiveXml;
 import org.camunda.bpm.container.impl.deployment.scanning.spi.ProcessApplicationScanner;
+import org.camunda.bpm.engine.impl.AbstractDefinitionDeployer;
 import org.camunda.bpm.engine.impl.bpmn.deployer.BpmnDeployer;
 import org.camunda.bpm.engine.impl.cmmn.deployer.CmmnDeployer;
 import org.camunda.bpm.engine.impl.dmn.deployer.DecisionDefinitionDeployer;
@@ -93,12 +94,16 @@ public class ProcessApplicationScanningUtil {
   }
 
   public static boolean isDiagram(String fileName, String modelFileName) {
+    // the three deployers do not declare their own diagram suffixes; naming them here suggested
+    // three different lists where there is only the one their common parent declares
+    String[] diagramSuffixes = AbstractDefinitionDeployer.DIAGRAM_SUFFIXES;
+
     // process resources
-    boolean isBpmnDiagram = checkDiagram(fileName, modelFileName, BpmnDeployer.DIAGRAM_SUFFIXES, BpmnDeployer.BPMN_RESOURCE_SUFFIXES);
+    boolean isBpmnDiagram = checkDiagram(fileName, modelFileName, diagramSuffixes, BpmnDeployer.BPMN_RESOURCE_SUFFIXES);
     // case resources
-    boolean isCmmnDiagram = checkDiagram(fileName, modelFileName, CmmnDeployer.DIAGRAM_SUFFIXES, CmmnDeployer.CMMN_RESOURCE_SUFFIXES);
+    boolean isCmmnDiagram = checkDiagram(fileName, modelFileName, diagramSuffixes, CmmnDeployer.CMMN_RESOURCE_SUFFIXES);
     // decision resources
-    boolean isDmnDiagram = checkDiagram(fileName, modelFileName, DecisionDefinitionDeployer.DIAGRAM_SUFFIXES, DecisionDefinitionDeployer.DMN_RESOURCE_SUFFIXES);
+    boolean isDmnDiagram = checkDiagram(fileName, modelFileName, diagramSuffixes, DecisionDefinitionDeployer.DMN_RESOURCE_SUFFIXES);
 
     return isBpmnDiagram || isCmmnDiagram || isDmnDiagram;
   }

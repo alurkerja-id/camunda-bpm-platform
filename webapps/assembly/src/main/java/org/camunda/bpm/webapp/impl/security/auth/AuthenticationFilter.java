@@ -49,6 +49,7 @@ public class AuthenticationFilter implements Filter {
 
   protected Long cacheTimeToLive = null;
 
+  @Override
   public void init(FilterConfig filterConfig) throws ServletException {
     String authCacheTTLAsString = filterConfig.getInitParameter(AUTH_CACHE_TTL_INIT_PARAM_NAME);
     if (!ServletFilterUtil.isEmpty(authCacheTTLAsString)) {
@@ -60,8 +61,9 @@ public class AuthenticationFilter implements Filter {
     }
   }
 
+  @Override
   public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
-    throws IOException, ServletException {
+      throws IOException, ServletException {
 
     HttpServletRequest req = (HttpServletRequest) request;
 
@@ -93,6 +95,7 @@ public class AuthenticationFilter implements Filter {
 
   }
 
+  @Override
   public void destroy() {
 
   }

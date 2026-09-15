@@ -44,7 +44,6 @@ import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.impl.util.StringUtil;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
@@ -77,11 +76,7 @@ public class UserTaskImpl extends TaskImpl implements UserTask {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(UserTask.class, BPMN_ELEMENT_USER_TASK)
       .namespaceUri(BPMN20_NS)
       .extendsType(Task.class)
-      .instanceProvider(new ModelTypeInstanceProvider<UserTask>() {
-        public UserTask newInstance(ModelTypeInstanceContext instanceContext) {
-          return new UserTaskImpl(instanceContext);
-        }
-      });
+      .instanceProvider(UserTaskImpl::new);
 
     implementationAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_IMPLEMENTATION)
       .defaultValue("##unspecified")
@@ -150,124 +145,153 @@ public class UserTaskImpl extends TaskImpl implements UserTask {
     return new UserTaskBuilder((BpmnModelInstance) modelInstance, this);
   }
 
+  @Override
   public String getImplementation() {
     return implementationAttribute.getValue(this);
   }
 
+  @Override
   public void setImplementation(String implementation) {
     implementationAttribute.setValue(this, implementation);
   }
 
+  @Override
   public Collection<Rendering> getRenderings() {
     return renderingCollection.get(this);
   }
 
   /** camunda extensions */
 
+  @Override
   public String getCamundaAssignee() {
     return camundaAssigneeAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaAssignee(String camundaAssignee) {
     camundaAssigneeAttribute.setValue(this, camundaAssignee);
   }
 
+  @Override
   public String getCamundaCandidateGroups() {
     return camundaCandidateGroupsAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaCandidateGroups(String camundaCandidateGroups) {
     camundaCandidateGroupsAttribute.setValue(this, camundaCandidateGroups);
   }
 
+  @Override
   public List<String> getCamundaCandidateGroupsList() {
     String candidateGroups = camundaCandidateGroupsAttribute.getValue(this);
     return StringUtil.splitCommaSeparatedList(candidateGroups);
   }
 
+  @Override
   public void setCamundaCandidateGroupsList(List<String> camundaCandidateGroupsList) {
     String candidateGroups = StringUtil.joinCommaSeparatedList(camundaCandidateGroupsList);
     camundaCandidateGroupsAttribute.setValue(this, candidateGroups);
   }
 
+  @Override
   public String getCamundaCandidateUsers() {
     return camundaCandidateUsersAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaCandidateUsers(String camundaCandidateUsers) {
     camundaCandidateUsersAttribute.setValue(this, camundaCandidateUsers);
   }
 
+  @Override
   public List<String> getCamundaCandidateUsersList() {
     String candidateUsers = camundaCandidateUsersAttribute.getValue(this);
     return StringUtil.splitCommaSeparatedList(candidateUsers);
   }
 
+  @Override
   public void setCamundaCandidateUsersList(List<String> camundaCandidateUsersList) {
     String candidateUsers = StringUtil.joinCommaSeparatedList(camundaCandidateUsersList);
     camundaCandidateUsersAttribute.setValue(this, candidateUsers);
   }
 
+  @Override
   public String getCamundaDueDate() {
     return camundaDueDateAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaDueDate(String camundaDueDate) {
     camundaDueDateAttribute.setValue(this, camundaDueDate);
   }
 
+  @Override
   public String getCamundaFollowUpDate() {
     return camundaFollowUpDateAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaFollowUpDate(String camundaFollowUpDate) {
     camundaFollowUpDateAttribute.setValue(this, camundaFollowUpDate);
   }
 
+  @Override
   public String getCamundaFormHandlerClass() {
     return camundaFormHandlerClassAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaFormHandlerClass(String camundaFormHandlerClass) {
     camundaFormHandlerClassAttribute.setValue(this, camundaFormHandlerClass);
   }
 
+  @Override
   public String getCamundaFormKey() {
     return camundaFormKeyAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaFormKey(String camundaFormKey) {
     camundaFormKeyAttribute.setValue(this, camundaFormKey);
   }
 
+  @Override
   public String getCamundaFormRef() {
     return camundaFormRefAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaFormRef(String camundaFormRef) {
     camundaFormRefAttribute.setValue(this, camundaFormRef);
   }
 
+  @Override
   public String getCamundaFormRefBinding() {
     return camundaFormRefBindingAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaFormRefBinding(String camundaFormRefBinding) {
     camundaFormRefBindingAttribute.setValue(this, camundaFormRefBinding);
   }
 
+  @Override
   public String getCamundaFormRefVersion() {
     return camundaFormRefVersionAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaFormRefVersion(String camundaFormRefVersion) {
     camundaFormRefVersionAttribute.setValue(this, camundaFormRefVersion);
   }
 
+  @Override
   public String getCamundaPriority() {
     return camundaPriorityAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaPriority(String camundaPriority) {
     camundaPriorityAttribute.setValue(this, camundaPriority);
   }

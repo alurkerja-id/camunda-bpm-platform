@@ -31,6 +31,7 @@ import org.camunda.bpm.webapp.plugin.spi.impl.AbstractAppPlugin;
  */
 public abstract class AbstractCockpitPlugin extends AbstractAppPlugin implements CockpitPlugin {
 
+  @Override
   public List<String> getMappingFiles() {
     return Collections.emptyList();
   }

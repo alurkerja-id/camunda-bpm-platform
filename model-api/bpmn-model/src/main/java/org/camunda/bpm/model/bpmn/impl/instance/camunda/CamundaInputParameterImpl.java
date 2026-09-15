@@ -24,7 +24,6 @@ import org.camunda.bpm.model.bpmn.instance.camunda.CamundaInputParameter;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
 /**
@@ -39,11 +38,7 @@ public class CamundaInputParameterImpl extends CamundaGenericValueElementImpl im
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaInputParameter.class, CAMUNDA_ELEMENT_INPUT_PARAMETER)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<CamundaInputParameter>() {
-        public CamundaInputParameter newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CamundaInputParameterImpl(instanceContext);
-        }
-      });
+      .instanceProvider(CamundaInputParameterImpl::new);
 
     camundaNameAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_NAME)
       .namespace(CAMUNDA_NS)
@@ -57,10 +52,12 @@ public class CamundaInputParameterImpl extends CamundaGenericValueElementImpl im
     super(instanceContext);
   }
 
+  @Override
   public String getCamundaName() {
     return camundaNameAttribute.getValue(this);
   }
 
+  @Override
   public void setCamundaName(String camundaName) {
     camundaNameAttribute.setValue(this, camundaName);
   }

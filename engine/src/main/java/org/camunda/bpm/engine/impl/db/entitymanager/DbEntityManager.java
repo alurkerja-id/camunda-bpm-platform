@@ -175,7 +175,7 @@ public class DbEntityManager implements Session, EntityLoadListener {
   @SuppressWarnings("unchecked")
   public List selectListWithRawParameter(String statement, Object parameter, int firstResult, int maxResults) {
     if(firstResult == -1 ||  maxResults==-1) {
-      return Collections.EMPTY_LIST;
+      return Collections.emptyList();
     }
     List loadedObjects = persistenceSession.selectList(statement, parameter);
     return filterLoadedObjects(loadedObjects);
@@ -192,7 +192,9 @@ public class DbEntityManager implements Session, EntityLoadListener {
 
   @SuppressWarnings("unchecked")
   public boolean selectBoolean(String statement, Object parameter) {
-    List<String> result = (List<String>) persistenceSession.selectList(statement, parameter);
+    // the statements behind this one declare resultType="integer", so the list holds Integers;
+    // declaring it as List<String> only hid that from the reader and from contains()
+    List<Integer> result = (List<Integer>) persistenceSession.selectList(statement, parameter);
     if(result != null) {
       return result.contains(1);
     }
@@ -303,7 +305,7 @@ public class DbEntityManager implements Session, EntityLoadListener {
 
     // obtain totally ordered operation list from operation manager
     List<DbOperation> operationsToFlush = dbOperationManager.calculateFlush();
-    if (operationsToFlush == null || operationsToFlush.size() == 0) {
+    if (operationsToFlush == null || operationsToFlush.isEmpty()) {
       return;
     }
 

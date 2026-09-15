@@ -31,7 +31,8 @@ import com.fasterxml.uuid.impl.TimeBasedGenerator;
 public class StrongUuidGenerator implements IdGenerator {
 
   // different ProcessEngines on the same classloader share one generator.
-  protected static TimeBasedGenerator timeBasedGenerator;
+  // volatile: lazily initialized under double-checked locking
+  protected static volatile TimeBasedGenerator timeBasedGenerator;
 
   public StrongUuidGenerator() {
     ensureGeneratorInitialized();
@@ -47,6 +48,7 @@ public class StrongUuidGenerator implements IdGenerator {
     }
   }
 
+  @Override
   public String getNextId() {
     return timeBasedGenerator.generate().toString();
   }

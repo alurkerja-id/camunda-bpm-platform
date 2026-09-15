@@ -24,7 +24,6 @@ import org.camunda.bpm.model.dmn.instance.Row;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class RowImpl extends ListImpl implements Row {
 
@@ -36,11 +35,7 @@ public class RowImpl extends ListImpl implements Row {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Row.class, DMN_ELEMENT_ROW)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(List.class)
-      .instanceProvider(new ModelTypeInstanceProvider<Row>() {
-        public Row newInstance(ModelTypeInstanceContext instanceContext) {
-          return new RowImpl(instanceContext);
-        }
-      });
+      .instanceProvider(RowImpl::new);
 
     typeBuilder.build();
   }

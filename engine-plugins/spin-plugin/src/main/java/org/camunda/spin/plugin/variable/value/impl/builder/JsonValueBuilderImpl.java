@@ -40,10 +40,12 @@ public class JsonValueBuilderImpl extends SpinValueBuilderImpl<JsonValue> implem
     this(new JsonValueImpl(value));
   }
 
+  @Override
   public JsonValueBuilder serializationDataFormat(SerializationDataFormat dataFormat) {
     return (JsonValueBuilderImpl) super.serializationDataFormat(dataFormat);
   }
 
+  @Override
   public JsonValueBuilder serializationDataFormat(String dataFormatName) {
     return (JsonValueBuilderImpl) super.serializationDataFormat(dataFormatName);
   }

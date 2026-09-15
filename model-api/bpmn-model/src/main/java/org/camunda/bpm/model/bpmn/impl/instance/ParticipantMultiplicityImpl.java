@@ -24,7 +24,6 @@ import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN participantMultiplicity element
@@ -40,11 +39,7 @@ public class ParticipantMultiplicityImpl extends BaseElementImpl implements Part
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ParticipantMultiplicity.class, BPMN_ELEMENT_PARTICIPANT_MULTIPLICITY)
       .namespaceUri(BPMN20_NS)
       .extendsType(BaseElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<ParticipantMultiplicity>() {
-        public ParticipantMultiplicity newInstance(ModelTypeInstanceContext instanceContext) {
-          return new ParticipantMultiplicityImpl(instanceContext);
-        }
-      });
+      .instanceProvider(ParticipantMultiplicityImpl::new);
 
     minimumAttribute = typeBuilder.integerAttribute(BPMN_ATTRIBUTE_MINIMUM)
       .defaultValue(0)
@@ -61,18 +56,22 @@ public class ParticipantMultiplicityImpl extends BaseElementImpl implements Part
     super(instanceContext);
   }
 
+  @Override
   public int getMinimum() {
     return minimumAttribute.getValue(this);
   }
 
+  @Override
   public void setMinimum(int minimum) {
     minimumAttribute.setValue(this, minimum);
   }
 
+  @Override
   public int getMaximum() {
     return maximumAttribute.getValue(this);
   }
 
+  @Override
   public void setMaximum(int maximum) {
     maximumAttribute.setValue(this, maximum);
   }

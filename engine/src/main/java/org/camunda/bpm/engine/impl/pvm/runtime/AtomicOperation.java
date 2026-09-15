@@ -26,6 +26,8 @@ import org.camunda.bpm.engine.impl.pvm.runtime.operation.PvmAtomicOperation;
  * @author Tom Baeyens
  * @author Daniel Meyer
  * @author Thorben Lindhauer
+ *
+ * @deprecated use {@link PvmAtomicOperation}, which declares the same operations
  */
 @Deprecated
 public interface AtomicOperation extends CoreAtomicOperation<PvmExecutionImpl> {

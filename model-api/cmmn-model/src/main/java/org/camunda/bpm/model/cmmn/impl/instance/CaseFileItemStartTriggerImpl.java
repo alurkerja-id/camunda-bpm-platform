@@ -28,7 +28,6 @@ import org.camunda.bpm.model.cmmn.instance.StartTrigger;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElement;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import org.camunda.bpm.model.xml.type.reference.AttributeReference;
@@ -46,19 +45,23 @@ public class CaseFileItemStartTriggerImpl extends StartTriggerImpl implements Ca
     super(instanceContext);
   }
 
+  @Override
   public CaseFileItem getSource() {
     return sourceRefAttribute.getReferenceTargetElement(this);
   }
 
+  @Override
   public void setSource(CaseFileItem source) {
     sourceRefAttribute.setReferenceTargetElement(this, source);
   }
 
+  @Override
   public CaseFileItemTransition getStandardEvent() {
     CaseFileItemTransitionStandardEvent child = standardEventChild.getChild(this);
     return child.getValue();
   }
 
+  @Override
   public void setStandardEvent(CaseFileItemTransition standardEvent) {
     CaseFileItemTransitionStandardEvent child = standardEventChild.getChild(this);
     child.setValue(standardEvent);
@@ -68,11 +71,7 @@ public class CaseFileItemStartTriggerImpl extends StartTriggerImpl implements Ca
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CaseFileItemStartTrigger.class, CMMN_ELEMENT_CASE_FILE_ITEM_START_TRIGGER)
         .extendsType(StartTrigger.class)
         .namespaceUri(CMMN11_NS)
-        .instanceProvider(new ModelTypeInstanceProvider<CaseFileItemStartTrigger>() {
-          public CaseFileItemStartTrigger newInstance(ModelTypeInstanceContext instanceContext) {
-            return new CaseFileItemStartTriggerImpl(instanceContext);
-          }
-        });
+        .instanceProvider(CaseFileItemStartTriggerImpl::new);
 
     sourceRefAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_SOURCE_REF)
         .idAttributeReference(CaseFileItem.class)

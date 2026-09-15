@@ -95,6 +95,9 @@ public abstract class AbstractProcessAssert<S extends AbstractProcessAssert<S, A
 
   public static void resetLastAsserts() {
     getLastAsserts().clear();
+    // clearing the map leaves the ThreadLocal entry behind, which holds on to the assert instances
+    // - and through them the process engine - for whatever runs on this thread next
+    lastAsserts.remove();
   }
 
   @SuppressWarnings("unchecked")

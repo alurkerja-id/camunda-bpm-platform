@@ -40,7 +40,7 @@ public class DefaultFailedJobParseListener extends AbstractBpmnParseListener {
   protected static final String FAILED_JOB_RETRY_TIME_CYCLE = "failedJobRetryTimeCycle";
 
   /**
-   * deprecated since 7.4, use camunda ns.
+   * @deprecated since 7.4, use the camunda namespace
    */
   @Deprecated
   public static final Namespace FOX_ENGINE_NS = new Namespace("http://www.camunda.com/fox");

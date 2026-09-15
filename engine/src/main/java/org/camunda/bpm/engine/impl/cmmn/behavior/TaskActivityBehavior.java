@@ -29,14 +29,17 @@ import org.camunda.bpm.engine.impl.cmmn.model.CmmnActivity;
  */
 public class TaskActivityBehavior extends StageOrTaskActivityBehavior {
 
+  @Override
   public void onReactivation(CmmnActivityExecution execution) {
     ensureTransitionAllowed(execution, FAILED, ACTIVE, "re-activate");
   }
 
+  @Override
   protected void performStart(CmmnActivityExecution execution) {
     execution.complete();
   }
 
+  @Override
   public void fireExitCriteria(CmmnActivityExecution execution) {
     execution.exit();
   }
@@ -44,12 +47,13 @@ public class TaskActivityBehavior extends StageOrTaskActivityBehavior {
   protected boolean isBlocking(CmmnActivityExecution execution) {
     CmmnActivity activity = execution.getActivity();
     Object isBlockingProperty = activity.getProperty(PROPERTY_IS_BLOCKING);
-    if (isBlockingProperty != null && isBlockingProperty instanceof Boolean) {
+    if (isBlockingProperty instanceof Boolean) {
       return (Boolean) isBlockingProperty;
     }
     return false;
   }
 
+  @Override
   protected String getTypeName() {
     return "task";
   }

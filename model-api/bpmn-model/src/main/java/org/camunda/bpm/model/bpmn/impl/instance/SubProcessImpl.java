@@ -29,7 +29,6 @@ import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 import java.util.Collection;
 
 import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMN subProcess element
@@ -50,11 +49,7 @@ public class SubProcessImpl extends ActivityImpl implements SubProcess {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(SubProcess.class, BPMN_ELEMENT_SUB_PROCESS)
       .namespaceUri(BPMN20_NS)
       .extendsType(Activity.class)
-      .instanceProvider(new ModelTypeInstanceProvider<SubProcess>() {
-        public SubProcess newInstance(ModelTypeInstanceContext instanceContext) {
-          return new SubProcessImpl(instanceContext);
-        }
-      });
+      .instanceProvider(SubProcessImpl::new);
 
     triggeredByEventAttribute = typeBuilder.booleanAttribute(BPMN_ATTRIBUTE_TRIGGERED_BY_EVENT)
       .defaultValue(false)
@@ -85,26 +80,32 @@ public class SubProcessImpl extends ActivityImpl implements SubProcess {
     super(context);
   }
 
+  @Override
   public SubProcessBuilder builder() {
     return new SubProcessBuilder((BpmnModelInstance) modelInstance, this);
   }
 
+  @Override
   public boolean triggeredByEvent() {
     return triggeredByEventAttribute.getValue(this);
   }
 
+  @Override
   public void setTriggeredByEvent(boolean triggeredByEvent) {
     triggeredByEventAttribute.setValue(this, triggeredByEvent);
   }
 
+  @Override
   public Collection<LaneSet> getLaneSets() {
     return laneSetCollection.get(this);
   }
 
+  @Override
   public Collection<FlowElement> getFlowElements() {
     return flowElementCollection.get(this);
   }
 
+  @Override
   public Collection<Artifact> getArtifacts() {
     return artifactCollection.get(this);
   }
@@ -115,6 +116,7 @@ public class SubProcessImpl extends ActivityImpl implements SubProcess {
    * @deprecated use isCamundaAsyncBefore() instead.
    */
   @Deprecated
+  @Override
   public boolean isCamundaAsync() {
     return camundaAsyncAttribute.getValue(this);
   }
@@ -123,6 +125,7 @@ public class SubProcessImpl extends ActivityImpl implements SubProcess {
    * @deprecated use setCamundaAsyncBefore(isCamundaAsyncBefore) instead.
    */
   @Deprecated
+  @Override
   public void setCamundaAsync(boolean isCamundaAsync) {
     camundaAsyncAttribute.setValue(this, isCamundaAsync);
   }

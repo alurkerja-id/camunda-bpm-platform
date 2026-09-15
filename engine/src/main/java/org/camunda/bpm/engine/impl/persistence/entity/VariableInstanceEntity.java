@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Callable;
 
 import org.camunda.bpm.application.InvocationContext;
 import org.camunda.bpm.application.ProcessApplicationReference;
@@ -170,6 +169,7 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
     }
   }
 
+  @Override
   public Object getPersistentState() {
     Map<String, Object> persistentState = new HashMap<>();
     if (typedValueField.getSerializerName() != null) {
@@ -204,6 +204,7 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
     return persistentState;
   }
 
+  @Override
   public int getRevisionNext() {
     return revision+1;
   }
@@ -257,10 +258,12 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
     this.byteArrayField.setByteArrayId(byteArrayValueId);
   }
 
+  @Override
   public byte[] getByteArrayValue() {
     return byteArrayField.getByteArrayValue();
   }
 
+  @Override
   public void setByteArrayValue(byte[] bytes) {
     byteArrayField.setByteArrayValue(bytes, isTransient);
   }
@@ -271,18 +274,22 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
 
   // type /////////////////////////////////////////////////////////////////////
 
+  @Override
   public Object getValue() {
     return typedValueField.getValue();
   }
 
+  @Override
   public TypedValue getTypedValue() {
     return typedValueField.getTypedValue(isTransient);
   }
 
+  @Override
   public TypedValue getTypedValue(boolean deserializeValue) {
     return typedValueField.getTypedValue(deserializeValue, isTransient);
   }
 
+  @Override
   public void setValue(TypedValue value) {
     TypedValue newValue = value;
 
@@ -328,12 +335,14 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
     }
   }
 
+  @Override
   public String getTypeName() {
     return typedValueField.getTypeName();
   }
 
   // entity lifecycle /////////////////////////////////////////////////////////
 
+  @Override
   public void postLoad() {
     // make sure the serializer is initialized
     typedValueField.postLoad();
@@ -387,50 +396,62 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
 
   // getters and setters //////////////////////////////////////////////////////
 
+  @Override
   public String getId() {
     return id;
   }
 
+  @Override
   public void setId(String id) {
     this.id = id;
   }
 
+  @Override
   public String getTextValue() {
     return textValue;
   }
 
+  @Override
   public String getProcessInstanceId() {
     return processInstanceId;
   }
 
+  @Override
   public String getProcessDefinitionId() {
     return processDefinitionId;
   }
 
+  @Override
   public String getExecutionId() {
     return executionId;
   }
 
+  @Override
   public String getCaseInstanceId() {
     return caseInstanceId;
   }
 
+  @Override
   public String getCaseExecutionId() {
     return caseExecutionId;
   }
 
+  @Override
   public Long getLongValue() {
     return longValue;
   }
 
+  @Override
   public void setLongValue(Long longValue) {
     this.longValue = longValue;
   }
 
+  @Override
   public Double getDoubleValue() {
     return doubleValue;
   }
 
+  @Override
   public void setDoubleValue(Double doubleValue) {
     this.doubleValue = doubleValue;
   }
@@ -439,18 +460,22 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
     this.name = name;
   }
 
+  @Override
   public void setTextValue(String textValue) {
     this.textValue = textValue;
   }
 
+  @Override
   public String getName() {
     return name;
   }
 
+  @Override
   public int getRevision() {
     return revision;
   }
 
+  @Override
   public void setRevision(int revision) {
     this.revision = revision;
   }
@@ -467,14 +492,17 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
     return typedValueField.getSerializer();
   }
 
+  @Override
   public String getTextValue2() {
     return textValue2;
   }
 
+  @Override
   public void setTextValue2(String textValue2) {
     this.textValue2 = textValue2;
   }
 
+  @Override
   public String getTaskId() {
     return taskId;
   }
@@ -483,6 +511,7 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
     this.taskId = taskId;
   }
 
+  @Override
   public String getBatchId() {
     return batchId;
   }
@@ -513,6 +542,7 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
 
   }
 
+  @Override
   public String getActivityInstanceId() {
     return activityInstanceId;
   }
@@ -525,6 +555,7 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
     return typedValueField.getSerializerName();
   }
 
+  @Override
   public String getErrorMessage() {
     return typedValueField.getErrorMessage();
   }
@@ -605,14 +636,9 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
 
     ProcessApplicationReference targetProcessApplication = getContextProcessApplication();
     if (targetProcessApplication != null) {
-      Context.executeWithinProcessApplication(new Callable<Void>() {
-
-        @Override
-        public Void call() throws Exception {
-          getVariableScope().setVariableLocal(name, updatedValue);
-          return null;
-        }
-
+      Context.executeWithinProcessApplication(() -> {
+        getVariableScope().setVariableLocal(name, updatedValue);
+        return null;
       }, targetProcessApplication, new InvocationContext(getExecution()));
 
     }
@@ -704,6 +730,7 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
     return isTransient;
   }
 
+  @Override
   public String getTenantId() {
     return tenantId;
   }

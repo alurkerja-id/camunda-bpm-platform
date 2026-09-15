@@ -33,22 +33,26 @@ public class NullValueSerializer extends AbstractTypedValueSerializer<NullValueI
     super(ValueType.NULL);
   }
 
+  @Override
   public String getName() {
     return ValueType.NULL.getName().toLowerCase();
   }
 
+  @Override
   public NullValueImpl convertToTypedValue(UntypedValueImpl untypedValue) {
-    return !untypedValue.isTransient() ? NullValueImpl.INSTANCE : NullValueImpl.INSTANCE_TRANSIENT;
+    return untypedValue.isTransient() ? NullValueImpl.INSTANCE_TRANSIENT : NullValueImpl.INSTANCE;
   }
 
   public void writeValue(NullValueImpl value, ValueFields valueFields) {
     // nothing to do
   }
 
+  @Override
   public NullValueImpl readValue(ValueFields valueFields, boolean deserialize, boolean asTransientValue) {
     return NullValueImpl.INSTANCE;
   }
 
+  @Override
   protected boolean canWriteValue(TypedValue value) {
     return value.getValue() == null;
   }

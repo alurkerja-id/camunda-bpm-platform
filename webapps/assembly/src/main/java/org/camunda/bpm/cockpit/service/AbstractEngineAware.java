@@ -31,6 +31,8 @@ import org.camunda.bpm.engine.ProcessEngine;
  * the engine for which cockpit services should be provided.
  *
  * @author nico.rehwaldt
+ *
+ * @deprecated no longer used by cockpit; engine aware services take the engine name directly
  */
 @Deprecated
 public class AbstractEngineAware {

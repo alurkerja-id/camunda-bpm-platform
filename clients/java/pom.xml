@@ -20,6 +20,14 @@
     <version>${revision}</version>
   </parent>
 
+  <properties>
+    <!-- Alurkerja fork: the external task client is a library for applications outside Camunda -
+         it long-polls the REST API and runs their handlers. It is not part of the engine, and the
+         only tests that exercise it need a running engine (clients/java/qa), so it is out of the
+         SonarQube analysis. -->
+    <sonar.skip>true</sonar.skip>
+  </properties>
+
   <modules>
     <module>qa</module>
     <module>client</module>

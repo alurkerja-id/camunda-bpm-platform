@@ -24,7 +24,6 @@ import org.camunda.bpm.model.bpmn.instance.camunda.CamundaOutputParameter;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
 import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
 
@@ -44,11 +43,7 @@ public class CamundaInputOutputImpl extends BpmnModelElementInstanceImpl impleme
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaInputOutput.class, CAMUNDA_ELEMENT_INPUT_OUTPUT)
       .namespaceUri(CAMUNDA_NS)
-      .instanceProvider(new ModelTypeInstanceProvider<CamundaInputOutput>() {
-        public CamundaInputOutput newInstance(ModelTypeInstanceContext instanceContext) {
-          return new CamundaInputOutputImpl(instanceContext);
-        }
-      });
+      .instanceProvider(CamundaInputOutputImpl::new);
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 
@@ -65,10 +60,12 @@ public class CamundaInputOutputImpl extends BpmnModelElementInstanceImpl impleme
     super(instanceContext);
   }
 
+  @Override
   public Collection<CamundaInputParameter> getCamundaInputParameters() {
     return camundaInputParameterCollection.get(this);
   }
 
+  @Override
   public Collection<CamundaOutputParameter> getCamundaOutputParameters() {
     return camundaOutputParameterCollection.get(this);
   }

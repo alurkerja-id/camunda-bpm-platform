@@ -24,6 +24,7 @@ package org.camunda.bpm.cockpit.plugin.resource;
  *
  * @author nico.rehwaldt
  *
+ * @deprecated use {@link AbstractCockpitPluginRootResource}
  */
 @Deprecated
 public class AbstractPluginRootResource extends AbstractCockpitPluginRootResource {

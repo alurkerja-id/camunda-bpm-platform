@@ -25,7 +25,6 @@ import org.camunda.bpm.model.dmn.instance.NamedElement;
 import org.camunda.bpm.model.xml.ModelBuilder;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import org.camunda.bpm.model.xml.type.attribute.Attribute;
 
 public class InformationItemImpl extends NamedElementImpl implements InformationItem {
@@ -36,10 +35,12 @@ public class InformationItemImpl extends NamedElementImpl implements Information
     super(instanceContext);
   }
 
+  @Override
   public String getTypeRef() {
     return typeRefAttribute.getValue(this);
   }
 
+  @Override
   public void setTypeRef(String typeRef) {
     typeRefAttribute.setValue(this, typeRef);
   }
@@ -48,11 +49,7 @@ public class InformationItemImpl extends NamedElementImpl implements Information
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(InformationItem.class, DMN_ELEMENT_INFORMATION_ITEM)
       .namespaceUri(LATEST_DMN_NS)
       .extendsType(NamedElement.class)
-      .instanceProvider(new ModelTypeInstanceProvider<InformationItem>() {
-        public InformationItem newInstance(ModelTypeInstanceContext instanceContext) {
-          return new InformationItemImpl(instanceContext);
-        }
-      });
+      .instanceProvider(InformationItemImpl::new);
 
     typeRefAttribute = typeBuilder.stringAttribute(DMN_ATTRIBUTE_TYPE_REF)
       .build();
