@@ -145,10 +145,8 @@ public class TaskForm implements Serializable {
     }
 
     Map<String, String> requestParameterMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-    String processDefinitionId = requestParameterMap.get("processDefinitionId");
-    String callbackUrl = requestParameterMap.get("callbackUrl");
-    this.url = callbackUrl;
-    this.processDefinitionId = processDefinitionId;
+    this.url = requestParameterMap.get("callbackUrl");
+    this.processDefinitionId = requestParameterMap.get("processDefinitionId");
     beginConversation();
   }
 
@@ -179,10 +177,8 @@ public class TaskForm implements Serializable {
     }
 
     Map<String, String> requestParameterMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-    String processDefinitionKey = requestParameterMap.get("processDefinitionKey");
-    String callbackUrl = requestParameterMap.get("callbackUrl");
-    this.url = callbackUrl;
-    this.processDefinitionKey = processDefinitionKey;
+    this.url = requestParameterMap.get("callbackUrl");
+    this.processDefinitionKey = requestParameterMap.get("processDefinitionKey");
     beginConversation();
   }
 

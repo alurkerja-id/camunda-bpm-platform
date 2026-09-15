@@ -218,17 +218,17 @@ public class ProcessDefinitionEntity extends ProcessDefinitionImpl implements Pr
   public ProcessDefinitionEntity getPreviousDefinition() {
     ProcessDefinitionEntity previousProcessDefinition = null;
 
-    String previousProcessDefinitionId = getPreviousProcessDefinitionId();
-    if (previousProcessDefinitionId != null) {
+    String previousId = getPreviousProcessDefinitionId();
+    if (previousId != null) {
 
-      previousProcessDefinition = loadProcessDefinition(previousProcessDefinitionId);
+      previousProcessDefinition = loadProcessDefinition(previousId);
 
       if (previousProcessDefinition == null) {
         resetPreviousProcessDefinitionId();
-        previousProcessDefinitionId = getPreviousProcessDefinitionId();
+        previousId = getPreviousProcessDefinitionId();
 
-        if (previousProcessDefinitionId != null) {
-          previousProcessDefinition = loadProcessDefinition(previousProcessDefinitionId);
+        if (previousId != null) {
+          previousProcessDefinition = loadProcessDefinition(previousId);
         }
       }
     }

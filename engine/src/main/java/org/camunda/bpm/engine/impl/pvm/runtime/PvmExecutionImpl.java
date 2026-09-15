@@ -199,12 +199,12 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
   public PvmExecutionImpl createSubProcessInstance(PvmProcessDefinition processDefinition, String businessKey) {
     PvmExecutionImpl processInstance = getProcessInstance();
 
-    String caseInstanceId = null;
+    String inheritedCaseInstanceId = null;
     if (processInstance != null) {
-      caseInstanceId = processInstance.getCaseInstanceId();
+      inheritedCaseInstanceId = processInstance.getCaseInstanceId();
     }
 
-    return createSubProcessInstance(processDefinition, businessKey, caseInstanceId);
+    return createSubProcessInstance(processDefinition, businessKey, inheritedCaseInstanceId);
   }
 
   @Override
@@ -358,8 +358,8 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
     }
 
     // fire activity end on active activity
-    PvmActivity activity = getActivity();
-    if ((isActive || externallyTerminated) && activity != null) {
+    PvmActivity currentActivity = getActivity();
+    if ((isActive || externallyTerminated) && currentActivity != null) {
       // set activity instance state to cancel
       if (activityInstanceState != ENDING.getStateCode() || activityInstanceEndListenersFailed) {
         setCanceled(true);
@@ -863,13 +863,11 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
    */
   protected void setDelayedPayloadToNewScope(PvmActivity activity) {
     String activityType = (String) activity.getProperty(BpmnProperties.TYPE.getName());
-    if (ActivityTypes.START_EVENT_MESSAGE.equals(activityType) // Event subprocess message start event
-        || ActivityTypes.BOUNDARY_MESSAGE.equals(activityType)) {
-      if (getProcessInstance().getPayloadForTriggeredScope() != null) {
-        this.setVariablesLocal(getProcessInstance().getPayloadForTriggeredScope());
-        // clear the process instance
-        getProcessInstance().setPayloadForTriggeredScope(null);
-      }
+    if ((ActivityTypes.START_EVENT_MESSAGE.equals(activityType) // Event subprocess message start event
+        || ActivityTypes.BOUNDARY_MESSAGE.equals(activityType)) && getProcessInstance().getPayloadForTriggeredScope() != null) {
+      this.setVariablesLocal(getProcessInstance().getPayloadForTriggeredScope());
+      // clear the process instance
+      getProcessInstance().setPayloadForTriggeredScope(null);
     }
   }
 
@@ -1188,9 +1186,9 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
   }
 
   protected void collectActiveActivityIds(List<String> activeActivityIds) {
-    ActivityImpl activity = getActivity();
-    if (isActive && activity != null) {
-      activeActivityIds.add(activity.getId());
+    ActivityImpl currentActivity = getActivity();
+    if (isActive && currentActivity != null) {
+      activeActivityIds.add(currentActivity.getId());
     }
 
     for (PvmExecutionImpl execution : getExecutions()) {
@@ -1271,9 +1269,9 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
   }
 
   public String getActivityId() {
-    ActivityImpl activity = getActivity();
-    if (activity != null) {
-      return activity.getId();
+    ActivityImpl currentActivity = getActivity();
+    if (currentActivity != null) {
+      return currentActivity.getId();
     } else {
       return null;
     }
@@ -1281,9 +1279,9 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
 
   @Override
   public String getCurrentActivityName() {
-    ActivityImpl activity = getActivity();
-    if (activity != null) {
-      return activity.getName();
+    ActivityImpl currentActivity = getActivity();
+    if (currentActivity != null) {
+      return currentActivity.getName();
     } else {
       return null;
     }
@@ -1301,8 +1299,8 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
 
   @Override
   public void enterActivityInstance() {
-    ActivityImpl activity = getActivity();
-    activityInstanceId = generateActivityInstanceId(activity.getId());
+    ActivityImpl currentActivity = getActivity();
+    activityInstanceId = generateActivityInstanceId(currentActivity.getId());
 
     LOG.debugEnterActivityInstance(this, getParentActivityInstanceId());
 
@@ -1312,7 +1310,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
     // anyway because the multi-instance body already ensures variable isolation
     executeIoMapping();
 
-    if (activity.isScope()) {
+    if (currentActivity.isScope()) {
       initializeTimerDeclarations();
     }
 
@@ -1589,19 +1587,19 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
   }
 
   protected ScopeImpl getFlowScope() {
-    ActivityImpl activity = getActivity();
+    ActivityImpl currentActivity = getActivity();
 
-    if (!activity.isScope() || activityInstanceId == null
-      || (activity.isScope() && !isScope() && activity.getActivityBehavior() instanceof CompositeActivityBehavior)) {
+    if (!currentActivity.isScope() || activityInstanceId == null
+      || (currentActivity.isScope() && !isScope() && currentActivity.getActivityBehavior() instanceof CompositeActivityBehavior)) {
       // if
       // - this is a scope execution currently executing a non scope activity
       // - or it is not scope but the current activity is (e.g. can happen during activity end, when the actual
       //   scope execution has been removed and the concurrent parent has been set to the scope activity)
       // - or it is asyncBefore/asyncAfter
 
-      return activity.getFlowScope();
+      return currentActivity.getFlowScope();
     } else {
-      return activity;
+      return currentActivity;
     }
   }
 
@@ -1781,9 +1779,9 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
 
   @Override
   public String getCurrentTransitionId() {
-    TransitionImpl transition = getTransition();
-    if (transition != null) {
-      return transition.getId();
+    TransitionImpl currentTransition = getTransition();
+    if (currentTransition != null) {
+      return currentTransition.getId();
     } else {
       return null;
     }

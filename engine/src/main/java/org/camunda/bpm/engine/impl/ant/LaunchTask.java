@@ -80,11 +80,9 @@ public class LaunchTask extends Task {
         return base+".bat";
       }
     }
-      
-    if (os.indexOf("linux")!=-1 || os.indexOf("mac")!=-1) {
-      if (exists(base+".sh")) {
-        return base+".sh";
-      }
+
+    if ((os.indexOf("linux") != -1 || os.indexOf("mac") != -1) && exists(base + ".sh")) {
+      return base + ".sh";
     }
   
     throw new BuildException("couldn't find executable for script "+base);

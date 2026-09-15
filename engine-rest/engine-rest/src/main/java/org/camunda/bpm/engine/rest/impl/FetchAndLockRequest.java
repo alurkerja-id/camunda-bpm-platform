@@ -81,10 +81,7 @@ public class FetchAndLockRequest {
   }
 
   public long getTimeoutTimestamp() {
-    FetchExternalTasksExtendedDto dto = getDto();
-    long requestTime = getRequestTime().getTime();
-    long asyncResponseTimeout = dto.getAsyncResponseTimeout();
-    return requestTime + asyncResponseTimeout;
+    return getRequestTime().getTime() + getDto().getAsyncResponseTimeout();
   }
 
   @Override

@@ -165,10 +165,10 @@ public class ModelElementTypeImpl implements ModelElementType {
   }
 
   public Collection<ModelElementType> getAllExtendingTypes() {
-    HashSet<ModelElementType> extendingTypes = new HashSet<ModelElementType>();
-    extendingTypes.add(this);
-    resolveExtendingTypes(extendingTypes);
-    return extendingTypes;
+    HashSet<ModelElementType> allExtendingTypes = new HashSet<ModelElementType>();
+    allExtendingTypes.add(this);
+    resolveExtendingTypes(allExtendingTypes);
+    return allExtendingTypes;
   }
 
   /**
@@ -288,8 +288,7 @@ public class ModelElementTypeImpl implements ModelElementType {
   public Collection<Attribute<?>> getAllAttributes() {
     List<Attribute<?>> allAttributes = new ArrayList<Attribute<?>>();
     allAttributes.addAll(getAttributes());
-    Collection<ModelElementType> baseTypes = ModelUtil.calculateAllBaseTypes(this);
-    for (ModelElementType baseType : baseTypes) {
+    for (ModelElementType baseType : ModelUtil.calculateAllBaseTypes(this)) {
       allAttributes.addAll(baseType.getAttributes());
     }
     return allAttributes;

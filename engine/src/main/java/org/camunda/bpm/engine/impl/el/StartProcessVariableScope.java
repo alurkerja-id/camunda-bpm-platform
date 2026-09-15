@@ -126,7 +126,7 @@ public class StartProcessVariableScope implements VariableScope {
   @Override
   @SuppressWarnings("unchecked")
   public Set<String> getVariableNames() {
-    return Collections.EMPTY_SET;
+    return Collections.emptySet();
   }
 
   @Override

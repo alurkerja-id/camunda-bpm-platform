@@ -72,8 +72,6 @@ public class ProcessInstanceCommentResourceImpl implements ProcessInstanceCommen
     TaskService taskService = engine.getTaskService();
     try {
       taskService.deleteProcessInstanceComment(processInstanceId, commentId);
-    } catch (AuthorizationException e) {
-      throw e;
     } catch (NullValueException e) {
       throw new InvalidRequestException(Status.BAD_REQUEST, e.getMessage());
     }
@@ -90,8 +88,6 @@ public class ProcessInstanceCommentResourceImpl implements ProcessInstanceCommen
     TaskService taskService = engine.getTaskService();
     try {
       taskService.updateProcessInstanceComment(processInstanceId, comment.getId(), comment.getMessage());
-    } catch (AuthorizationException e) {
-      throw e;
     } catch (NullValueException e) {
       throw new InvalidRequestException(Status.BAD_REQUEST, e.getMessage());
     }
@@ -108,8 +104,6 @@ public class ProcessInstanceCommentResourceImpl implements ProcessInstanceCommen
 
     try {
       taskService.deleteProcessInstanceComments(processInstanceId);
-    } catch (AuthorizationException e) {
-      throw e;
     } catch (NullValueException e) {
       throw new InvalidRequestException(Status.BAD_REQUEST, e.getMessage());
     }

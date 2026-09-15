@@ -57,8 +57,8 @@ public class DeleteTaskCmd implements Command<Void>, Serializable {
     if (taskId != null) {
       deleteTask(taskId, commandContext);
     } else if (taskIds != null) {
-        for (String taskId : taskIds) {
-          deleteTask(taskId, commandContext);
+        for (String id : taskIds) {
+          deleteTask(id, commandContext);
         }
     } else {
       throw new ProcessEngineException("taskId and taskIds are null");

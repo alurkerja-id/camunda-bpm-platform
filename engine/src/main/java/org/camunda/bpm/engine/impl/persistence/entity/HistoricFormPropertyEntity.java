@@ -31,7 +31,7 @@ public class HistoricFormPropertyEntity extends HistoricFormPropertyEventEntity 
   @Override
   public String getPropertyValue() {
     if(propertyValue != null) {
-      return propertyValue.toString();
+      return propertyValue;
     } else {
       return null;
     }

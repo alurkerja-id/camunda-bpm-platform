@@ -117,7 +117,7 @@ public class MBeanServiceContainer implements PlatformServiceContainer {
   @Override
   public synchronized void stopService(String name) {
 
-    final MBeanServer mBeanServer = getmBeanServer();
+    final MBeanServer beanServer = getmBeanServer();
 
     ObjectName serviceName = getObjectName(name);
 
@@ -139,7 +139,7 @@ public class MBeanServiceContainer implements PlatformServiceContainer {
 
     // always unregister, even if the stop method threw an exception.
     try {
-      mBeanServer.unregisterMBean(serviceName);
+      beanServer.unregisterMBean(serviceName);
       servicesByName.remove(serviceName);
     }
     catch (Throwable t) {

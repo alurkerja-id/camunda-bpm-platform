@@ -58,7 +58,6 @@ public class HistoryEventProcessor {
     }
 
     public void postHandleSingleHistoryEventCreated(HistoryEvent event) {
-      return;
     }
   }
 

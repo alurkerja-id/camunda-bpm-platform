@@ -276,13 +276,13 @@ public abstract class ProcessEngines {
       Map<String, ProcessEngine> engines = new HashMap<String, ProcessEngine>(processEngines);
       processEngines = new HashMap<String, ProcessEngine>();
 
-      for (String processEngineName: engines.keySet()) {
-        ProcessEngine processEngine = engines.get(processEngineName);
+      for (Map.Entry<String, ProcessEngine> entry : engines.entrySet()) {
+        ProcessEngine processEngine = entry.getValue();
         try {
           processEngine.close();
         }
         catch (Exception e) {
-          LOG.exceptionWhileClosingProcessEngine(processEngineName==null ? "the default process engine" : "process engine "+processEngineName, e);
+          LOG.exceptionWhileClosingProcessEngine(entry.getKey()==null ? "the default process engine" : "process engine "+entry.getKey(), e);
         }
       }
 

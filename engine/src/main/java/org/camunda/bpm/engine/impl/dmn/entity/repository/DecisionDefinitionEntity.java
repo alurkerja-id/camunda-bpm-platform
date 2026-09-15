@@ -215,17 +215,17 @@ public class DecisionDefinitionEntity extends DmnDecisionImpl implements Decisio
   public DecisionDefinitionEntity getPreviousDefinition() {
     DecisionDefinitionEntity previousDecisionDefinition = null;
 
-    String previousDecisionDefinitionId = getPreviousDecisionDefinitionId();
-    if (previousDecisionDefinitionId != null) {
+    String previousId = getPreviousDecisionDefinitionId();
+    if (previousId != null) {
 
-      previousDecisionDefinition = loadDecisionDefinition(previousDecisionDefinitionId);
+      previousDecisionDefinition = loadDecisionDefinition(previousId);
 
       if (previousDecisionDefinition == null) {
         resetPreviousDecisionDefinitionId();
-        previousDecisionDefinitionId = getPreviousDecisionDefinitionId();
+        previousId = getPreviousDecisionDefinitionId();
 
-        if (previousDecisionDefinitionId != null) {
-          previousDecisionDefinition = loadDecisionDefinition(previousDecisionDefinitionId);
+        if (previousId != null) {
+          previousDecisionDefinition = loadDecisionDefinition(previousId);
         }
       }
     }

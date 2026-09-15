@@ -49,8 +49,8 @@ public class ActivityCancellationCmd extends AbstractProcessInstanceModification
 
   @Override
   public Void execute(final CommandContext commandContext) {
-    ActivityInstance activityInstanceTree = getActivityInstanceTree(commandContext);
-    List<AbstractInstanceCancellationCmd> commands = createActivityInstanceCancellations(activityInstanceTree, commandContext);
+    List<AbstractInstanceCancellationCmd> commands =
+        createActivityInstanceCancellations(getActivityInstanceTree(commandContext), commandContext);
 
     for (AbstractInstanceCancellationCmd cmd : commands) {
       cmd.setSkipCustomListeners(skipCustomListeners);

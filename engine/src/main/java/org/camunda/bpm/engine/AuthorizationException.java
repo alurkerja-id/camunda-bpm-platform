@@ -91,11 +91,11 @@ public class AuthorizationException extends ProcessEngineException {
    */
   @Deprecated
   public String getResourceType() {
-    String resourceType = null;
+    String type = null;
     if (missingAuthorizations.size() == 1) {
-      resourceType = missingAuthorizations.get(0).getResourceType();
+      type = missingAuthorizations.get(0).getResourceType();
     }
-    return resourceType;
+    return type;
   }
 
   /**

@@ -196,19 +196,19 @@ public class CaseExecutionQueryDto extends AbstractQueryDto<CaseExecutionQuery> 
       query.tenantIdIn(tenantIds.toArray(new String[tenantIds.size()]));
     }
 
-    if (required != null && required == true) {
+    if (required != null && required) {
       query.required();
     }
 
-    if (active != null && active == true) {
+    if (active != null && active) {
       query.active();
     }
 
-    if (enabled != null && enabled == true) {
+    if (enabled != null && enabled) {
       query.enabled();
     }
 
-    if (disabled != null && disabled == true) {
+    if (disabled != null && disabled) {
       query.disabled();
     }
 

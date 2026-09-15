@@ -177,13 +177,13 @@ public class CaseExecutionImpl extends CmmnExecution implements Serializable {
 
   @Override
   public PvmExecutionImpl createSubProcessInstance(PvmProcessDefinition processDefinition, String businessKey, String caseInstanceId) {
-    ExecutionImpl subProcessInstance = (ExecutionImpl) processDefinition.createProcessInstance(businessKey, caseInstanceId);
+    ExecutionImpl createdSubProcessInstance = (ExecutionImpl) processDefinition.createProcessInstance(businessKey, caseInstanceId);
 
     // manage bidirectional super-subprocess relation
-    subProcessInstance.setSuperCaseExecution(this);
-    setSubProcessInstance(subProcessInstance);
+    createdSubProcessInstance.setSuperCaseExecution(this);
+    setSubProcessInstance(createdSubProcessInstance);
 
-    return subProcessInstance;
+    return createdSubProcessInstance;
   }
 
   // sub-/super- case instance ////////////////////////////////////////////////////
@@ -205,13 +205,13 @@ public class CaseExecutionImpl extends CmmnExecution implements Serializable {
 
   @Override
   public CaseExecutionImpl createSubCaseInstance(CmmnCaseDefinition caseDefinition, String businessKey) {
-    CaseExecutionImpl caseInstance = (CaseExecutionImpl) caseDefinition.createCaseInstance(businessKey);
+    CaseExecutionImpl createdSubCaseInstance = (CaseExecutionImpl) caseDefinition.createCaseInstance(businessKey);
 
     // manage bidirectional super-sub-case-instances relation
-    subCaseInstance.setSuperCaseExecution(this);
-    setSubCaseInstance(subCaseInstance);
+    createdSubCaseInstance.setSuperCaseExecution(this);
+    setSubCaseInstance(createdSubCaseInstance);
 
-    return caseInstance;
+    return createdSubCaseInstance;
   }
 
   @Override
@@ -241,14 +241,7 @@ public class CaseExecutionImpl extends CmmnExecution implements Serializable {
     for (CaseSentryPartImpl sentryPart : getCaseSentryParts()) {
 
       String sentryId = sentryPart.getSentryId();
-      List<CmmnSentryPart> parts = sentries.get(sentryId);
-
-      if (parts == null) {
-        parts = new ArrayList<CmmnSentryPart>();
-        sentries.put(sentryId, parts);
-      }
-
-      parts.add(sentryPart);
+      sentries.computeIfAbsent(sentryId, k -> new ArrayList<CmmnSentryPart>()).add(sentryPart);
     }
 
     return sentries;

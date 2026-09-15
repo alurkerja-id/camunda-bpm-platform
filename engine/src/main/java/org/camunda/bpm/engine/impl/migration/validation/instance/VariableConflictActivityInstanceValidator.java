@@ -46,9 +46,9 @@ public class VariableConflictActivityInstanceValidator implements MigratingActiv
       boolean becomesNonScope = sourceScope.isScope() && !targetScope.isScope();
       if (becomesNonScope) {
         Map<String, List<MigratingVariableInstance>> dependentVariablesByName = getMigratingVariableInstancesByName(migratingInstance);
-        for (String variableName : dependentVariablesByName.keySet()) {
-          if (dependentVariablesByName.get(variableName).size() > 1) {
-            instanceReport.addFailure("The variable '" + variableName + "' exists in both, this scope and "
+        for (Map.Entry<String, List<MigratingVariableInstance>> entry : dependentVariablesByName.entrySet()) {
+          if (entry.getValue().size() > 1) {
+            instanceReport.addFailure("The variable '" + entry.getKey() + "' exists in both, this scope and "
                 + "concurrent local in the parent scope. "
                 + "Migrating to a non-scope activity would overwrite one of them.");
           }

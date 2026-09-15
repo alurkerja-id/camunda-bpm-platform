@@ -210,7 +210,7 @@ public class Context {
       } catch (Exception e) {
 
         // unwrap exception
-        if(e.getCause() != null && e.getCause() instanceof RuntimeException) {
+        if(e.getCause() instanceof RuntimeException) {
           throw (RuntimeException) e.getCause();
         }else {
           throw new ProcessEngineException("Unexpected exeption while executing within process application ", e);

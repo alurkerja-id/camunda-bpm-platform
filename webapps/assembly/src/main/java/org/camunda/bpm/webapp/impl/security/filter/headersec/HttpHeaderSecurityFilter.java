@@ -45,6 +45,7 @@ public class HttpHeaderSecurityFilter implements Filter {
       new ContentTypeOptionsProvider(),
       new StrictTransportSecurityProvider()));
 
+  @Override
   public void init(FilterConfig filterConfig) {
 
     for (HeaderSecurityProvider provider : headerSecurityProviders) {
@@ -65,6 +66,7 @@ public class HttpHeaderSecurityFilter implements Filter {
     }
   }
 
+  @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
     if (response instanceof HttpServletResponse) {
@@ -86,6 +88,7 @@ public class HttpHeaderSecurityFilter implements Filter {
     chain.doFilter(request, response);
   }
 
+  @Override
   public void destroy() {
   }
 

@@ -88,8 +88,6 @@ public class TaskCommentResourceImpl implements TaskCommentResource {
     TaskService taskService = engine.getTaskService();
     try {
       taskService.deleteTaskComment(taskId, commentId);
-    } catch (AuthorizationException e) {
-      throw e;
     } catch (NullValueException e) {
       throw new InvalidRequestException(Status.BAD_REQUEST, e.getMessage());
     }
@@ -102,8 +100,6 @@ public class TaskCommentResourceImpl implements TaskCommentResource {
 
     try {
       engine.getTaskService().updateTaskComment(taskId, comment.getId(), comment.getMessage());
-    } catch (AuthorizationException e) {
-      throw e;
     } catch (NullValueException e) {
       throw new InvalidRequestException(Status.BAD_REQUEST, e.getMessage());
     }
@@ -117,8 +113,6 @@ public class TaskCommentResourceImpl implements TaskCommentResource {
 
     try {
       taskService.deleteTaskComments(taskId);
-    } catch (AuthorizationException e) {
-      throw e;
     } catch (NullValueException e) {
       throw new InvalidRequestException(Status.BAD_REQUEST, e.getMessage());
     }

@@ -204,10 +204,10 @@ public class ExecutionQueryDto extends AbstractQueryDto<ExecutionQuery> {
     if (messageEventSubscriptionName != null) {
       query.messageEventSubscriptionName(messageEventSubscriptionName);
     }
-    if (active != null && active == true) {
+    if (active != null && active) {
       query.active();
     }
-    if (suspended != null && suspended == true) {
+    if (suspended != null && suspended) {
       query.suspended();
     }
     if (incidentId != null) {

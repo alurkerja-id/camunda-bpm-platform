@@ -134,13 +134,13 @@ public class ProcessDefinitionBuilder {
 
   public PvmProcessDefinition buildProcessDefinition() {
     for (Object[] unresolvedTransition: unresolvedTransitions) {
-      TransitionImpl transition = (TransitionImpl) unresolvedTransition[0];
+      TransitionImpl pendingTransition = (TransitionImpl) unresolvedTransition[0];
       String destinationActivityName = (String) unresolvedTransition[1];
       ActivityImpl destination = processDefinition.findActivity(destinationActivityName);
       if (destination == null) {
-        throw new RuntimeException("destination '"+destinationActivityName+"' not found.  (referenced from transition in '"+transition.getSource().getId()+"')");
+        throw new RuntimeException("destination '"+destinationActivityName+"' not found.  (referenced from transition in '"+pendingTransition.getSource().getId()+"')");
       }
-      transition.setDestination(destination);
+      pendingTransition.setDestination(destination);
     }
     return processDefinition;
   }

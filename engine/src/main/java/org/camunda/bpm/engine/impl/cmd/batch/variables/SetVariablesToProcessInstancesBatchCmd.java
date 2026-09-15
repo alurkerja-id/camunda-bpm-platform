@@ -123,20 +123,20 @@ public class SetVariablesToProcessInstancesBatchCmd implements Command<Batch> {
       elementConfiguration.addDeploymentMappings(mappings);
     }
 
-    ProcessInstanceQueryImpl processInstanceQuery =
+    ProcessInstanceQueryImpl instanceQuery =
         (ProcessInstanceQueryImpl) this.processInstanceQuery;
-    if (processInstanceQuery != null) {
+    if (instanceQuery != null) {
       List<ImmutablePair<String, String>> mappings =
-          processInstanceQuery.listDeploymentIdMappings();
+          instanceQuery.listDeploymentIdMappings();
       elementConfiguration.addDeploymentMappings(mappings);
     }
 
-    HistoricProcessInstanceQueryImpl historicProcessInstanceQuery =
+    HistoricProcessInstanceQueryImpl historicInstanceQuery =
         (HistoricProcessInstanceQueryImpl) this.historicProcessInstanceQuery;
-    if (historicProcessInstanceQuery != null) {
-      historicProcessInstanceQuery.unfinished();
+    if (historicInstanceQuery != null) {
+      historicInstanceQuery.unfinished();
       List<ImmutablePair<String, String>> mappings =
-          historicProcessInstanceQuery.listDeploymentIdMappings();
+          historicInstanceQuery.listDeploymentIdMappings();
       elementConfiguration.addDeploymentMappings(mappings);
     }
 

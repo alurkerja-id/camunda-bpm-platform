@@ -117,17 +117,15 @@ public class ProcessDefinitionImpl extends ScopeImpl implements PvmProcessDefini
   }
 
   public synchronized List<ActivityImpl> getInitialActivityStack(ActivityImpl startActivity) {
-    List<ActivityImpl> initialActivityStack = initialActivityStacks.get(startActivity);
-    if(initialActivityStack == null) {
-      initialActivityStack = new ArrayList<ActivityImpl>();
-      ActivityImpl activity = startActivity;
+    return initialActivityStacks.computeIfAbsent(startActivity, start -> {
+      List<ActivityImpl> stack = new ArrayList<ActivityImpl>();
+      ActivityImpl activity = start;
       while (activity!=null) {
-        initialActivityStack.add(0, activity);
+        stack.add(0, activity);
         activity = activity.getParentFlowScopeActivity();
       }
-      initialActivityStacks.put(startActivity, initialActivityStack);
-    }
-    return initialActivityStack;
+      return stack;
+    });
   }
 
   @Override
@@ -145,7 +143,7 @@ public class ProcessDefinitionImpl extends ScopeImpl implements PvmProcessDefini
   }
 
   public Lane getLaneForId(String id) {
-    if(laneSets != null && laneSets.size() > 0) {
+    if(laneSets != null && !laneSets.isEmpty()) {
       Lane lane;
       for(LaneSet set : laneSets) {
         lane = set.getLaneForId(id);

@@ -174,17 +174,17 @@ public class CaseDefinitionEntity extends CmmnCaseDefinition implements CaseDefi
   public CaseDefinitionEntity getPreviousDefinition() {
     CaseDefinitionEntity previousCaseDefinition = null;
 
-    String previousCaseDefinitionId = getPreviousCaseDefinitionId();
-    if (previousCaseDefinitionId != null) {
+    String previousId = getPreviousCaseDefinitionId();
+    if (previousId != null) {
 
-      previousCaseDefinition = loadCaseDefinition(previousCaseDefinitionId);
+      previousCaseDefinition = loadCaseDefinition(previousId);
 
       if (previousCaseDefinition == null) {
         resetPreviousCaseDefinitionId();
-        previousCaseDefinitionId = getPreviousCaseDefinitionId();
+        previousId = getPreviousCaseDefinitionId();
 
-        if (previousCaseDefinitionId != null) {
-          previousCaseDefinition = loadCaseDefinition(previousCaseDefinitionId);
+        if (previousId != null) {
+          previousCaseDefinition = loadCaseDefinition(previousId);
         }
       }
     }

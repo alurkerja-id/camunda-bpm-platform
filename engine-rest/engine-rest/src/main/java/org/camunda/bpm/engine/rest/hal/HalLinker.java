@@ -54,16 +54,12 @@ public class HalLinker {
    * */
   public void createLink(HalRelation rel, String... pathParams) {
     if(pathParams != null && pathParams.length > 0 && pathParams[0] != null) {
-      Set<String> linkedResourceIds = linkedResources.get(rel);
-      if(linkedResourceIds == null) {
-        linkedResourceIds = new HashSet<String>();
-        linkedResources.put(rel, linkedResourceIds);
-      }
-
       // Hmm... use the last id in the pathParams as linked resource id
-      linkedResourceIds.add(pathParams[pathParams.length - 1]);
+      linkedResources
+          .computeIfAbsent(rel, k -> new HashSet<String>())
+          .add(pathParams[pathParams.length - 1]);
 
-      resource.addLink(rel.relName, rel.uriTemplate.build((Object[])pathParams));
+      resource.addLink(rel.relName, rel.uriTemplate.build(pathParams));
     }
   }
 

@@ -240,10 +240,8 @@ public class TaskResourceImpl implements TaskResource {
     }
 
     FormDto dto = FormDto.fromFormData(formData);
-    if(dto.getKey() == null || dto.getKey().isEmpty()) {
-      if(formData != null && formData.getFormFields() != null && !formData.getFormFields().isEmpty()) {
-        dto.setKey("embedded:engine://engine/:engine/task/"+taskId+"/rendered-form");
-      }
+    if ((dto.getKey() == null || dto.getKey().isEmpty()) && formData != null && formData.getFormFields() != null && !formData.getFormFields().isEmpty()) {
+      dto.setKey("embedded:engine://engine/:engine/task/" + taskId + "/rendered-form");
     }
 
     // to get the application context path it is necessary to
@@ -484,8 +482,6 @@ public class TaskResourceImpl implements TaskResource {
     try {
       identityService.clearAuthentication();
       return action.get();
-    } catch (Exception e) {
-      throw e;
     } finally {
       identityService.setAuthentication(currentAuthentication);
     }

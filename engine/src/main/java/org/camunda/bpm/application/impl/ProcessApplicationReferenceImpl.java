@@ -71,7 +71,7 @@ public class ProcessApplicationReferenceImpl implements ProcessApplicationRefere
     }
   }
 
-  public void processEngineStopping(ProcessEngine processEngine) throws ProcessApplicationUnavailableException {
+  public void processEngineStopping(ProcessEngine processEngine) {
     // do nothing
   }
 

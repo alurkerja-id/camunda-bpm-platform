@@ -41,11 +41,9 @@ public class ReadOnlyMapELResolver extends ELResolver {
 
   @Override
   public Object getValue(ELContext context, Object base, Object property) {
-    if (base == null) {
-      if (wrappedMap.containsKey(property)) {
-        context.setPropertyResolved(true);
-        return wrappedMap.get(property);
-      }
+    if (base == null && wrappedMap.containsKey(property)) {
+      context.setPropertyResolved(true);
+      return wrappedMap.get(property);
     }
     return null;
   }
@@ -57,10 +55,8 @@ public class ReadOnlyMapELResolver extends ELResolver {
 
   @Override
   public void setValue(ELContext context, Object base, Object property, Object value) {
-    if(base == null) {
-      if (wrappedMap.containsKey(property)) {
-        throw new ProcessEngineException("Cannot set value of '" + property + "', it's readonly!");
-      }
+    if (base == null && wrappedMap.containsKey(property)) {
+      throw new ProcessEngineException("Cannot set value of '" + property + "', it's readonly!");
     }
   }
 

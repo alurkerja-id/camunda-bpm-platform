@@ -58,9 +58,9 @@ public abstract class AbstractVariableScope implements Serializable, VariableSco
   public abstract AbstractVariableScope getParentVariableScope();
 
   public void initializeVariableStore(Map<String, Object> variables) {
-    for (String variableName : variables.keySet()) {
-      TypedValue value = Variables.untypedValue(variables.get(variableName));
-      CoreVariableInstance variableValue = getVariableInstanceFactory().build(variableName, value, false);
+    for (Map.Entry<String, Object> entry : variables.entrySet()) {
+      TypedValue value = Variables.untypedValue(entry.getValue());
+      CoreVariableInstance variableValue = getVariableInstanceFactory().build(entry.getKey(), value, false);
       getVariableStore().addVariable(variableValue);
     }
   }

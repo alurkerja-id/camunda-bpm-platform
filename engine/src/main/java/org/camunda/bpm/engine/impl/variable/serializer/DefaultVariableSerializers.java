@@ -64,22 +64,18 @@ public class DefaultVariableSerializers implements Serializable, VariableSeriali
     }
 
     for (TypedValueSerializer<?> serializer : serializerList) {
-      if(type == null || serializer.getType().equals(type)) {
-
-        // if type is null => ask handler whether it can handle the value
-        // OR if types match, this handler can handle values of this type
-        //    => BUT we still need to ask as the handler may not be able to handle ALL values of this type.
-
-        if(serializer.canHandle(value)) {
-          matchedSerializers.add(serializer);
-          if(serializer.getType().isPrimitiveValueType()) {
-            break;
-          }
+      // if type is null => ask handler whether it can handle the value
+      // OR if types match, this handler can handle values of this type
+      //    => BUT we still need to ask as the handler may not be able to handle ALL values of this type.
+      if ((type == null || serializer.getType().equals(type)) && serializer.canHandle(value)) {
+        matchedSerializers.add(serializer);
+        if (serializer.getType().isPrimitiveValueType()) {
+          break;
         }
       }
     }
 
-    if(matchedSerializers.size() == 0) {
+    if(matchedSerializers.isEmpty()) {
       if (fallBackSerializerFactory != null) {
         TypedValueSerializer<?> serializer = fallBackSerializerFactory.getSerializer(value);
         if (serializer != null) {

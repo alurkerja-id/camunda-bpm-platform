@@ -172,17 +172,17 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
 
   @Override
   public TaskEntity createTask(TaskDecorator taskDecorator) {
-    TaskEntity task = new TaskEntity((CaseExecutionEntity) this);
-    task.insert();
+    TaskEntity newTask = new TaskEntity((CaseExecutionEntity) this);
+    newTask.insert();
 
-    setTask(task);
-    taskDecorator.decorate(task, this);
+    setTask(newTask);
+    taskDecorator.decorate(newTask, this);
 
     // task decoration is part of the initialization of the task,
     // so we transition to CREATED only afterwards
-    task.transitionTo(TaskState.STATE_CREATED);
+    newTask.transitionTo(TaskState.STATE_CREATED);
 
-    return task;
+    return newTask;
   }
 
   // super execution  ////////////////////////////////////////////////////////
@@ -232,10 +232,10 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
 
   @Override
   public void createSentryParts() {
-    CmmnActivity activity = getActivity();
-    ensureNotNull("Case execution '"+id+"': has no current activity", "activity", activity);
+    CmmnActivity currentActivity = getActivity();
+    ensureNotNull("Case execution '"+id+"': has no current activity", "activity", currentActivity);
 
-    List<CmmnSentryDeclaration> sentries = activity.getSentries();
+    List<CmmnSentryDeclaration> sentries = currentActivity.getSentries();
 
     if (sentries != null && !sentries.isEmpty()) {
 
@@ -480,8 +480,8 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
 
   protected List<CmmnSentryPart> collectSentryParts(Map<String,List<CmmnSentryPart>> sentries) {
     List<CmmnSentryPart> sentryParts = new ArrayList<CmmnSentryPart>();
-    for(String sentryId: sentries.keySet()) {
-      sentryParts.addAll(sentries.get(sentryId));
+    for (Map.Entry<String, List<CmmnSentryPart>> entry : sentries.entrySet()) {
+      sentryParts.addAll(entry.getValue());
     }
     return sentryParts;
   }
@@ -606,11 +606,11 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
 
   protected void checkAndFireExitCriteria(List<String> satisfiedSentries) {
     if (isActive()) {
-      CmmnActivity activity = getActivity();
-      ensureNotNull(PvmException.class, "Case execution '"+getId()+"': has no current activity.", "activity", activity);
+      CmmnActivity currentActivity = getActivity();
+      ensureNotNull(PvmException.class, "Case execution '"+getId()+"': has no current activity.", "activity", currentActivity);
 
       // trigger first exitCriteria
-      List<CmmnSentryDeclaration> exitCriteria = activity.getExitCriteria();
+      List<CmmnSentryDeclaration> exitCriteria = currentActivity.getExitCriteria();
       for (CmmnSentryDeclaration sentryDeclaration : exitCriteria) {
 
         if (sentryDeclaration != null && satisfiedSentries.contains(sentryDeclaration.getId())) {
@@ -626,10 +626,10 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
       // do that only, when this child case execution
       // is available
 
-      CmmnActivity activity = getActivity();
-      ensureNotNull(PvmException.class, "Case execution '"+getId()+"': has no current activity.", "activity", activity);
+      CmmnActivity currentActivity = getActivity();
+      ensureNotNull(PvmException.class, "Case execution '"+getId()+"': has no current activity.", "activity", currentActivity);
 
-      List<CmmnSentryDeclaration> criteria = activity.getEntryCriteria();
+      List<CmmnSentryDeclaration> criteria = currentActivity.getEntryCriteria();
       for (CmmnSentryDeclaration sentryDeclaration : criteria) {
         if (sentryDeclaration != null && satisfiedSentries.contains(sentryDeclaration.getId())) {
           if (isAvailable()) {
@@ -703,10 +703,10 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
       CmmnExecution execution = ifPart.getCaseExecution();
       ensureNotNull("Case execution of sentry '"+ifPart.getSentryId() +"': is null", execution);
 
-      CmmnActivity activity = ifPart.getCaseExecution().getActivity();
-      ensureNotNull("Case execution '"+id+"': has no current activity", "activity", activity);
+      CmmnActivity ifPartActivity = ifPart.getCaseExecution().getActivity();
+      ensureNotNull("Case execution '"+id+"': has no current activity", "activity", ifPartActivity);
 
-      CmmnSentryDeclaration sentryDeclaration = activity.getSentry(sentryId);
+      CmmnSentryDeclaration sentryDeclaration = ifPartActivity.getSentry(sentryId);
       ensureNotNull("Case execution '"+id+"': has no declaration for sentry '"+sentryId+"'", "sentryDeclaration", sentryDeclaration);
 
       CmmnIfPartDeclaration ifPartDeclaration = sentryDeclaration.getIfPart();
@@ -1142,22 +1142,22 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
 
   protected void queueVariableEvent(VariableEvent variableEvent, boolean includeCustomerListeners) {
 
-    Queue<VariableEvent> variableEventsQueue = getVariableEventQueue();
+    Queue<VariableEvent> eventQueue = getVariableEventQueue();
 
-    variableEventsQueue.add(variableEvent);
+    eventQueue.add(variableEvent);
 
     // if this is the first event added, trigger listener invocation
-    if (variableEventsQueue.size() == 1) {
+    if (eventQueue.size() == 1) {
       invokeVariableListeners(includeCustomerListeners);
     }
   }
 
   protected void invokeVariableListeners(boolean includeCustomerListeners) {
-    Queue<VariableEvent> variableEventsQueue = getVariableEventQueue();
+    Queue<VariableEvent> eventQueue = getVariableEventQueue();
 
-    while (!variableEventsQueue.isEmpty()) {
+    while (!eventQueue.isEmpty()) {
       // do not remove the event yet, as otherwise new events will immediately be dispatched
-      VariableEvent nextEvent = variableEventsQueue.peek();
+      VariableEvent nextEvent = eventQueue.peek();
 
       CmmnExecution sourceExecution = (CmmnExecution) nextEvent.getSourceScope();
 
@@ -1196,7 +1196,7 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
       }
 
       // finally remove the event from the queue
-      variableEventsQueue.remove();
+      eventQueue.remove();
     }
   }
 

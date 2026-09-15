@@ -72,21 +72,21 @@ public abstract class AbstractSetJobStateCmd extends AbstractSetStateCmd {
 
         if (job != null) {
 
-          String processInstanceId = job.getProcessInstanceId();
-          if (processInstanceId != null) {
-            checker.checkUpdateProcessInstanceById(processInstanceId);
+          String jobProcessInstanceId = job.getProcessInstanceId();
+          if (jobProcessInstanceId != null) {
+            checker.checkUpdateProcessInstanceById(jobProcessInstanceId);
           }
           else {
             // start timer job is not assigned to a specific process
             // instance, that's why we have to check whether there
             // exists a UPDATE_INSTANCES permission on process definition or
             // a UPDATE permission on any process instance
-            String processDefinitionKey = job.getProcessDefinitionKey();
-            if (processDefinitionKey != null) {
-              checker.checkUpdateProcessInstanceByProcessDefinitionKey(processDefinitionKey);
+            String jobProcessDefinitionKey = job.getProcessDefinitionKey();
+            if (jobProcessDefinitionKey != null) {
+              checker.checkUpdateProcessInstanceByProcessDefinitionKey(jobProcessDefinitionKey);
             }
           }
-          // if (processInstanceId == null && processDefinitionKey == null):
+          // if the job has neither a process instance id nor a process definition key:
           // job is not assigned to any process instance nor process definition
           // then it is always possible to activate/suspend the corresponding job
           // -> no authorization check necessary
@@ -99,8 +99,7 @@ public abstract class AbstractSetJobStateCmd extends AbstractSetStateCmd {
         JobDefinitionEntity jobDefinition = jobDefinitionManager.findById(jobDefinitionId);
 
         if (jobDefinition != null) {
-          String processDefinitionKey = jobDefinition.getProcessDefinitionKey();
-          checker.checkUpdateProcessInstanceByProcessDefinitionKey(processDefinitionKey);
+          checker.checkUpdateProcessInstanceByProcessDefinitionKey(jobDefinition.getProcessDefinitionKey());
         }
 
       } else

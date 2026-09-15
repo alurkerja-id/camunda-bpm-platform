@@ -177,24 +177,24 @@ public class VariableInstanceQueryDto extends AbstractQueryDto<VariableInstanceQ
 
     if (variableValues != null) {
       for (VariableQueryParameterDto variableQueryParam : variableValues) {
-        String variableName = variableQueryParam.getName();
+        String paramName = variableQueryParam.getName();
         String op = variableQueryParam.getOperator();
         Object variableValue = variableQueryParam.resolveValue(objectMapper);
 
         if (op.equals(ConditionQueryParameterDto.EQUALS_OPERATOR_NAME)) {
-          query.variableValueEquals(variableName, variableValue);
+          query.variableValueEquals(paramName, variableValue);
         } else if (op.equals(ConditionQueryParameterDto.GREATER_THAN_OPERATOR_NAME)) {
-          query.variableValueGreaterThan(variableName, variableValue);
+          query.variableValueGreaterThan(paramName, variableValue);
         } else if (op.equals(ConditionQueryParameterDto.GREATER_THAN_OR_EQUALS_OPERATOR_NAME)) {
-          query.variableValueGreaterThanOrEqual(variableName, variableValue);
+          query.variableValueGreaterThanOrEqual(paramName, variableValue);
         } else if (op.equals(ConditionQueryParameterDto.LESS_THAN_OPERATOR_NAME)) {
-          query.variableValueLessThan(variableName, variableValue);
+          query.variableValueLessThan(paramName, variableValue);
         } else if (op.equals(ConditionQueryParameterDto.LESS_THAN_OR_EQUALS_OPERATOR_NAME)) {
-          query.variableValueLessThanOrEqual(variableName, variableValue);
+          query.variableValueLessThanOrEqual(paramName, variableValue);
         } else if (op.equals(ConditionQueryParameterDto.NOT_EQUALS_OPERATOR_NAME)) {
-          query.variableValueNotEquals(variableName, variableValue);
+          query.variableValueNotEquals(paramName, variableValue);
         } else if (op.equals(ConditionQueryParameterDto.LIKE_OPERATOR_NAME)) {
-          query.variableValueLike(variableName, String.valueOf(variableValue));
+          query.variableValueLike(paramName, String.valueOf(variableValue));
         } else {
           throw new InvalidRequestException(Status.BAD_REQUEST, "Invalid variable comparator specified: " + op);
         }

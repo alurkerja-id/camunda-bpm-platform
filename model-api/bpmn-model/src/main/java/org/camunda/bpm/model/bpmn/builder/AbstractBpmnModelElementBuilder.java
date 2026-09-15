@@ -58,7 +58,7 @@ public abstract class AbstractBpmnModelElementBuilder<B extends AbstractBpmnMode
    */
   public SubProcessBuilder subProcessDone() {
     BpmnModelElementInstance lastSubProcess = element.getScope();
-    if (lastSubProcess != null && lastSubProcess instanceof SubProcess) {
+    if (lastSubProcess instanceof SubProcess) {
       return ((SubProcess) lastSubProcess).builder();
     }
     else {
@@ -68,7 +68,7 @@ public abstract class AbstractBpmnModelElementBuilder<B extends AbstractBpmnMode
 
   public TransactionBuilder transactionDone() {
     BpmnModelElementInstance lastTransaction = element.getScope();
-    if (lastTransaction != null && lastTransaction instanceof Transaction) {
+    if (lastTransaction instanceof Transaction) {
       return new TransactionBuilder(modelInstance, (Transaction) lastTransaction);
     }
     else {
@@ -78,9 +78,9 @@ public abstract class AbstractBpmnModelElementBuilder<B extends AbstractBpmnMode
 
   public AbstractThrowEventBuilder throwEventDefinitionDone() {
     ModelElementInstance lastEvent = element.getDomElement().getParentElement().getModelElementInstance();
-    if (lastEvent != null && lastEvent instanceof IntermediateThrowEvent) {
+    if (lastEvent instanceof IntermediateThrowEvent) {
       return new IntermediateThrowEventBuilder(modelInstance, (IntermediateThrowEvent) lastEvent);
-    } else if (lastEvent != null && lastEvent instanceof EndEvent) {
+    } else if (lastEvent instanceof EndEvent) {
       return new EndEventBuilder(modelInstance, (EndEvent) lastEvent);
     }
     else {

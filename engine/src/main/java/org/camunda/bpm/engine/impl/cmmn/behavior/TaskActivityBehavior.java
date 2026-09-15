@@ -47,7 +47,7 @@ public class TaskActivityBehavior extends StageOrTaskActivityBehavior {
   protected boolean isBlocking(CmmnActivityExecution execution) {
     CmmnActivity activity = execution.getActivity();
     Object isBlockingProperty = activity.getProperty(PROPERTY_IS_BLOCKING);
-    if (isBlockingProperty != null && isBlockingProperty instanceof Boolean) {
+    if (isBlockingProperty instanceof Boolean) {
       return (Boolean) isBlockingProperty;
     }
     return false;

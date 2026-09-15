@@ -125,6 +125,9 @@ public class AstBinary extends AstRightValue {
 	}
 
 	public AstNode getChild(int i) {
-		return i == 0 ? left : i == 1 ? right : null;
+		if (i == 0) {
+			return left;
+		}
+		return i == 1 ? right : null;
 	}
 }

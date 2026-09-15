@@ -16,8 +16,6 @@
  */
 package org.camunda.bpm.engine.impl.core.model;
 
-import java.util.Map;
-
 import org.camunda.bpm.engine.delegate.VariableScope;
 import org.camunda.bpm.engine.impl.core.variable.mapping.value.ConstantValueProvider;
 import org.camunda.bpm.engine.impl.core.variable.mapping.value.ParameterValueProvider;
@@ -56,8 +54,7 @@ public class CallableElementParameter {
     }
 
     if (allVariables) {
-      Map<String, Object> allVariables = variableScope.getVariables();
-      variables.putAll(allVariables);
+      variables.putAll(variableScope.getVariables());
 
     } else {
       Object value = getSource(variableScope);

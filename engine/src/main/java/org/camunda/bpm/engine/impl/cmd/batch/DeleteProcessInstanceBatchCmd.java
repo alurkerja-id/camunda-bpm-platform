@@ -86,22 +86,22 @@ public class DeleteProcessInstanceBatchCmd implements Command<Batch> {
   protected BatchElementConfiguration collectProcessInstanceIds(CommandContext commandContext) {
     BatchElementConfiguration elementConfiguration = new BatchElementConfiguration();
 
-    List<String> processInstanceIds = this.getProcessInstanceIds();
-    if (!CollectionUtil.isEmpty(processInstanceIds)) {
+    List<String> instanceIds = this.getProcessInstanceIds();
+    if (!CollectionUtil.isEmpty(instanceIds)) {
       ProcessInstanceQueryImpl query = new ProcessInstanceQueryImpl();
-      query.processInstanceIds(new HashSet<>(processInstanceIds));
+      query.processInstanceIds(new HashSet<>(instanceIds));
       elementConfiguration.addDeploymentMappings(
-          commandContext.runWithoutAuthorization(query::listDeploymentIdMappings), processInstanceIds);
+          commandContext.runWithoutAuthorization(query::listDeploymentIdMappings), instanceIds);
     }
 
-    ProcessInstanceQueryImpl processInstanceQuery = (ProcessInstanceQueryImpl) this.processInstanceQuery;
-    if (processInstanceQuery != null) {
-      elementConfiguration.addDeploymentMappings(processInstanceQuery.listDeploymentIdMappings());
+    ProcessInstanceQueryImpl instanceQuery = (ProcessInstanceQueryImpl) this.processInstanceQuery;
+    if (instanceQuery != null) {
+      elementConfiguration.addDeploymentMappings(instanceQuery.listDeploymentIdMappings());
     }
 
-    HistoricProcessInstanceQueryImpl historicProcessInstanceQuery = (HistoricProcessInstanceQueryImpl) this.historicProcessInstanceQuery;
-    if (historicProcessInstanceQuery != null) {
-      elementConfiguration.addDeploymentMappings(historicProcessInstanceQuery.listDeploymentIdMappings());
+    HistoricProcessInstanceQueryImpl historicInstanceQuery = (HistoricProcessInstanceQueryImpl) this.historicProcessInstanceQuery;
+    if (historicInstanceQuery != null) {
+      elementConfiguration.addDeploymentMappings(historicInstanceQuery.listDeploymentIdMappings());
     }
 
     return elementConfiguration;

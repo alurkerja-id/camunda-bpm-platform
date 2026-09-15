@@ -77,7 +77,7 @@ public class CamundaListImpl extends BpmnModelElementInstanceImpl implements Cam
 
       @Override
       public Iterator<T> iterator() {
-        return (Iterator<T>) getElements().iterator();
+        return getElements().iterator();
       }
 
       @Override

@@ -35,10 +35,8 @@ public class DefaultEngineMetricCollector implements DmnEngineMetricCollector, D
 
   @Override
   public void notify(DmnDecisionEvaluationEvent evaluationEvent) {
-    long executedDecisionInstances = evaluationEvent.getExecutedDecisionInstances();
-    long executedDecisionElements = evaluationEvent.getExecutedDecisionElements();
-    this.executedDecisionInstances.getAndAdd(executedDecisionInstances);
-    this.executedDecisionElements.getAndAdd(executedDecisionElements);
+    this.executedDecisionInstances.getAndAdd(evaluationEvent.getExecutedDecisionInstances());
+    this.executedDecisionElements.getAndAdd(evaluationEvent.getExecutedDecisionElements());
   }
 
   @Override

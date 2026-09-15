@@ -49,6 +49,7 @@ public class ContainerBasedAuthenticationFilter implements Filter {
 
   protected AuthenticationProvider authenticationProvider;
 
+  @Override
   public void init(FilterConfig filterConfig) throws ServletException {
 
     String authenticationProviderClassName = filterConfig.getInitParameter(AUTHENTICATION_PROVIDER_PARAM);
@@ -72,9 +73,11 @@ public class ContainerBasedAuthenticationFilter implements Filter {
     }
   }
 
+  @Override
   public void destroy() {
   }
 
+  @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
     final HttpServletRequest req = (HttpServletRequest) request;
     final HttpServletResponse resp = (HttpServletResponse) response;

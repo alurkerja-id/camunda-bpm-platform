@@ -50,6 +50,7 @@ public class ServiceTaskConnectorActivityBehavior extends TaskActivityBehavior {
     this.ioMapping = ioMapping;
   }
 
+  @Override
   public void execute(final ActivityExecution execution) throws Exception {
     ensureConnectorInitialized();
 

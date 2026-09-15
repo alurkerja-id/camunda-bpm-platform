@@ -105,7 +105,10 @@ public class AstMethod extends AstNode {
 	}
 
 	public Node getChild(int i) {
-		return i == 0 ? property : i == 1 ? params : null;
+		if (i == 0) {
+			return property;
+		}
+		return i == 1 ? params : null;
 	}
 
 	@Override

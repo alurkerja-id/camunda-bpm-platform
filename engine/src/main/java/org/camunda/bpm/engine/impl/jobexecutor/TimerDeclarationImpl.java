@@ -97,13 +97,10 @@ public class TimerDeclarationImpl extends JobDeclaration<ExecutionEntity, TimerE
   protected void initializeConfiguration(ExecutionEntity context, TimerEntity job) {
     String dueDateString = resolveAndSetDuedate(context, job, false);
 
-    if (type == TimerDeclarationType.CYCLE && !TimerCatchIntermediateEventJobHandler.TYPE.equals(jobHandlerType)) {
-
-      // See ACT-1427: A boundary timer with a cancelActivity='true', doesn't need to repeat itself
-      if (!isInterruptingTimer) {
-        String prepared = prepareRepeat(dueDateString);
-        job.setRepeat(prepared);
-      }
+    // See ACT-1427: A boundary timer with a cancelActivity='true', doesn't need to repeat itself
+    if (type == TimerDeclarationType.CYCLE && !TimerCatchIntermediateEventJobHandler.TYPE.equals(jobHandlerType) && !isInterruptingTimer) {
+      String prepared = prepareRepeat(dueDateString);
+      job.setRepeat(prepared);
     }
   }
 
@@ -179,7 +176,7 @@ public class TimerDeclarationImpl extends JobDeclaration<ExecutionEntity, TimerE
   }
 
   public TimerEntity createTimer(String deploymentId) {
-    TimerEntity timer = super.createJobInstance((ExecutionEntity) null);
+    TimerEntity timer = super.createJobInstance(null);
     timer.setDeploymentId(deploymentId);
     scheduleTimer(timer);
     return timer;

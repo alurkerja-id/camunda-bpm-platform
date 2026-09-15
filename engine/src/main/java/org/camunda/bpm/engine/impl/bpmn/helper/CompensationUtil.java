@@ -103,7 +103,7 @@ public class CompensationUtil {
 
     List<EventSubscriptionEntity> eventSubscriptions = execution.getCompensateEventSubscriptions();
 
-    if (eventSubscriptions.size() > 0 || hasCompensationEventSubprocess(activity)) {
+    if (!eventSubscriptions.isEmpty() || hasCompensationEventSubprocess(activity)) {
 
       ExecutionEntity eventScopeExecution = scopeExecution.createExecution();
       eventScopeExecution.setActivity(execution.getActivity());

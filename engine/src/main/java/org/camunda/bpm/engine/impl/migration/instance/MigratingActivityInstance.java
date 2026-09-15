@@ -188,9 +188,9 @@ public class MigratingActivityInstance extends MigratingScopeInstance implements
       migratingInstance.migrateDependentEntities();
     }
 
-    ExecutionEntity representativeExecution = resolveRepresentativeExecution();
+    ExecutionEntity resolvedExecution = resolveRepresentativeExecution();
     for (EmergingInstance emergingInstance : emergingDependentInstances) {
-      emergingInstance.create(representativeExecution);
+      emergingInstance.create(resolvedExecution);
     }
   }
 
@@ -528,9 +528,9 @@ public class MigratingActivityInstance extends MigratingScopeInstance implements
 
     @Override
     public boolean isDetached() {
-      ExecutionEntity representativeExecution = resolveRepresentativeExecution();
-      return representativeExecution != representativeExecution.getProcessInstance()
-        && representativeExecution.getParent() == null;
+      ExecutionEntity resolvedExecution = resolveRepresentativeExecution();
+      return resolvedExecution != resolvedExecution.getProcessInstance()
+        && resolvedExecution.getParent() == null;
     }
 
     @Override

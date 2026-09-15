@@ -79,8 +79,8 @@ public abstract class JobDeclaration<S, T extends JobEntity> implements Serializ
     T job = newJobInstance(context);
 
     // set job definition id
-    String jobDefinitionId = resolveJobDefinitionId(context);
-    job.setJobDefinitionId(jobDefinitionId);
+    String resolvedJobDefinitionId = resolveJobDefinitionId(context);
+    job.setJobDefinitionId(resolvedJobDefinitionId);
 
     //set batch id for monitor and seed jobs (BatchEntity) and batch execution jobs (BatchJobContext)
     if (context instanceof BatchEntity) {
@@ -91,11 +91,11 @@ public abstract class JobDeclaration<S, T extends JobEntity> implements Serializ
       job.setBatchId(batchJobContext.getBatch().getId());
     }
 
-    if(jobDefinitionId != null) {
+    if(resolvedJobDefinitionId != null) {
 
       JobDefinitionEntity jobDefinition = Context.getCommandContext()
         .getJobDefinitionManager()
-        .findById(jobDefinitionId);
+        .findById(resolvedJobDefinitionId);
 
       if(jobDefinition != null) {
         // if job definition is suspended while creating a job instance,

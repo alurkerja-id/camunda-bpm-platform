@@ -335,7 +335,7 @@ public abstract class AbstractBaseElementBuilder<B extends AbstractBaseElementBu
         FlowNode flowNode = (FlowNode) element;
         Collection<SequenceFlow> outgoing = flowNode.getOutgoing();
 
-        if (outgoing.size() == 0) {
+        if (outgoing.isEmpty()) {
           double sourceY = sourceBounds.getY();
           double sourceHeight = sourceBounds.getHeight();
           double targetHeight = shapeBounds.getHeight();

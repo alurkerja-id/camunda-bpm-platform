@@ -171,19 +171,19 @@ public class CaseInstanceResourceImpl implements CaseInstanceResource {
   }
 
   protected void initializeCommandWithVariables(CaseExecutionCommandBuilder commandBuilder, Map<String, TriggerVariableValueDto> variables, String transition) {
-    for(String variableName : variables.keySet()) {
+    for (Map.Entry<String, TriggerVariableValueDto> entry : variables.entrySet()) {
       try {
-        TriggerVariableValueDto variableValue = variables.get(variableName);
+        TriggerVariableValueDto variableValue = entry.getValue();
 
         if (variableValue.isLocal()) {
-          commandBuilder.setVariableLocal(variableName, variableValue.toTypedValue(engine, objectMapper));
+          commandBuilder.setVariableLocal(entry.getKey(), variableValue.toTypedValue(engine, objectMapper));
 
         } else {
-          commandBuilder.setVariable(variableName, variableValue.toTypedValue(engine, objectMapper));
+          commandBuilder.setVariable(entry.getKey(), variableValue.toTypedValue(engine, objectMapper));
         }
 
       } catch (RestException e) {
-        String errorMessage = String.format("Cannot %s case instance %s due to invalid variable %s: %s", transition, caseInstanceId, variableName, e.getMessage());
+        String errorMessage = String.format("Cannot %s case instance %s due to invalid variable %s: %s", transition, caseInstanceId, entry.getKey(), e.getMessage());
         throw new RestException(e.getStatus(), e, errorMessage);
 
       }

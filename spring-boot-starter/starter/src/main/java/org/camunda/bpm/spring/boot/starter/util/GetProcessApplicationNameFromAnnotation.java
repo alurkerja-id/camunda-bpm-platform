@@ -111,8 +111,8 @@ public class GetProcessApplicationNameFromAnnotation implements Supplier<Optiona
    *
    * @throws IllegalStateException if more than one bean is found
    */
-  public static Function<ApplicationContext, Optional<AnnotatedBean>> getAnnotatedBean = applicationContext -> {
-    final Set<Entry<String, Object>> beans = Optional.ofNullable(applicationContext.getBeansWithAnnotation(EnableProcessApplication.class))
+  public static Function<ApplicationContext, Optional<AnnotatedBean>> getAnnotatedBean = context -> {
+    final Set<Entry<String, Object>> beans = Optional.ofNullable(context.getBeansWithAnnotation(EnableProcessApplication.class))
       .map(Map::entrySet)
       .orElse(Collections.emptySet());
 
@@ -134,8 +134,8 @@ public class GetProcessApplicationNameFromAnnotation implements Supplier<Optiona
     Optional.of(pair.getAnnotation()).flatMap(getAnnotationValue).orElse(pair.getName());
 
 
-  public static Function<ApplicationContext, Optional<String>> getProcessApplicationName = applicationContext ->
-    getAnnotatedBean.apply(applicationContext).map(getName);
+  public static Function<ApplicationContext, Optional<String>> getProcessApplicationName = context ->
+    getAnnotatedBean.apply(context).map(getName);
 
   @Override
   public Optional<String> get() {

@@ -125,12 +125,10 @@ public class ExecutionImpl extends PvmExecutionImpl implements
 
   @Override
   public void initialize() {
-    return;
   }
 
   @Override
   public void initializeTimerDeclarations() {
-    return;
   }
 
   // parent ///////////////////////////////////////////////////////////////////

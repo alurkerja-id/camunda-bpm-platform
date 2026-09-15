@@ -78,9 +78,9 @@ public class SameBehaviorInstructionValidator implements MigrationInstructionVal
       return true;
     }
     else {
-      Set<Class<?>> equivalentBehaviors = this.equivalentBehaviors.get(sourceBehavior);
-      if (equivalentBehaviors != null) {
-        return equivalentBehaviors.contains(targetBehavior);
+      Set<Class<?>> behaviorsForSource = this.equivalentBehaviors.get(sourceBehavior);
+      if (behaviorsForSource != null) {
+        return behaviorsForSource.contains(targetBehavior);
       }
       else {
         return false;

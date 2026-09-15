@@ -44,7 +44,6 @@ import org.camunda.bpm.webapp.impl.util.ServletContextUtil;
 import org.camunda.bpm.webapp.impl.IllegalWebAppConfigurationException;
 import org.camunda.bpm.webapp.impl.filter.AbstractTemplateFilter;
 import org.camunda.bpm.webapp.impl.security.SecurityActions;
-import org.camunda.bpm.webapp.impl.security.SecurityActions.SecurityAction;
 import org.camunda.bpm.webapp.plugin.spi.AppPlugin;
 import org.camunda.bpm.welcome.Welcome;
 import org.camunda.bpm.welcome.WelcomeRuntimeDelegate;
@@ -251,13 +250,9 @@ public class ProcessEnginesFilter extends AbstractTemplateFilter {
 
     } else {
 
-      return SecurityActions.runWithoutAuthentication(new SecurityAction<Boolean>() {
-        public Boolean execute() {
-          return processEngine.getIdentityService()
-              .createUserQuery()
-              .memberOfGroup(Groups.CAMUNDA_ADMIN).count() == 0;
-        }
-      }, processEngine);
+      return SecurityActions.runWithoutAuthentication(() -> processEngine.getIdentityService()
+          .createUserQuery()
+          .memberOfGroup(Groups.CAMUNDA_ADMIN).count() == 0, processEngine);
 
     }
 

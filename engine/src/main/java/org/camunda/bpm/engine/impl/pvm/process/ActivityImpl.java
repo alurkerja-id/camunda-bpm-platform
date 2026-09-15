@@ -256,9 +256,9 @@ public class ActivityImpl extends ScopeImpl implements PvmActivity, HasDIBounds 
   }
 
   public ActivityImpl getParentFlowScopeActivity() {
-    ScopeImpl flowScope = getFlowScope();
-    if(flowScope != getProcessDefinition()) {
-      return (ActivityImpl) flowScope;
+    ScopeImpl parentScope = getFlowScope();
+    if(parentScope != getProcessDefinition()) {
+      return (ActivityImpl) parentScope;
     }
     else {
       return null;

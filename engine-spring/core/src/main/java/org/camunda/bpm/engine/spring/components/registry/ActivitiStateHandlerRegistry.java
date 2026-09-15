@@ -104,7 +104,7 @@ public class ActivitiStateHandlerRegistry extends ReceiveTaskActivityBehavior im
 				registrationCollection.add(this.registrations.get(k));
 			}
 
-		if (registrationCollection.size() == 0) {
+		if (registrationCollection.isEmpty()) {
 			for (String k : this.registrations.keySet())
 				if (k.contains(regKeyWithJustState)) {
 					registrationCollection.add(this.registrations.get(k));
@@ -146,7 +146,7 @@ public class ActivitiStateHandlerRegistry extends ReceiveTaskActivityBehavior im
 			}
 		}
 
-		if ((r == null) && (rs.size() > 0)) {
+		if ((r == null) && (!rs.isEmpty())) {
 			r = rs.iterator().next();
 		}
 

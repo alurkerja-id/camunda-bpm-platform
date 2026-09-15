@@ -119,8 +119,7 @@ public abstract class JobEntity extends AcquirableJobEntity
 
   public void execute(CommandContext commandContext) {
     if (executionId != null) {
-      ExecutionEntity execution = getExecution();
-      ensureNotNull("Cannot find execution with id '" + executionId + "' referenced from job '" + this + "'", "execution", execution);
+      ensureNotNull("Cannot find execution with id '" + executionId + "' referenced from job '" + this + "'", "execution", getExecution());
     }
 
     // initialize activity id
@@ -161,8 +160,7 @@ public abstract class JobEntity extends AcquirableJobEntity
     }
 
     // cancel the retries -> will resolve job incident if present
-    int retries = HistoryCleanupHelper.getMaxRetries();
-    setRetries(retries);
+    setRetries(HistoryCleanupHelper.getMaxRetries());
 
     // delete the job's exception byte array and exception message
     if (exceptionByteArrayId != null) {
@@ -180,11 +178,11 @@ public abstract class JobEntity extends AcquirableJobEntity
     CommandContext commandContext = Context.getCommandContext();
 
     // add link to execution and deployment
-    ExecutionEntity execution = getExecution();
-    if (execution != null) {
-      execution.addJob(this);
+    ExecutionEntity jobExecution = getExecution();
+    if (jobExecution != null) {
+      jobExecution.addJob(this);
 
-      ProcessDefinitionImpl processDefinition = execution.getProcessDefinition();
+      ProcessDefinitionImpl processDefinition = jobExecution.getProcessDefinition();
       this.deploymentId = processDefinition.getDeploymentId();
     }
 
@@ -218,9 +216,9 @@ public abstract class JobEntity extends AcquirableJobEntity
     }
 
     // remove link to execution
-    ExecutionEntity execution = getExecution();
-    if (execution != null) {
-      execution.removeJob(this);
+    ExecutionEntity jobExecution = getExecution();
+    if (jobExecution != null) {
+      jobExecution.removeJob(this);
     }
 
     removeFailedJobIncident(incidentResolved);
@@ -615,14 +613,14 @@ public abstract class JobEntity extends AcquirableJobEntity
 
   protected void ensureActivityIdInitialized() {
     if (activityId == null) {
-      JobDefinition jobDefinition = getJobDefinition();
-      if (jobDefinition != null) {
-        activityId = jobDefinition.getActivityId();
+      JobDefinition definition = getJobDefinition();
+      if (definition != null) {
+        activityId = definition.getActivityId();
       }
       else {
-        ExecutionEntity execution = getExecution();
-        if (execution != null) {
-          activityId = execution.getActivityId();
+        ExecutionEntity jobExecution = getExecution();
+        if (jobExecution != null) {
+          activityId = jobExecution.getActivityId();
         }
       }
     }
@@ -693,7 +691,7 @@ public abstract class JobEntity extends AcquirableJobEntity
       persistedDependentEntities.put(exceptionByteArrayId, ByteArrayEntity.class);
     }
     else {
-      persistedDependentEntities = Collections.EMPTY_MAP;
+      persistedDependentEntities = Collections.emptyMap();
     }
   }
 

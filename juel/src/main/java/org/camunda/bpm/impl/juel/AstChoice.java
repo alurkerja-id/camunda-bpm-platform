@@ -52,6 +52,12 @@ public class AstChoice extends AstRightValue {
 	}
 
 	public AstNode getChild(int i) {
-		return i == 0 ? question : i == 1 ? yes : i == 2 ? no : null;
+		if (i == 0) {
+			return question;
+		}
+		if (i == 1) {
+			return yes;
+		}
+		return i == 2 ? no : null;
 	}
 }

@@ -167,8 +167,8 @@ public class ProcessStartingMethodInterceptor implements MethodInterceptor {
 		Map<ProcessVariable, Object> vars = this.mapOfAnnotationValues(ProcessVariable.class, invocation);
 
 		Map<String, Object> varNameToValueMap = new HashMap<String, Object>();
-		for (ProcessVariable processVariable : vars.keySet()) {
-			varNameToValueMap.put(processVariable.value(), vars.get(processVariable));
+		for (Map.Entry<ProcessVariable, Object> entry : vars.entrySet()) {
+			varNameToValueMap.put(entry.getKey().value(), entry.getValue());
 		}
 		return varNameToValueMap;
 

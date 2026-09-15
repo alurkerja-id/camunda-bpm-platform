@@ -76,11 +76,11 @@ public abstract class AbstractSetJobDefinitionStateCmd extends AbstractSetStateC
         JobDefinitionEntity jobDefinition = jobDefinitionManager.findById(jobDefinitionId);
 
         if (jobDefinition != null && jobDefinition.getProcessDefinitionKey() != null) {
-          String processDefinitionKey = jobDefinition.getProcessDefinitionKey();
-          checker.checkUpdateProcessDefinitionByKey(processDefinitionKey);
+          String definitionKey = jobDefinition.getProcessDefinitionKey();
+          checker.checkUpdateProcessDefinitionByKey(definitionKey);
 
           if (includeSubResources) {
-            checker.checkUpdateProcessInstanceByProcessDefinitionKey(processDefinitionKey);
+            checker.checkUpdateProcessInstanceByProcessDefinitionKey(definitionKey);
           }
         }
 

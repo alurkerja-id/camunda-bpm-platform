@@ -80,7 +80,7 @@ public class DmnEvaluatedOutputImpl implements DmnEvaluatedOutput {
     if (id != null ? !id.equals(that.id) : that.id != null) return false;
     if (name != null ? !name.equals(that.name) : that.name != null) return false;
     if (outputName != null ? !outputName.equals(that.outputName) : that.outputName != null) return false;
-    return !(value != null ? !value.equals(that.value) : that.value != null);
+    return value != null ? value.equals(that.value) : that.value == null;
 
   }
 

@@ -62,7 +62,7 @@ public class SpringBeansResolverFactory implements ResolverFactory, Resolver {
   @Override
   public boolean containsKey(Object key) {
     if (key instanceof String) {
-      return keySet.contains((String) key);
+      return keySet.contains(key);
     } else {
       return false;
     }

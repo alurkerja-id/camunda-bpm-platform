@@ -675,7 +675,7 @@ public class BpmnParse extends Parse {
   protected void parseLaneSets(Element parentElement, ProcessDefinitionEntity processDefinition) {
     List<Element> laneSets = parentElement.elements("laneSet");
 
-    if (laneSets != null && laneSets.size() > 0) {
+    if (laneSets != null && !laneSets.isEmpty()) {
       for (Element laneSetElement : laneSets) {
         LaneSet newLaneSet = new LaneSet();
 
@@ -691,7 +691,7 @@ public class BpmnParse extends Parse {
 
   protected void parseLanes(Element laneSetElement, LaneSet laneSet) {
     List<Element> lanes = laneSetElement.elements("lane");
-    if (lanes != null && lanes.size() > 0) {
+    if (lanes != null && !lanes.isEmpty()) {
       for (Element laneElement : lanes) {
         // Parse basic attributes
         Lane lane = new Lane();
@@ -700,7 +700,7 @@ public class BpmnParse extends Parse {
 
         // Parse ID's of flow-nodes that live inside this lane
         List<Element> flowNodeElements = laneElement.elements("flowNodeRef");
-        if (flowNodeElements != null && flowNodeElements.size() > 0) {
+        if (flowNodeElements != null && !flowNodeElements.isEmpty()) {
           for (Element flowNodeElement : flowNodeElements) {
             lane.getFlowNodeIds().add(flowNodeElement.getText());
           }
@@ -947,7 +947,7 @@ public class BpmnParse extends Parse {
   public void parseStartEvents(Element parentElement, ScopeImpl scope) {
     List<Element> startEventElements = parentElement.elements("startEvent");
     List<ActivityImpl> startEventActivities = new ArrayList<>();
-    if (startEventElements.size() > 0) {
+    if (!startEventElements.isEmpty()) {
       for (Element startEventElement : startEventElements) {
 
         ActivityImpl startEventActivity = createActivityOnScope(startEventElement, scope);
@@ -1436,7 +1436,7 @@ public class BpmnParse extends Parse {
     for (ActivityImpl activity : activities) {
       validateActivity(activity);
       // check children if it is an own scope / subprocess / ...
-      if (activity.getActivities().size() > 0) {
+      if (!activity.getActivities().isEmpty()) {
         validateActivities(activity.getActivities());
       }
     }
@@ -1461,7 +1461,7 @@ public class BpmnParse extends Parse {
   }
 
   public void validateExclusiveGateway(ActivityImpl activity) {
-    if (activity.getOutgoingTransitions().size() == 0) {
+    if (activity.getOutgoingTransitions().isEmpty()) {
       // TODO: double check if this is valid (I think in Activiti yes, since we
       // need start events we will need an end event as well)
       addError("Exclusive Gateway '" + activity.getId() + "' has no outgoing sequence flows.", null, activity.getId());
@@ -1700,20 +1700,18 @@ public class BpmnParse extends Parse {
     final String activityRef = compensateEventDefinitionElement.attribute("activityRef");
     boolean waitForCompletion = TRUE.equals(compensateEventDefinitionElement.attribute("waitForCompletion", TRUE));
 
-    if (activityRef != null) {
+    if (activityRef != null && scopeElement.findActivityAtLevelOfSubprocess(activityRef) == null) {
+      Boolean isTriggeredByEvent = scopeElement.getProperties().get(BpmnProperties.TRIGGERED_BY_EVENT);
+      String type = (String) scopeElement.getProperty(PROPERTYNAME_TYPE);
+      if (Boolean.TRUE == isTriggeredByEvent && "subProcess".equals(type)) {
+        scopeElement = scopeElement.getFlowScope();
+      }
       if (scopeElement.findActivityAtLevelOfSubprocess(activityRef) == null) {
-        Boolean isTriggeredByEvent = scopeElement.getProperties().get(BpmnProperties.TRIGGERED_BY_EVENT);
-        String type = (String) scopeElement.getProperty(PROPERTYNAME_TYPE);
-        if (Boolean.TRUE == isTriggeredByEvent && "subProcess".equals(type)) {
-          scopeElement = scopeElement.getFlowScope();
-        }
-        if (scopeElement.findActivityAtLevelOfSubprocess(activityRef) == null) {
-          final String scopeId = scopeElement.getId();
-          scopeElement.addToBacklog(activityRef, () ->
-              addError("Invalid attribute value for 'activityRef': no activity with id '" + activityRef + "' in scope '" + scopeId + "'",
-                  compensateEventDefinitionElement,
-                  parentElementId));
-        }
+        final String scopeId = scopeElement.getId();
+        scopeElement.addToBacklog(activityRef, () ->
+            addError("Invalid attribute value for 'activityRef': no activity with id '" + activityRef + "' in scope '" + scopeId + "'",
+                compensateEventDefinitionElement,
+                parentElementId));
       }
     }
 
@@ -1762,7 +1760,7 @@ public class BpmnParse extends Parse {
     LegacyBehavior.parseCancelBoundaryEvent(activity);
 
     ActivityImpl transaction = (ActivityImpl) activity.getEventScope();
-    if (transaction.getActivityBehavior() != null && transaction.getActivityBehavior() instanceof MultiInstanceActivityBehavior) {
+    if (transaction.getActivityBehavior() instanceof MultiInstanceActivityBehavior) {
       transaction = transaction.getActivities().get(0);
     }
 
@@ -1780,7 +1778,7 @@ public class BpmnParse extends Parse {
     // find all cancel end events
     for (ActivityImpl childActivity : transaction.getActivities()) {
       ActivityBehavior activityBehavior = childActivity.getActivityBehavior();
-      if (activityBehavior != null && activityBehavior instanceof CancelEndEventActivityBehavior) {
+      if (activityBehavior instanceof CancelEndEventActivityBehavior) {
         ((CancelEndEventActivityBehavior) activityBehavior).setCancelBoundaryEvent(activity);
       }
     }
@@ -2482,13 +2480,7 @@ public class BpmnParse extends Parse {
   protected void addJobDeclarationToProcessDefinition(JobDeclaration<?, ?> jobDeclaration, ProcessDefinition processDefinition) {
     String key = processDefinition.getKey();
 
-    List<JobDeclaration<?, ?>> containingJobDeclarations = jobDeclarations.get(key);
-    if (containingJobDeclarations == null) {
-      containingJobDeclarations = new ArrayList<>();
-      jobDeclarations.put(key, containingJobDeclarations);
-    }
-
-    containingJobDeclarations.add(jobDeclaration);
+    jobDeclarations.computeIfAbsent(key, k -> new ArrayList<>()).add(jobDeclaration);
   }
 
   /**
@@ -2591,7 +2583,7 @@ public class BpmnParse extends Parse {
 
       if ((fieldName.equals("wait") || fieldName.equals("redirectError") || fieldName.equals("cleanEnv")) && !fieldValue.toLowerCase().equals(TRUE)
           && !fieldValue.toLowerCase().equals("false")) {
-        addError("undefined value for shell " + fieldName + " parameter :" + fieldValue.toString(), serviceTaskElement);
+        addError("undefined value for shell " + fieldName + " parameter :" + fieldValue, serviceTaskElement);
       }
 
     }

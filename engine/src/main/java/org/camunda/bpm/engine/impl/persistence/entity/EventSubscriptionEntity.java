@@ -154,17 +154,17 @@ public class EventSubscriptionEntity implements EventSubscription, DbEntity, Has
 
   protected void addToExecution() {
     // add reference in execution
-    ExecutionEntity execution = getExecution();
-    if(execution != null) {
-      execution.addEventSubscription(this);
+    ExecutionEntity subscribedExecution = getExecution();
+    if(subscribedExecution != null) {
+      subscribedExecution.addEventSubscription(this);
     }
   }
 
   protected void removeFromExecution() {
     // remove reference in execution
-    ExecutionEntity execution = getExecution();
-    if(execution != null) {
-      execution.removeEventSubscription(this);
+    ExecutionEntity subscribedExecution = getExecution();
+    if(subscribedExecution != null) {
+      subscribedExecution.removeEventSubscription(this);
     }
   }
 
@@ -212,8 +212,7 @@ public class EventSubscriptionEntity implements EventSubscription, DbEntity, Has
 
   public ProcessDefinitionEntity getProcessDefinition() {
     if (executionId != null) {
-      ExecutionEntity execution = getExecution();
-      return execution.getProcessDefinition();
+      return getExecution().getProcessDefinition();
     }
     else {
       // this assumes that start event subscriptions have the process definition id

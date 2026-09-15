@@ -103,7 +103,7 @@ public abstract class HistoryCleanupHelper {
     //add process instance ids
     final List<String> historicProcessInstanceIds = commandContext.getHistoricProcessInstanceManager()
         .findHistoricProcessInstanceIdsForCleanup(batchSize, configuration.getMinuteFrom(), configuration.getMinuteTo());
-    if (historicProcessInstanceIds.size() > 0) {
+    if (!historicProcessInstanceIds.isEmpty()) {
       historyCleanupBatch.setHistoricProcessInstanceIds(historicProcessInstanceIds);
     }
 
@@ -111,7 +111,7 @@ public abstract class HistoryCleanupHelper {
     if (historyCleanupBatch.size() < batchSize && processEngineConfiguration.isDmnEnabled()) {
       final List<String> historicDecisionInstanceIds = commandContext.getHistoricDecisionInstanceManager()
           .findHistoricDecisionInstanceIdsForCleanup(batchSize - historyCleanupBatch.size(), configuration.getMinuteFrom(), configuration.getMinuteTo());
-      if (historicDecisionInstanceIds.size() > 0) {
+      if (!historicDecisionInstanceIds.isEmpty()) {
         historyCleanupBatch.setHistoricDecisionInstanceIds(historicDecisionInstanceIds);
       }
     }
@@ -120,7 +120,7 @@ public abstract class HistoryCleanupHelper {
     if (historyCleanupBatch.size() < batchSize && processEngineConfiguration.isCmmnEnabled()) {
       final List<String> historicCaseInstanceIds = commandContext.getHistoricCaseInstanceManager()
           .findHistoricCaseInstanceIdsForCleanup(batchSize - historyCleanupBatch.size(), configuration.getMinuteFrom(), configuration.getMinuteTo());
-      if (historicCaseInstanceIds.size() > 0) {
+      if (!historicCaseInstanceIds.isEmpty()) {
         historyCleanupBatch.setHistoricCaseInstanceIds(historicCaseInstanceIds);
       }
     }
@@ -131,7 +131,7 @@ public abstract class HistoryCleanupHelper {
       List<String> historicBatchIds = commandContext
           .getHistoricBatchManager()
           .findHistoricBatchIdsForCleanup(batchSize - historyCleanupBatch.size(), batchOperationsForHistoryCleanup, configuration.getMinuteFrom(), configuration.getMinuteTo());
-      if (historicBatchIds.size() > 0) {
+      if (!historicBatchIds.isEmpty()) {
         historyCleanupBatch.setHistoricBatchIds(historicBatchIds);
       }
     }
@@ -141,7 +141,7 @@ public abstract class HistoryCleanupHelper {
     if (parsedTaskMetricsTimeToLive != null && historyCleanupBatch.size() < batchSize) {
       final List<String> taskMetricIds = commandContext.getMeterLogManager()
           .findTaskMetricsForCleanup(batchSize - historyCleanupBatch.size(), parsedTaskMetricsTimeToLive, configuration.getMinuteFrom(), configuration.getMinuteTo());
-      if (taskMetricIds.size() > 0) {
+      if (!taskMetricIds.isEmpty()) {
         historyCleanupBatch.setTaskMetricIds(taskMetricIds);
       }
     }

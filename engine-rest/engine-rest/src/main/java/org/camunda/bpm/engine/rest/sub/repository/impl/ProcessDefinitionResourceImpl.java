@@ -261,8 +261,6 @@ public class ProcessDefinitionResourceImpl implements ProcessDefinitionResource 
       processModelIn = engine.getRepositoryService().getProcessModel(processDefinitionId);
       byte[] processModel = IoUtil.readInputStream(processModelIn, "processModelBpmn20Xml");
       return ProcessDefinitionDiagramDto.create(processDefinitionId, new String(processModel, "UTF-8"));
-    } catch (AuthorizationException e) {
-      throw e;
     } catch (NotFoundException e) {
       throw new InvalidRequestException(Status.NOT_FOUND, e, "No matching definition with id " + processDefinitionId);
     } catch (UnsupportedEncodingException e) {
@@ -325,10 +323,8 @@ public class ProcessDefinitionResourceImpl implements ProcessDefinitionResource 
       throw new InvalidRequestException(Status.BAD_REQUEST, e, "Cannot get start form data for process definition " + processDefinitionId);
     }
     FormDto dto = FormDto.fromFormData(formData);
-    if((dto.getKey() == null || dto.getKey().isEmpty()) && dto.getCamundaFormRef() == null) {
-      if(formData != null && formData.getFormFields() != null && !formData.getFormFields().isEmpty()) {
-        dto.setKey("embedded:engine://engine/:engine/process-definition/"+processDefinitionId+"/rendered-form");
-      }
+    if ((dto.getKey() == null || dto.getKey().isEmpty()) && dto.getCamundaFormRef() == null && formData != null && formData.getFormFields() != null && !formData.getFormFields().isEmpty()) {
+      dto.setKey("embedded:engine://engine/:engine/process-definition/" + processDefinitionId + "/rendered-form");
     }
     dto.setContextPath(ApplicationContextPathUtil.getApplicationPathByProcessDefinitionId(engine, processDefinitionId));
 

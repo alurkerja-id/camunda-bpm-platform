@@ -79,7 +79,7 @@ public class DmnEvaluatedInputImpl implements DmnEvaluatedInput {
     if (id != null ? !id.equals(that.id) : that.id != null) return false;
     if (name != null ? !name.equals(that.name) : that.name != null) return false;
     if (inputVariable != null ? !inputVariable.equals(that.inputVariable) : that.inputVariable != null) return false;
-    return !(value != null ? !value.equals(that.value) : that.value != null);
+    return value != null ? value.equals(that.value) : that.value == null;
 
   }
 

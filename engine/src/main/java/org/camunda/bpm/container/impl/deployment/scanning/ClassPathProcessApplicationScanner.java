@@ -223,11 +223,9 @@ public class ClassPathProcessApplicationScanner implements ProcessApplicationSca
               && currentPathSegment != null
               && currentPathSegment.length()>0) {
 
-        if(path.isDirectory()) {
-          // only descend into directory, if below resource root:
-          if(path.getName().equals(currentPathSegment)) {
-            handleDirectory(path, rootPath, localPath, paResourceRootPath, isPaLocal, additionalResourceSuffixes, resourceMap);
-          }
+        // only descend into directory, if below resource root:
+        if (path.isDirectory() && path.getName().equals(currentPathSegment)) {
+          handleDirectory(path, rootPath, localPath, paResourceRootPath, isPaLocal, additionalResourceSuffixes, resourceMap);
         }
 
       } else { // at resource root or below -> continue scanning

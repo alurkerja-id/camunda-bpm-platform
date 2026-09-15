@@ -215,13 +215,13 @@ public class CaseInstanceQueryDto extends AbstractQueryDto<CaseInstanceQuery> {
     if (TRUE.equals(withoutTenantId)) {
       query.withoutTenantId();
     }
-    if (active != null && active == true) {
+    if (active != null && active) {
       query.active();
     }
-    if (completed != null && completed == true) {
+    if (completed != null && completed) {
       query.completed();
     }
-    if (terminated != null && terminated == true) {
+    if (terminated != null && terminated) {
       query.terminated();
     }
     if(Boolean.TRUE.equals(variableNamesIgnoreCase)) {

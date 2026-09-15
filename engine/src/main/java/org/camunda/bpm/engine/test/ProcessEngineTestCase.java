@@ -125,7 +125,7 @@ public class ProcessEngineTestCase extends TestCase {
     try {
       processEngine = TestHelper.getProcessEngine(getConfigurationResource());
     } catch (RuntimeException ex) {
-      if (ex.getCause() != null && ex.getCause() instanceof FileNotFoundException) {
+      if (ex.getCause() instanceof FileNotFoundException) {
         processEngine = ProcessEngineConfiguration
             .createProcessEngineConfigurationFromResource(configurationResourceCompat)
             .buildProcessEngine();
