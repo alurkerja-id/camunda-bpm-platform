@@ -18,13 +18,21 @@ Camunda Platform 7 is a flexible framework for workflow and process automation. 
 ### Scan Sonar
 
 ```
-mvn clean install "-Pintegration-test-spring-boot-starter" "-Dmaven.test.failure.ignore=true" sonar:sonar "-Dsonar.login=<token>"
+SONAR_TOKEN=<token> ./scripts/scan-sonar.sh
+```
+
+which runs:
+
+```
+./mvnw clean install "-Pintegration-test-spring-boot-starter,!it-runtime" "-Dmaven.test.failure.ignore=true" sonar:sonar "-Dsonar.token=<token>"
 ```
 
 Host URL, project key and every exclusion live in `sonar-project.properties`, which the build reads
 during `initialize` — nothing has to be passed on the command line except the token.
 
-Exactly one profile, and it has to be that one. The six `distro*` profiles in the root pom are
+`!it-runtime` only switches off the Cargo/Tomcat integration tests of `clients/java/client`, which
+hang on a clean checkout (see the comments in the script). Apart from that, exactly one profile is
+activated, and it has to be that one. The six `distro*` profiles in the root pom are
 active by default, so a plain build already contains every module including `distro/run` and the
 `coverage-report` aggregator. Naming any of them on the command line makes things worse, not
 better, in two ways:

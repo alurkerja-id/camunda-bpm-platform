@@ -24,6 +24,12 @@
 # fix (module reordering, or make it-runtime genuinely opt-in); until then,
 # this flag is required for the script to finish on a clean checkout.
 #
+# `integration-test-spring-boot-starter` adds the spring-boot-starter / Camunda Run
+# modules whose tests only run under that profile; without it their coverage is missing
+# from the scan. Its id does not exist in the root pom, so the root's activeByDefault
+# `distro*` profiles stay active — do not add those ids to `-P`, naming any of them turns
+# the rest off and `distro` in engine-rest skips its whole test suite.
+#
 # `-Dcargo.rmi.port` is a second, independent workaround for the SAME
 # clients/java/client module: even with `it-runtime` disabled, the module's
 # `cargo-maven3-plugin` `start-container`/`stop-container` executions are
@@ -54,13 +60,13 @@ CARGO_RMI_PORT="${CARGO_RMI_PORT:-50205}"
 
 ./mvnw -B clean install \
   "-Dmaven.test.failure.ignore=true" \
-  -P '!it-runtime' \
+  -P 'integration-test-spring-boot-starter,!it-runtime' \
   "-Dcargo.rmi.port=${CARGO_RMI_PORT}" \
   org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
   "-Dsonar.host.url=${SONAR_HOST_URL}" \
   "-Dsonar.token=${SONAR_TOKEN}"
 
 echo
-echo "Scan submitted. sonar.projectKey/sonar.projectName are pinned in the root pom.xml —"
-echo "verify the dashboard at ${SONAR_HOST_URL}/dashboard?id=org.camunda.bpm:camunda-root"
+echo "Scan submitted. sonar.projectKey/sonar.projectName are pinned in sonar-project.properties —"
+echo "verify the dashboard at ${SONAR_HOST_URL}/dashboard?id=alurkerja-camunda-bpm-platform"
 echo "shows THIS run's date before quoting any numbers from it."
