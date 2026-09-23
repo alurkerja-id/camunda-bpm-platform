@@ -67,18 +67,18 @@ import org.slf4j.Logger;
  */
 public abstract class TestHelper {
 
-  private static Logger LOG = ProcessEngineLogger.TEST_LOGGER.getLogger();
+  private static final Logger LOG = ProcessEngineLogger.TEST_LOGGER.getLogger();
 
   public static final String EMPTY_LINE = "                                                                                           ";
 
-  public static final List<String> TABLENAMES_EXCLUDED_FROM_DB_CLEAN_CHECK = Arrays.asList(
+  protected static final List<String> TABLENAMES_EXCLUDED_FROM_DB_CLEAN_CHECK = Arrays.asList(
     "ACT_GE_PROPERTY",
     "ACT_GE_SCHEMA_LOG"
   );
 
   static Map<String, ProcessEngine> processEngines = new HashMap<>();
 
-  public final static List<String> RESOURCE_SUFFIXES = new ArrayList<>();
+  protected final static List<String> RESOURCE_SUFFIXES = new ArrayList<>();
 
   static {
     RESOURCE_SUFFIXES.addAll(Arrays.asList(BpmnDeployer.BPMN_RESOURCE_SUFFIXES));
@@ -89,7 +89,7 @@ public abstract class TestHelper {
   /**
    * @deprecated use {@link ProcessEngineAssert} instead
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public static void assertProcessEnded(ProcessEngine processEngine, String processInstanceId) {
     ProcessEngineAssert.assertProcessEnded(processEngine, processInstanceId);
   }

@@ -45,7 +45,7 @@ import java.util.concurrent.Callable;
  */
 public abstract class AbstractProcessApplication implements ProcessApplicationInterface {
 
-  private static ProcessApplicationLogger LOG = ProcessEngineLogger.PROCESS_APPLICATION_LOGGER;
+  private static final ProcessApplicationLogger LOG = ProcessEngineLogger.PROCESS_APPLICATION_LOGGER;
 
   // volatile: these three are lazily initialized under double-checked locking, which without it
   // can hand a second thread a reference to an object whose construction it cannot see finished
@@ -108,13 +108,13 @@ public abstract class AbstractProcessApplication implements ProcessApplicationIn
     if (annotation != null) {
       name = annotation.value();
 
-      if (name == null || name.length() == 0) {
+      if (name == null || name.isEmpty()) {
         name = annotation.name();
       }
     }
 
 
-    if (name == null || name.length() == 0) {
+    if (name == null || name.isEmpty()) {
       name = autodetectProcessApplicationName();
     }
 

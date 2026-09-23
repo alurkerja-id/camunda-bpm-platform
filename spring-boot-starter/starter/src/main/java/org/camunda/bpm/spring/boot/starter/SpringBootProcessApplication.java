@@ -89,7 +89,7 @@ public class SpringBootProcessApplication extends SpringProcessApplication {
       .apply(springApplicationName)
       .ifPresent(this::setBeanName);
 
-    if (camundaBpmProperties.getGenerateUniqueProcessApplicationName()) {
+    if (Boolean.TRUE.equals(camundaBpmProperties.getGenerateUniqueProcessApplicationName())) {
       setBeanName(CamundaBpmProperties.getUniqueName(CamundaBpmProperties.UNIQUE_APPLICATION_NAME_PREFIX));
     }
 

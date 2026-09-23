@@ -86,7 +86,7 @@ public class Element {
     List<Element> selectedElements = new ArrayList<Element>();
     for (Element element: elements) {
       if (tagName.equals(element.getTagName()) && (nameSpaceUri == null
-          || (nameSpaceUri != null && nameSpaceUri.equals(element.getUri())))) {
+          || nameSpaceUri.equals(element.getUri()))) {
         selectedElements.add(element);
       }
     }
@@ -98,16 +98,16 @@ public class Element {
   }
 
   public Element elementNS(Namespace nameSpace, String tagName) {
-    List<Element> elements = elementsNS(nameSpace.getNamespaceUri(), tagName);
-    if (elements.isEmpty() && nameSpace.hasAlternativeUri()) {
-      elements = elementsNS(nameSpace.getAlternativeUri(), tagName);
+    List<Element> matchedElements = elementsNS(nameSpace.getNamespaceUri(), tagName);
+    if (matchedElements.isEmpty() && nameSpace.hasAlternativeUri()) {
+      matchedElements = elementsNS(nameSpace.getAlternativeUri(), tagName);
     }
-    if (elements.isEmpty()) {
+    if (matchedElements.isEmpty()) {
       return null;
-    } else if (elements.size() > 1) {
+    } else if (matchedElements.size() > 1) {
       throw new ProcessEngineException("Parsing exception: multiple elements with tag name " + tagName + " found");
     }
-    return elements.get(0);
+    return matchedElements.get(0);
   }
 
   public void add(Element element) {

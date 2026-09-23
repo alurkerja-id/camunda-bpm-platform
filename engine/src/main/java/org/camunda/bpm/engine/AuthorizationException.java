@@ -44,13 +44,13 @@ public class AuthorizationException extends ProcessEngineException {
   // and are only left because this is a public API package and users might
   // have subclasses relying on these fields
   /** @deprecated use {@link #getMissingAuthorizations()} */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   protected String resourceType;
   /** @deprecated use {@link #getMissingAuthorizations()} */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   protected String permissionName;
   /** @deprecated use {@link #getMissingAuthorizations()} */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   protected String resourceId;
 
   public AuthorizationException(String message) {
@@ -89,7 +89,7 @@ public class AuthorizationException extends ProcessEngineException {
    * @deprecated Use {@link #getMissingAuthorizations()} to get the type of the resource
    * of the {@link MissingAuthorization}(s). This method may be removed in future versions.
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public String getResourceType() {
     String type = null;
     if (missingAuthorizations.size() == 1) {
@@ -105,7 +105,7 @@ public class AuthorizationException extends ProcessEngineException {
    * @deprecated Use {@link #getMissingAuthorizations()} to get the violated permission name
    * of the {@link MissingAuthorization}(s). This method may be removed in future versions.
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public String getViolatedPermissionName() {
     if (missingAuthorizations.size() == 1) {
       return missingAuthorizations.get(0).getViolatedPermissionName();
@@ -128,7 +128,7 @@ public class AuthorizationException extends ProcessEngineException {
    * @deprecated Use {@link #getMissingAuthorizations()} to get the id of the resource
    * of the {@link MissingAuthorization}(s). This method may be removed in future versions.
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public String getResourceId() {
     if (missingAuthorizations.size() == 1) {
       return missingAuthorizations.get(0).getResourceId();

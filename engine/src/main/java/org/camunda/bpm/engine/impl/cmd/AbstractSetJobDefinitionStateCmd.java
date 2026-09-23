@@ -16,8 +16,6 @@
  */
 package org.camunda.bpm.engine.impl.cmd;
 
-import java.util.Date;
-
 import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.impl.cfg.CommandChecker;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
@@ -41,7 +39,6 @@ public abstract class AbstractSetJobDefinitionStateCmd extends AbstractSetStateC
   protected String jobDefinitionId;
   protected String processDefinitionId;
   protected String processDefinitionKey;
-  protected Date executionDate;
 
   protected String processDefinitionTenantId;
   protected boolean isProcessDefinitionTenantIdSet = false;

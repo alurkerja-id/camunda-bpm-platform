@@ -42,7 +42,7 @@ public class ProcessEngineRuleRunner extends BlockJUnit4ClassRunner {
     List<TestRule> testRules = super.getTestRules(target);
 
     testRules.stream()
-      .filter(t -> t instanceof ProcessEngineRule)
+      .filter(ProcessEngineRule.class::isInstance)
       .map(t -> (ProcessEngineRule)t)
       .forEach(processEngineRules::add);
 

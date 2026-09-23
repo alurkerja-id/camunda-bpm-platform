@@ -51,7 +51,7 @@ import org.camunda.bpm.engine.variable.VariableMap;
 
 public class TaskRestServiceImpl extends AbstractRestProcessEngineAware implements TaskRestService {
 
-  public static final List<Variant> VARIANTS = Variant.mediaTypes(MediaType.APPLICATION_JSON_TYPE, Hal.APPLICATION_HAL_JSON_TYPE).add().build();
+  protected static final List<Variant> VARIANTS = Variant.mediaTypes(MediaType.APPLICATION_JSON_TYPE, Hal.APPLICATION_HAL_JSON_TYPE).add().build();
 
   public TaskRestServiceImpl(String engineName, final ObjectMapper objectMapper) {
     super(engineName, objectMapper);
@@ -100,7 +100,7 @@ public class TaskRestServiceImpl extends AbstractRestProcessEngineAware implemen
     TaskQuery query = queryDto.toQuery(engine);
 
     List<Task> matchingTasks = executeTaskQuery(firstResult, maxResults, query);
-    List<TaskDto> tasks = new ArrayList<TaskDto>();
+    List<TaskDto> tasks;
 
     boolean withTaskVariables = Boolean.TRUE.equals(queryDto.getWithTaskVariablesInReturn());
     boolean withTaskLocalVariables = Boolean.TRUE.equals(queryDto.getWithTaskLocalVariablesInReturn());

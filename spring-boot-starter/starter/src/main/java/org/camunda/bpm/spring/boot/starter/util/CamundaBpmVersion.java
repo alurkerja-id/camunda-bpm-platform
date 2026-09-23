@@ -36,7 +36,7 @@ import static org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties.
 public class CamundaBpmVersion implements Supplier<String> {
 
   private static final String VERSION_FORMAT = "(v%s)";
-  public static final String VERSION = "version";
+  public static final String VERSION_KEY = "version";
   public static final String IS_ENTERPRISE = "is-enterprise";
   public static final String FORMATTED_VERSION = "formatted-version";
 
@@ -71,7 +71,7 @@ public class CamundaBpmVersion implements Supplier<String> {
 
   public PropertiesPropertySource getPropertiesPropertySource() {
     final Properties props = new Properties();
-    props.put(key(VERSION), version);
+    props.put(key(VERSION_KEY), version);
     props.put(key(IS_ENTERPRISE), isEnterprise);
     props.put(key(FORMATTED_VERSION), formattedVersion);
 

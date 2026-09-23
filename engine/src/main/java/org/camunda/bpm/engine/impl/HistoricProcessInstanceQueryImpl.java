@@ -508,8 +508,8 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
       String dbType = processEngineConfiguration.getDatabaseType();
 
       for (HistoricProcessInstanceQueryImpl orQuery: queries) {
-        for (QueryVariableValue var : orQuery.getQueryVariableValues()) {
-          var.initialize(variableSerializers, dbType);
+        for (QueryVariableValue queryVariableValue : orQuery.getQueryVariableValues()) {
+          queryVariableValue.initialize(variableSerializers, dbType);
         }
       }
     }
@@ -760,7 +760,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
   /**
    * @deprecated the whole-day granularity is gone; use {@link #startedBefore(Date)}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   @Override
   public HistoricProcessInstanceQuery startDateBy(Date date) {
     this.startDateBy = this.calculateMidnight(date);
@@ -771,7 +771,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
    * @deprecated the whole-day granularity is gone; use {@link #startedAfter(Date)} together with
    *             {@link #startedBefore(Date)}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   @Override
   public HistoricProcessInstanceQuery startDateOn(Date date) {
     this.startDateOn = date;
@@ -783,7 +783,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
   /**
    * @deprecated the whole-day granularity is gone; use {@link #finishedBefore(Date)}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   @Override
   public HistoricProcessInstanceQuery finishDateBy(Date date) {
     this.finishDateBy = this.calculateBeforeMidnight(date);
@@ -794,7 +794,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
    * @deprecated the whole-day granularity is gone; use {@link #finishedAfter(Date)} together with
    *             {@link #finishedBefore(Date)}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   @Override
   public HistoricProcessInstanceQuery finishDateOn(Date date) {
     this.finishDateOn = date;
@@ -806,7 +806,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
   /**
    * @deprecated only used by the whole-day query methods above, which are deprecated themselves
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   private Date calculateBeforeMidnight(Date date){
     Calendar cal = Calendar.getInstance();
     cal.setTime(date);
@@ -818,7 +818,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
   /**
    * @deprecated only used by the whole-day query methods above, which are deprecated themselves
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   private Date calculateMidnight(Date date){
     Calendar cal = Calendar.getInstance();
     cal.setTime(date);

@@ -42,9 +42,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class CamundaBpmWebappAutoConfiguration implements WebMvcConfigurer {
 
   @Autowired
-  private ResourceLoader resourceLoader;
-
-  @Autowired
   private CamundaBpmProperties properties;
 
 
@@ -54,7 +51,7 @@ public class CamundaBpmWebappAutoConfiguration implements WebMvcConfigurer {
   }
 
   @Bean(name = "resourceLoaderDependingInitHook")
-  public InitHook<ResourceLoaderDependingFilter> resourceLoaderDependingInitHook() {
+  public InitHook<ResourceLoaderDependingFilter> resourceLoaderDependingInitHook(ResourceLoader resourceLoader) {
     return filter -> {
       filter.setResourceLoader(resourceLoader);
       filter.setWebappProperty(properties.getWebapp());

@@ -31,10 +31,10 @@ import javax.ws.rs.core.Response.Status;
  */
 public class ReportResultToCsvConverter {
 
-  protected static String DELIMITER = ",";
-  protected static String NEW_LINE_SEPARATOR = "\n";
+  protected static final String DELIMITER = ",";
+  protected static final String NEW_LINE_SEPARATOR = "\n";
 
-  public static String DURATION_HEADER = "PERIOD"
+  public static final String DURATION_HEADER = "PERIOD"
                               + DELIMITER + "PERIOD_UNIT"
                               + DELIMITER + "MINIMUM"
                               + DELIMITER + "MAXIMUM"

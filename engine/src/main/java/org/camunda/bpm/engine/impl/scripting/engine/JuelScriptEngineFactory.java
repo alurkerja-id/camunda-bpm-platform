@@ -31,7 +31,7 @@ import javax.script.ScriptEngineFactory;
  */
 public class JuelScriptEngineFactory implements ScriptEngineFactory {
 
-  public static List<String> names;
+  public static final List<String> names;
   private static List<String> extensions;
   private static List<String> mimeTypes;
 

@@ -34,7 +34,7 @@ import org.camunda.bpm.engine.impl.interceptor.ProcessApplicationContextIntercep
 public class StandaloneProcessEngineConfiguration extends ProcessEngineConfigurationImpl {
 
   @Override
-  protected Collection<? extends CommandInterceptor> getDefaultCommandInterceptorsTxRequired() {
+  protected Collection<CommandInterceptor> getDefaultCommandInterceptorsTxRequired() {
     List<CommandInterceptor> defaultCommandInterceptorsTxRequired = new ArrayList<CommandInterceptor>();
     if (!isDisableExceptionCode()) {
       defaultCommandInterceptorsTxRequired.add(getExceptionCodeInterceptor());
@@ -47,7 +47,7 @@ public class StandaloneProcessEngineConfiguration extends ProcessEngineConfigura
   }
 
   @Override
-  protected Collection<? extends CommandInterceptor> getDefaultCommandInterceptorsTxRequiresNew() {
+  protected Collection<CommandInterceptor> getDefaultCommandInterceptorsTxRequiresNew() {
     List<CommandInterceptor> defaultCommandInterceptorsTxRequired = new ArrayList<CommandInterceptor>();
     if (!isDisableExceptionCode()) {
       defaultCommandInterceptorsTxRequired.add(getExceptionCodeInterceptor());

@@ -351,7 +351,7 @@ public interface HistoryService {
    * @deprecated As of v. 7.9.0, because there can be more than one history cleanup job at once, use {@link #findHistoryCleanupJobs} instead.
    * @return history cleanup job entity
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   Job findHistoryCleanupJob();
 
   /**
@@ -440,7 +440,7 @@ public interface HistoryService {
    * @throws AuthorizationException
    *          If the user has no {@link Permissions#DELETE_HISTORY} permission on {@link Resources#DECISION_DEFINITION}.
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   void deleteHistoricDecisionInstance(String decisionDefinitionId);
 
   /**

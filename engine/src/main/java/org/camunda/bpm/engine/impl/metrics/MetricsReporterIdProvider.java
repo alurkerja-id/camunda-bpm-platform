@@ -25,7 +25,7 @@ import org.camunda.bpm.engine.impl.history.event.HostnameProvider;
  *
  * @author Thorben Lindhauer
  */
-@Deprecated
+@Deprecated(forRemoval = false)
 public interface MetricsReporterIdProvider {
 
   /**

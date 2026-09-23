@@ -64,15 +64,12 @@ public class IoUtil {
       throw new ProcessEngineException("resource " + resourceName + " not found");
     }
 
-    ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-
     int next;
     byte[] result;
     byte[] buffer = new byte[1024];
 
-    BufferedInputStream inputStream = null;
-    try {
-      inputStream = new BufferedInputStream(resourceAsStream);
+    try (ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+         BufferedInputStream inputStream = new BufferedInputStream(resourceAsStream)) {
       while ((next = inputStream.read(buffer)) >= 0)
       {
         outStream.write(buffer, 0, next);
@@ -82,10 +79,6 @@ public class IoUtil {
     }
     catch(Exception e) {
       throw LOG.exceptionWhileReadingFile(resourceName, e);
-    }
-    finally {
-      IoUtil.closeSilently(inputStream);
-      IoUtil.closeSilently(outStream);
     }
     return new String(result, StandardCharsets.UTF_8);
   }
@@ -101,17 +94,12 @@ public class IoUtil {
   }
 
   public static void writeStringToFile(String content, String filePath) {
-    BufferedOutputStream outputStream = null;
-    try {
-      outputStream = new BufferedOutputStream(new FileOutputStream(getFile(filePath)));
+    try (BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(getFile(filePath)))) {
       outputStream.write(content.getBytes());
       outputStream.flush();
     }
     catch(Exception e) {
       throw LOG.exceptionWhileWritingToFile(filePath, e);
-    }
-    finally {
-      IoUtil.closeSilently(outputStream);
     }
   }
 

@@ -25,7 +25,7 @@ public class ParseException extends ProcessEngineException {
 
   private static final long serialVersionUID = 1L;
 
-  protected List<ResourceReport> resorceReports;
+  protected final List<ResourceReport> resorceReports;
 
   public ParseException(String exceptionMessage, String resource, List<Problem> errors, List<Problem> warnings) {
     super(exceptionMessage);

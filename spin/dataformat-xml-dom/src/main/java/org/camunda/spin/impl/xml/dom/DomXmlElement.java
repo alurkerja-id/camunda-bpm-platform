@@ -390,7 +390,7 @@ public class DomXmlElement extends SpinXmlElement {
    *
    * @return the XPath factory
    */
-  protected XPathFactory getXPathFactory() {
+  protected static XPathFactory getXPathFactory() {
     if (cachedXPathFactory == null) {
       cachedXPathFactory = XPathFactory.newInstance();
     }

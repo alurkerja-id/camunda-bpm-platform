@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.camunda.bpm.engine.impl.QueryOperator;
 
 import java.util.Date;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,7 +55,7 @@ public class ConditionQueryParameterDto {
     NAME_OPERATOR_MAP.put(NOT_LIKE_OPERATOR_NAME, QueryOperator.NOT_LIKE);
   };
 
-  protected static final Map<QueryOperator, String> OPERATOR_NAME_MAP = new HashMap<>();
+  protected static final Map<QueryOperator, String> OPERATOR_NAME_MAP = new EnumMap<>(QueryOperator.class);
 
   static {
     OPERATOR_NAME_MAP.put(QueryOperator.EQUALS, EQUALS_OPERATOR_NAME);

@@ -59,8 +59,8 @@ public class MultipartPayloadProvider implements MessageBodyReader<MultipartForm
 
   @Override
   public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-    return TYPE_NAME.equals(mediaType.getType().toLowerCase())
-        && SUB_TYPE_NAME.equals(mediaType.getSubtype().toLowerCase());
+    return TYPE_NAME.equalsIgnoreCase(mediaType.getType())
+        && SUB_TYPE_NAME.equalsIgnoreCase(mediaType.getSubtype());
   }
 
   public MultipartFormData readFrom(Class<MultipartFormData> type, Type genericType, Annotation[] annotations, MediaType mediaType,

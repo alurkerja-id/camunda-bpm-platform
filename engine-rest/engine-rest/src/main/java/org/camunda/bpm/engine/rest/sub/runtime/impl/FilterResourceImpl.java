@@ -80,9 +80,8 @@ public class FilterResourceImpl extends AbstractAuthorizedRestResource implement
   public static final Pattern EMPTY_JSON_BODY = Pattern.compile("\\s*\\{\\s*\\}\\s*");
   public static final String PROPERTIES_VARIABLES_KEY = "variables";
   public static final String PROPERTIES_VARIABLES_NAME_KEY = "name";
-  public static final List<Variant> VARIANTS = Variant.mediaTypes(MediaType.APPLICATION_JSON_TYPE, Hal.APPLICATION_HAL_JSON_TYPE).add().build();
+  protected static final List<Variant> VARIANTS = Variant.mediaTypes(MediaType.APPLICATION_JSON_TYPE, Hal.APPLICATION_HAL_JSON_TYPE).add().build();
 
-  protected String relativeRootResourcePath;
   protected FilterService filterService;
   protected Filter dbFilter;
 

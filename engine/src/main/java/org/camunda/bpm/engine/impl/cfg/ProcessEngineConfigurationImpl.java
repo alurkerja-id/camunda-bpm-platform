@@ -354,7 +354,6 @@ import org.camunda.bpm.engine.impl.telemetry.dto.JdkImpl;
 import org.camunda.bpm.engine.impl.telemetry.dto.ProductImpl;
 import org.camunda.bpm.engine.impl.telemetry.dto.TelemetryDataImpl;
 import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.impl.util.IoUtil;
 import org.camunda.bpm.engine.impl.util.ParseUtil;
 import org.camunda.bpm.engine.impl.util.ProcessEngineDetails;
 import org.camunda.bpm.engine.impl.util.ReflectUtil;
@@ -1380,11 +1379,9 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     }
 
     parsedBatchOperationsForHistoryCleanup = new HashMap<>();
-    if (batchOperationsForHistoryCleanup != null) {
-      for (Map.Entry<String, String> entry : batchOperationsForHistoryCleanup.entrySet()) {
-        Integer parsedTimeToLive = ParseUtil.parseHistoryTimeToLive(entry.getValue());
-        parsedBatchOperationsForHistoryCleanup.put(entry.getKey(), parsedTimeToLive);
-      }
+    for (Map.Entry<String, String> entry : batchOperationsForHistoryCleanup.entrySet()) {
+      Integer parsedTimeToLive = ParseUtil.parseHistoryTimeToLive(entry.getValue());
+      parsedBatchOperationsForHistoryCleanup.put(entry.getKey(), parsedTimeToLive);
     }
   }
 
@@ -1541,9 +1538,9 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   // command executors ////////////////////////////////////////////////////////
 
-  protected abstract Collection<? extends CommandInterceptor> getDefaultCommandInterceptorsTxRequired();
+  protected abstract Collection<CommandInterceptor> getDefaultCommandInterceptorsTxRequired();
 
-  protected abstract Collection<? extends CommandInterceptor> getDefaultCommandInterceptorsTxRequiresNew();
+  protected abstract Collection<CommandInterceptor> getDefaultCommandInterceptorsTxRequiresNew();
 
   protected void initCommandExecutors() {
     initActualCommandExecutor();
@@ -1658,7 +1655,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
         }
 
       } else if (jdbcUrl != null) {
-        if ((jdbcDriver == null) || (jdbcUrl == null) || (jdbcUsername == null)) {
+        if ((jdbcDriver == null) || (jdbcUsername == null)) {
           throw new ProcessEngineException("DataSource or JDBC properties have to be specified in a process engine configuration");
         }
 
@@ -1809,9 +1806,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
       }
 
       if (sqlSessionFactory == null) {
-        InputStream inputStream = null;
-        try {
-          inputStream = getMyBatisXmlConfigurationSteam();
+        try (InputStream inputStream = getMyBatisXmlConfigurationSteam()) {
 
           // update the jdbc parameters to the configured ones...
           Environment environment = new Environment("default", transactionFactory, dataSource);
@@ -1847,8 +1842,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
         } catch (Exception e) {
           throw new ProcessEngineException("Error while building ibatis SqlSessionFactory: " + e.getMessage(), e);
-        } finally {
-          IoUtil.closeSilently(inputStream);
         }
       }
     }
@@ -2111,8 +2104,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
    */
   protected void ensurePrefixAndSchemaFitToegether(String prefix, String schema) {
     if (schema == null) {
-      return;
-    } else if (prefix == null || (prefix != null && !prefix.startsWith(schema + "."))) {
+    } else if (prefix == null || !prefix.startsWith(schema + ".")) {
       throw new ProcessEngineException("When setting a schema the prefix has to be schema + '.'. Received schema: " + schema + " prefix: " + prefix);
     }
   }
@@ -2150,7 +2142,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     }
   }
 
-  protected Collection<? extends Deployer> getDefaultDeployers() {
+  protected Collection<Deployer> getDefaultDeployers() {
     List<Deployer> defaultDeployers = new ArrayList<>();
 
     BpmnDeployer bpmnDeployer = getBpmnDeployer();
@@ -2667,8 +2659,8 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     expressionManager.addFunction(CommandContextFunctions.CURRENT_USER_GROUPS,
         ReflectUtil.getMethod(CommandContextFunctions.class, CommandContextFunctions.CURRENT_USER_GROUPS));
 
-    expressionManager.addFunction(DateTimeFunctions.NOW,
-        ReflectUtil.getMethod(DateTimeFunctions.class, DateTimeFunctions.NOW));
+    expressionManager.addFunction(DateTimeFunctions.FUNCTION_NOW,
+        ReflectUtil.getMethod(DateTimeFunctions.class, DateTimeFunctions.FUNCTION_NOW));
     expressionManager.addFunction(DateTimeFunctions.DATE_TIME,
         ReflectUtil.getMethod(DateTimeFunctions.class, DateTimeFunctions.DATE_TIME));
   }
@@ -3484,7 +3476,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   /**
    * @deprecated use {@link #getCustomPreBPMNParseListeners} instead.
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public List<BpmnParseListener> getPreParseListeners() {
     return preParseListeners;
   }
@@ -3492,7 +3484,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   /**
    * @deprecated use {@link #setCustomPreBPMNParseListeners} instead.
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public void setPreParseListeners(List<BpmnParseListener> preParseListeners) {
     this.preParseListeners = preParseListeners;
   }
@@ -3500,7 +3492,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   /**
    * @deprecated use {@link #getCustomPostBPMNParseListeners} instead.
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public List<BpmnParseListener> getPostParseListeners() {
     return postParseListeners;
   }
@@ -3508,7 +3500,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   /**
    * @deprecated use {@link #setCustomPostBPMNParseListeners} instead.
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public void setPostParseListeners(List<BpmnParseListener> postParseListeners) {
     this.postParseListeners = postParseListeners;
   }
@@ -4425,7 +4417,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   /**
    * @deprecated use {@link #getHostnameProvider()} instead.
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public MetricsReporterIdProvider getMetricsReporterIdProvider() {
     return metricsReporterIdProvider;
   }
@@ -4433,7 +4425,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   /**
    * @deprecated use {@link #setHostnameProvider(HostnameProvider)} instead.
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public ProcessEngineConfigurationImpl setMetricsReporterIdProvider(MetricsReporterIdProvider metricsReporterIdProvider) {
     this.metricsReporterIdProvider = metricsReporterIdProvider;
     return this;

@@ -49,7 +49,7 @@ public abstract class CmmnElementImpl extends CmmnModelElementInstanceImpl imple
    * @deprecated CMMN 1.0 only; CMMN 1.1 uses {@link #documentationCollection} instead
    */
   // cmmn 1.0
-  @Deprecated
+  @Deprecated(forRemoval = false)
   protected static Attribute<String> descriptionAttribute;
 
   // cmmn 1.1

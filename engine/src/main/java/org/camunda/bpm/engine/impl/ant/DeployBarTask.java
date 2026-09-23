@@ -32,7 +32,6 @@ import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.ProcessEngineInfo;
 import org.camunda.bpm.engine.ProcessEngines;
 import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.impl.util.IoUtil;
 import org.camunda.bpm.engine.impl.util.LogUtil;
 
 
@@ -92,20 +91,17 @@ public class DeployBarTask extends Task {
       RepositoryService repositoryService = processEngine.getRepositoryService();
 
       log("Starting to deploy " + files.size() + " files");
-      for (File file: files) {
-        String path = file.getAbsolutePath();
+      for (File barFile: files) {
+        String path = barFile.getAbsolutePath();
         log("Handling file " + path);
         try {
-          FileInputStream inputStream = new FileInputStream(file);
-          try {
+          try (FileInputStream inputStream = new FileInputStream(barFile)) {
             log("deploying bar "+path);
             repositoryService
                 .createDeployment()
-                .name(file.getName())
+                .name(barFile.getName())
                 .addZipInputStream(new ZipInputStream(inputStream))
                 .deploy();
-          } finally {
-            IoUtil.closeSilently(inputStream);
           }
         } catch (Exception e) {
           throw new BuildException("couldn't deploy bar "+path+": "+e.getMessage(), e);

@@ -87,7 +87,7 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
   public static final String SORT_BY_CASE_INSTANCE_VARIABLE = "caseInstanceVariable";
   public static final String SORT_BY_CASE_EXECUTION_VARIABLE = "caseExecutionVariable";
 
-  public static final List<String> VALID_SORT_BY_VALUES;
+  protected static final List<String> VALID_SORT_BY_VALUES;
   static {
     VALID_SORT_BY_VALUES = new ArrayList<>();
     VALID_SORT_BY_VALUES.add(SORT_BY_PROCESS_INSTANCE_ID_VALUE);
@@ -542,7 +542,7 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
   /**
    * @deprecated the query parameter was renamed; use {@link #setDueDate(Date)}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   @CamundaQueryParam(value = "due", converter = DateConverter.class)
   public void setDue(Date dueDate) {
     this.dueDate = dueDate;
@@ -596,7 +596,7 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
   /**
    * @deprecated the query parameter was renamed; use {@link #setFollowUpDate(Date)}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   @CamundaQueryParam(value = "followUp", converter = DateConverter.class)
   public void setFollowUp(Date followUpDate) {
     this.followUpDate = followUpDate;
@@ -635,7 +635,7 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
   /**
    * @deprecated the query parameter was renamed; use {@link #setCreatedOn(Date)}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   @CamundaQueryParam(value = "created", converter = DateConverter.class)
   public void setCreated(Date createdOn) {
     this.createdOn = createdOn;

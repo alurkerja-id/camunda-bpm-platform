@@ -316,7 +316,7 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
 
   /** @deprecated the method name is misspelt; use {@link #taskUnassigned()} */
   @Override
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public TaskQuery taskUnnassigned() {
     return taskUnassigned();
   }
@@ -483,7 +483,8 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   @Override
   public TaskQuery includeAssignedTasks() {
     if (candidateUser == null && candidateGroup == null && candidateGroupLike == null && candidateGroups == null
-        && !isWithCandidateGroups() && !isWithoutCandidateGroups() && !isWithCandidateUsers() && !isWithoutCandidateUsers()
+        && !Boolean.TRUE.equals(isWithCandidateGroups()) && !Boolean.TRUE.equals(isWithoutCandidateGroups())
+        && !Boolean.TRUE.equals(isWithCandidateUsers()) && !Boolean.TRUE.equals(isWithoutCandidateUsers())
         && !expressions.containsKey("taskCandidateUser") && !expressions.containsKey("taskCandidateGroup")
         && !expressions.containsKey("taskCandidateGroupIn")) {
       throw new ProcessEngineException("Invalid query usage: candidateUser, candidateGroup, candidateGroupLike, candidateGroupIn, withCandidateGroups, withoutCandidateGroups, withCandidateUsers, withoutCandidateUsers has to be called before 'includeAssignedTasks'.");
@@ -1170,9 +1171,9 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   }
 
   protected List<String> getGroupsForCandidateUser(String candidateUser) {
-    Map<String, List<String>> cachedUserGroups = getCachedUserGroups();
-    if (cachedUserGroups.containsKey(candidateUser)) {
-      return cachedUserGroups.get(candidateUser);
+    Map<String, List<String>> candidateUserGroupsCache = getCachedUserGroups();
+    if (candidateUserGroupsCache.containsKey(candidateUser)) {
+      return candidateUserGroupsCache.get(candidateUser);
     }
 
     List<Group> groups = Context.getCommandContext()
@@ -1186,7 +1187,7 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
       groupIds.add(group.getId());
     }
 
-    cachedUserGroups.put(candidateUser, groupIds);
+    candidateUserGroupsCache.put(candidateUser, groupIds);
 
     return groupIds;
   }
@@ -1211,14 +1212,14 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
     ProcessEngineConfigurationImpl processEngineConfiguration = Context.getProcessEngineConfiguration();
     VariableSerializers variableSerializers = processEngineConfiguration.getVariableSerializers();
     String dbType = processEngineConfiguration.getDatabaseType();
-    for(QueryVariableValue var : variables) {
-      var.initialize(variableSerializers, dbType);
+    for(QueryVariableValue queryVariableValue : variables) {
+      queryVariableValue.initialize(variableSerializers, dbType);
     }
 
     if (!queries.isEmpty()) {
       for (TaskQueryImpl orQuery: queries) {
-        for (QueryVariableValue var : orQuery.variables) {
-          var.initialize(variableSerializers, dbType);
+        for (QueryVariableValue queryVariableValue : orQuery.variables) {
+          queryVariableValue.initialize(variableSerializers, dbType);
         }
       }
     }
@@ -1573,7 +1574,7 @@ public class TaskQueryImpl extends AbstractQuery<TaskQuery, Task> implements Tas
   }
 
   public boolean isIncludeAssignedTasks() {
-    return includeAssignedTasks != null ? includeAssignedTasks : false;
+    return includeAssignedTasks != null && includeAssignedTasks;
   }
 
   public Boolean isIncludeAssignedTasksInternal() {

@@ -50,7 +50,7 @@ public class TaskManager extends AbstractManager {
       .processInstanceId(processInstanceId)
       .list();
 
-    String reason = (deleteReason == null || deleteReason.length() == 0) ? TaskEntity.DELETE_REASON_DELETED : deleteReason;
+    String reason = (deleteReason == null || deleteReason.isEmpty()) ? TaskEntity.DELETE_REASON_DELETED : deleteReason;
 
     for (TaskEntity task: tasks) {
       task.delete(reason, cascade, skipCustomListeners);
@@ -64,7 +64,7 @@ public class TaskManager extends AbstractManager {
         .caseInstanceId(caseInstanceId)
         .list();
 
-      String reason = (deleteReason == null || deleteReason.length() == 0) ? TaskEntity.DELETE_REASON_DELETED : deleteReason;
+      String reason = (deleteReason == null || deleteReason.isEmpty()) ? TaskEntity.DELETE_REASON_DELETED : deleteReason;
 
       for (TaskEntity task: tasks) {
         task.delete(reason, cascade, false);
@@ -129,7 +129,7 @@ public class TaskManager extends AbstractManager {
    * @deprecated set the page on the query itself and call
    *             {@link #findTasksByQueryCriteria(TaskQueryImpl)}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public List<Task> findTasksByQueryCriteria(TaskQueryImpl taskQuery, Page page) {
     taskQuery.setFirstResult(page.getFirstResult());
     taskQuery.setMaxResults(page.getMaxResults());

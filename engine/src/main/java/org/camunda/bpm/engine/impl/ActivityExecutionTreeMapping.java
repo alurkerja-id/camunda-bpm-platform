@@ -17,6 +17,7 @@
 package org.camunda.bpm.engine.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -79,9 +80,7 @@ public class ActivityExecutionTreeMapping {
 
   protected ExecutionEntity intersect(Set<ExecutionEntity> executions, String[] executionIds) {
     Set<String> executionIdSet = new HashSet<String>();
-    for (String executionId : executionIds) {
-      executionIdSet.add(executionId);
-    }
+    Collections.addAll(executionIdSet, executionIds);
 
     for (ExecutionEntity execution : executions) {
       if (executionIdSet.contains(execution.getId())) {

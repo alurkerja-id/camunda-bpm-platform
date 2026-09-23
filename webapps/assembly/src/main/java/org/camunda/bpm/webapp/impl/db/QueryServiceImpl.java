@@ -68,7 +68,7 @@ public class QueryServiceImpl implements QueryService {
     return processEngineConfiguration;
   }
 
-  protected  <T> void configureAuthCheck(ListQueryParameterObject parameter,
+  protected void configureAuthCheck(ListQueryParameterObject parameter,
                                          ProcessEngineConfigurationImpl engineConfig,
                                          CommandContext commandContext) {
     AuthorizationCheck authCheck = parameter.getAuthCheck();
@@ -130,7 +130,7 @@ public class QueryServiceImpl implements QueryService {
     protected Object parameter;
     protected Class clazz;
 
-    public <T> ExecuteSingleQueryCmd(String statement, Object parameter, Class<T> clazz) {
+    public ExecuteSingleQueryCmd(String statement, Object parameter, Class<T> clazz) {
       this.statement = statement;
       this.parameter = parameter;
       this.clazz = clazz;

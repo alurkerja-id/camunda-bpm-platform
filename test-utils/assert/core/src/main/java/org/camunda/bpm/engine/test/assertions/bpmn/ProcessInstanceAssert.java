@@ -133,7 +133,7 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
     Stream <ActivityInstance> flattendActivityInstances = collectAllDescendantActivities(activityInstanceTree);
 
     Stream<String> descendantActivityIdStream = flattendActivityInstances
-        .flatMap(activityInstance -> getActivityIdAndCollectTransitions(activityInstance));
+        .flatMap(this::getActivityIdAndCollectTransitions);
     List<String> descendantActivityIds = descendantActivityIdStream.filter(
         // remove the root id from the list
         activityId -> !activityId.equals(activityInstanceTree.getActivityId())
@@ -168,7 +168,7 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
     ActivityInstance[] childActivityInstances = root.getChildActivityInstances();
     return Stream.concat(
         Stream.of(root),
-        Arrays.stream(childActivityInstances).flatMap(child -> collectAllDescendantActivities(child))
+        Arrays.stream(childActivityInstances).flatMap(this::collectAllDescendantActivities)
     );
   }
 

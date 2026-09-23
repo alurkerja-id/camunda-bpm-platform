@@ -73,8 +73,8 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -260,11 +260,9 @@ public class ProcessDefinitionResourceImpl implements ProcessDefinitionResource 
     try {
       processModelIn = engine.getRepositoryService().getProcessModel(processDefinitionId);
       byte[] processModel = IoUtil.readInputStream(processModelIn, "processModelBpmn20Xml");
-      return ProcessDefinitionDiagramDto.create(processDefinitionId, new String(processModel, "UTF-8"));
+      return ProcessDefinitionDiagramDto.create(processDefinitionId, new String(processModel, StandardCharsets.UTF_8));
     } catch (NotFoundException e) {
       throw new InvalidRequestException(Status.NOT_FOUND, e, "No matching definition with id " + processDefinitionId);
-    } catch (UnsupportedEncodingException e) {
-      throw new RestException(Status.INTERNAL_SERVER_ERROR, e);
     } finally {
       IoUtil.closeSilently(processModelIn);
     }
@@ -451,12 +449,10 @@ public class ProcessDefinitionResourceImpl implements ProcessDefinitionResource 
       return Response.ok(deployedStartForm, getStartFormMediaType(processDefinitionId)).build();
     } catch (NotFoundException e) {
       throw new InvalidRequestException(Status.NOT_FOUND, e.getMessage());
-    } catch (NullValueException e) {
+    } catch (NullValueException | BadUserRequestException e) {
       throw new InvalidRequestException(Status.BAD_REQUEST, e.getMessage());
     } catch (AuthorizationException e) {
       throw new InvalidRequestException(Status.FORBIDDEN, e.getMessage());
-    } catch (BadUserRequestException e) {
-      throw new InvalidRequestException(Status.BAD_REQUEST, e.getMessage());
     }
   }
 

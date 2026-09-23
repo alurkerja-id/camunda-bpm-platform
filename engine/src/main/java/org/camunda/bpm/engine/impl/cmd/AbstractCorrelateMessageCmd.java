@@ -119,7 +119,7 @@ public abstract class AbstractCorrelateMessageCmd {
       ProcessInstance processInstance = execution.getProcessInstance();
       resultWithVariables.setProcessInstance(processInstance);
 
-      if (variablesInResultEnabled && execution != null) {
+      if (variablesInResultEnabled) {
         variablesListener = new ExecutionVariableSnapshotObserver(execution, false, deserializeVariableValues);
       }
       triggerExecution(commandContext, handlerResult);

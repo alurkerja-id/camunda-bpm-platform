@@ -41,7 +41,7 @@ public class GetDeploymentProcessDiagramLayoutCmd implements Command<DiagramLayo
   protected String processDefinitionId;
 
   public GetDeploymentProcessDiagramLayoutCmd(String processDefinitionId) {
-    if (processDefinitionId == null || processDefinitionId.length() < 1) {
+    if (processDefinitionId == null || processDefinitionId.isEmpty()) {
       throw new ProcessEngineException("The process definition id is mandatory, but '" + processDefinitionId + "' has been provided.");
     }
     this.processDefinitionId = processDefinitionId;

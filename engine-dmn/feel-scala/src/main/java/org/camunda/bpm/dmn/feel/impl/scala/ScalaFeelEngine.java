@@ -21,7 +21,6 @@ import org.camunda.bpm.dmn.feel.impl.scala.function.CustomFunctionTransformer;
 import org.camunda.bpm.dmn.feel.impl.scala.function.FeelCustomFunctionProvider;
 import org.camunda.bpm.dmn.feel.impl.scala.spin.SpinValueMapperFactory;
 import org.camunda.bpm.engine.variable.context.VariableContext;
-import org.camunda.feel.FeelEngine$;
 import org.camunda.feel.FeelEngine.Builder;
 import org.camunda.feel.FeelEngine.Failure;
 import org.camunda.feel.context.CustomContext;

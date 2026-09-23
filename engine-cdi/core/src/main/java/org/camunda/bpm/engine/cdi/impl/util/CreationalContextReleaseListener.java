@@ -54,7 +54,7 @@ public class CreationalContextReleaseListener implements CommandContextListener 
     try {
       creationalContext.release();
     } catch(Exception e) {
-      LOG.log(Level.WARNING, "Exception while releasing CDI creational context "+e.getMessage(), e);
+      LOG.log(Level.WARNING, e, () -> "Exception while releasing CDI creational context " + e.getMessage());
     }
   }
 

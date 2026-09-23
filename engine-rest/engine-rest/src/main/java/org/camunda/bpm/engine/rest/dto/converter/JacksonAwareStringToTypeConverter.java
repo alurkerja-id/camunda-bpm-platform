@@ -16,8 +16,6 @@
  */
 package org.camunda.bpm.engine.rest.dto.converter;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
 
@@ -41,12 +39,6 @@ public abstract class JacksonAwareStringToTypeConverter<T> implements StringToTy
   protected T mapToType(String value, Class<T> typeClass) {
     try {
       return objectMapper.readValue(value, typeClass);
-    } catch (JsonParseException e) {
-      throw new InvalidRequestException(Status.BAD_REQUEST, e, String.format("Cannot convert value %s to java type %s",
-          value, typeClass.getName()));
-    } catch (JsonMappingException e) {
-      throw new InvalidRequestException(Status.BAD_REQUEST, e, String.format("Cannot convert value %s to java type %s",
-          value, typeClass.getName()));
     } catch (IOException e) {
       throw new InvalidRequestException(Status.BAD_REQUEST, e, String.format("Cannot convert value %s to java type %s",
           value, typeClass.getName()));

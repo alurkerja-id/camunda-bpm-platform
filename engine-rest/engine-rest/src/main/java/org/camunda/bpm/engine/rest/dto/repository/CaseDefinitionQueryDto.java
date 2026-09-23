@@ -149,7 +149,7 @@ public class CaseDefinitionQueryDto extends AbstractQueryDto<CaseDefinitionQuery
   /**
    * @deprecated use {@link #setLatestVersion(Boolean)}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   @CamundaQueryParam(value = "latest", converter = BooleanConverter.class)
   public void setLatest(Boolean latest) {
     setLatestVersion(latest);

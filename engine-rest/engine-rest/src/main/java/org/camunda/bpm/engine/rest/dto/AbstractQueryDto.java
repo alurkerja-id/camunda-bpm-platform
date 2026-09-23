@@ -45,7 +45,7 @@ public abstract class AbstractQueryDto<T extends Query<?, ?>>  extends AbstractS
   public static final String SORT_ORDER_ASC_VALUE = "asc";
   public static final String SORT_ORDER_DESC_VALUE = "desc";
 
-  public static final List<String> VALID_SORT_ORDER_VALUES;
+  protected static final List<String> VALID_SORT_ORDER_VALUES;
   static {
     VALID_SORT_ORDER_VALUES = new ArrayList<String>();
     VALID_SORT_ORDER_VALUES.add(SORT_ORDER_ASC_VALUE);

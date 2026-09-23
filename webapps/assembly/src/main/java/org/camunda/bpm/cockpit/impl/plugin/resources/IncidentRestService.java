@@ -35,14 +35,14 @@ import javax.ws.rs.core.UriInfo;
 
 import org.camunda.bpm.cockpit.impl.plugin.base.dto.IncidentDto;
 import org.camunda.bpm.cockpit.impl.plugin.base.dto.query.IncidentQueryDto;
-import org.camunda.bpm.cockpit.plugin.resource.AbstractPluginResource;
+import org.camunda.bpm.cockpit.plugin.resource.AbstractCockpitPluginResource;
 import org.camunda.bpm.engine.rest.dto.CountResultDto;
 
 /**
  * @author roman.smirnov
  */
 @Produces(MediaType.APPLICATION_JSON)
-public class IncidentRestService extends AbstractPluginResource {
+public class IncidentRestService extends AbstractCockpitPluginResource {
 
   public final static String PATH = "/incident";
 

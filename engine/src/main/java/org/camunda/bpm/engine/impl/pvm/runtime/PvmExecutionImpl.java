@@ -251,7 +251,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
     if (currentScope != currentScope.getProcessDefinition()) {
       ActivityImpl currentActivity = (ActivityImpl) currentScope;
 
-      if (currentActivity != null && currentActivity.getIoMapping() != null && !skipIoMapping) {
+      if (currentActivity.getIoMapping() != null && !skipIoMapping) {
         currentActivity.getIoMapping().executeInputParameters(this);
       }
     }
@@ -1129,7 +1129,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
     return result;
   }
 
-  public List<? extends PvmExecutionImpl> getEventScopeExecutions() {
+  public List<PvmExecutionImpl> getEventScopeExecutions() {
     List<? extends PvmExecutionImpl> children = getExecutions();
     List<PvmExecutionImpl> result = new ArrayList<>();
 
@@ -2104,12 +2104,12 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
   protected void dispatchScopeEvents(PvmExecutionImpl execution) {
     PvmExecutionImpl scopeExecution = execution.isScope() ? execution : execution.getParent();
 
-    List<DelayedVariableEvent> delayedEvents = new ArrayList<>(scopeExecution.getDelayedEvents());
+    List<DelayedVariableEvent> scopeDelayedEvents = new ArrayList<>(scopeExecution.getDelayedEvents());
     scopeExecution.clearDelayedEvents();
 
     Map<PvmExecutionImpl, String> activityInstanceIds = new HashMap<>();
     Map<PvmExecutionImpl, String> activityIds = new HashMap<>();
-    initActivityIds(delayedEvents, activityInstanceIds, activityIds);
+    initActivityIds(scopeDelayedEvents, activityInstanceIds, activityIds);
 
     //For each delayed variable event we have to check if the delayed event can be dispatched,
     //the check will be done with the help of the activity id and activity instance id.
@@ -2117,7 +2117,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
     //the other delayed variable events. We have to check the target scope with the last activity id and activity instance id
     //and also the replace pointer if it exist. Because on concurrency the replace pointer will be set on which we have
     //to check the latest state.
-    for (DelayedVariableEvent event : delayedEvents) {
+    for (DelayedVariableEvent event : scopeDelayedEvents) {
       PvmExecutionImpl targetScope = event.getTargetScope();
       PvmExecutionImpl replaced = targetScope.getReplacedBy() != null ? targetScope.getReplacedBy() : targetScope;
       dispatchOnSameActivity(targetScope, replaced, activityIds, activityInstanceIds, event);

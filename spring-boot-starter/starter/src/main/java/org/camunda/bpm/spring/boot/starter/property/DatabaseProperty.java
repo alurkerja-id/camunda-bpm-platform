@@ -29,7 +29,7 @@ import static org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl.DB_
 import static org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties.joinOn;
 
 public class DatabaseProperty {
-  public static final List<String> SCHEMA_UPDATE_VALUES = Arrays.asList(
+  protected static final List<String> SCHEMA_UPDATE_VALUES = Arrays.asList(
     DB_SCHEMA_UPDATE_TRUE,
     DB_SCHEMA_UPDATE_FALSE,
     DB_SCHEMA_UPDATE_CREATE,

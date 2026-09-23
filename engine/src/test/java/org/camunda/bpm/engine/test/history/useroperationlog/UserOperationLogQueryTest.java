@@ -44,8 +44,8 @@ import static org.camunda.bpm.engine.history.UserOperationLogEntry.OPERATION_TYP
 import static org.camunda.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_UPDATE;
 import static org.camunda.bpm.engine.impl.cmd.AbstractSetBatchStateCmd.SUSPENSION_STATE_PROPERTY;
 import static org.camunda.bpm.engine.impl.cmd.AbstractSetProcessDefinitionStateCmd.INCLUDE_PROCESS_INSTANCES_PROPERTY;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.ASSIGNEE;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.OWNER;
+import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.ASSIGNEE_PROPERTY;
+import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.OWNER_PROPERTY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -163,8 +163,8 @@ public class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
     assertEquals(updates.count(), query().operationId(updateOperationId).count());
 
     // changed properties
-    assertEquals(3, query().property(ASSIGNEE).count());
-    assertEquals(2, query().property(OWNER).count());
+    assertEquals(3, query().property(ASSIGNEE_PROPERTY).count());
+    assertEquals(2, query().property(OWNER_PROPERTY).count());
 
     // ascending order results by time
     List<UserOperationLogEntry> ascLog = query().orderByTimestamp().asc().list();

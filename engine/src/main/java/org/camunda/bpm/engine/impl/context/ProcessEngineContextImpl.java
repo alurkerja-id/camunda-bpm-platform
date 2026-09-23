@@ -18,12 +18,7 @@ package org.camunda.bpm.engine.impl.context;
 
 public class ProcessEngineContextImpl {
 
-  protected static ThreadLocal<Boolean> commandContextNew = new ThreadLocal<Boolean>() {
-    @Override
-    protected Boolean initialValue() {
-      return Boolean.FALSE;
-    }
-  };
+  protected static ThreadLocal<Boolean> commandContextNew = ThreadLocal.withInitial(() -> Boolean.FALSE);
 
   public static boolean get() {
     return commandContextNew.get();

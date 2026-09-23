@@ -17,9 +17,7 @@
 package org.camunda.bpm.engine.impl.jobexecutor.historycleanup;
 
 import java.util.Date;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cmd.CommandLogger;
 import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.core.variable.mapping.value.ConstantValueProvider;
 import org.camunda.bpm.engine.impl.core.variable.mapping.value.ParameterValueProvider;
@@ -34,8 +32,6 @@ import org.camunda.bpm.engine.impl.util.ClockUtil;
  * @author Svetlana Dorokhova
  */
 public class HistoryCleanupJobDeclaration extends JobDeclaration<HistoryCleanupContext, EverLivingJobEntity> {
-
-  private final static CommandLogger LOG = ProcessEngineLogger.CMD_LOGGER;
 
   public HistoryCleanupJobDeclaration() {
     super(HistoryCleanupJobHandler.TYPE);

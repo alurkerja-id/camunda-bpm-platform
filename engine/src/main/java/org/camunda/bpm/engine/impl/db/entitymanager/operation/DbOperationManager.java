@@ -48,11 +48,11 @@ public class DbOperationManager {
 
   // comparators ////////////////
 
-  public static Comparator<Class<?>> INSERT_TYPE_COMPARATOR = new EntityTypeComparatorForInserts();
-  public static Comparator<Class<?>> MODIFICATION_TYPE_COMPARATOR = new EntityTypeComparatorForModifications();
-  public static Comparator<DbEntityOperation> INSERT_OPERATION_COMPARATOR = new DbEntityOperationComparator();
-  public static Comparator<DbEntityOperation> MODIFICATION_OPERATION_COMPARATOR  = new DbEntityOperationComparator();
-  public static Comparator<DbBulkOperation> BULK_OPERATION_COMPARATOR = new DbBulkOperationComparator();
+  public static final Comparator<Class<?>> INSERT_TYPE_COMPARATOR = new EntityTypeComparatorForInserts();
+  public static final Comparator<Class<?>> MODIFICATION_TYPE_COMPARATOR = new EntityTypeComparatorForModifications();
+  public static final Comparator<DbEntityOperation> INSERT_OPERATION_COMPARATOR = new DbEntityOperationComparator();
+  public static final Comparator<DbEntityOperation> MODIFICATION_OPERATION_COMPARATOR  = new DbEntityOperationComparator();
+  public static final Comparator<DbBulkOperation> BULK_OPERATION_COMPARATOR = new DbBulkOperationComparator();
 
   // pre-sorted operation maps //////////////
 
@@ -69,7 +69,7 @@ public class DbOperationManager {
   public SortedMap<Class<?>, SortedSet<DbBulkOperation>> bulkOperations = new TreeMap<Class<?>, SortedSet<DbBulkOperation>>(MODIFICATION_TYPE_COMPARATOR);
 
   /** bulk modifications (DELETE, UPDATE) for which order of execution is important */
-  public LinkedHashSet<DbBulkOperation> bulkOperationsInsertionOrder = new LinkedHashSet<DbBulkOperation>();
+  public Set<DbBulkOperation> bulkOperationsInsertionOrder = new LinkedHashSet<DbBulkOperation>();
 
   public boolean addOperation(DbEntityOperation newOperation) {
     if(newOperation.getOperationType() == INSERT) {

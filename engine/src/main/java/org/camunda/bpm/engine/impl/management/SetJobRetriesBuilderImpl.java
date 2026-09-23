@@ -106,7 +106,7 @@ public class SetJobRetriesBuilderImpl implements SetJobRetriesBuilder {
       if ((jobId == null || jobId.isEmpty()) && (jobDefinitionId == null || jobDefinitionId.isEmpty())) {
         throw LOG.exceptionSettingJobRetriesJobsNotSpecifiedCorrectly();
       }
-    } else if(byJobIds) {
+    } else {
       ensureNotEmpty("job ids", jobIds);
     }
 

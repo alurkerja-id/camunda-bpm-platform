@@ -477,8 +477,8 @@ public class DeployCmd implements Command<DeploymentWithDefinitions>, Serializab
     return result;
   }
 
-  protected List<? extends ProcessDefinition>   getDeployedProcesses(CommandContext commandContext, DeploymentWithDefinitions deployment) {
-    List<? extends ProcessDefinition> deployedProcessDefinitions = deployment.getDeployedProcessDefinitions();
+  protected List<ProcessDefinition>   getDeployedProcesses(CommandContext commandContext, DeploymentWithDefinitions deployment) {
+    List<ProcessDefinition> deployedProcessDefinitions = deployment.getDeployedProcessDefinitions();
     if (deployedProcessDefinitions == null) {
       // existing deployment
       ProcessDefinitionManager manager = commandContext.getProcessDefinitionManager();

@@ -51,7 +51,7 @@ public class CamundaBpmVersionTest {
 
     final PropertiesPropertySource source = version.getPropertiesPropertySource();
     assertThat(source.getName()).isEqualTo("CamundaBpmVersion");
-    final String versionFromPropertiesSource = (String) source.getProperty(key(CamundaBpmVersion.VERSION));
+    final String versionFromPropertiesSource = (String) source.getProperty(key(CamundaBpmVersion.VERSION_KEY));
     assertThat(versionFromPropertiesSource).startsWith(currentVersion);
     assertThat(source.getProperty(key(CamundaBpmVersion.FORMATTED_VERSION))).isEqualTo("(v" + versionFromPropertiesSource + ")");
     assertThat(source.getProperty(key(CamundaBpmVersion.IS_ENTERPRISE))).isEqualTo(Boolean.FALSE);

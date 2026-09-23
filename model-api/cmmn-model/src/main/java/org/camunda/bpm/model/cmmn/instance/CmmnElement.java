@@ -32,14 +32,14 @@ public interface CmmnElement extends CmmnModelElementInstance {
    * @deprecated the description attribute is CMMN 1.0; CMMN 1.1 carries the same text in
    *             documentation elements, see {@link #getDocumentations()}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   String getDescription();
 
   /**
    * @deprecated the description attribute is CMMN 1.0; CMMN 1.1 carries the same text in
    *             documentation elements, see {@link #getDocumentations()}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   void setDescription(String description);
 
   Collection<Documentation> getDocumentations();

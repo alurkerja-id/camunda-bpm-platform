@@ -51,7 +51,7 @@ public final class BpmnModelConstants {
   /**
    * @deprecated use {@link #CAMUNDA_NS}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public static final String ACTIVITI_NS = "http://activiti.org/bpmn";
 
   /** CAMUNDA_NS namespace */

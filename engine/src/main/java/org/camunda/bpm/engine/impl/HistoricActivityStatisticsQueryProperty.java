@@ -23,7 +23,11 @@ import org.camunda.bpm.engine.query.QueryProperty;
  * @author Roman Smirnov
  *
  */
-public interface HistoricActivityStatisticsQueryProperty {
+public final class HistoricActivityStatisticsQueryProperty {
+
+  private HistoricActivityStatisticsQueryProperty() {
+  }
+
 
   public static final QueryProperty ACTIVITY_ID_ = new QueryPropertyImpl("ID_");
 

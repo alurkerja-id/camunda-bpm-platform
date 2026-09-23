@@ -52,7 +52,7 @@ public class HistoricCaseInstanceQueryDto extends AbstractQueryDto<HistoricCaseI
   public static final String SORT_BY_CASE_INSTANCE_DURATION_VALUE = "duration";
   private static final String SORT_BY_TENANT_ID = "tenantId";
 
-  public static final List<String> VALID_SORT_BY_VALUES;
+  protected static final List<String> VALID_SORT_BY_VALUES;
   static {
     VALID_SORT_BY_VALUES = new ArrayList<String>();
     VALID_SORT_BY_VALUES.add(SORT_BY_CASE_INSTANCE_ID_VALUE);

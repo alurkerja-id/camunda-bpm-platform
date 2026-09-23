@@ -382,7 +382,7 @@ public class FetchAndLockHandlerImpl implements Runnable, FetchAndLockHandler {
         }
         capacity = parsedCapacity;
       } catch (NumberFormatException e) {
-        LOG.log(Level.WARNING, "Invalid blocking queue capacity parameter: [" + queueSizeRequestParam + "], falling back to default value", e);
+        LOG.log(Level.WARNING, e, () -> "Invalid blocking queue capacity parameter: [" + queueSizeRequestParam + "], falling back to default value");
       }
     }
     return capacity;

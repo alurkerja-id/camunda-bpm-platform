@@ -23,7 +23,11 @@ import org.camunda.bpm.engine.query.QueryProperty;
 /**
  * @author Daniel Meyer
  */
-public interface EventSubscriptionQueryProperty {
+public final class EventSubscriptionQueryProperty {
+
+  private EventSubscriptionQueryProperty() {
+  }
+
 
   // properties used in event subscription queries:
 

@@ -49,6 +49,7 @@ public abstract class DomXmlNodeIterator<T extends SpinXmlNode> implements Itera
     }
   }
 
+  @Override
   public void remove() {
     throw LOG.methodNotSupportedByClass("remove", DomXmlElementIterable.class);
   }

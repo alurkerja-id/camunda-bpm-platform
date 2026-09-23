@@ -102,10 +102,6 @@
     <camunda.osgi.activator />
     <camunda.osgi.failok>false</camunda.osgi.failok>
     <camunda.osgi.export>${camunda.osgi.export.pkg};${camunda.osgi.version};-noimport:=true</camunda.osgi.export>
-    <!--
-    <camunda.osgi.export.pkg>!*.impl;${camunda.artifact}*</camunda.osgi.export.pkg>
-    <camunda.osgi.private.pkg>${camunda.artifact}*.impl</camunda.osgi.private.pkg>
-    -->
     <camunda.osgi.export.pkg>${camunda.artifact}*</camunda.osgi.export.pkg>
     <camunda.osgi.private.pkg />
     <camunda.osgi.version>version=${project.version}</camunda.osgi.version>

@@ -28,14 +28,14 @@ public interface PlanItemOnPart extends OnPart {
    * @deprecated CMMN 1.0 pointed at the sentry itself; CMMN 1.1 points at a criterion, see
    *             {@link #getExitCriterion()}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   Sentry getSentry();
 
   /**
    * @deprecated CMMN 1.0 pointed at the sentry itself; CMMN 1.1 points at a criterion, see
    *             {@link #setExitCriterion(ExitCriterion)}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   void setSentry(Sentry sentry);
 
   ExitCriterion getExitCriterion();

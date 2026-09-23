@@ -654,7 +654,7 @@ public class ManagementServiceImpl extends ServiceImpl implements ManagementServ
    * @deprecated The sending telemetry feature is removed.
    * Please remove the method references as they are no longer needed.
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   @Override
   public void toggleTelemetry(boolean enabled) {
     commandExecutor.execute(new TelemetryConfigureCmd(enabled));
@@ -664,7 +664,7 @@ public class ManagementServiceImpl extends ServiceImpl implements ManagementServ
    * @deprecated The sending telemetry feature is removed.
    * Please remove the method references as they are no longer needed.
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   @Override
   public Boolean isTelemetryEnabled() {
     return commandExecutor.execute(new IsTelemetryEnabledCmd());

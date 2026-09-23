@@ -60,10 +60,8 @@ public final class IoUtil {
    * @throws IOException
    */
   private static String getStringFromInputStream(InputStream inputStream, boolean trim) throws IOException {
-    BufferedReader bufferedReader = null;
     StringBuilder stringBuilder = new StringBuilder();
-    try {
-      bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+    try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
       String line;
       while ((line = bufferedReader.readLine()) != null) {
         if (trim) {
@@ -73,9 +71,6 @@ public final class IoUtil {
           stringBuilder.append(line).append("\n");
         }
       }
-    }
-    finally {
-      closeSilently(bufferedReader);
     }
 
     return stringBuilder.toString();

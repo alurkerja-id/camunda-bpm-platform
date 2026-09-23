@@ -17,6 +17,7 @@
 package org.camunda.bpm.spring.boot.starter.webapp.filter;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -79,8 +80,8 @@ public class LazyDelegateFilter<T extends Filter> implements Filter {
     return delegateClass;
   }
 
-  protected T createNewFilterInstance() throws InstantiationException, IllegalAccessException {
-    return delegateClass.newInstance();
+  protected T createNewFilterInstance() throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    return delegateClass.getDeclaredConstructor().newInstance();
   }
 
   public static interface InitHook<T extends Filter> {

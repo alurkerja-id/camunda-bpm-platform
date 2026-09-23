@@ -40,7 +40,7 @@ public class SpringTransactionInterceptor extends CommandInterceptor {
    *    constructor to ensure that concurrency conflicts that occur on
    *    transaction commit are detected and handled in all cases
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public SpringTransactionInterceptor(PlatformTransactionManager transactionManager, int transactionPropagation) {
     this(transactionManager, transactionPropagation, null);
   }

@@ -23,7 +23,11 @@ import org.camunda.bpm.engine.query.QueryProperty;
  * @author Roman Smirnov
  *
  */
-public interface CaseSentryPartQueryProperty {
+public final class CaseSentryPartQueryProperty {
+
+  private CaseSentryPartQueryProperty() {
+  }
+
 
   public static final QueryProperty CASE_SENTRY_PART_ID = new QueryPropertyImpl("ID_");
   public static final QueryProperty CASE_INSTANCE_ID = new QueryPropertyImpl("CASE_INST_ID_");

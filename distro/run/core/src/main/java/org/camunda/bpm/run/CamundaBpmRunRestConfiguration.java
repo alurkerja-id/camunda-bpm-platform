@@ -59,8 +59,8 @@ public class CamundaBpmRunRestConfiguration {
    * preflight requests must not contain authentication. The CORS filter will
    * not invoke the next filter in the chain for preflight requests.
    */
-  private static int CORS_FILTER_PRECEDENCE = 0;
-  private static int AUTH_FILTER_PRECEDENCE = 1;
+  private static final int CORS_FILTER_PRECEDENCE = 0;
+  private static final int AUTH_FILTER_PRECEDENCE = 1;
 
   @Bean
   @ConditionalOnProperty(name = "enabled", havingValue = "true", prefix = CamundaBpmRunAuthenticationProperties.PREFIX)

@@ -38,7 +38,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.camunda.bpm.cockpit.impl.plugin.base.dto.ProcessInstanceDto;
 import org.camunda.bpm.cockpit.impl.plugin.base.dto.query.ProcessInstanceQueryDto;
 import org.camunda.bpm.cockpit.impl.plugin.base.sub.resources.ProcessInstanceResource;
-import org.camunda.bpm.cockpit.plugin.resource.AbstractPluginResource;
+import org.camunda.bpm.cockpit.plugin.resource.AbstractCockpitPluginResource;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.history.HistoryLevel;
@@ -46,7 +46,7 @@ import org.camunda.bpm.engine.impl.interceptor.Command;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
 import org.camunda.bpm.engine.rest.dto.CountResultDto;
 
-public class ProcessInstanceRestService extends AbstractPluginResource {
+public class ProcessInstanceRestService extends AbstractCockpitPluginResource {
 
   public static final String PATH = "/process-instance";
   protected ObjectMapper objectMapper;
@@ -94,17 +94,6 @@ public class ProcessInstanceRestService extends AbstractPluginResource {
     return getCommandExecutor().executeCommand(new QueryProcessInstancesCountCmd(queryParameter));
   }
 
-  private void paginate(ProcessInstanceQueryDto queryParameter, Integer firstResult, Integer maxResults) {
-    if (firstResult == null) {
-      firstResult = 0;
-    }
-    if (maxResults == null) {
-      maxResults = Integer.MAX_VALUE;
-    }
-    queryParameter.setFirstResult(firstResult);
-    queryParameter.setMaxResults(maxResults);
-  }
-
   private void injectEngineConfig(ProcessInstanceQueryDto parameter) {
 
     ProcessEngineConfigurationImpl processEngineConfiguration = ((ProcessEngineImpl) getProcessEngine()).getProcessEngineConfiguration();
@@ -144,6 +133,17 @@ public class ProcessInstanceRestService extends AbstractPluginResource {
       this.queryParameter = queryParameter;
       this.firstResult = firstResult;
       this.maxResults = maxResults;
+    }
+
+    private void paginate(ProcessInstanceQueryDto queryParameter, Integer firstResult, Integer maxResults) {
+      if (firstResult == null) {
+        firstResult = 0;
+      }
+      if (maxResults == null) {
+        maxResults = Integer.MAX_VALUE;
+      }
+      queryParameter.setFirstResult(firstResult);
+      queryParameter.setMaxResults(maxResults);
     }
 
     @Override

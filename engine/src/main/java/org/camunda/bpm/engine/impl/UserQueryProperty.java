@@ -26,7 +26,11 @@ import org.camunda.bpm.engine.query.QueryProperty;
  *
  * @author Joram Barrez
  */
-public interface UserQueryProperty {
+public final class UserQueryProperty {
+
+  private UserQueryProperty() {
+  }
+
 
   public static final QueryProperty USER_ID = new QueryPropertyImpl("ID_");
   public static final QueryProperty FIRST_NAME = new QueryPropertyImpl("FIRST_");

@@ -49,7 +49,7 @@ public abstract class AbstractCamundaConfiguration extends SpringBootProcessEngi
   /**
    * @deprecated use {@link SpringBootProcessEngineLogger}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   protected final Logger logger = getLogger(this.getClass());
 
   @Autowired

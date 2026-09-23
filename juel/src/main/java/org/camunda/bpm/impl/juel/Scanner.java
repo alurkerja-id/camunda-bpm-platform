@@ -15,6 +15,7 @@
  */ 
 package org.camunda.bpm.impl.juel;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 
 
@@ -108,7 +109,7 @@ public class Scanner {
 	}
 
 	private static final HashMap<String, Token> KEYMAP = new HashMap<String, Token>();
-	private static final HashMap<Symbol, Token> FIXMAP = new HashMap<Symbol, Token>();
+	private static final EnumMap<Symbol, Token> FIXMAP = new EnumMap<Symbol, Token>(Symbol.class);
 
 	private static void addFixToken(Token token) {
 		FIXMAP.put(token.getSymbol(), token);
@@ -399,8 +400,10 @@ public class Scanner {
 				return fixed(Symbol.GT);
 			case '"':
 			case '\'': return nextString();
+			default:
+				break;
 		}
-		
+
 		if (isDigit(c1) || c1 == '.') {
 			return nextNumber();
 		}
@@ -432,6 +435,8 @@ public class Scanner {
 						return fixed(Symbol.START_EVAL_DEFERRED);
 					case '$':
 						return fixed(Symbol.START_EVAL_DYNAMIC);
+					default:
+						break;
 				}
 			}
 			return nextText();

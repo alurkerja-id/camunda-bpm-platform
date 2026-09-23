@@ -58,12 +58,9 @@ public class ResourceLoadingProcessEnginesFilter extends ProcessEnginesFilter im
 
   @Override
   protected String getWebResourceContents(String name) throws IOException {
-    InputStream is = null;
+    Resource resource = resourceLoader.getResource("classpath:"+webappProperty.getWebjarClasspath() + name);
 
-    try {
-      Resource resource = resourceLoader.getResource("classpath:"+webappProperty.getWebjarClasspath() + name);
-      is = resource.getInputStream();
-
+    try (InputStream is = resource.getInputStream()) {
       BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 
       StringWriter writer = new StringWriter();
@@ -75,13 +72,6 @@ public class ResourceLoadingProcessEnginesFilter extends ProcessEnginesFilter im
       }
 
       return writer.toString();
-    } finally {
-      if (is != null) {
-        try {
-          is.close();
-        } catch (IOException e) {
-        }
-      }
     }
   }
 

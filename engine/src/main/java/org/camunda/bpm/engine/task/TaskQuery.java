@@ -172,7 +172,7 @@ public interface TaskQuery extends Query<TaskQuery, Task> {
    *
    * @deprecated the method name is misspelt; use {@link #taskUnassigned()}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   TaskQuery taskUnnassigned();
 
   /**

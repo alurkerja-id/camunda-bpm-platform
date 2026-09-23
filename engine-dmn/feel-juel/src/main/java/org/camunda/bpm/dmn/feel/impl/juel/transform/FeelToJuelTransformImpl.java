@@ -33,7 +33,7 @@ public class FeelToJuelTransformImpl implements FeelToJuelTransform {
   public static final FeelToJuelTransformer COMPARISON_TRANSFORMER = new ComparisonTransformer();
   public static final FeelToJuelTransformer EQUAL_TRANSFORMER = new EqualTransformer();
   public static final FeelToJuelTransformer ENDPOINT_TRANSFORMER = new EndpointTransformer();
-  public static final List<FeelToJuelTransformer> CUSTOM_FUNCTION_TRANSFORMERS = new ArrayList<FeelToJuelTransformer>();
+  protected static final List<FeelToJuelTransformer> CUSTOM_FUNCTION_TRANSFORMERS = new ArrayList<FeelToJuelTransformer>();
 
   public String transformSimpleUnaryTests(String simpleUnaryTests, String inputName) {
     simpleUnaryTests = simpleUnaryTests.trim();

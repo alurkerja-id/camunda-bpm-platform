@@ -70,7 +70,7 @@ import org.camunda.bpm.engine.task.IdentityLinkType;
  */
 public class BpmnDeployer extends AbstractDefinitionDeployer<ProcessDefinitionEntity> {
 
-  public static BpmnParseLogger LOG = ProcessEngineLogger.BPMN_PARSE_LOGGER;
+  public static final BpmnParseLogger LOG = ProcessEngineLogger.BPMN_PARSE_LOGGER;
 
   public static final String[] BPMN_RESOURCE_SUFFIXES = new String[] { "bpmn20.xml", "bpmn" };
 

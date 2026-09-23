@@ -32,7 +32,7 @@ public interface HumanTask extends Task {
   /**
    * @deprecated CMMN 1.0 allowed several planning tables; use {@link #getPlanningTable()}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   Collection<PlanningTable> getPlanningTables();
 
   PlanningTable getPlanningTable();

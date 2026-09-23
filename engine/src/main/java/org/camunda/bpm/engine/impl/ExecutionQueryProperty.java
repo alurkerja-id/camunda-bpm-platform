@@ -24,7 +24,11 @@ import org.camunda.bpm.engine.runtime.ExecutionQuery;
  *
  * @author Joram Barrez
  */
-public interface ExecutionQueryProperty {
+public final class ExecutionQueryProperty {
+
+  private ExecutionQueryProperty() {
+  }
+
 
   public static final QueryProperty PROCESS_INSTANCE_ID = new QueryPropertyImpl("PROC_INST_ID_");
   public static final QueryProperty PROCESS_DEFINITION_KEY = new QueryPropertyImpl("KEY_");

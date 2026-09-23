@@ -29,7 +29,7 @@ import org.camunda.bpm.cockpit.plugin.spi.CockpitPlugin;
  *
  * @deprecated use {@link AppPluginRegistry}
  */
-@Deprecated
+@Deprecated(forRemoval = false)
 public interface PluginRegistry {
 
   /**

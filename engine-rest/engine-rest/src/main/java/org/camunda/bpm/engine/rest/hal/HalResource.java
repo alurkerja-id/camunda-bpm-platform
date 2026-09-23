@@ -39,7 +39,7 @@ public abstract class HalResource<T extends HalResource<?>> {
   protected Map<String, Object> _embedded;
 
   // the linker used by this resource
-  protected transient HalLinker linker;
+  protected HalLinker linker;
 
   public HalResource() {
     this.linker = Hal.getInstance().createLinker(this);

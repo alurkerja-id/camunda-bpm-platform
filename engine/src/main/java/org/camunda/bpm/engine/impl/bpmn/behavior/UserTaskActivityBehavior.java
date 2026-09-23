@@ -44,7 +44,7 @@ public class UserTaskActivityBehavior extends TaskActivityBehavior implements Mi
   /**
    * @deprecated use {@link #UserTaskActivityBehavior(TaskDecorator)}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public UserTaskActivityBehavior(ExpressionManager expressionManager, TaskDefinition taskDefinition) {
     this.taskDecorator = new TaskDecorator(taskDefinition, expressionManager);
   }

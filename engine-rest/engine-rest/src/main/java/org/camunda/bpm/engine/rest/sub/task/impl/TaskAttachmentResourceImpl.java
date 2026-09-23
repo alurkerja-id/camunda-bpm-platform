@@ -142,7 +142,7 @@ public class TaskAttachmentResourceImpl implements TaskAttachmentResource {
       if (contentPart != null) {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(contentPart.getBinaryContent());
         attachment = engine.getTaskService().createAttachment(attachmentType, taskId, null, attachmentName, attachmentDescription, byteArrayInputStream);
-      } else if (urlPart != null) {
+      } else {
         attachment = engine.getTaskService().createAttachment(attachmentType, taskId, null, attachmentName, attachmentDescription, urlPart.getTextContent());
       }
     } catch (ProcessEngineException e) {

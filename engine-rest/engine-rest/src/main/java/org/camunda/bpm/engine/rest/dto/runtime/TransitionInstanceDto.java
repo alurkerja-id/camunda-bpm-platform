@@ -54,7 +54,7 @@ public class TransitionInstanceDto {
   /**
    * @deprecated the field was renamed; use {@link #getActivityId()}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public String getTargetActivityId() {
     return activityId;
   }

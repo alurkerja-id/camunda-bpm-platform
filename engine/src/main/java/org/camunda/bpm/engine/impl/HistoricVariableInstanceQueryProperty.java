@@ -25,11 +25,15 @@ import org.camunda.bpm.engine.query.QueryProperty;
  *
  * @author Christian Lipphardt (camunda)
  */
-public interface HistoricVariableInstanceQueryProperty {
+public final class HistoricVariableInstanceQueryProperty {
 
-  QueryProperty PROCESS_INSTANCE_ID = new QueryPropertyImpl("PROC_INST_ID_");
-  QueryProperty VARIABLE_NAME = new QueryPropertyImpl("NAME_");
-  QueryProperty TENANT_ID = new QueryPropertyImpl("TENANT_ID_");
-  QueryProperty VARIABLE_ID = new QueryPropertyImpl("ID_");
-  QueryProperty CREATE_TIME = new QueryPropertyImpl("CREATE_TIME_");
+  private HistoricVariableInstanceQueryProperty() {
+  }
+
+
+  public static final QueryProperty PROCESS_INSTANCE_ID = new QueryPropertyImpl("PROC_INST_ID_");
+  public static final QueryProperty VARIABLE_NAME = new QueryPropertyImpl("NAME_");
+  public static final QueryProperty TENANT_ID = new QueryPropertyImpl("TENANT_ID_");
+  public static final QueryProperty VARIABLE_ID = new QueryPropertyImpl("ID_");
+  public static final QueryProperty CREATE_TIME = new QueryPropertyImpl("CREATE_TIME_");
 }

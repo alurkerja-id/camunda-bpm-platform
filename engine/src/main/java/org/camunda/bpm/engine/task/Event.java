@@ -35,7 +35,7 @@ import org.camunda.bpm.engine.history.UserOperationLogQuery;
  * @deprecated task events were replaced by the user operation log; see
  *             {@link org.camunda.bpm.engine.history.UserOperationLogEntry}
  */
-@Deprecated
+@Deprecated(forRemoval = false)
 public interface Event {
 
   /** A user identity link was added with following message parts:

@@ -36,7 +36,7 @@ public class StandaloneInMemoryTestConfiguration extends StandaloneInMemProcessE
   public StandaloneInMemoryTestConfiguration(ProcessEnginePlugin... plugins) {
     this(Optional.ofNullable(plugins)
       .map(Arrays::asList)
-      .orElse(Collections.EMPTY_LIST)
+      .orElse(Collections.emptyList())
     );
   }
 

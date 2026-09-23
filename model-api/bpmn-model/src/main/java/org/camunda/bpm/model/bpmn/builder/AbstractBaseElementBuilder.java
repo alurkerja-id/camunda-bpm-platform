@@ -364,7 +364,7 @@ public abstract class AbstractBaseElementBuilder<B extends AbstractBaseElementBu
   /**
    * @deprecated use {@link #createEdge(BaseElement)} instead
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public BpmnEdge createBpmnEdge(SequenceFlow sequenceFlow) {
     return createEdge(sequenceFlow);
   }

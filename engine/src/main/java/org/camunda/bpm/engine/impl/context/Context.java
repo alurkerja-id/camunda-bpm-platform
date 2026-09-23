@@ -112,7 +112,7 @@ public class Context {
   /**
    * @deprecated since 7.2, use {@link #getBpmnExecutionContext()}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public static ExecutionContext getExecutionContext() {
     return getBpmnExecutionContext();
   }
@@ -127,7 +127,7 @@ public class Context {
 
   public static CoreExecutionContext<? extends CoreExecution> getCoreExecutionContext() {
     Deque<CoreExecutionContext<? extends CoreExecution>> stack = getStack(executionContextStackThreadLocal);
-    if(stack == null || stack.isEmpty()) {
+    if(stack.isEmpty()) {
       return null;
     } else {
       return stack.peek();

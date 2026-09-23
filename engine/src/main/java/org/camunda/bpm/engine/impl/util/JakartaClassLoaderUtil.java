@@ -17,16 +17,10 @@
 package org.camunda.bpm.engine.impl.util;
 
 import jakarta.servlet.ServletContextEvent;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 
 public class JakartaClassLoaderUtil extends ClassLoaderUtil {
 
   public static ClassLoader getServletContextClassloader(final ServletContextEvent sce) {
-    if(System.getSecurityManager() != null) {
-      return AccessController.doPrivileged((PrivilegedAction<ClassLoader>) () -> sce.getServletContext().getClassLoader());
-    } else {
-      return sce.getServletContext().getClassLoader();
-    }
+    return sce.getServletContext().getClassLoader();
   }
 }

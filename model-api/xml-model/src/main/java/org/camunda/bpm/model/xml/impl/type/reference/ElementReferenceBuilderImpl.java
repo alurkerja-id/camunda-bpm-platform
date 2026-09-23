@@ -32,6 +32,7 @@ public class ElementReferenceBuilderImpl<Target extends ModelElementInstance, So
   }
 
   @SuppressWarnings("unchecked")
+  @Override
   public ElementReference<Target,Source> build() {
     return (ElementReference<Target, Source>) elementReferenceCollectionImpl;
   }

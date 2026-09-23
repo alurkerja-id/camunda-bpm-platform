@@ -34,14 +34,14 @@ import javax.ws.rs.core.UriInfo;
 
 import org.camunda.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionDto;
 import org.camunda.bpm.cockpit.impl.plugin.base.dto.query.ProcessDefinitionQueryDto;
-import org.camunda.bpm.cockpit.plugin.resource.AbstractPluginResource;
+import org.camunda.bpm.cockpit.plugin.resource.AbstractCockpitPluginResource;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.history.HistoryLevel;
 import org.camunda.bpm.engine.impl.interceptor.Command;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
 
-public class ProcessDefinitionResource extends AbstractPluginResource {
+public class ProcessDefinitionResource extends AbstractCockpitPluginResource {
 
   protected String id;
 
@@ -66,16 +66,6 @@ public class ProcessDefinitionResource extends AbstractPluginResource {
     return getCommandExecutor().executeCommand(new QueryCalledProcessDefinitionsCmd(queryParameter));
   }
 
-  private void injectEngineConfig(ProcessDefinitionQueryDto parameter) {
-
-    ProcessEngineConfigurationImpl processEngineConfiguration = ((ProcessEngineImpl) getProcessEngine()).getProcessEngineConfiguration();
-    if (processEngineConfiguration.getHistoryLevel().equals(HistoryLevel.HISTORY_LEVEL_NONE)) {
-      parameter.setHistoryEnabled(false);
-    }
-
-    parameter.initQueryVariableValues(processEngineConfiguration.getVariableSerializers(), processEngineConfiguration.getDatabaseType());
-  }
-
   protected void configureExecutionQuery(ProcessDefinitionQueryDto query) {
     configureAuthorizationCheck(query);
     configureTenantCheck(query);
@@ -89,6 +79,16 @@ public class ProcessDefinitionResource extends AbstractPluginResource {
 
     public QueryCalledProcessDefinitionsCmd(ProcessDefinitionQueryDto queryParameter) {
       this.queryParameter = queryParameter;
+    }
+
+    private void injectEngineConfig(ProcessDefinitionQueryDto parameter) {
+
+      ProcessEngineConfigurationImpl processEngineConfiguration = ((ProcessEngineImpl) getProcessEngine()).getProcessEngineConfiguration();
+      if (processEngineConfiguration.getHistoryLevel().equals(HistoryLevel.HISTORY_LEVEL_NONE)) {
+        parameter.setHistoryEnabled(false);
+      }
+
+      parameter.initQueryVariableValues(processEngineConfiguration.getVariableSerializers(), processEngineConfiguration.getDatabaseType());
     }
 
     @Override

@@ -36,7 +36,7 @@ import com.google.gson.JsonObject;
 public class CamundaFormDefinitionDeployer extends AbstractDefinitionDeployer<CamundaFormDefinitionEntity> {
 
   protected static final EngineUtilLogger LOG = ProcessEngineLogger.UTIL_LOGGER;
-  public static final String[] FORM_RESOURCE_SUFFIXES = new String[] { "form" };
+  protected static final String[] FORM_RESOURCE_SUFFIXES = new String[] { "form" };
 
   @Override
   protected String[] getResourcesSuffixes() {

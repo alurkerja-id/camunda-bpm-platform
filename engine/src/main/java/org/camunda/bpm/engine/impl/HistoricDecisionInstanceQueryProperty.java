@@ -24,7 +24,11 @@ import org.camunda.bpm.engine.query.QueryProperty;
  *
  * @author Philipp Ossler
  */
-public interface HistoricDecisionInstanceQueryProperty {
+public final class HistoricDecisionInstanceQueryProperty {
+
+  private HistoricDecisionInstanceQueryProperty() {
+  }
+
 
   public static final QueryProperty DECISION_INSTANCE_ID = new QueryPropertyImpl("ID_");
   public static final QueryProperty EVALUATION_TIME = new QueryPropertyImpl("EVAL_TIME_");

@@ -67,7 +67,7 @@ public interface FormService {
   /**
    * @deprecated use {@link #submitStartForm(String, Map)}
    * */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   ProcessInstance submitStartFormData(String processDefinitionId, Map<String, String> properties);
 
   /**
@@ -82,7 +82,7 @@ public interface FormService {
   /**
    * @deprecated use {@link #submitStartForm(String, String, Map)}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   ProcessInstance submitStartFormData(String processDefinitionId, String businessKey, Map<String, String> properties);
 
   /**
@@ -164,7 +164,7 @@ public interface FormService {
 
   /**
    * @deprecated use {@link #submitTaskForm(String, Map)} */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   void submitTaskFormData(String taskId, Map<String, String> properties);
 
   /**

@@ -42,7 +42,7 @@ public abstract class AbstractStartEventBuilder<B extends AbstractStartEventBuil
    *
    * @return the builder object
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public B camundaAsync() {
     element.setCamundaAsyncBefore(true);
     return myself;
@@ -56,7 +56,7 @@ public abstract class AbstractStartEventBuilder<B extends AbstractStartEventBuil
    * @param isCamundaAsync  the async state of the task
    * @return the builder object
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public B camundaAsync(boolean isCamundaAsync) {
     element.setCamundaAsyncBefore(isCamundaAsync);
     return myself;

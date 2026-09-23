@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -59,9 +60,9 @@ public class ShellActivityBehavior extends AbstractBpmnActivityBehavior {
   String waitStr;
   String resultVariableStr;
   String errorCodeVariableStr;
-  Boolean waitFlag;
-  Boolean redirectErrorFlag;
-  Boolean cleanEnvBoolan;
+  boolean waitFlag;
+  boolean redirectErrorFlag;
+  boolean cleanEnvBoolan;
   String directoryStr;
 
   private void readFields(ActivityExecution execution) {
@@ -112,7 +113,7 @@ public class ShellActivityBehavior extends AbstractBpmnActivityBehavior {
         Map<String, String> env = processBuilder.environment();
         env.clear();
       }
-      if (directoryStr != null && directoryStr.length() > 0)
+      if (directoryStr != null && !directoryStr.isEmpty())
         processBuilder.directory(new File(directoryStr));
 
       Process process = processBuilder.start();
@@ -148,14 +149,12 @@ public class ShellActivityBehavior extends AbstractBpmnActivityBehavior {
       Writer writer = new StringWriter();
 
       char[] buffer = new char[1024];
-      try {
-        Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+      try (InputStream inputStream = is) {
+        Reader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         int n;
         while ((n = reader.read(buffer)) != -1) {
           writer.write(buffer, 0, n);
         }
-      } finally {
-        is.close();
       }
       return writer.toString();
     } else {

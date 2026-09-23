@@ -56,7 +56,7 @@ public class CustomExpressionManagerTest {
 
     Assert.assertTrue(functions.containsKey(CommandContextFunctions.CURRENT_USER));
     Assert.assertTrue(functions.containsKey(CommandContextFunctions.CURRENT_USER_GROUPS));
-    Assert.assertTrue(functions.containsKey(DateTimeFunctions.NOW));
+    Assert.assertTrue(functions.containsKey(DateTimeFunctions.FUNCTION_NOW));
     Assert.assertTrue(functions.containsKey(DateTimeFunctions.DATE_TIME));
   }
 

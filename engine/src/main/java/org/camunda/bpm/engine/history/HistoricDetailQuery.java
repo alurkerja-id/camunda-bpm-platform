@@ -82,7 +82,7 @@ public interface HistoricDetailQuery extends Query<HistoricDetailQuery, Historic
 
   /** Only select {@link HistoricFormProperty}s.
    * @deprecated form properties were replaced by form fields; use {@link #formFields()} */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   HistoricDetailQuery formProperties();
 
   /** Only select {@link HistoricFormField}s. */

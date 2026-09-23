@@ -82,7 +82,6 @@ import org.camunda.bpm.engine.impl.util.EnsureUtil;
 import org.camunda.bpm.engine.impl.variable.VariableDeclaration;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.runtime.Job;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.variable.VariableMap;
 import org.camunda.bpm.engine.variable.Variables;
@@ -1080,11 +1079,11 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
   }
 
   private void removeJobs() {
-    for (Job job : getJobs()) {
+    for (JobEntity job : getJobs()) {
       if (isReplacedByParent()) {
-        ((JobEntity) job).setExecution(getReplacedBy());
+        job.setExecution(getReplacedBy());
       } else {
-        ((JobEntity) job).delete();
+        job.delete();
       }
     }
   }

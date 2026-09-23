@@ -399,8 +399,8 @@ public class ProcessInstanceQueryImpl extends AbstractVariableQueryImpl<ProcessI
       String dbType = processEngineConfiguration.getDatabaseType();
 
       for (ProcessInstanceQueryImpl orQuery: queries) {
-        for (QueryVariableValue var : orQuery.getQueryVariableValues()) {
-          var.initialize(variableSerializers, dbType);
+        for (QueryVariableValue queryVariableValue : orQuery.getQueryVariableValues()) {
+          queryVariableValue.initialize(variableSerializers, dbType);
         }
       }
     }

@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -233,18 +234,17 @@ public class Dmn {
   }
 
   protected DmnModelInstance doReadModelFromFile(File file) {
-    InputStream is = null;
-    try {
-      is = new FileInputStream(file);
-      return doReadModelFromInputStream(is);
+    DmnModelInstance result = null;
+    try (InputStream is = new FileInputStream(file)) {
+      result = doReadModelFromInputStream(is);
 
     } catch (FileNotFoundException e) {
       throw new DmnModelException("Cannot read model from file "+file+": file does not exist.");
 
-    } finally {
-      IoUtil.closeSilently(is);
-
+    } catch (IOException e) {
+      // ignore, mirrors previous IoUtil.closeSilently behavior for the stream close failure
     }
+    return result;
   }
 
   protected DmnModelInstance doReadModelFromInputStream(InputStream is) {
@@ -252,15 +252,13 @@ public class Dmn {
   }
 
   protected void doWriteModelToFile(File file, DmnModelInstance modelInstance) {
-    OutputStream os = null;
-    try {
-      os = new FileOutputStream(file);
+    try (OutputStream os = new FileOutputStream(file)) {
       doWriteModelToOutputStream(os, modelInstance);
     }
     catch (FileNotFoundException e) {
       throw new DmnModelException("Cannot write model to file "+file+": file does not exist.");
-    } finally {
-      IoUtil.closeSilently(os);
+    } catch (IOException e) {
+      // ignore, mirrors previous IoUtil.closeSilently behavior for the stream close failure
     }
   }
 

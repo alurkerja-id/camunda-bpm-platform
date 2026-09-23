@@ -64,7 +64,6 @@ public class PvmAtomicOperationActivityInitStackNotifyListenerReturn extends Pvm
     if (instantiationStack.getActivities().isEmpty()) {
       // done
       execution.disposeScopeInstantiationContext();
-      return;
     }
     else {
       // else instantiate the activity stack further

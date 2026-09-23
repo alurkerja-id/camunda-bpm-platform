@@ -45,13 +45,13 @@ public interface CaseFileItem extends CmmnElement {
   /**
    * @deprecated CMMN 1.0 allowed a single source; use {@link #getSourceRefs()}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   CaseFileItem getSourceRef();
 
   /**
    * @deprecated CMMN 1.0 allowed a single source; add to {@link #getSourceRefs()} instead
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   void setSourceRef(CaseFileItem sourceRef);
 
   Collection<CaseFileItem> getSourceRefs();

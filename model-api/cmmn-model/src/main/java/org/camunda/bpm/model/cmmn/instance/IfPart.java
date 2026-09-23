@@ -31,7 +31,7 @@ public interface IfPart extends CmmnElement {
   /**
    * @deprecated CMMN 1.0 allowed several conditions; use {@link #getCondition()}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public Collection<ConditionExpression> getConditions();
 
   ConditionExpression getCondition();

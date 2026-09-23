@@ -29,7 +29,7 @@ import org.camunda.bpm.engine.impl.pvm.runtime.operation.PvmAtomicOperation;
  *
  * @deprecated use {@link PvmAtomicOperation}, which declares the same operations
  */
-@Deprecated
+@Deprecated(forRemoval = false)
 public interface AtomicOperation extends CoreAtomicOperation<PvmExecutionImpl> {
 
   AtomicOperation PROCESS_START = PvmAtomicOperation.PROCESS_START;

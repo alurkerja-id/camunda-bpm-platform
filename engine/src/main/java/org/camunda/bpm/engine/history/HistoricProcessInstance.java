@@ -71,7 +71,7 @@ public interface HistoricProcessInstance {
    *
    * @deprecated not deterministic for a process with several end events; query
    *             {@link HistoricActivityInstanceQuery} instead */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   String getEndActivityId();
 
   /** The authenticated user that started this process instance.

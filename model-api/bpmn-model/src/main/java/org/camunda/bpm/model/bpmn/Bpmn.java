@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import org.camunda.bpm.model.bpmn.builder.ProcessBuilder;
@@ -400,18 +401,17 @@ public class Bpmn {
   }
 
   protected BpmnModelInstance doReadModelFromFile(File file) {
-    InputStream is = null;
-    try {
-      is = new FileInputStream(file);
-      return doReadModelFromInputStream(is);
+    BpmnModelInstance result = null;
+    try (InputStream is = new FileInputStream(file)) {
+      result = doReadModelFromInputStream(is);
 
     } catch (FileNotFoundException e) {
       throw new BpmnModelException("Cannot read model from file "+file+": file does not exist.");
 
-    } finally {
-      IoUtil.closeSilently(is);
-
+    } catch (IOException e) {
+      // ignore, mirrors previous IoUtil.closeSilently behavior for the stream close failure
     }
+    return result;
   }
 
   protected BpmnModelInstance doReadModelFromInputStream(InputStream is) {
@@ -419,15 +419,13 @@ public class Bpmn {
   }
 
   protected void doWriteModelToFile(File file, BpmnModelInstance modelInstance) {
-    OutputStream os = null;
-    try {
-      os = new FileOutputStream(file);
+    try (OutputStream os = new FileOutputStream(file)) {
       doWriteModelToOutputStream(os, modelInstance);
     }
     catch (FileNotFoundException e) {
       throw new BpmnModelException("Cannot write model to file "+file+": file does not exist.");
-    } finally {
-      IoUtil.closeSilently(os);
+    } catch (IOException e) {
+      // ignore, mirrors previous IoUtil.closeSilently behavior for the stream close failure
     }
   }
 

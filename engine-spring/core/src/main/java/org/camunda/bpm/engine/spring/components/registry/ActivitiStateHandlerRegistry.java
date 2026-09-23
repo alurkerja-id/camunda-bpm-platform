@@ -44,10 +44,6 @@ public class ActivitiStateHandlerRegistry extends ReceiveTaskActivityBehavior im
 
 	private Logger logger = Logger.getLogger(getClass().getName());
 
-	private String beanName;
-
-	private BeanFactory beanFactory;
-
 	// the map is never replaced, and ConcurrentHashMap already handles concurrent access, so
 	// volatile on the reference bought nothing
 	private final ConcurrentHashMap<String, ActivitiStateHandlerRegistration> registrations = new ConcurrentHashMap<>();
@@ -155,12 +151,10 @@ public class ActivitiStateHandlerRegistry extends ReceiveTaskActivityBehavior im
 
 	@Override
 	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-		this.beanFactory = beanFactory;
 	}
 
 	@Override
 	public void setBeanName(String name) {
-		this.beanName = name;
 	}
 
 	@Override

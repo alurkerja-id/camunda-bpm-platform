@@ -22,7 +22,11 @@ import org.camunda.bpm.engine.query.QueryProperty;
  * @author Roman Smirnov
  *
  */
-public interface HistoricJobLogQueryProperty {
+public final class HistoricJobLogQueryProperty {
+
+  private HistoricJobLogQueryProperty() {
+  }
+
 
   public static final QueryProperty JOB_ID = new QueryPropertyImpl("JOB_ID_");
   public static final QueryProperty JOB_DEFINITION_ID = new QueryPropertyImpl("JOB_DEF_ID_");

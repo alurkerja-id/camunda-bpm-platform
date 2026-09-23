@@ -25,7 +25,11 @@ import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
  *
  * @author Joram Barrez
  */
-public interface ProcessInstanceQueryProperty {
+public final class ProcessInstanceQueryProperty {
+
+  private ProcessInstanceQueryProperty() {
+  }
+
 
   public static final QueryProperty PROCESS_INSTANCE_ID = new QueryPropertyImpl("ID_");
   public static final QueryProperty PROCESS_DEFINITION_KEY = new QueryPropertyImpl("KEY_");

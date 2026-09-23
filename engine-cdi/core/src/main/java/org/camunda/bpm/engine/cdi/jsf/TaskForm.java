@@ -61,7 +61,7 @@ public class TaskForm implements Serializable {
    * @param taskId
    * @param callbackUrl
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public void startTask(String taskId, String callbackUrl) {
     if (taskId==null || callbackUrl == null) {
       if (FacesContext.getCurrentInstance().isPostback()) {
@@ -71,7 +71,7 @@ public class TaskForm implements Serializable {
         return;
       }
       // return it anyway but log an info message
-      log.log(Level.INFO, "Called startTask method without proper parameter (taskId='"+taskId+"'; callbackUrl='"+callbackUrl+"') even if it seems we are not called by an AJAX Postback. Are you using the camundaTaskForm bean correctly?");
+      log.log(Level.INFO, () -> "Called startTask method without proper parameter (taskId='"+taskId+"'; callbackUrl='"+callbackUrl+"') even if it seems we are not called by an AJAX Postback. Are you using the camundaTaskForm bean correctly?");
       return;
     }
     // Note that we always run in a conversation
@@ -97,7 +97,7 @@ public class TaskForm implements Serializable {
         return;
       }
       // return it anyway but log an info message
-      log.log(Level.INFO, "Called startTask method without proper parameter (taskId='"+taskId+"'; callbackUrl='"+callbackUrl+"') even if it seems we are not called by an AJAX Postback. Are you using the camundaTaskForm bean correctly?");
+      log.log(Level.INFO, () -> "Called startTask method without proper parameter (taskId='"+taskId+"'; callbackUrl='"+callbackUrl+"') even if it seems we are not called by an AJAX Postback. Are you using the camundaTaskForm bean correctly?");
       return;
     }
     // Note that we always run in a conversation
@@ -124,7 +124,7 @@ public class TaskForm implements Serializable {
    * @param processDefinitionId
    * @param callbackUrl
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public void startProcessInstanceByIdForm(String processDefinitionId, String callbackUrl) {
     this.url = callbackUrl;
     this.processDefinitionId = processDefinitionId;
@@ -156,7 +156,7 @@ public class TaskForm implements Serializable {
    * @param processDefinitionKey
    * @param callbackUrl
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public void startProcessInstanceByKeyForm(String processDefinitionKey, String callbackUrl) {
     this.url = callbackUrl;
     this.processDefinitionKey = processDefinitionKey;

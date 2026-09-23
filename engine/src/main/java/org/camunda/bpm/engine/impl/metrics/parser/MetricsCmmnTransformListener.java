@@ -34,7 +34,7 @@ import org.camunda.bpm.model.cmmn.instance.Task;
  */
 public class MetricsCmmnTransformListener extends AbstractCmmnTransformListener {
 
-  public static MetricsCaseExecutionListener listener = new MetricsCaseExecutionListener();
+  public static final MetricsCaseExecutionListener listener = new MetricsCaseExecutionListener();
 
   protected void addListeners(CmmnActivity activity) {
     if(activity != null) {

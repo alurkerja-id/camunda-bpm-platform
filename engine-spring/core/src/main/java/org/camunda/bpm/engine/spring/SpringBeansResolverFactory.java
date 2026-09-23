@@ -40,9 +40,9 @@ import org.springframework.context.ApplicationContext;
  */
 public class SpringBeansResolverFactory implements ResolverFactory, Resolver {
 
-  protected static Logger LOG = Logger.getLogger(SpringBeansResolverFactory.class.getName());
+  protected static final Logger LOG = Logger.getLogger(SpringBeansResolverFactory.class.getName());
 
-  protected static String SCOPE_NOT_ACTIVE_EXCEPTION = "org.springframework.beans.factory.support.ScopeNotActiveException";
+  protected static final String SCOPE_NOT_ACTIVE_EXCEPTION = "org.springframework.beans.factory.support.ScopeNotActiveException";
 
   private ApplicationContext applicationContext;
   private Set<String> keySet;

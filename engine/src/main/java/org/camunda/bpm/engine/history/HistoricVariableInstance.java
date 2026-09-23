@@ -64,7 +64,7 @@ public interface HistoricVariableInstance {
    *
    * @deprecated since 7.2, use {@link #getName()} instead
    */
-   @Deprecated
+   @Deprecated(forRemoval = false)
   String getVariableName();
 
   /**
@@ -72,7 +72,7 @@ public interface HistoricVariableInstance {
    *
    * @deprecated since 7.2, use {@link #getTypeName()} instead
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   String getVariableTypeName();
 
   /**
@@ -105,7 +105,7 @@ public interface HistoricVariableInstance {
    *
    * @deprecated the method name is misspelt; use {@link #getActivityInstanceId()}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   String getActivtyInstanceId();
 
   /**

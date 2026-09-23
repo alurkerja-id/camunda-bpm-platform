@@ -44,7 +44,7 @@ import org.camunda.bpm.engine.impl.util.ParseUtil;
  */
 public class DefaultJobRetryCmd extends JobRetryCmd {
 
-  public static final List<String> SUPPORTED_TYPES = Arrays.asList(
+  protected static final List<String> SUPPORTED_TYPES = Arrays.asList(
       TimerExecuteNestedActivityJobHandler.TYPE,
       TimerCatchIntermediateEventJobHandler.TYPE,
       TimerStartEventJobHandler.TYPE,

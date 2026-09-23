@@ -123,7 +123,7 @@ public abstract class ProcessEngineConfiguration {
    *
    * @deprecated use level {@link #HISTORY_ACTIVITY} instead
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public static final String HISTORY_VARIABLE = "variable";
   /**
    * Value for {@link #setHistory(String)} to ensure that only historic process instances,

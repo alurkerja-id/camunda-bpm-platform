@@ -24,7 +24,11 @@ import org.camunda.bpm.engine.query.QueryProperty;
  *
  * @author roman.smirnov
  */
-public interface JobDefinitionQueryProperty {
+public final class JobDefinitionQueryProperty {
+
+  private JobDefinitionQueryProperty() {
+  }
+
 
   public static final QueryProperty JOB_DEFINITION_ID = new QueryPropertyImpl("ID_");
   public static final QueryProperty ACTIVITY_ID = new QueryPropertyImpl("ACT_ID_");

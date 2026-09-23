@@ -26,7 +26,11 @@ import org.camunda.bpm.engine.query.QueryProperty;
  *
  * @author Joram Barrez
  */
-public interface GroupQueryProperty {
+public final class GroupQueryProperty {
+
+  private GroupQueryProperty() {
+  }
+
 
   public static final QueryProperty GROUP_ID = new QueryPropertyImpl("ID_");
   public static final QueryProperty NAME = new QueryPropertyImpl("NAME_");

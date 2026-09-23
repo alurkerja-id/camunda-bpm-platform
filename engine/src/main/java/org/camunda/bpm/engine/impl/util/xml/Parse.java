@@ -18,6 +18,7 @@ package org.camunda.bpm.engine.impl.util.xml;
 
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,8 +94,8 @@ public abstract class Parse extends DefaultHandler {
 
   public Parse sourceUrl(String url) {
     try {
-      return sourceUrl(new URL(url));
-    } catch (MalformedURLException e) {
+      return sourceUrl(URI.create(url).toURL());
+    } catch (MalformedURLException | IllegalArgumentException e) {
       throw LOG.malformedUrlException(url, e);
     }
   }

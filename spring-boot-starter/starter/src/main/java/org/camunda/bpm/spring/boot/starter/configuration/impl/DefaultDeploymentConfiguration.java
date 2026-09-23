@@ -18,8 +18,6 @@ package org.camunda.bpm.spring.boot.starter.configuration.impl;
 
 import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.camunda.bpm.spring.boot.starter.configuration.CamundaDeploymentConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -34,7 +32,6 @@ import java.util.stream.Collectors;
 import static java.util.Collections.EMPTY_SET;
 
 public class DefaultDeploymentConfiguration extends AbstractCamundaConfiguration implements CamundaDeploymentConfiguration {
-  private final Logger logger = LoggerFactory.getLogger(DefaultDeploymentConfiguration.class);
 
   @Override
   public void preInit(SpringProcessEngineConfiguration configuration) {

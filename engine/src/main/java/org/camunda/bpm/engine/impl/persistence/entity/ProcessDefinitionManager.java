@@ -30,7 +30,6 @@ import org.camunda.bpm.engine.impl.jobexecutor.TimerStartEventJobHandler;
 import org.camunda.bpm.engine.impl.persistence.AbstractManager;
 import org.camunda.bpm.engine.impl.persistence.AbstractResourceDefinitionManager;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.Job;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -279,8 +278,8 @@ public class ProcessDefinitionManager extends AbstractManager implements Abstrac
 
     // delete timer start event jobs only if this is the latest version of the process definition.
     if(latestVersion != null && latestVersion.getId().equals(processDefinition.getId())) {
-      for (Job job : timerStartJobs) {
-        ((JobEntity)job).delete();
+      for (JobEntity job : timerStartJobs) {
+        job.delete();
       }
     }
   }

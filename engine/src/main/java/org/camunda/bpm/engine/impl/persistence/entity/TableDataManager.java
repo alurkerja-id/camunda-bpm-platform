@@ -75,8 +75,8 @@ public class TableDataManager extends AbstractManager {
 
   protected static final EnginePersistenceLogger LOG = ProcessEngineLogger.PERSISTENCE_LOGGER;
 
-  public static Map<Class<?>, String> apiTypeToTableNameMap = new HashMap<>();
-  public static Map<Class<? extends DbEntity>, String> persistentObjectToTableNameMap = new HashMap<>();
+  protected static final Map<Class<?>, String> apiTypeToTableNameMap = new HashMap<>();
+  protected static Map<Class<? extends DbEntity>, String> persistentObjectToTableNameMap = new HashMap<>();
 
   static {
     // runtime

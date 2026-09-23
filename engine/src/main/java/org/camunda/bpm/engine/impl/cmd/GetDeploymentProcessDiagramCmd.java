@@ -39,7 +39,7 @@ public class GetDeploymentProcessDiagramCmd implements Command<InputStream>, Ser
   protected String processDefinitionId;
 
   public GetDeploymentProcessDiagramCmd(String processDefinitionId) {
-    if (processDefinitionId == null || processDefinitionId.length() < 1) {
+    if (processDefinitionId == null || processDefinitionId.isEmpty()) {
       throw new ProcessEngineException("The process definition id is mandatory, but '" + processDefinitionId + "' has been provided.");
     }
     this.processDefinitionId = processDefinitionId;

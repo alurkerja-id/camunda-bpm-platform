@@ -29,7 +29,7 @@ import org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.AuthorizationManager;
 
 import java.util.Date;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -96,7 +96,7 @@ public class SaveAuthorizationCmd implements Command<Authorization> {
 
   protected Set<Entry<Resources, Supplier<HistoryEvent>>> getHistoricInstanceResources(
       CommandContext commandContext) {
-    Map<Resources, Supplier<HistoryEvent>> resources = new HashMap<>();
+    Map<Resources, Supplier<HistoryEvent>> resources = new EnumMap<>(Resources.class);
 
     resources.put(Resources.HISTORIC_PROCESS_INSTANCE, () ->
         getHistoricProcessInstance(commandContext));

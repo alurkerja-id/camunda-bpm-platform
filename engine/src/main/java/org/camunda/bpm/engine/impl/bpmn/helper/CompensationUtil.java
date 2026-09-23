@@ -18,7 +18,6 @@ package org.camunda.bpm.engine.impl.bpmn.helper;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -74,12 +73,7 @@ public class CompensationUtil {
     }
 
     // signal compensation events in REVERSE order of their 'created' timestamp
-    Collections.sort(eventSubscriptions, new Comparator<EventSubscriptionEntity>() {
-      @Override
-      public int compare(EventSubscriptionEntity o1, EventSubscriptionEntity o2) {
-        return o2.getCreated().compareTo(o1.getCreated());
-      }
-    });
+    Collections.sort(eventSubscriptions, (o1, o2) -> o2.getCreated().compareTo(o1.getCreated()));
 
     for (EventSubscriptionEntity compensateEventSubscriptionEntity : eventSubscriptions) {
       compensateEventSubscriptionEntity.eventReceived(null, async);

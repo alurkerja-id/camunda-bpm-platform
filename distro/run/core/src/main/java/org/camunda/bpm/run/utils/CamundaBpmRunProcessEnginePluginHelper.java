@@ -56,7 +56,7 @@ public class CamundaBpmRunProcessEnginePluginHelper {
 
       // check if an instance of the process engine plugin is already present
       Optional<ProcessEnginePlugin> plugin = processEnginePlugins.stream()
-          .filter(p -> pluginClass.isInstance(p)).findFirst();
+          .filter(pluginClass::isInstance).findFirst();
 
       // get existing plugin instance or create a new one and add it to the list
       return plugin.orElseGet(() -> {

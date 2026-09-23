@@ -50,7 +50,7 @@ public class ProblemImpl implements Problem {
     this(errorMessage, element);
     this.mainElementId = elementIds[0];
     for (String elementId : elementIds) {
-      if(elementId != null && elementId.length() > 0) {
+      if(elementId != null && !elementId.isEmpty()) {
         this.elementIds.add(elementId);
       }
     }
@@ -64,20 +64,27 @@ public class ProblemImpl implements Problem {
   public ProblemImpl(BpmnParseException exception, String elementId) {
     this(exception);
     this.mainElementId = elementId;
-    if(elementId != null && elementId.length() > 0) {
+    if(elementId != null && !elementId.isEmpty()) {
       this.elementIds.add(elementId);
     }
   }
 
   protected void concatenateErrorMessages(Throwable throwable) {
+    StringBuilder messageBuilder = new StringBuilder();
+    boolean hasMessage = message != null;
+    if (hasMessage) {
+      messageBuilder.append(message);
+    }
     while (throwable != null) {
-      if (message == null) {
-        message = throwable.getMessage();
+      if (!hasMessage) {
+        messageBuilder.append(throwable.getMessage());
+        hasMessage = true;
       } else {
-        message += ": " + throwable.getMessage();
+        messageBuilder.append(": ").append(throwable.getMessage());
       }
       throwable = throwable.getCause();
     }
+    message = hasMessage ? messageBuilder.toString() : null;
   }
 
   protected void extractElementDetails(Element element) {
@@ -85,7 +92,7 @@ public class ProblemImpl implements Problem {
       this.line = element.getLine();
       this.column = element.getColumn();
       String id = element.attribute("id");
-      if (id != null && id.length() > 0) {
+      if (id != null && !id.isEmpty()) {
         this.mainElementId = id;
         this.elementIds.add(id);
       }

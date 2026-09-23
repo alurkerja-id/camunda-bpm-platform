@@ -17,6 +17,7 @@
 package org.camunda.bpm.engine.rest.security.auth;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -92,13 +93,17 @@ public class ProcessEngineAuthenticationFilter implements Filter {
 
     try {
       Class<?> authenticationProviderClass = Class.forName(authenticationProviderClassName);
-      authenticationProvider = (AuthenticationProvider) authenticationProviderClass.newInstance();
+      authenticationProvider = (AuthenticationProvider) authenticationProviderClass.getDeclaredConstructor().newInstance();
     } catch (ClassNotFoundException e) {
       throw new ServletException("Cannot instantiate authentication filter: authentication provider not found", e);
     } catch (InstantiationException e) {
       throw new ServletException("Cannot instantiate authentication filter: cannot instantiate authentication provider", e);
     } catch (IllegalAccessException e) {
       throw new ServletException("Cannot instantiate authentication filter: constructor not accessible", e);
+    } catch (NoSuchMethodException e) {
+      throw new ServletException("Cannot instantiate authentication filter: no default constructor found", e);
+    } catch (InvocationTargetException e) {
+      throw new ServletException("Cannot instantiate authentication filter: cannot instantiate authentication provider", e);
     } catch (ClassCastException e) {
       throw new ServletException("Cannot instantiate authentication filter: authentication provider does not implement interface " +
           AuthenticationProvider.class.getName(), e);

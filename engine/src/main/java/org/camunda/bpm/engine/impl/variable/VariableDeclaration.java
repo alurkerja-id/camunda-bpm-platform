@@ -29,7 +29,7 @@ import org.camunda.bpm.engine.delegate.VariableScope;
  * @deprecated variable declarations are no longer part of the process definition; map variables
  *             with input and output parameters instead
  */
-@Deprecated
+@Deprecated(forRemoval = false)
 public class VariableDeclaration implements Serializable {
 
   private static final long serialVersionUID = 1L;

@@ -42,7 +42,7 @@ import org.w3c.dom.Element;
  */
 public class ActivitiAnnotationDrivenBeanDefinitionParser implements BeanDefinitionParser {
 
-	private final String processEngineAttribute = "process-engine";
+	private static final String processEngineAttribute = "process-engine";
 
 	@Override
 	public BeanDefinition parse(Element element, ParserContext parserContext) {

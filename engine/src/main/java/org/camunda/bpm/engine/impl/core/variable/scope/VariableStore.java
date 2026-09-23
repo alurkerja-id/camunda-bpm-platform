@@ -58,7 +58,6 @@ public class VariableStore<T extends CoreVariableInstance> {
   public void setVariablesProvider(VariablesProvider<T> variablesProvider) {
     if (variables != null) {
       // already initialized
-      return;
     }
     else {
       this.variablesProvider = variablesProvider;

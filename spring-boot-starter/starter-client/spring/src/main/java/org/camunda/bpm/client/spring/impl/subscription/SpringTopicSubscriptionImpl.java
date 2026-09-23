@@ -53,7 +53,7 @@ public class SpringTopicSubscriptionImpl
   protected ApplicationEventPublisher applicationEventPublisher;
 
   protected Predicate<ApplicationEvent> isEventThatCanStartSubscription() {
-    return event -> event instanceof ContextRefreshedEvent;
+    return ContextRefreshedEvent.class::isInstance;
   }
 
   @EventListener

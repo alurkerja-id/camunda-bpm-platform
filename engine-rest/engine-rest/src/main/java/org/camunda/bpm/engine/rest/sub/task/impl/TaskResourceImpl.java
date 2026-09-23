@@ -66,7 +66,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TaskResourceImpl implements TaskResource {
 
-  public static final List<Variant> VARIANTS = Variant.mediaTypes(MediaType.APPLICATION_JSON_TYPE, Hal.APPLICATION_HAL_JSON_TYPE).add().build();
+  protected static final List<Variant> VARIANTS = Variant.mediaTypes(MediaType.APPLICATION_JSON_TYPE, Hal.APPLICATION_HAL_JSON_TYPE).add().build();
 
   protected ProcessEngine engine;
   protected String taskId;
@@ -419,12 +419,10 @@ public class TaskResourceImpl implements TaskResource {
       return Response.ok(deployedTaskForm, getTaskFormMediaType(taskId)).build();
     } catch (NotFoundException e) {
       throw new InvalidRequestException(Status.NOT_FOUND, e.getMessage());
-    } catch (NullValueException e) {
+    } catch (NullValueException | BadUserRequestException e) {
       throw new InvalidRequestException(Status.BAD_REQUEST, e.getMessage());
     } catch (AuthorizationException e) {
       throw new InvalidRequestException(Status.FORBIDDEN, e.getMessage());
-    } catch (BadUserRequestException e) {
-      throw new InvalidRequestException(Status.BAD_REQUEST, e.getMessage());
     }
   }
 

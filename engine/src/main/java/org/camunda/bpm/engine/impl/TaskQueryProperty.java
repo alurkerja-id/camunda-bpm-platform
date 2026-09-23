@@ -26,7 +26,11 @@ import org.camunda.bpm.engine.task.TaskQuery;
  *
  * @author Joram Barrez
  */
-public interface TaskQueryProperty {
+public final class TaskQueryProperty {
+
+  private TaskQueryProperty() {
+  }
+
 
   public static final QueryProperty TASK_ID = new QueryPropertyImpl("ID_");
   public static final QueryProperty NAME = new QueryPropertyImpl("NAME_");

@@ -18,6 +18,7 @@ package org.camunda.bpm.container.impl.deployment;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -87,7 +88,7 @@ public abstract class AbstractParseBpmPlatformXmlStep extends DeploymentOperatio
         fileLocation = checkValidFileLocation(url);
       }
     }
-    catch (MalformedURLException e) {
+    catch (MalformedURLException | IllegalArgumentException e) {
       throw new ProcessEngineException("'" + url + "' is not a valid Camunda Platform configuration resource location.", e);
     }
 
@@ -127,7 +128,7 @@ public abstract class AbstractParseBpmPlatformXmlStep extends DeploymentOperatio
     Pattern urlPattern = Pattern.compile("^(https?://).*/bpm-platform\\.xml$", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
     Matcher urlMatcher = urlPattern.matcher(url);
     if (urlMatcher.matches()) {
-      return new URL(url);
+      return URI.create(url).toURL();
     }
 
     return null;

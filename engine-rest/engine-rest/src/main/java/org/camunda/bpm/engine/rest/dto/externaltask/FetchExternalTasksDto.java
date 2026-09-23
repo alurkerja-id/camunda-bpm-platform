@@ -20,7 +20,6 @@ import static java.lang.Boolean.TRUE;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -104,7 +103,7 @@ public class FetchExternalTasksDto {
     protected String processDefinitionVersionTag;
     protected long lockDuration;
     protected List<String> variables;
-    protected HashMap<String, Object> processVariables;
+    protected Map<String, Object> processVariables;
     protected boolean deserializeValues = false;
     protected boolean localVariables = false;
     protected boolean includeExtensionProperties = false;
@@ -166,10 +165,10 @@ public class FetchExternalTasksDto {
     public void setVariables(List<String> variables) {
       this.variables = variables;
     }
-    public HashMap<String, Object> getProcessVariables() {
+    public Map<String, Object> getProcessVariables() {
       return processVariables;
     }
-    public void setProcessVariables(HashMap<String, Object> processVariables) {
+    public void setProcessVariables(Map<String, Object> processVariables) {
       this.processVariables = processVariables;
     }
     public boolean isDeserializeValues() {
@@ -297,11 +296,11 @@ public class FetchExternalTasksDto {
    */
   static class SortMapper {
 
-    protected static Map<String, Consumer<FetchAndLockBuilder>> FIELD_MAPPINGS = Map.of(
+    protected static final Map<String, Consumer<FetchAndLockBuilder>> FIELD_MAPPINGS = Map.of(
         "createTime", FetchAndLockBuilder::orderByCreateTime
     );
 
-    protected static Map<String, Consumer<FetchAndLockBuilder>> ORDER_MAPPINGS = Map.of(
+    protected static final Map<String, Consumer<FetchAndLockBuilder>> ORDER_MAPPINGS = Map.of(
         "asc", FetchAndLockBuilder::asc,
         "desc", FetchAndLockBuilder::desc
     );

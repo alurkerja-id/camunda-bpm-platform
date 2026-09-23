@@ -37,14 +37,14 @@ public abstract class AbstractFormFieldType implements FormType {
    * @deprecated conversion works on typed values now; use
    *             {@link #convertToModelValue(TypedValue)}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public abstract Object convertFormValueToModelValue(Object propertyValue);
 
   /**
    * @deprecated conversion works on typed values now; use
    *             {@link #convertToFormValue(TypedValue)}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public abstract String convertModelValueToFormValue(Object modelValue);
 
   @Override

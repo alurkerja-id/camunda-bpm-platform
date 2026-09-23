@@ -38,7 +38,7 @@ import org.camunda.bpm.engine.management.JobDefinition;
  */
 public class EntityTypeComparatorForModifications implements Comparator<Class<?>> {
 
-  public static final Map<Class<?>, Integer> TYPE_ORDER = new HashMap<Class<?>, Integer>();
+  protected static final Map<Class<?>, Integer> TYPE_ORDER = new HashMap<Class<?>, Integer>();
 
   static {
 

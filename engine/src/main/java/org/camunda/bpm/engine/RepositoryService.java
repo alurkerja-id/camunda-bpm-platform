@@ -98,7 +98,7 @@ public interface RepositoryService {
    *
    * @deprecated use {@link #deleteDeployment(String, boolean)}. This methods may be deleted from 5.3.
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   void deleteDeploymentCascade(String deploymentId);
 
   /**
@@ -635,7 +635,7 @@ public interface RepositoryService {
    * @deprecated Use authorization mechanism instead.
    *
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   void addCandidateStarterUser(String processDefinitionId, String userId);
 
   /**
@@ -650,7 +650,7 @@ public interface RepositoryService {
    * @deprecated Use authorization mechanism instead.
    *
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   void addCandidateStarterGroup(String processDefinitionId, String groupId);
 
   /**
@@ -665,7 +665,7 @@ public interface RepositoryService {
    * @deprecated Use authorization mechanism instead.
    *
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   void deleteCandidateStarterUser(String processDefinitionId, String userId);
 
   /**
@@ -680,7 +680,7 @@ public interface RepositoryService {
    * @deprecated Use authorization mechanism instead.
    *
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   void deleteCandidateStarterGroup(String processDefinitionId, String groupId);
 
   /**
@@ -691,7 +691,7 @@ public interface RepositoryService {
    * @deprecated Use authorization mechanism instead.
    *
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   List<IdentityLink> getIdentityLinksForProcessDefinition(String processDefinitionId);
 
   /**

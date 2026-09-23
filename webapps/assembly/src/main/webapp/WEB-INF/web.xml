@@ -40,21 +40,6 @@
     </cookie-config>
   </session-config>
 
-  <!-- Container Based Authentication filter -->
-  <!-- <filter>
-    <filter-name>Container Based Authentication Filter</filter-name>
-    <filter-class>org.camunda.bpm.webapp.impl.security.auth.ContainerBasedAuthenticationFilter</filter-class>
-    <init-param>
-      <param-name>authentication-provider</param-name>
-      <param-value>org.camunda.bpm.engine.rest.security.auth.impl.ContainerBasedAuthenticationProvider</param-value>
-    </init-param>
-  </filter>
-  <filter-mapping>
-    <filter-name>Container Based Authentication Filter</filter-name>
-    <url-pattern>/*</url-pattern>
-    <dispatcher>REQUEST</dispatcher>
-  </filter-mapping> -->
-
   <!-- Authentication filter -->
   <filter>
     <filter-name>Authentication Filter</filter-name>
@@ -90,10 +75,6 @@
   <filter>
     <filter-name>CsrfPreventionFilter</filter-name>
     <filter-class>org.camunda.bpm.webapp.impl.security.filter.CsrfPreventionFilter</filter-class>
-    <!--<init-param>-->
-      <!--<param-name>targetOrigin</param-name>-->
-      <!--<param-value>http://localhost:8080</param-value>-->
-    <!--</init-param>-->
   </filter>
   <filter-mapping>
     <filter-name>CsrfPreventionFilter</filter-name>

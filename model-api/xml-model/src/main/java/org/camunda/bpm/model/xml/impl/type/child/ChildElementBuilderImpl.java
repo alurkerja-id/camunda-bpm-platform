@@ -40,26 +40,31 @@ public class ChildElementBuilderImpl<T extends ModelElementInstance> extends Chi
     return new ChildElementImpl<T>(childElementType, parentElementType);
   }
 
+  @Override
   public ChildElementBuilder<T> immutable() {
     super.immutable();
     return this;
   }
 
+  @Override
   public ChildElementBuilder<T> required() {
     super.required();
     return this;
   }
 
+  @Override
   public ChildElementBuilder<T> minOccurs(int i) {
     super.minOccurs(i);
     return this;
   }
 
+  @Override
   public ChildElementBuilder<T> maxOccurs(int i) {
     super.maxOccurs(i);
     return this;
   }
 
+  @Override
   public ChildElement<T> build() {
     return (ChildElement<T>) super.build();
   }

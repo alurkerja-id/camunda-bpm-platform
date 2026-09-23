@@ -43,7 +43,6 @@ import static org.camunda.bpm.engine.authorization.Resources.AUTHORIZATION;
 public class AuthorizationResourceImpl extends AbstractAuthorizedRestResource implements AuthorizationResource {
 
   protected final AuthorizationService authorizationService;
-  protected String relativeRootResourcePath;
 
   public AuthorizationResourceImpl(String processEngineName, String resourceId, String relativeRootResourcePath, ObjectMapper objectMapper) {
     super(processEngineName, AUTHORIZATION, resourceId, objectMapper);

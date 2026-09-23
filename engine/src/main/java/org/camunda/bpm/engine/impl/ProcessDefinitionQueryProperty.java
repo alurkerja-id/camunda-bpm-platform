@@ -25,7 +25,11 @@ import org.camunda.bpm.engine.repository.ProcessDefinitionQuery;
  *
  * @author Joram Barrez
  */
-public interface ProcessDefinitionQueryProperty {
+public final class ProcessDefinitionQueryProperty {
+
+  private ProcessDefinitionQueryProperty() {
+  }
+
 
   public static final QueryProperty PROCESS_DEFINITION_KEY = new QueryPropertyImpl("KEY_");
   public static final QueryProperty PROCESS_DEFINITION_CATEGORY = new QueryPropertyImpl("CATEGORY_");

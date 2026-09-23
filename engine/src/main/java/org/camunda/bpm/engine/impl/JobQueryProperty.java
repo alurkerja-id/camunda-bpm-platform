@@ -24,7 +24,11 @@ import org.camunda.bpm.engine.runtime.JobQuery;
  *
  * @author Joram Barrez
  */
-public interface JobQueryProperty {
+public final class JobQueryProperty {
+
+  private JobQueryProperty() {
+  }
+
 
   public static final QueryProperty JOB_ID = new QueryPropertyImpl("ID_");
   public static final QueryProperty PROCESS_INSTANCE_ID = new QueryPropertyImpl("PROCESS_INSTANCE_ID_");

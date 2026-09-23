@@ -113,13 +113,13 @@ public class EvaluateDecisionTableCmd implements Command<DmnDecisionTableResult>
     if (version == null && !isTenandIdSet) {
       decisionDefinition = deploymentCache.findDeployedLatestDecisionDefinitionByKey(decisionDefinitionKey);
     }
-    else if (version == null && isTenandIdSet) {
+    else if (version == null) {
       decisionDefinition = deploymentCache.findDeployedLatestDecisionDefinitionByKeyAndTenantId(decisionDefinitionKey, decisionDefinitionTenantId);
     }
-    else if (version != null && !isTenandIdSet) {
+    else if (!isTenandIdSet) {
       decisionDefinition = deploymentCache.findDeployedDecisionDefinitionByKeyAndVersion(decisionDefinitionKey, version);
     }
-    else if (version != null && isTenandIdSet) {
+    else {
       decisionDefinition = deploymentCache.findDeployedDecisionDefinitionByKeyVersionAndTenantId(decisionDefinitionKey, version, decisionDefinitionTenantId);
     }
 

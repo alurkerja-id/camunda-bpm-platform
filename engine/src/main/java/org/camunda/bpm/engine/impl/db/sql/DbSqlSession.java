@@ -71,8 +71,8 @@ import org.camunda.bpm.engine.impl.util.ReflectUtil;
 public abstract class DbSqlSession extends AbstractPersistenceSession {
 
   protected static final EnginePersistenceLogger LOG = ProcessEngineLogger.PERSISTENCE_LOGGER;
-  public static final String[] JDBC_METADATA_TABLE_TYPES = { "TABLE" };
-  public static final String[] PG_JDBC_METADATA_TABLE_TYPES = { "TABLE", "PARTITIONED TABLE" };
+  protected static final String[] JDBC_METADATA_TABLE_TYPES = { "TABLE" };
+  protected static final String[] PG_JDBC_METADATA_TABLE_TYPES = { "TABLE", "PARTITIONED TABLE" };
 
   protected SqlSession sqlSession;
   protected DbSqlSessionFactory dbSqlSessionFactory;
@@ -697,14 +697,12 @@ public abstract class DbSqlSession extends AbstractPersistenceSession {
   }
 
   public void executeSchemaResource(String schemaFileResourceName) {
-    FileInputStream inputStream = null;
-    try {
-      inputStream = new FileInputStream(new File(schemaFileResourceName));
+    try (FileInputStream inputStream = new FileInputStream(new File(schemaFileResourceName))) {
       executeSchemaResource("schema operation", "process engine", schemaFileResourceName, inputStream);
     } catch (FileNotFoundException e) {
       throw LOG.missingSchemaResourceFileException(schemaFileResourceName, e);
-    } finally {
-      IoUtil.closeSilently(inputStream);
+    } catch (IOException e) {
+      // ignore, mirrors previous IoUtil.closeSilently behavior for the stream close failure
     }
   }
 
@@ -726,7 +724,7 @@ public abstract class DbSqlSession extends AbstractPersistenceSession {
           logLines.add(line.substring(2));
         } else if (line.startsWith("-- ")) {
           logLines.add(line.substring(3));
-        } else if (line.length()>0) {
+        } else if (!line.isEmpty()) {
 
           if (line.endsWith(";")) {
             sqlStatement = addSqlStatementPiece(sqlStatement, line.substring(0, line.length()-1));

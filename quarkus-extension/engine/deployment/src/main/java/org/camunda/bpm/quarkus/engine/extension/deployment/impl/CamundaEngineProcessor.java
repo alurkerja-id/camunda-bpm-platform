@@ -48,11 +48,11 @@ import org.jboss.jandex.DotName;
 
 public class CamundaEngineProcessor {
 
-  protected static final String FEATURE = "camunda-platform-engine";
+  protected static final String FEATURE_NAME = "camunda-platform-engine";
 
   @BuildStep
   protected FeatureBuildItem feature() {
-    return new FeatureBuildItem(FEATURE);
+    return new FeatureBuildItem(FEATURE_NAME);
   }
 
   @BuildStep

@@ -58,7 +58,7 @@ public class CaseFileItemImpl extends CmmnElementImpl implements CaseFileItem {
    * @deprecated CMMN 1.0 only; CMMN 1.1 uses {@link #sourceRefCollection} instead
    */
   // cmmn 1.0
-  @Deprecated
+  @Deprecated(forRemoval = false)
   protected static AttributeReference<CaseFileItem> sourceRefAttribute;
 
 //  cmmn 1.1

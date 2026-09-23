@@ -45,7 +45,7 @@ import org.camunda.bpm.engine.impl.util.ClassLoaderUtil;
  */
 public class SequentialJobAcquisitionRunnable extends AcquireJobsRunnable {
 
-  protected final JobExecutorLogger LOG = ProcessEngineLogger.JOB_EXECUTOR_LOGGER;
+  protected static final JobExecutorLogger LOG = ProcessEngineLogger.JOB_EXECUTOR_LOGGER;
 
   protected JobAcquisitionContext acquisitionContext;
 

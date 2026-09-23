@@ -64,13 +64,13 @@ import org.camunda.bpm.engine.EntityTypes;
 public interface UserOperationLogEntry {
 
   /** @deprecated Please use {@link EntityTypes#TASK} instead. */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   String ENTITY_TYPE_TASK = EntityTypes.TASK;
   /** @deprecated Please use {@link EntityTypes#IDENTITY_LINK} instead. */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   String ENTITY_TYPE_IDENTITY_LINK = EntityTypes.IDENTITY_LINK;
   /** @deprecated Please use {@link EntityTypes#ATTACHMENT} instead. */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   String ENTITY_TYPE_ATTACHMENT = EntityTypes.ATTACHMENT;
 
   String OPERATION_TYPE_ASSIGN = "Assign";

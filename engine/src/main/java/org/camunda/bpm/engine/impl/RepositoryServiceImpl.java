@@ -343,10 +343,7 @@ public class RepositoryServiceImpl extends ServiceImpl implements RepositoryServ
     } catch (NullValueException e) {
       throw new NotValidException(e.getMessage(), e);
 
-    } catch (CmmnModelInstanceNotFoundException e) {
-      throw new NotFoundException(e.getMessage(), e);
-
-    } catch (DeploymentResourceNotFoundException e) {
+    } catch (CmmnModelInstanceNotFoundException | DeploymentResourceNotFoundException e) {
       throw new NotFoundException(e.getMessage(), e);
 
     }
@@ -360,10 +357,7 @@ public class RepositoryServiceImpl extends ServiceImpl implements RepositoryServ
     } catch (NullValueException e) {
       throw new NotValidException(e.getMessage(), e);
 
-    } catch (DmnModelInstanceNotFoundException e) {
-      throw new NotFoundException(e.getMessage(), e);
-
-    } catch (DeploymentResourceNotFoundException e) {
+    } catch (DmnModelInstanceNotFoundException | DeploymentResourceNotFoundException e) {
       throw new NotFoundException(e.getMessage(), e);
 
     }
@@ -454,9 +448,7 @@ public class RepositoryServiceImpl extends ServiceImpl implements RepositoryServ
       return commandExecutor.execute(new GetDeploymentDecisionModelCmd(decisionDefinitionId));
     } catch (NullValueException e) {
       throw new NotValidException(e.getMessage(), e);
-    } catch (DecisionDefinitionNotFoundException e) {
-      throw new NotFoundException(e.getMessage(), e);
-    } catch (DeploymentResourceNotFoundException e) {
+    } catch (DecisionDefinitionNotFoundException | DeploymentResourceNotFoundException e) {
       throw new NotFoundException(e.getMessage(), e);
     }
   }
@@ -467,9 +459,7 @@ public class RepositoryServiceImpl extends ServiceImpl implements RepositoryServ
       return commandExecutor.execute(new GetDeploymentDecisionRequirementsModelCmd(decisionRequirementsDefinitionId));
     } catch (NullValueException e) {
       throw new NotValidException(e.getMessage(), e);
-    } catch (DecisionDefinitionNotFoundException e) {
-      throw new NotFoundException(e.getMessage(), e);
-    } catch (DeploymentResourceNotFoundException e) {
+    } catch (DecisionDefinitionNotFoundException | DeploymentResourceNotFoundException e) {
       throw new NotFoundException(e.getMessage(), e);
     }
   }

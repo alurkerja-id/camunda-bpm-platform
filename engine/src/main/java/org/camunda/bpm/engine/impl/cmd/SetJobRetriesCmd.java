@@ -41,7 +41,7 @@ public class SetJobRetriesCmd implements Command<Void>, Serializable {
   protected static final long serialVersionUID = 1L;
   protected static final CommandLogger LOG = ProcessEngineLogger.CMD_LOGGER;
 
-  protected static final String RETRIES = "retries";
+  protected static final String RETRIES_PROPERTY = "retries";
   protected static final String DUE_DATE = "dueDate";
 
   protected final String jobId;
@@ -104,7 +104,7 @@ public class SetJobRetriesCmd implements Command<Void>, Serializable {
 
       int oldRetries = job.getRetries();
       job.setRetries(retries);
-      propertyChanges.add(new PropertyChange(RETRIES, oldRetries, job.getRetries()));
+      propertyChanges.add(new PropertyChange(RETRIES_PROPERTY, oldRetries, job.getRetries()));
 
       if (isDueDateSet) {
         Date oldDueDate = job.getDuedate();
@@ -136,7 +136,7 @@ public class SetJobRetriesCmd implements Command<Void>, Serializable {
         .updateFailedJobRetriesByJobDefinitionId(jobDefinitionId, retries, dueDate, isDueDateSet);
 
     List<PropertyChange> propertyChanges = new ArrayList<>();
-    propertyChanges.add(new PropertyChange(RETRIES, null, retries));
+    propertyChanges.add(new PropertyChange(RETRIES_PROPERTY, null, retries));
 
     if (isDueDateSet) {
       propertyChanges.add(new PropertyChange(DUE_DATE, null, dueDate));

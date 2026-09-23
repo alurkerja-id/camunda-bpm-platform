@@ -288,8 +288,8 @@ public class ModelElementTypeImpl implements ModelElementType {
   public Collection<Attribute<?>> getAllAttributes() {
     List<Attribute<?>> allAttributes = new ArrayList<Attribute<?>>();
     allAttributes.addAll(getAttributes());
-    for (ModelElementType baseType : ModelUtil.calculateAllBaseTypes(this)) {
-      allAttributes.addAll(baseType.getAttributes());
+    for (ModelElementType allBaseType : ModelUtil.calculateAllBaseTypes(this)) {
+      allAttributes.addAll(allBaseType.getAttributes());
     }
     return allAttributes;
   }

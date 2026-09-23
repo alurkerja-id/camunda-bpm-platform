@@ -16,7 +16,11 @@
  */
 package org.camunda.bpm.spring.boot.starter.configuration;
 
-public interface Ordering {
+public final class Ordering {
 
-  static int DEFAULT_ORDER = 0;
+  private Ordering() {
+  }
+
+
+  public static final int DEFAULT_ORDER = 0;
 }

@@ -27,7 +27,7 @@ public class CycleBusinessCalendar implements BusinessCalendar {
 
   private final static EngineUtilLogger LOG = ProcessEngineLogger.UTIL_LOGGER;
 
-  public static String NAME = "cycle";
+  public static final String NAME = "cycle";
 
   @Override
   public Date resolveDuedate(String duedateDescription, Task task) {

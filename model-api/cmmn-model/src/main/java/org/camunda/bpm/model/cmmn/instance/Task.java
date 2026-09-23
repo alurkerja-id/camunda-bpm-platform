@@ -31,13 +31,13 @@ public interface Task extends PlanItemDefinition {
   /**
    * @deprecated CMMN 1.0 element name; use {@link #getInputParameters()}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   Collection<InputsCaseParameter> getInputs();
 
   /**
    * @deprecated CMMN 1.0 element name; use {@link #getOutputParameters()}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   Collection<OutputsCaseParameter> getOutputs();
 
   Collection<InputCaseParameter> getInputParameters();

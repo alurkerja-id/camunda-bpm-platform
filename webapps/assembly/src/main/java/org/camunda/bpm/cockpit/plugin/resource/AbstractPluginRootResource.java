@@ -26,7 +26,7 @@ package org.camunda.bpm.cockpit.plugin.resource;
  *
  * @deprecated use {@link AbstractCockpitPluginRootResource}
  */
-@Deprecated
+@Deprecated(forRemoval = false)
 public class AbstractPluginRootResource extends AbstractCockpitPluginRootResource {
 
   public AbstractPluginRootResource(String pluginName) {

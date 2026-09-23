@@ -31,7 +31,7 @@ public interface Case extends CmmnElement {
   /**
    * @deprecated CMMN 1.0 named the roles caseRoles; use {@link #getRoles()}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   Collection<CaseRole> getCaseRoles();
 
   CaseRoles getRoles();
@@ -54,14 +54,14 @@ public interface Case extends CmmnElement {
    * @deprecated the value is no longer restricted to a number of days; use
    *             {@link #getCamundaHistoryTimeToLiveString()}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   Integer getCamundaHistoryTimeToLive();
 
   /**
    * @deprecated the value is no longer restricted to a number of days; use
    *             {@link #setCamundaHistoryTimeToLiveString(String)}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   void setCamundaHistoryTimeToLive(Integer historyTimeToLive);
 
   String getCamundaHistoryTimeToLiveString();

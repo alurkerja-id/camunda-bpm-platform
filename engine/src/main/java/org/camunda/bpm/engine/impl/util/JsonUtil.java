@@ -439,9 +439,7 @@ public final class JsonUtil {
     if (properties != null) {
 
       JsonObject jsonObject = asObject(properties);
-      if (jsonObject != null) {
-        stringValue = jsonObject.toString();
-      }
+      stringValue = jsonObject.toString();
     }
 
     return stringValue;

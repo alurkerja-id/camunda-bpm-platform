@@ -163,7 +163,7 @@ public interface DeploymentBuilder {
    *
    * @deprecated use {@link #enableDuplicateFiltering(boolean)}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   DeploymentBuilder enableDuplicateFiltering();
 
   /**

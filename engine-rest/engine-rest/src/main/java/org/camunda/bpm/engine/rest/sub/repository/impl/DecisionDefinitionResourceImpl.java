@@ -17,7 +17,7 @@
 package org.camunda.bpm.engine.rest.sub.repository.impl;
 
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -97,7 +97,7 @@ public class DecisionDefinitionResourceImpl implements DecisionDefinitionResourc
       decisionModelInputStream = engine.getRepositoryService().getDecisionModel(decisionDefinitionId);
 
       byte[] decisionModel = IoUtil.readInputStream(decisionModelInputStream, "decisionModelDmnXml");
-      return DecisionDefinitionDiagramDto.create(decisionDefinitionId, new String(decisionModel, "UTF-8"));
+      return DecisionDefinitionDiagramDto.create(decisionDefinitionId, new String(decisionModel, StandardCharsets.UTF_8));
 
     } catch (NotFoundException e) {
       throw new InvalidRequestException(Status.NOT_FOUND, e, e.getMessage());
@@ -106,9 +106,6 @@ public class DecisionDefinitionResourceImpl implements DecisionDefinitionResourc
       throw new InvalidRequestException(Status.BAD_REQUEST, e, e.getMessage());
 
     } catch (ProcessEngineException e) {
-      throw new RestException(Status.INTERNAL_SERVER_ERROR, e);
-
-    } catch (UnsupportedEncodingException e) {
       throw new RestException(Status.INTERNAL_SERVER_ERROR, e);
 
     } finally {
@@ -155,11 +152,7 @@ public class DecisionDefinitionResourceImpl implements DecisionDefinitionResourc
       String errorMessage = String.format("Cannot evaluate decision %s: %s", decisionDefinitionId, e.getMessage());
       throw new InvalidRequestException(Status.BAD_REQUEST, e, errorMessage);
     }
-    catch (ProcessEngineException e) {
-      String errorMessage = String.format("Cannot evaluate decision %s: %s", decisionDefinitionId, e.getMessage());
-      throw new RestException(Status.INTERNAL_SERVER_ERROR, e, errorMessage);
-    }
-    catch (DmnEngineException e) {
+    catch (ProcessEngineException | DmnEngineException e) {
       String errorMessage = String.format("Cannot evaluate decision %s: %s", decisionDefinitionId, e.getMessage());
       throw new RestException(Status.INTERNAL_SERVER_ERROR, e, errorMessage);
     }

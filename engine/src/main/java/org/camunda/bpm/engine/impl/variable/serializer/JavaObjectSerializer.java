@@ -25,7 +25,6 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectStreamClass;
 import java.io.Serializable;
 
-import org.camunda.bpm.engine.impl.util.IoUtil;
 import org.camunda.bpm.engine.impl.util.ReflectUtil;
 import org.camunda.bpm.engine.variable.Variables.SerializationDataFormats;
 
@@ -55,30 +54,18 @@ public class JavaObjectSerializer extends AbstractObjectValueSerializer {
 
   @Override
   protected Object deserializeFromByteArray(byte[] bytes, String objectTypeName) throws Exception {
-    ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-    ObjectInputStream ois = null;
-    try {
-      ois = new ClassloaderAwareObjectInputStream(bais);
+    try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+         ObjectInputStream ois = new ClassloaderAwareObjectInputStream(bais)) {
       return ois.readObject();
-    }
-    finally {
-      IoUtil.closeSilently(ois);
-      IoUtil.closeSilently(bais);
     }
   }
 
   @Override
   protected byte[] serializeToByteArray(Object deserializedObject) throws Exception {
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    ObjectOutputStream ois = null;
-    try {
-      ois = new ObjectOutputStream(baos);
+    try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+         ObjectOutputStream ois = new ObjectOutputStream(baos)) {
       ois.writeObject(deserializedObject);
       return baos.toByteArray();
-    }
-    finally {
-      IoUtil.closeSilently(ois);
-      IoUtil.closeSilently(baos);
     }
   }
 
@@ -98,6 +85,7 @@ public class JavaObjectSerializer extends AbstractObjectValueSerializer {
       super(in);
     }
 
+    @Override
     protected Class<?> resolveClass(ObjectStreamClass desc) throws IOException, ClassNotFoundException {
       return ReflectUtil.loadClass(desc.getName());
     }

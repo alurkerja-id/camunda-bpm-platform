@@ -22,6 +22,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -134,8 +135,8 @@ public abstract class ProcessEngines {
   protected static void initProcessEngineFromSpringResource(URL resource) {
     try {
       Class< ? > springConfigurationHelperClass = ReflectUtil.loadClass("org.camunda.bpm.engine.spring.SpringConfigurationHelper");
-      Method method = springConfigurationHelperClass.getMethod("buildProcessEngine", new Class<?>[]{URL.class});
-      ProcessEngine processEngine = (ProcessEngine) method.invoke(null, new Object[]{resource});
+      Method method = springConfigurationHelperClass.getMethod("buildProcessEngine", URL.class);
+      ProcessEngine processEngine = (ProcessEngine) method.invoke(null, resource);
 
       String processEngineName = processEngine.getName();
       ProcessEngineInfo processEngineInfo = new ProcessEngineInfoImpl(processEngineName, resource.toString(), null);
@@ -257,8 +258,8 @@ public abstract class ProcessEngines {
    */
   public static ProcessEngineInfo retry(String resourceUrl) {
     try {
-      return initProcessEngineFromResource(new URL(resourceUrl));
-    } catch (MalformedURLException e) {
+      return initProcessEngineFromResource(URI.create(resourceUrl).toURL());
+    } catch (MalformedURLException | IllegalArgumentException e) {
       throw new ProcessEngineException("invalid url: "+resourceUrl, e);
     }
   }

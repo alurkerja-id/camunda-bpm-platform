@@ -33,9 +33,9 @@ import javax.ws.rs.core.UriInfo;
 
 import org.camunda.bpm.cockpit.impl.plugin.base.dto.CalledProcessInstanceDto;
 import org.camunda.bpm.cockpit.impl.plugin.base.dto.query.CalledProcessInstanceQueryDto;
-import org.camunda.bpm.cockpit.plugin.resource.AbstractPluginResource;
+import org.camunda.bpm.cockpit.plugin.resource.AbstractCockpitPluginResource;
 
-public class ProcessInstanceResource extends AbstractPluginResource {
+public class ProcessInstanceResource extends AbstractCockpitPluginResource {
 
   protected String id;
 

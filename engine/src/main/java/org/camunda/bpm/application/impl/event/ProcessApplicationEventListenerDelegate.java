@@ -53,7 +53,7 @@ import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
  */
 public class ProcessApplicationEventListenerDelegate implements ExecutionListener, TaskListener {
 
-  private static ProcessApplicationLogger LOG = ProcessEngineLogger.PROCESS_APPLICATION_LOGGER;
+  private static final ProcessApplicationLogger LOG = ProcessEngineLogger.PROCESS_APPLICATION_LOGGER;
 
   @Override
   public void notify(final DelegateExecution execution) throws Exception {

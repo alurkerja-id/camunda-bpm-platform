@@ -16,8 +16,6 @@
  */
 package org.camunda.bpm.identity.impl.ldap.plugin;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;

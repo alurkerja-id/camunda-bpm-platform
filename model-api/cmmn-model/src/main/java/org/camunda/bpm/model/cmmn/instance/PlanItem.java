@@ -35,13 +35,13 @@ public interface PlanItem extends CmmnElement {
   /**
    * @deprecated misspelt plural kept for CMMN 1.0 callers; use {@link #getEntryCriteria()}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   Collection<Sentry> getEntryCriterias();
 
   /**
    * @deprecated misspelt plural kept for CMMN 1.0 callers; use {@link #getExitCriteria()}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   Collection<Sentry> getExitCriterias();
 
   /**

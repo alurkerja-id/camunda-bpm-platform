@@ -37,7 +37,7 @@ public class SpinApplication {
   public JavaDelegate spinJava8DeserializerDelegate() {
     return delegateExecution -> {
       SpinJsonNode jsonNode = S("{\"dateTime\": \"2019-12-12T22:22:22\"}");
-      Object         key      = jsonNode.mapTo(SpinJava8Dto.class);
+      jsonNode.mapTo(SpinJava8Dto.class);
     };
   }
 

@@ -21,7 +21,11 @@ import org.camunda.bpm.engine.query.QueryProperty;
 /**
  * @author roman.smirnov
  */
-public interface VariableInstanceQueryProperty {
+public final class VariableInstanceQueryProperty {
+
+  private VariableInstanceQueryProperty() {
+  }
+
 
   public static final QueryProperty VARIABLE_NAME = new QueryPropertyImpl("NAME_");
   public static final QueryProperty VARIABLE_TYPE = new QueryPropertyImpl("TYPE_");

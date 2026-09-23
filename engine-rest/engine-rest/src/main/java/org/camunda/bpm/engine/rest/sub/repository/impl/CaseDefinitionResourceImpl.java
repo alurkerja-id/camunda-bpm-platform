@@ -45,8 +45,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 
 /**
  *
@@ -97,7 +97,7 @@ public class CaseDefinitionResourceImpl implements CaseDefinitionResource {
       caseModelInputStream = engine.getRepositoryService().getCaseModel(caseDefinitionId);
 
       byte[] caseModel = IoUtil.readInputStream(caseModelInputStream, "caseModelCmmnXml");
-      return CaseDefinitionDiagramDto.create(caseDefinitionId, new String(caseModel, "UTF-8"));
+      return CaseDefinitionDiagramDto.create(caseDefinitionId, new String(caseModel, StandardCharsets.UTF_8));
 
     } catch (NotFoundException e) {
       throw new InvalidRequestException(Status.NOT_FOUND, e, e.getMessage());
@@ -106,9 +106,6 @@ public class CaseDefinitionResourceImpl implements CaseDefinitionResource {
       throw new InvalidRequestException(Status.BAD_REQUEST, e, e.getMessage());
 
     } catch (ProcessEngineException e) {
-      throw new RestException(Status.INTERNAL_SERVER_ERROR, e);
-
-    } catch (UnsupportedEncodingException e) {
       throw new RestException(Status.INTERNAL_SERVER_ERROR, e);
 
     } finally {

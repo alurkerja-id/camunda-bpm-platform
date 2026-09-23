@@ -51,7 +51,7 @@ public class CustomFunctionBuilderImpl implements CustomFunctionBuilder {
   @Override
   public CustomFunctionBuilder setReturnValue(Object returnValue) {
     functionCount++;
-    customFunction.setFunction((args) -> returnValue);
+    customFunction.setFunction(args -> returnValue);
     return this;
   }
 

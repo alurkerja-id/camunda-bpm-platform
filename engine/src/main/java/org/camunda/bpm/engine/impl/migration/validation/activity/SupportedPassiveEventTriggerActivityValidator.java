@@ -33,9 +33,9 @@ import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
  */
 public class SupportedPassiveEventTriggerActivityValidator implements MigrationActivityValidator {
 
-  public static SupportedPassiveEventTriggerActivityValidator INSTANCE = new SupportedPassiveEventTriggerActivityValidator();
+  public static final SupportedPassiveEventTriggerActivityValidator INSTANCE = new SupportedPassiveEventTriggerActivityValidator();
 
-  public static final List<String> supportedTypes = Arrays.asList(
+  protected static final List<String> supportedTypes = Arrays.asList(
     ActivityTypes.BOUNDARY_MESSAGE,
     ActivityTypes.BOUNDARY_SIGNAL,
     ActivityTypes.BOUNDARY_TIMER,

@@ -60,12 +60,12 @@ public class PlanItemImpl extends CmmnElementImpl implements PlanItem {
    * @deprecated CMMN 1.0 only; CMMN 1.1 uses {@link #entryCriterionCollection} instead
    */
   // cmmn 1.0
-  @Deprecated
+  @Deprecated(forRemoval = false)
   protected static AttributeReferenceCollection<Sentry> entryCriteriaRefCollection;
   /**
    * @deprecated CMMN 1.0 only; CMMN 1.1 uses {@link #exitCriterionCollection} instead
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   protected static AttributeReferenceCollection<Sentry> exitCriteriaRefCollection;
 
   // cmmn 1.1

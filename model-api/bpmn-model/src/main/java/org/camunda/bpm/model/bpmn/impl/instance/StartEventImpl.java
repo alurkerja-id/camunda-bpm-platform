@@ -115,7 +115,7 @@ public class StartEventImpl extends CatchEventImpl implements StartEvent {
   /**
    * @deprecated use isCamundaAsyncBefore() instead.
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   @Override
   public boolean isCamundaAsync() {
     return camundaAsyncAttribute.getValue(this);
@@ -124,7 +124,7 @@ public class StartEventImpl extends CatchEventImpl implements StartEvent {
   /**
    * @deprecated use setCamundaAsyncBefore(isCamundaAsyncBefore) instead.
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   @Override
   public void setCamundaAsync(boolean isCamundaAsync) {
     camundaAsyncAttribute.setValue(this, isCamundaAsync);

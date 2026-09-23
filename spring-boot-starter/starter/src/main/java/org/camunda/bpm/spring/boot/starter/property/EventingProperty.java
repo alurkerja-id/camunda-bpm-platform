@@ -56,7 +56,7 @@ public class EventingProperty {
     this.execution = execution;
   }
 
-  public Boolean isTask() {
+  public boolean isTask() {
     return BooleanUtils.isTrue(task);
   }
 
@@ -64,7 +64,7 @@ public class EventingProperty {
     this.task = task;
   }
 
-  public Boolean isHistory() {
+  public boolean isHistory() {
     return BooleanUtils.isTrue(history);
   }
 

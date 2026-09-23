@@ -55,7 +55,7 @@ public interface FormData {
 
   /** Properties containing the dynamic information that needs to be displayed in the form.
    * @deprecated form properties were replaced by form fields; use {@link #getFormFields()} */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   List<FormProperty> getFormProperties();
 
   /** returns the form fields which make up this form. */

@@ -15,8 +15,6 @@
  */
 package org.camunda.bpm.engine.spring.components.aop;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.spring.annotations.ProcessVariable;
 import org.camunda.bpm.engine.spring.annotations.StartProcess;
@@ -40,8 +38,6 @@ import org.springframework.util.ClassUtils;
  * @since 5,3
  */
 public class ProcessStartAnnotationBeanPostProcessor extends ProxyConfig implements BeanPostProcessor, InitializingBean {
-
-	private Log log = LogFactory.getLog(getClass()) ;
 
 	/**
 	 * the process engine as created by a {@link org.camunda.bpm.engine.spring.ProcessEngineFactoryBean}

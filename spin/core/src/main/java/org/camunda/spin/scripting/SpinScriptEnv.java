@@ -45,7 +45,7 @@ public class SpinScriptEnv {
    * Mapping of known {@link ScriptEngine} language names and
    * file extensions of corresponding script files.
    */
-  public static final Map<String,String> extensions = new HashMap<String, String>();
+  protected static final Map<String,String> extensions = new HashMap<String, String>();
   static {
     extensions.put("python", "py");
     extensions.put("javascript", "js");

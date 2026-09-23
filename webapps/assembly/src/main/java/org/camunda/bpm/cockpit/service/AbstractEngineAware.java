@@ -34,7 +34,7 @@ import org.camunda.bpm.engine.ProcessEngine;
  *
  * @deprecated no longer used by cockpit; engine aware services take the engine name directly
  */
-@Deprecated
+@Deprecated(forRemoval = false)
 public class AbstractEngineAware {
 
   private final String engineName;

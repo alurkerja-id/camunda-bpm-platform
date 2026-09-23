@@ -140,7 +140,7 @@ public abstract class JobExecutor {
    *
    * @deprecated use {@link #executeJobs(List, ProcessEngineImpl)} instead
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public void executeJobs(List<String> jobIds) {
     if(!processEngines.isEmpty()) {
       executeJobs(jobIds, processEngines.get(0));
@@ -235,7 +235,7 @@ public abstract class JobExecutor {
   /**
    * @deprecated use {@link #getProcessEngines()} instead
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public CommandExecutor getCommandExecutor() {
     if(processEngines.isEmpty()) {
       return null;
@@ -249,7 +249,7 @@ public abstract class JobExecutor {
    *
    * @deprecated use {@link #registerProcessEngine(ProcessEngineImpl)} instead
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public void setCommandExecutor(CommandExecutor commandExecutorTxRequired) {
 
   }

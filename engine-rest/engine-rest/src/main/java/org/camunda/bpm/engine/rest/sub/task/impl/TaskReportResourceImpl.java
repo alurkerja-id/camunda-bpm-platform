@@ -36,7 +36,7 @@ public class TaskReportResourceImpl implements TaskReportResource {
 
   public static final MediaType APPLICATION_CSV_TYPE = new MediaType("application", "csv");
   public static final MediaType TEXT_CSV_TYPE = new MediaType("text", "csv");
-  public static final List<Variant> VARIANTS = Variant.mediaTypes(MediaType.APPLICATION_JSON_TYPE, APPLICATION_CSV_TYPE, TEXT_CSV_TYPE).add().build();
+  protected static final List<Variant> VARIANTS = Variant.mediaTypes(MediaType.APPLICATION_JSON_TYPE, APPLICATION_CSV_TYPE, TEXT_CSV_TYPE).add().build();
 
   protected ProcessEngine engine;
 

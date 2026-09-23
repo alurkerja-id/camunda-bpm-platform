@@ -25,11 +25,11 @@ import static org.camunda.bpm.engine.history.UserOperationLogEntry.OPERATION_TYP
 import static org.camunda.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_RESOLVE;
 import static org.camunda.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_SET_OWNER;
 import static org.camunda.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_SET_PRIORITY;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.ASSIGNEE;
+import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.ASSIGNEE_PROPERTY;
 import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.DELEGATION;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.DELETE;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.OWNER;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.PRIORITY;
+import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.DELETE_PROPERTY;
+import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.OWNER_PROPERTY;
+import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.PRIORITY_PROPERTY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -79,7 +79,7 @@ public class UserOperationLogTaskTest extends AbstractUserOperationLogTest {
     query = queryOperationDetails(OPERATION_TYPE_COMPLETE);
     assertEquals(1, query.count());
     UserOperationLogEntry complete = query.singleResult();
-    assertEquals(DELETE, complete.getProperty());
+    assertEquals(DELETE_PROPERTY, complete.getProperty());
     assertTrue(Boolean.parseBoolean(complete.getNewValue()));
     assertEquals(UserOperationLogEntry.CATEGORY_TASK_WORKER, complete.getCategory());
   }
@@ -98,7 +98,7 @@ public class UserOperationLogTaskTest extends AbstractUserOperationLogTest {
 
     // assert: details
     UserOperationLogEntry assign = query.singleResult();
-    assertEquals(ASSIGNEE, assign.getProperty());
+    assertEquals(ASSIGNEE_PROPERTY, assign.getProperty());
     assertEquals("icke", assign.getNewValue());
     assertEquals(UserOperationLogEntry.CATEGORY_TASK_WORKER, assign.getCategory());
 
@@ -119,7 +119,7 @@ public class UserOperationLogTaskTest extends AbstractUserOperationLogTest {
 
     // assert: details
     UserOperationLogEntry change = query.singleResult();
-    assertEquals(OWNER, change.getProperty());
+    assertEquals(OWNER_PROPERTY, change.getProperty());
     assertEquals("icke", change.getNewValue());
     assertEquals(UserOperationLogEntry.CATEGORY_TASK_WORKER, change.getCategory());
 
@@ -140,7 +140,7 @@ public class UserOperationLogTaskTest extends AbstractUserOperationLogTest {
 
     // assert: correct priority set
     UserOperationLogEntry userOperationLogEntry = query.singleResult();
-    assertEquals(PRIORITY, userOperationLogEntry.getProperty());
+    assertEquals(PRIORITY_PROPERTY, userOperationLogEntry.getProperty());
     // note: 50 is the default task priority
     assertEquals(50, Integer.parseInt(userOperationLogEntry.getOrgValue()));
     assertEquals(10, Integer.parseInt(userOperationLogEntry.getNewValue()));
@@ -160,7 +160,7 @@ public class UserOperationLogTaskTest extends AbstractUserOperationLogTest {
 
     // assert: correct priority set
     userOperationLogEntry = query.orderByTimestamp().asc().list().get(1);
-    assertEquals(PRIORITY, userOperationLogEntry.getProperty());
+    assertEquals(PRIORITY_PROPERTY, userOperationLogEntry.getProperty());
     assertEquals(10, Integer.parseInt(userOperationLogEntry.getOrgValue()));
     assertEquals(75, Integer.parseInt(userOperationLogEntry.getNewValue()));
     assertEquals(UserOperationLogEntry.CATEGORY_TASK_WORKER, userOperationLogEntry.getCategory());
@@ -279,7 +279,7 @@ public class UserOperationLogTaskTest extends AbstractUserOperationLogTest {
 
     // assert: details
     UserOperationLogEntry claim = query.singleResult();
-    assertEquals(ASSIGNEE, claim.getProperty());
+    assertEquals(ASSIGNEE_PROPERTY, claim.getProperty());
     assertEquals("icke", claim.getNewValue());
     assertEquals(UserOperationLogEntry.CATEGORY_TASK_WORKER, claim.getCategory());
 
@@ -300,8 +300,8 @@ public class UserOperationLogTaskTest extends AbstractUserOperationLogTest {
     assertEquals(3, query.count());
 
     // assert: details
-    assertEquals("icke", queryOperationDetails(OPERATION_TYPE_DELEGATE, OWNER).singleResult().getNewValue());
-    assertEquals("er", queryOperationDetails(OPERATION_TYPE_DELEGATE, ASSIGNEE).singleResult().getNewValue());
+    assertEquals("icke", queryOperationDetails(OPERATION_TYPE_DELEGATE, OWNER_PROPERTY).singleResult().getNewValue());
+    assertEquals("er", queryOperationDetails(OPERATION_TYPE_DELEGATE, ASSIGNEE_PROPERTY).singleResult().getNewValue());
     assertEquals(DelegationState.PENDING.toString(), queryOperationDetails(OPERATION_TYPE_DELEGATE, DELEGATION).singleResult().getNewValue());
     assertEquals(UserOperationLogEntry.CATEGORY_TASK_WORKER, queryOperationDetails(OPERATION_TYPE_DELEGATE, DELEGATION).singleResult().getCategory());
 
@@ -459,7 +459,7 @@ public class UserOperationLogTaskTest extends AbstractUserOperationLogTest {
 
     assertFalse(Boolean.parseBoolean(entry.getOrgValue()));
     assertTrue(Boolean.parseBoolean(entry.getNewValue()));
-    assertEquals(DELETE, entry.getProperty());
+    assertEquals(DELETE_PROPERTY, entry.getProperty());
     assertEquals(UserOperationLogEntry.CATEGORY_TASK_WORKER, entry.getCategory());
 
   }

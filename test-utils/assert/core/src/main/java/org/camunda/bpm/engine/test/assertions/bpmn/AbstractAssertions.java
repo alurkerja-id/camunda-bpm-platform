@@ -46,10 +46,10 @@ public abstract class AbstractAssertions {
       init(processEngine);
       return processEngine;
     }
-    String message = processEngines.size() == 0 ? "No ProcessEngine found to be " +
-      "registered with " + ProcessEngines.class.getSimpleName() + "!"
-      : String.format(processEngines.size() + " ProcessEngines initialized. Call %s.init" +
-      "(ProcessEngine processEngine) first!", BpmnAwareTests.class.getSimpleName());
+    String message = processEngines.size() == 0
+      ? String.format("No ProcessEngine found to be registered with %s!", ProcessEngines.class.getSimpleName())
+      : String.format("%d ProcessEngines initialized. Call %s.init(ProcessEngine processEngine) first!",
+        processEngines.size(), BpmnAwareTests.class.getSimpleName());
     throw new IllegalStateException(message);
   }
 

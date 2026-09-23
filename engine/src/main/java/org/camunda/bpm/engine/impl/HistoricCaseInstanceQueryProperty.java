@@ -24,7 +24,11 @@ import org.camunda.bpm.engine.query.QueryProperty;
  *
  * @author Sebastian Menski
  */
-public interface HistoricCaseInstanceQueryProperty {
+public final class HistoricCaseInstanceQueryProperty {
+
+  private HistoricCaseInstanceQueryProperty() {
+  }
+
 
   public static final QueryProperty PROCESS_INSTANCE_ID_ = new QueryPropertyImpl("CASE_INST_ID_");
   public static final QueryProperty PROCESS_DEFINITION_ID = new QueryPropertyImpl("CASE_DEF_ID_");

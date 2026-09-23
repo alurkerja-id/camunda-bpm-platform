@@ -22,7 +22,7 @@ package org.camunda.bpm.engine.authorization;
  *
  * @deprecated These permissions have no effect
  */
-@Deprecated
+@Deprecated(forRemoval = false)
 public enum OptimizePermissions implements Permission {
 
   /**

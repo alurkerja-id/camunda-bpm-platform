@@ -18,7 +18,11 @@ package org.camunda.bpm.engine.impl;
 
 import org.camunda.bpm.engine.query.QueryProperty;
 
-public interface CleanableHistoricInstanceReportProperty {
+public final class CleanableHistoricInstanceReportProperty {
+
+  private CleanableHistoricInstanceReportProperty() {
+  }
+
 
   public static final QueryProperty FINISHED_AMOUNT = new QueryPropertyImpl("FINISHED_");
 }

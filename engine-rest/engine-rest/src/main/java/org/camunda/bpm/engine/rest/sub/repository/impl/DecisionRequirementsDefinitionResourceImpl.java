@@ -17,7 +17,7 @@
 package org.camunda.bpm.engine.rest.sub.repository.impl;
 
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -81,7 +81,7 @@ public class DecisionRequirementsDefinitionResourceImpl implements DecisionRequi
       decisionRequirementsModelInputStream = engine.getRepositoryService().getDecisionRequirementsModel(decisionRequirementsDefinitionId);
 
       byte[] decisionRequirementsModel = IoUtil.readInputStream(decisionRequirementsModelInputStream, "decisionRequirementsModelDmnXml");
-      return DecisionRequirementsDefinitionXmlDto.create(decisionRequirementsDefinitionId, new String(decisionRequirementsModel, "UTF-8"));
+      return DecisionRequirementsDefinitionXmlDto.create(decisionRequirementsDefinitionId, new String(decisionRequirementsModel, StandardCharsets.UTF_8));
 
     } catch (NotFoundException e) {
       throw new InvalidRequestException(Status.NOT_FOUND, e, e.getMessage());
@@ -90,9 +90,6 @@ public class DecisionRequirementsDefinitionResourceImpl implements DecisionRequi
       throw new InvalidRequestException(Status.BAD_REQUEST, e, e.getMessage());
 
     } catch (ProcessEngineException e) {
-      throw new RestException(Status.INTERNAL_SERVER_ERROR, e);
-
-    } catch (UnsupportedEncodingException e) {
       throw new RestException(Status.INTERNAL_SERVER_ERROR, e);
 
     } finally {

@@ -32,11 +32,6 @@ public abstract class AbstractErrorEventDefinitionBuilder<B extends AbstractErro
     super(modelInstance, element, selfType);
   }
 
-  @Override
-  public B id(String identifier) {
-    return super.id(identifier);
-  }
-
   /**
    * Sets the error code variable attribute.
    */

@@ -36,11 +36,7 @@ public class PeriodUnitConverter extends JacksonAwareStringToTypeConverter<Perio
     try {
       return Enum.valueOf(type, value.toUpperCase());
     }
-    catch (IllegalArgumentException e) {
-      throw new InvalidRequestException(Status.BAD_REQUEST, e, String.format("Cannot convert value %s to java enum type %s",
-          value, type.getName()));
-    }
-    catch (NullPointerException e) {
+    catch (IllegalArgumentException | NullPointerException e) {
       throw new InvalidRequestException(Status.BAD_REQUEST, e, String.format("Cannot convert value %s to java enum type %s",
           value, type.getName()));
     }

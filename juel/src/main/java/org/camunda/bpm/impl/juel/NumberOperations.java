@@ -35,6 +35,7 @@ public class NumberOperations {
 				case '.':
 				case 'E':
 				case 'e': return true;
+				default: break;
 			}
 		}
 		return false;

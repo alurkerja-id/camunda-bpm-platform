@@ -22,6 +22,7 @@ import org.camunda.spin.impl.logging.SpinLogger;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Daniel Meyer
@@ -29,7 +30,7 @@ import java.nio.charset.Charset;
  */
 public class SpinIoUtil extends IoUtil {
 
-  public static final Charset ENCODING_CHARSET = Charset.forName("UTF-8");
+  public static final Charset ENCODING_CHARSET = StandardCharsets.UTF_8;
 
   private static final SpinCoreLogger LOG = SpinLogger.CORE_LOGGER;
 
@@ -65,10 +66,8 @@ public class SpinIoUtil extends IoUtil {
    * @throws IOException
    */
   public static String getStringFromInputStream(InputStream inputStream, boolean trim) throws IOException {
-    BufferedReader bufferedReader = null;
     StringBuilder stringBuilder = new StringBuilder();
-    try {
-      bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+    try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
       String line;
       while ((line = bufferedReader.readLine()) != null) {
         if (trim) {
@@ -77,8 +76,6 @@ public class SpinIoUtil extends IoUtil {
           stringBuilder.append(line).append("\n");
         }
       }
-    } finally {
-      closeSilently(bufferedReader);
     }
 
     return stringBuilder.toString();
@@ -104,10 +101,8 @@ public class SpinIoUtil extends IoUtil {
    * @throws IOException
    */
   public static String getStringFromReader(Reader reader, boolean trim) throws IOException {
-    BufferedReader bufferedReader = null;
     StringBuilder stringBuilder = new StringBuilder();
-    try {
-      bufferedReader = new BufferedReader(reader);
+    try (BufferedReader bufferedReader = new BufferedReader(reader)) {
       String line;
       while ((line = bufferedReader.readLine()) != null) {
         if (trim) {
@@ -116,8 +111,6 @@ public class SpinIoUtil extends IoUtil {
           stringBuilder.append(line).append("\n");
         }
       }
-    } finally {
-      closeSilently(bufferedReader);
     }
 
     return stringBuilder.toString();

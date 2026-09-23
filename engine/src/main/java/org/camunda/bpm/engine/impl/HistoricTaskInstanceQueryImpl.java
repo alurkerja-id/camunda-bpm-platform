@@ -472,14 +472,14 @@ public class HistoricTaskInstanceQueryImpl extends AbstractQuery<HistoricTaskIns
     ProcessEngineConfigurationImpl processEngineConfiguration = Context.getProcessEngineConfiguration();
     VariableSerializers variableSerializers = processEngineConfiguration.getVariableSerializers();
     String dbType = processEngineConfiguration.getDatabaseType();
-    for(QueryVariableValue var : variables) {
-      var.initialize(variableSerializers, dbType);
+    for(QueryVariableValue queryVariableValue : variables) {
+      queryVariableValue.initialize(variableSerializers, dbType);
     }
 
     if (!queries.isEmpty()) {
       for (HistoricTaskInstanceQueryImpl orQuery: queries) {
-        for (QueryVariableValue var : orQuery.variables) {
-          var.initialize(variableSerializers, dbType);
+        for (QueryVariableValue queryVariableValue : orQuery.variables) {
+          queryVariableValue.initialize(variableSerializers, dbType);
         }
       }
     }

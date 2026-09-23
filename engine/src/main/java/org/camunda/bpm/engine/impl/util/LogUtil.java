@@ -35,10 +35,10 @@ import org.camunda.bpm.engine.impl.pvm.PvmException;
  *
  * @deprecated since 7.4, use slf4j
  */
-@Deprecated
+@Deprecated(forRemoval = false)
 public class LogUtil {
 
-  public static enum ThreadLogMode {
+  public enum ThreadLogMode {
     NONE, INDENT, PRINT_ID
   }
 
@@ -80,43 +80,43 @@ public class LogUtil {
   public static class LogFormatter extends Formatter {
 
     @Override
-    public String format(LogRecord record) {
+    public String format(LogRecord logRecord) {
       StringBuilder line = new StringBuilder();
       line.append(new SimpleDateFormat(DATE_PATTERN).format(new Date()));
-      if (Level.FINE.equals(record.getLevel())) {
+      if (Level.FINE.equals(logRecord.getLevel())) {
         line.append(" FIN ");
-      } else if (Level.FINEST.equals(record.getLevel())) {
+      } else if (Level.FINEST.equals(logRecord.getLevel())) {
         line.append(" FST ");
-      } else if (Level.INFO.equals(record.getLevel())) {
+      } else if (Level.INFO.equals(logRecord.getLevel())) {
         line.append(" INF ");
-      } else if (Level.SEVERE.equals(record.getLevel())) {
+      } else if (Level.SEVERE.equals(logRecord.getLevel())) {
         line.append(" SEV ");
-      } else if (Level.WARNING.equals(record.getLevel())) {
+      } else if (Level.WARNING.equals(logRecord.getLevel())) {
         line.append(" WRN ");
-      } else if (Level.FINER.equals(record.getLevel())) {
+      } else if (Level.FINER.equals(logRecord.getLevel())) {
         line.append(" FNR ");
-      } else if (Level.CONFIG.equals(record.getLevel())) {
+      } else if (Level.CONFIG.equals(logRecord.getLevel())) {
         line.append(" CFG ");
       }
 
-      int threadId = record.getThreadID();
+      int threadId = logRecord.getThreadID();
       String threadIndent = getThreadIndent(threadId);
 
       line.append(threadIndent);
       line.append(" | ");
-      line.append(record.getMessage());
+      line.append(logRecord.getMessage());
 
-      if (record.getThrown() != null) {
+      if (logRecord.getThrown() != null) {
         line.append(LINE_SEPARATOR);
 
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
-        record.getThrown().printStackTrace(printWriter);
+        logRecord.getThrown().printStackTrace(printWriter);
         line.append(stringWriter.toString());
       }
 
       line.append("  [");
-      line.append(record.getLoggerName());
+      line.append(logRecord.getLoggerName());
       line.append("]");
 
       line.append(LINE_SEPARATOR);

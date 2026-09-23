@@ -82,7 +82,7 @@ public interface ProcessDefinitionQuery extends Query<ProcessDefinitionQuery, Pr
    *
    * @deprecated use {@link #processDefinitionKeyIn(String...)}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   ProcessDefinitionQueryImpl processDefinitionKeysIn(String... processDefinitionKeys);
 
   /**
@@ -191,7 +191,7 @@ public interface ProcessDefinitionQuery extends Query<ProcessDefinitionQuery, Pr
    *
    * @deprecated use {@link #messageEventSubscriptionName(String)}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   ProcessDefinitionQuery messageEventSubscription(String messageName);
 
   /**

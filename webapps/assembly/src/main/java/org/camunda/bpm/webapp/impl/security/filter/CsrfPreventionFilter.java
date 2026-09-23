@@ -19,6 +19,8 @@ package org.camunda.bpm.webapp.impl.security.filter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.SecureRandom;
 import java.util.HashSet;
@@ -121,9 +123,9 @@ public class CsrfPreventionFilter implements Filter {
       Class<?> clazz = Class.forName(randomClass);
       randomSource = (Random) clazz.getConstructor().newInstance();
 
-      String targetOrigin = filterConfig.getInitParameter("targetOrigin");
-      if (!isBlank(targetOrigin)) {
-        setTargetOrigin(targetOrigin);
+      String targetOriginParam = filterConfig.getInitParameter("targetOrigin");
+      if (!isBlank(targetOriginParam)) {
+        setTargetOrigin(targetOriginParam);
       }
 
       String customDenyStatus = filterConfig.getInitParameter("denyStatus");
@@ -140,15 +142,11 @@ public class CsrfPreventionFilter implements Filter {
 
     } catch (ClassNotFoundException e) {
       throw new ServletException("Cannot instantiate CSRF Prevention filter: Random class not found.", e);
-    } catch (InstantiationException e) {
-      throw new ServletException("Cannot instantiate CSRF Prevention filter: cannot instantiate provided Random class", e);
-    } catch (InvocationTargetException e) {
-      throw new ServletException("Cannot instantiate CSRF Prevention filter: cannot instantiate provided Random class", e);
-    } catch (NoSuchMethodException e) {
+    } catch (InstantiationException | InvocationTargetException | NoSuchMethodException e) {
       throw new ServletException("Cannot instantiate CSRF Prevention filter: cannot instantiate provided Random class", e);
     } catch (IllegalAccessException e) {
       throw new ServletException("Cannot instantiate CSRF Prevention filter: Random class constructor not accessible", e);
-    } catch (MalformedURLException e) {
+    } catch (MalformedURLException | IllegalArgumentException e) {
       throw new ServletException("CSRFPreventionFilter: Could not read target origin URL: " + e.getMessage());
     }
   }
@@ -230,7 +228,13 @@ public class CsrfPreventionFilter implements Filter {
     }
 
     //Compare the source against the expected target origin
-    URL sourceURL = new URL(source);
+    URL sourceURL;
+    try {
+      sourceURL = URI.create(source).toURL();
+    } catch (IllegalArgumentException | MalformedURLException e) {
+      response.sendError(HttpServletResponse.SC_FORBIDDEN, "CSRFPreventionFilter: Could not parse ORIGIN/REFERER request header value: " + source);
+      return false;
+    }
     if (!getTargetOrigin().getProtocol().equals(sourceURL.getProtocol())
       || !getTargetOrigin().getHost().equals(sourceURL.getHost())
       || getTargetOrigin().getPort() != sourceURL.getPort()) {
@@ -310,7 +314,11 @@ public class CsrfPreventionFilter implements Filter {
    * @throws MalformedURLException
    */
   public void setTargetOrigin(String targetOrigin) throws MalformedURLException {
-    this.targetOrigin = new URL(targetOrigin);
+    try {
+      this.targetOrigin = new URI(targetOrigin).toURL();
+    } catch (URISyntaxException e) {
+      throw new MalformedURLException(e.getMessage());
+    }
   }
 
   /**

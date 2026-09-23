@@ -23,6 +23,6 @@ package org.camunda.bpm.engine.cdi.impl.event;
  *
  * @deprecated kept for older configurations; use {@link CdiEventListener}
  */
-@Deprecated
+@Deprecated(forRemoval = false)
 public class CdiExecutionListener extends CdiEventListener {
 }

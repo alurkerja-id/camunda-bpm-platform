@@ -34,12 +34,12 @@ import org.camunda.bpm.engine.runtime.ActivityInstance;
 public class ProcessInstanceModificationCmd extends AbstractModificationCmd<Void> {
 
   private final static CommandLogger LOG = ProcessEngineLogger.CMD_LOGGER;
-  protected boolean writeUserOperationLog;
+  protected boolean shouldWriteUserOperationLog;
 
   public ProcessInstanceModificationCmd(ModificationBuilderImpl builder,
                                         boolean writeUserOperationLog) {
     super(builder);
-    this.writeUserOperationLog = writeUserOperationLog;
+    this.shouldWriteUserOperationLog = writeUserOperationLog;
    }
 
   @Override
@@ -60,7 +60,7 @@ public class ProcessInstanceModificationCmd extends AbstractModificationCmd<Void
 
     ensureNotNull(BadUserRequestException.class, "Process definition id cannot be null", processDefinition);
 
-    if (writeUserOperationLog) {
+    if (shouldWriteUserOperationLog) {
       String annotation = builder.getAnnotation();
       writeUserOperationLog(commandContext, processDefinition,
           processInstanceIds.size(), false, annotation);

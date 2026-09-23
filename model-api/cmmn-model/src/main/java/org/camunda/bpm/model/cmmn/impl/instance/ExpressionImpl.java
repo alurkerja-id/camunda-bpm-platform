@@ -42,7 +42,7 @@ public class ExpressionImpl extends CmmnElementImpl implements Expression {
    * @deprecated CMMN 1.0 only; CMMN 1.1 holds the expression as text on the element itself
    */
   // cmmn 1.0
-  @Deprecated
+  @Deprecated(forRemoval = false)
   protected static ChildElement<Body> bodyChild;
 
   public ExpressionImpl(ModelTypeInstanceContext instanceContext) {

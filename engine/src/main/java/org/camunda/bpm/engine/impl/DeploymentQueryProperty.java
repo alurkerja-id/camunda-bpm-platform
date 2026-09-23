@@ -26,7 +26,11 @@ import org.camunda.bpm.engine.repository.DeploymentQuery;
  *
  * @author Joram Barrez
  */
-public interface DeploymentQueryProperty {
+public final class DeploymentQueryProperty {
+
+  private DeploymentQueryProperty() {
+  }
+
 
   public static final QueryProperty DEPLOYMENT_ID = new QueryPropertyImpl("ID_");
   public static final QueryProperty DEPLOYMENT_NAME = new QueryPropertyImpl("NAME_");

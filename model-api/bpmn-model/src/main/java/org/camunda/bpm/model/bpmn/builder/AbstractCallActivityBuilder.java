@@ -50,7 +50,7 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
    *
    * @return the builder object
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public B camundaAsync() {
     element.setCamundaAsyncBefore(true);
     return myself;
@@ -64,7 +64,7 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
    * @param isCamundaAsync  the async state of the task
    * @return the builder object
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public B camundaAsync(boolean isCamundaAsync) {
     element.setCamundaAsyncBefore(isCamundaAsync);
     return myself;

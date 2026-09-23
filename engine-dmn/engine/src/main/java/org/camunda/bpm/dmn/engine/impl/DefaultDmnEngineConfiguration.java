@@ -165,7 +165,7 @@ public class DefaultDmnEngineConfiguration extends DmnEngineConfiguration {
     decisionEvaluationListeners = listeners;
   }
 
-  protected Collection<? extends DmnDecisionEvaluationListener> getDefaultDmnDecisionEvaluationListeners() {
+  protected Collection<DmnDecisionEvaluationListener> getDefaultDmnDecisionEvaluationListeners() {
     List<DmnDecisionEvaluationListener> defaultListeners = new ArrayList<>();
 
     if (engineMetricCollector instanceof DmnDecisionEvaluationListener) {

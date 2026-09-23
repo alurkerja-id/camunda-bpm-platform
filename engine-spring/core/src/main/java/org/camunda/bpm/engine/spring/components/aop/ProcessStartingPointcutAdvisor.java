@@ -54,17 +54,17 @@ public class ProcessStartingPointcutAdvisor implements PointcutAdvisor, Serializ
 	/**
 	 * the {@link org.aopalliance.intercept.MethodInterceptor} that handles launching the business process.
 	 */
-	protected MethodInterceptor advice;
+	protected transient MethodInterceptor advice;
 
 	/**
 	 * matches any method containing the {@link StartProcess} annotation.
 	 */
-	protected Pointcut pointcut;
+	protected transient Pointcut pointcut;
 
 	/**
 	 * the injected reference to the {@link org.camunda.bpm.engine.ProcessEngine}
 	 */
-	protected ProcessEngine processEngine;
+	protected transient ProcessEngine processEngine;
 
 	public ProcessStartingPointcutAdvisor(ProcessEngine pe) {
 		this.processEngine = pe;

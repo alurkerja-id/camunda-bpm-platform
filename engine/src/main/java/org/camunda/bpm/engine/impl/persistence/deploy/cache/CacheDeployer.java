@@ -16,8 +16,6 @@
  */
 package org.camunda.bpm.engine.impl.persistence.deploy.cache;
 
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cmd.CommandLogger;
 import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.persistence.deploy.Deployer;
 import org.camunda.bpm.engine.impl.persistence.entity.DeploymentEntity;
@@ -30,8 +28,6 @@ import java.util.List;
  * @author: Johannes Heinemann
  */
 public class CacheDeployer {
-
-  private final static CommandLogger LOG = ProcessEngineLogger.CMD_LOGGER;
 
   protected List<Deployer> deployers;
 

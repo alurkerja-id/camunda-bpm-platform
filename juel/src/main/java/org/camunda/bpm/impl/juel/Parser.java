@@ -382,6 +382,7 @@ public class Parser {
 						v = getExtensionHandler(consumeToken()).createAstNode(v, and(true));
 						break;
 					}
+					return v;
 				default:
 					return v;
 			}
@@ -407,6 +408,7 @@ public class Parser {
 						v = getExtensionHandler(consumeToken()).createAstNode(v, eq(true));
 						break;
 					}
+					return v;
 				default:
 					return v;
 			}
@@ -436,6 +438,7 @@ public class Parser {
 						v = getExtensionHandler(consumeToken()).createAstNode(v, cmp(true));
 						break;
 					}
+					return v;
 				default:
 					return v;
 			}
@@ -473,6 +476,7 @@ public class Parser {
 						v = getExtensionHandler(consumeToken()).createAstNode(v, add(true));
 						break;
 					}
+					return v;
 				default:
 					return v;
 			}
@@ -502,6 +506,7 @@ public class Parser {
 						v = getExtensionHandler(consumeToken()).createAstNode(v, mul(true));
 						break;
 					}
+					return v;
 				default:
 					return v;
 			}
@@ -535,6 +540,7 @@ public class Parser {
 						v = getExtensionHandler(consumeToken()).createAstNode(v, unary(true));
 						break;
 					}
+					return v;
 				default:
 					return v;
 			}
@@ -564,6 +570,8 @@ public class Parser {
 					v = getExtensionHandler(consumeToken()).createAstNode(unary(true));
 					break;
 				}
+				v = value();
+				break;
 			default:
 				v = value();
 		}
@@ -642,6 +650,8 @@ public class Parser {
 				consumeToken(Scanner.Symbol.RPAREN);
 				v = new AstNested(v);
 				break;
+			default:
+				break;
 		}
 		return v;
 	}
@@ -700,6 +710,9 @@ public class Parser {
 					v = getExtensionHandler(consumeToken()).createAstNode();
 					break;
 				}
+				break;
+			default:
+				break;
 		}
 		return v;
 	}

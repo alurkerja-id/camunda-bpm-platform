@@ -47,12 +47,12 @@ public class TaskImpl extends PlanItemDefinitionImpl implements Task {
    * @deprecated CMMN 1.0 only; CMMN 1.1 uses {@link #inputParameterCollection} instead
    */
   // cmmn 1.0
-  @Deprecated
+  @Deprecated(forRemoval = false)
   protected static ChildElementCollection<InputsCaseParameter> inputsCollection;
   /**
    * @deprecated CMMN 1.0 only; CMMN 1.1 uses {@link #outputParameterCollection} instead
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   protected static ChildElementCollection<OutputsCaseParameter> outputsCollection;
 
   // cmmn 1.1

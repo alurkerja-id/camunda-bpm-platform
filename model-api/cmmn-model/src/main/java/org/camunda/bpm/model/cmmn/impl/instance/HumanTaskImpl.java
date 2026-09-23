@@ -57,7 +57,7 @@ public class HumanTaskImpl extends TaskImpl implements HumanTask {
    * @deprecated CMMN 1.0 only; CMMN 1.1 uses {@link #planningTableChild} instead
    */
   // cmmn 1.0
-  @Deprecated
+  @Deprecated(forRemoval = false)
   protected static ChildElementCollection<PlanningTable> planningTableCollection;
 
   // cmmn 1.1

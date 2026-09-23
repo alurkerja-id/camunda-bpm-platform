@@ -22,7 +22,11 @@ import org.camunda.bpm.engine.query.QueryProperty;
 /**
  * @author Sebastian Menski
  */
-public interface FilterQueryProperty {
+public final class FilterQueryProperty {
+
+  private FilterQueryProperty() {
+  }
+
 
   public static final QueryProperty FILTER_ID = new QueryPropertyImpl("ID_");
   public static final QueryProperty RESOURCE_TYPE = new QueryPropertyImpl("RESOURCE_TYPE_");

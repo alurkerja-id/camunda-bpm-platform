@@ -81,4 +81,47 @@ public class UserAuthentication extends Authentication {
     this.cacheValidationTime = cacheValidationTime;
   }
 
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = super.hashCode();
+    result = prime * result + ((groupIds == null) ? 0 : groupIds.hashCode());
+    result = prime * result + ((tenantIds == null) ? 0 : tenantIds.hashCode());
+    result = prime * result + ((authorizedApps == null) ? 0 : authorizedApps.hashCode());
+    result = prime * result + ((cacheValidationTime == null) ? 0 : cacheValidationTime.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (!super.equals(obj))
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    UserAuthentication other = (UserAuthentication) obj;
+    if (groupIds == null) {
+      if (other.groupIds != null)
+        return false;
+    } else if (!groupIds.equals(other.groupIds))
+      return false;
+    if (tenantIds == null) {
+      if (other.tenantIds != null)
+        return false;
+    } else if (!tenantIds.equals(other.tenantIds))
+      return false;
+    if (authorizedApps == null) {
+      if (other.authorizedApps != null)
+        return false;
+    } else if (!authorizedApps.equals(other.authorizedApps))
+      return false;
+    if (cacheValidationTime == null) {
+      if (other.cacheValidationTime != null)
+        return false;
+    } else if (!cacheValidationTime.equals(other.cacheValidationTime))
+      return false;
+    return true;
+  }
+
 }

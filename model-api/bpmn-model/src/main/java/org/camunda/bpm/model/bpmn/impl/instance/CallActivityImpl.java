@@ -148,7 +148,7 @@ public class CallActivityImpl extends ActivityImpl implements CallActivity {
   /**
    * @deprecated use isCamundaAsyncBefore() instead.
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   @Override
   public boolean isCamundaAsync() {
     return camundaAsyncAttribute.getValue(this);
@@ -157,7 +157,7 @@ public class CallActivityImpl extends ActivityImpl implements CallActivity {
   /**
    * @deprecated use setCamundaAsyncBefore() instead.
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   @Override
   public void setCamundaAsync(boolean isCamundaAsync) {
     camundaAsyncAttribute.setValue(this, isCamundaAsync);

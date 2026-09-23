@@ -60,14 +60,14 @@ public interface Decision extends DrgElement {
    * @deprecated the value is no longer restricted to a number of days; use
    *             {@link #getCamundaHistoryTimeToLiveString()}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   Integer getCamundaHistoryTimeToLive();
 
   /**
    * @deprecated the value is no longer restricted to a number of days; use
    *             {@link #setCamundaHistoryTimeToLiveString(String)}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   void setCamundaHistoryTimeToLive(Integer historyTimeToLive);
 
   String getCamundaHistoryTimeToLiveString();

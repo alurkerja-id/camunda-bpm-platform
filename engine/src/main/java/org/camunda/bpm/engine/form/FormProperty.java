@@ -26,7 +26,7 @@ import org.camunda.bpm.engine.FormService;
  *
  * @deprecated form properties were replaced by form fields; use {@link FormField}
  */
-@Deprecated
+@Deprecated(forRemoval = false)
 public interface FormProperty {
 
   /** The key used to submit the property in {@link FormService#submitStartFormData(String, java.util.Map)}

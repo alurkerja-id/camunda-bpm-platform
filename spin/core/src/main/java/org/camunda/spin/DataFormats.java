@@ -40,14 +40,14 @@ import org.camunda.spin.xml.SpinXmlElement;
  */
 public class DataFormats {
 
-  private static SpinCoreLogger LOG = SpinLogger.CORE_LOGGER;
+  private static final SpinCoreLogger LOG = SpinLogger.CORE_LOGGER;
 
-  public static String JSON_DATAFORMAT_NAME = "application/json";
+  public static final String JSON_DATAFORMAT_NAME = "application/json";
 
-  public static String XML_DATAFORMAT_NAME = "application/xml";
+  public static final String XML_DATAFORMAT_NAME = "application/xml";
 
   /** The global instance of the manager */
-  static DataFormats INSTANCE = new DataFormats();
+  static final DataFormats INSTANCE = new DataFormats();
 
   /**
    * Provides the global instance of the DataFormats manager.

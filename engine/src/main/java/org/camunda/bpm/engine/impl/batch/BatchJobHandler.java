@@ -49,7 +49,7 @@ public interface BatchJobHandler<T> extends JobHandler<BatchJobConfiguration> {
    *
    * @return the batch job declaration
    */
-  JobDeclaration<?, MessageEntity> getJobDeclaration();
+  JobDeclaration<BatchJobContext, MessageEntity> getJobDeclaration();
 
   /**
    * Creates batch jobs for a batch.

@@ -61,11 +61,11 @@ public class ModificationCmdJsonConverter extends JsonObjectConverter<AbstractPr
     } else if (command instanceof ActivityInstanceCancellationCmd) {
       JsonUtil.addField(json, CANCEL_ACTIVITY_INSTANCES,
           ((ActivityInstanceCancellationCmd) command).getActivityInstanceId());
-      JsonUtil.addField(json, PROCESS_INSTANCE, ((ActivityInstanceCancellationCmd) command).getProcessInstanceId());
+      JsonUtil.addField(json, PROCESS_INSTANCE, command.getProcessInstanceId());
     } else if (command instanceof TransitionInstanceCancellationCmd) {
       JsonUtil.addField(json, CANCEL_TRANSITION_INSTANCES,
           ((TransitionInstanceCancellationCmd) command).getTransitionInstanceId());
-      JsonUtil.addField(json, PROCESS_INSTANCE, ((TransitionInstanceCancellationCmd) command).getProcessInstanceId());
+      JsonUtil.addField(json, PROCESS_INSTANCE, command.getProcessInstanceId());
     }
 
     return json;

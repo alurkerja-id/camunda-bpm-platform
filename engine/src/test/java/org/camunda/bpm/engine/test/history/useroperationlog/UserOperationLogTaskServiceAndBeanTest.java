@@ -19,17 +19,17 @@ package org.camunda.bpm.engine.test.history.useroperationlog;
 import static org.camunda.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_CREATE;
 import static org.camunda.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_DELETE;
 import static org.camunda.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_UPDATE;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.ASSIGNEE;
+import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.ASSIGNEE_PROPERTY;
 import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.CASE_INSTANCE_ID;
 import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.DELEGATION;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.DELETE;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.DESCRIPTION;
+import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.DELETE_PROPERTY;
+import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.DESCRIPTION_PROPERTY;
 import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.DUE_DATE;
 import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.FOLLOW_UP_DATE;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.NAME;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.OWNER;
+import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.NAME_PROPERTY;
+import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.OWNER_PROPERTY;
 import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.PARENT_TASK;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.PRIORITY;
+import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.PRIORITY_PROPERTY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -75,8 +75,8 @@ public class UserOperationLogTaskServiceAndBeanTest extends AbstractUserOperatio
     entity.setAssignee("icke");
     Map<String, PropertyChange> changes = entity.getPropertyChanges();
     assertEquals(1, changes.size());
-    assertNull(changes.get(ASSIGNEE).getOrgValue());
-    assertEquals("icke", changes.get(ASSIGNEE).getNewValue());
+    assertNull(changes.get(ASSIGNEE_PROPERTY).getOrgValue());
+    assertEquals("icke", changes.get(ASSIGNEE_PROPERTY).getNewValue());
 
     // assign it again
     entity.setAssignee("er");
@@ -84,8 +84,8 @@ public class UserOperationLogTaskServiceAndBeanTest extends AbstractUserOperatio
     assertEquals(1, changes.size());
 
     // original value is still null because the task was not saved
-    assertNull(changes.get(ASSIGNEE).getOrgValue());
-    assertEquals("er", changes.get(ASSIGNEE).getNewValue());
+    assertNull(changes.get(ASSIGNEE_PROPERTY).getOrgValue());
+    assertEquals("er", changes.get(ASSIGNEE_PROPERTY).getNewValue());
 
     // set a due date
     entity.setDueDate(new Date());
@@ -144,15 +144,15 @@ public class UserOperationLogTaskServiceAndBeanTest extends AbstractUserOperatio
 
     // and validate the change list
     Map<String, PropertyChange> changes = entity.getPropertyChanges();
-    assertEquals("er", changes.get(ASSIGNEE).getNewValue());
+    assertEquals("er", changes.get(ASSIGNEE_PROPERTY).getNewValue());
     assertSame(DelegationState.PENDING, changes.get(DELEGATION).getNewValue());
-    assertEquals("a description", changes.get(DESCRIPTION).getNewValue());
+    assertEquals("a description", changes.get(DESCRIPTION_PROPERTY).getNewValue());
     assertEquals(tomorrow, changes.get(DUE_DATE).getNewValue());
     assertEquals(yesterday, changes.get(FOLLOW_UP_DATE).getNewValue());
-    assertEquals("to do", changes.get(NAME).getNewValue());
-    assertEquals("icke", changes.get(OWNER).getNewValue());
+    assertEquals("to do", changes.get(NAME_PROPERTY).getNewValue());
+    assertEquals("icke", changes.get(OWNER_PROPERTY).getNewValue());
     assertEquals("parent", changes.get(PARENT_TASK).getNewValue());
-    assertEquals(73, changes.get(PRIORITY).getNewValue());
+    assertEquals(73, changes.get(PRIORITY_PROPERTY).getNewValue());
 
     // DELETE property is not validated here; it is set directly on task deletion
   }
@@ -172,7 +172,7 @@ public class UserOperationLogTaskServiceAndBeanTest extends AbstractUserOperatio
 
     // assert: details
     UserOperationLogEntry delete = query.singleResult();
-    assertEquals(DELETE, delete.getProperty());
+    assertEquals(DELETE_PROPERTY, delete.getProperty());
     assertFalse(Boolean.parseBoolean(delete.getOrgValue()));
     assertTrue(Boolean.parseBoolean(delete.getNewValue()));
     assertEquals(UserOperationLogEntry.CATEGORY_TASK_WORKER, delete.getCategory());

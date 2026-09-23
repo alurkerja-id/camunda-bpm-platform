@@ -50,7 +50,7 @@ public class PlanItemOnPartImpl extends OnPartImpl implements PlanItemOnPart {
    * @deprecated CMMN 1.0 only; CMMN 1.1 uses {@link #exitCriterionRefAttribute} instead
    */
   // cmmn 1.0
-  @Deprecated
+  @Deprecated(forRemoval = false)
   protected static AttributeReference<Sentry> sentryRefAttribute;
 
   // cmmn 1.1

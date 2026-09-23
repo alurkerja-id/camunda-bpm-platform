@@ -111,10 +111,10 @@ public abstract class AbstractVariableScope implements Serializable, VariableSco
     boolean collectAll = (variableNames == null);
 
     List<CoreVariableInstance> localVariables = getVariableInstancesLocal(variableNames);
-    for (CoreVariableInstance var : localVariables) {
-      if(!resultVariables.containsKey(var.getName())
-         && (collectAll || variableNames.contains(var.getName()))) {
-        resultVariables.put(var.getName(), var.getTypedValue(deserializeValues));
+    for (CoreVariableInstance localVariable : localVariables) {
+      if(!resultVariables.containsKey(localVariable.getName())
+         && (collectAll || variableNames.contains(localVariable.getName()))) {
+        resultVariables.put(localVariable.getName(), localVariable.getTypedValue(deserializeValues));
       }
     }
     if(!isLocal) {

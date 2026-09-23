@@ -23,7 +23,11 @@ import org.camunda.bpm.engine.query.QueryProperty;
  * @author Roman Smirnov
  *
  */
-public interface CaseExecutionQueryProperty {
+public final class CaseExecutionQueryProperty {
+
+  private CaseExecutionQueryProperty() {
+  }
+
 
   public static final QueryProperty CASE_EXECUTION_ID = new QueryPropertyImpl("ID_");
   public static final QueryProperty CASE_DEFINITION_ID = new QueryPropertyImpl("CASE_DEF_ID_");

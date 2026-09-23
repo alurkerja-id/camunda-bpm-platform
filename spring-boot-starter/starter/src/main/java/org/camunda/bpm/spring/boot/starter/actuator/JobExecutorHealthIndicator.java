@@ -127,7 +127,7 @@ public class JobExecutorHealthIndicator extends AbstractHealthIndicator {
         return this;
       }
 
-      public DetailsBuilder processEngineNames(Set<? extends String> processEngineNames) {
+      public DetailsBuilder processEngineNames(Set<String> processEngineNames) {
         if (this.processEngineNames == null) {
           this.processEngineNames = new HashSet<String>();
         }
@@ -135,7 +135,7 @@ public class JobExecutorHealthIndicator extends AbstractHealthIndicator {
         return this;
       }
 
-      public DetailsBuilder clearProcessEngineNames(Set<? extends String> processEngineNames) {
+      public DetailsBuilder clearProcessEngineNames(Set<String> processEngineNames) {
         if (this.processEngineNames != null) {
           this.processEngineNames.clear();
         }

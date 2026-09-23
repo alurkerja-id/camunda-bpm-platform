@@ -74,7 +74,7 @@ public class CamundaSpringSecurityOAuth2AutoConfiguration {
   }
 
   @Bean
-  public FilterRegistrationBean<?> webappAuthenticationFilter() {
+  public FilterRegistrationBean<Filter> webappAuthenticationFilter() {
     FilterRegistrationBean<Filter> filterRegistration = new FilterRegistrationBean<>();
     filterRegistration.setName("Container Based Authentication Filter");
     filterRegistration.setFilter(new ContainerBasedAuthenticationFilter());

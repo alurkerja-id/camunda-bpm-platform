@@ -100,7 +100,7 @@ public abstract class AbstractRestQueryParametersDto<T> extends QueryParameters 
   /**
    * @deprecated part of the old sorting parameters; use {@link #getInternalOrderBy()}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public String getOrderBy() {
     if (sortBy != null) {
       if (sortOrder == null || sortOrder.isEmpty()) {
@@ -144,12 +144,10 @@ public abstract class AbstractRestQueryParametersDto<T> extends QueryParameters 
 
       StringToTypeConverter<?> converter = null;
       try {
-        converter = converterClass.newInstance();
+        converter = converterClass.getDeclaredConstructor().newInstance();
         Object convertedValue = converter.convertQueryParameterToType(value);
         method.invoke(this, convertedValue);
-      } catch (InstantiationException e) {
-        throw new RestException(Status.INTERNAL_SERVER_ERROR, e, "Server error.");
-      } catch (IllegalAccessException e) {
+      } catch (InstantiationException | IllegalAccessException | NoSuchMethodException e) {
         throw new RestException(Status.INTERNAL_SERVER_ERROR, e, "Server error.");
       } catch (InvocationTargetException e) {
         throw new InvalidRequestException(Status.BAD_REQUEST, e, "Cannot set query parameter '" + key + "' to value '" + value + "'");

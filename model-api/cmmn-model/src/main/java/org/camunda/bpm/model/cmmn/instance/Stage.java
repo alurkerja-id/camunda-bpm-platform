@@ -31,7 +31,7 @@ public interface Stage extends PlanFragment {
   /**
    * @deprecated misspelt plural kept for CMMN 1.0 callers; use {@link #getExitCriteria()}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   Collection<Sentry> getExitCriterias();
 
   Collection<Sentry> getExitCriteria();

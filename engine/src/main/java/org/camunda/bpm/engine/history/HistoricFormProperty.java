@@ -25,7 +25,7 @@ package org.camunda.bpm.engine.history;
  *
  * @deprecated form properties were replaced by form fields; use {@link HistoricFormField}
  */
-@Deprecated
+@Deprecated(forRemoval = false)
 public interface HistoricFormProperty extends HistoricDetail {
 
   /** the id or key of the property */

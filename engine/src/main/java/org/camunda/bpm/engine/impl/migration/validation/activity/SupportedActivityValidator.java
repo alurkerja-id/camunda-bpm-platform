@@ -31,9 +31,9 @@ import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
  */
 public class SupportedActivityValidator implements MigrationActivityValidator {
 
-  public static SupportedActivityValidator INSTANCE = new SupportedActivityValidator();
+  public static final SupportedActivityValidator INSTANCE = new SupportedActivityValidator();
 
-  public static List<Class<? extends ActivityBehavior>> SUPPORTED_ACTIVITY_BEHAVIORS = new ArrayList<Class<? extends ActivityBehavior>>();
+  public static final List<Class<? extends ActivityBehavior>> SUPPORTED_ACTIVITY_BEHAVIORS = new ArrayList<Class<? extends ActivityBehavior>>();
 
   static {
     SUPPORTED_ACTIVITY_BEHAVIORS.add(SubProcessActivityBehavior.class);

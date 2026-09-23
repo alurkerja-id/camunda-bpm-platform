@@ -133,7 +133,6 @@ public class DefaultDmnDecisionContext {
     List<Map<String, Object>> resultList = evaluatedResult.getResultList();
 
     if (resultList.isEmpty()) {
-      return;
     } else if (resultList.size() == 1 && !isDecisionTableWithCollectOrRuleOrderHitPolicy(evaluatedDecision)) {
       variableMap.putAll(evaluatedResult.getSingleResult());
     } else {

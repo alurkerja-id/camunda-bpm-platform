@@ -19,6 +19,7 @@ package org.camunda.bpm.webapp.impl.security.auth;
 import static org.camunda.bpm.engine.rest.security.auth.ProcessEngineAuthenticationFilter.AUTHENTICATION_PROVIDER_PARAM;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,10 +43,10 @@ import org.camunda.bpm.webapp.impl.util.ServletContextUtil;
 
 public class ContainerBasedAuthenticationFilter implements Filter {
 
-  public static Pattern APP_PATTERN = Pattern.compile("/app/(cockpit|admin|tasklist|welcome)/([^/]+)/");
-  public static Pattern API_ENGINE_PATTERN = Pattern.compile("/api/engine/engine/([^/]+)/.*");
-  public static Pattern API_STATIC_PLUGIN_PATTERN = Pattern.compile("/api/(cockpit|admin|tasklist|welcome)/plugin/[^/]+/static/.*");
-  public static Pattern API_PLUGIN_PATTERN = Pattern.compile("/api/(cockpit|admin|tasklist|welcome)/plugin/[^/]+/([^/]+)/.*");
+  public static final Pattern APP_PATTERN = Pattern.compile("/app/(cockpit|admin|tasklist|welcome)/([^/]+)/");
+  public static final Pattern API_ENGINE_PATTERN = Pattern.compile("/api/engine/engine/([^/]+)/.*");
+  public static final Pattern API_STATIC_PLUGIN_PATTERN = Pattern.compile("/api/(cockpit|admin|tasklist|welcome)/plugin/[^/]+/static/.*");
+  public static final Pattern API_PLUGIN_PATTERN = Pattern.compile("/api/(cockpit|admin|tasklist|welcome)/plugin/[^/]+/([^/]+)/.*");
 
   protected AuthenticationProvider authenticationProvider;
 
@@ -60,13 +61,17 @@ public class ContainerBasedAuthenticationFilter implements Filter {
 
     try {
       Class<?> authenticationProviderClass = Class.forName(authenticationProviderClassName);
-      authenticationProvider = (AuthenticationProvider) authenticationProviderClass.newInstance();
+      authenticationProvider = (AuthenticationProvider) authenticationProviderClass.getDeclaredConstructor().newInstance();
     } catch (ClassNotFoundException e) {
       throw new ServletException("Cannot instantiate authentication filter: authentication provider not found", e);
     } catch (InstantiationException e) {
       throw new ServletException("Cannot instantiate authentication filter: cannot instantiate authentication provider", e);
     } catch (IllegalAccessException e) {
       throw new ServletException("Cannot instantiate authentication filter: constructor not accessible", e);
+    } catch (NoSuchMethodException e) {
+      throw new ServletException("Cannot instantiate authentication filter: no default constructor found", e);
+    } catch (InvocationTargetException e) {
+      throw new ServletException("Cannot instantiate authentication filter: cannot instantiate authentication provider", e);
     } catch (ClassCastException e) {
       throw new ServletException("Cannot instantiate authentication filter: authentication provider does not implement interface " +
           AuthenticationProvider.class.getName(), e);

@@ -30,14 +30,14 @@ public interface Expression extends CmmnElement {
    * @deprecated the body element is CMMN 1.0; CMMN 1.1 holds the expression as text, see
    *             {@link #getText()}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   String getBody();
 
   /**
    * @deprecated the body element is CMMN 1.0; CMMN 1.1 holds the expression as text, see
    *             {@link #setText(String)}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   void setBody(String body);
 
   String getLanguage();

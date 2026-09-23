@@ -23,7 +23,6 @@ import java.io.InputStreamReader;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
-import org.camunda.bpm.engine.impl.util.IoUtil;
 
 
 /**
@@ -80,28 +79,26 @@ public class LaunchThread extends Thread {
       .redirectErrorStream(true)
       .directory(dir);
     
-    InputStream consoleStream = null;
     try {
       Process process = processBuilder.start();
-      
-      consoleStream = process.getInputStream();
-      BufferedReader consoleReader = new BufferedReader(new InputStreamReader(consoleStream));
-      String consoleLine = "";
-      while ( (consoleLine!=null)
-              && (msg==null || consoleLine.indexOf(msg)==-1)
-            ) {
-        consoleLine = consoleReader.readLine();
-        
-        if (consoleLine!=null) {
-          task.log("  " + consoleLine);
-        } else {
-          task.log("launched process completed");
+
+      try (InputStream consoleStream = process.getInputStream()) {
+        BufferedReader consoleReader = new BufferedReader(new InputStreamReader(consoleStream));
+        String consoleLine = "";
+        while ( (consoleLine!=null)
+                && (msg==null || consoleLine.indexOf(msg)==-1)
+              ) {
+          consoleLine = consoleReader.readLine();
+
+          if (consoleLine!=null) {
+            task.log("  " + consoleLine);
+          } else {
+            task.log("launched process completed");
+          }
         }
       }
     } catch (Exception e) {
       throw new BuildException("couldn't launch "+cmdString(cmd), e);
-    } finally {
-      IoUtil.closeSilently(consoleStream);
     }
   }
 }

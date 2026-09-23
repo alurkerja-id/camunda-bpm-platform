@@ -41,7 +41,7 @@ public class CleanableHistoricCaseInstanceReportDto extends AbstractQueryDto<Cle
 
   protected static final String SORT_BY_FINISHED_VALUE = "finished";
 
-  public static final List<String> VALID_SORT_BY_VALUES;
+  protected static final List<String> VALID_SORT_BY_VALUES;
 
   static {
     VALID_SORT_BY_VALUES = new ArrayList<String>();

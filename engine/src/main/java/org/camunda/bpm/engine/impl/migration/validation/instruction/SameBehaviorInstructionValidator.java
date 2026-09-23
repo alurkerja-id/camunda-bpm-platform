@@ -31,7 +31,7 @@ import org.camunda.bpm.engine.impl.util.CollectionUtil;
 
 public class SameBehaviorInstructionValidator implements MigrationInstructionValidator {
 
-  public static final List<Set<Class<?>>> EQUIVALENT_BEHAVIORS =
+  protected static final List<Set<Class<?>>> EQUIVALENT_BEHAVIORS =
       new ArrayList<Set<Class<?>>>();
 
   static {

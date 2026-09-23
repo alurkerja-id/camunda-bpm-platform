@@ -22,7 +22,11 @@ import org.camunda.bpm.engine.query.QueryProperty;
 /**
  * Properties to sort decision definition queries by
  */
-public interface DecisionDefinitionQueryProperty {
+public final class DecisionDefinitionQueryProperty {
+
+  private DecisionDefinitionQueryProperty() {
+  }
+
 
   public static final QueryProperty DECISION_DEFINITION_ID = new QueryPropertyImpl("ID_");
   public static final QueryProperty DECISION_DEFINITION_KEY = new QueryPropertyImpl("KEY_");

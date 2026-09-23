@@ -20,7 +20,7 @@ import org.camunda.bpm.cockpit.db.QueryParameters;
 import org.camunda.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionStatisticsDto;
 import org.camunda.bpm.cockpit.impl.plugin.base.dto.query.ProcessDefinitionStatisticsQueryDto;
 import org.camunda.bpm.cockpit.impl.plugin.base.sub.resources.ProcessDefinitionResource;
-import org.camunda.bpm.cockpit.plugin.resource.AbstractPluginResource;
+import org.camunda.bpm.cockpit.plugin.resource.AbstractCockpitPluginResource;
 import org.camunda.bpm.engine.rest.dto.CountResultDto;
 
 import javax.ws.rs.Consumes;
@@ -37,7 +37,7 @@ import java.util.List;
 import static org.camunda.bpm.engine.authorization.Permissions.READ;
 import static org.camunda.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
 
-public class ProcessDefinitionRestService extends AbstractPluginResource {
+public class ProcessDefinitionRestService extends AbstractCockpitPluginResource {
 
   public static final String PATH = "/process-definition";
 

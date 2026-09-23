@@ -56,7 +56,7 @@ public class DateDataTypeTransformer implements DmnDataTypeTransformer {
       Date date = transformString((String) value);
       return Variables.dateValue(date);
 
-    } if (value instanceof ZonedDateTime) {
+    } else if (value instanceof ZonedDateTime) {
       Instant instant = ((ZonedDateTime) value).toInstant();
       Date date = Date.from(instant);
 

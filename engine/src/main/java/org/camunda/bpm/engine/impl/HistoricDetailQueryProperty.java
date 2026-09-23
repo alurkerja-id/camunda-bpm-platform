@@ -25,7 +25,11 @@ import org.camunda.bpm.engine.query.QueryProperty;
  *
  * @author Tom Baeyens
  */
-public interface HistoricDetailQueryProperty {
+public final class HistoricDetailQueryProperty {
+
+  private HistoricDetailQueryProperty() {
+  }
+
 
   public static final QueryProperty PROCESS_INSTANCE_ID = new QueryPropertyImpl("PROC_INST_ID_");
   public static final QueryProperty VARIABLE_NAME = new QueryPropertyImpl("NAME_");

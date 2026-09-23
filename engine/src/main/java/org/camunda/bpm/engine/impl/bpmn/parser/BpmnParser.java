@@ -55,7 +55,7 @@ public class BpmnParser extends Parser {
    * The namespace of the Activiti custom BPMN extensions.
    * @deprecated use {@link #CAMUNDA_BPMN_EXTENSIONS_NS}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   public static final String ACTIVITI_BPMN_EXTENSIONS_NS = "http://activiti.org/bpmn";
 
   /**

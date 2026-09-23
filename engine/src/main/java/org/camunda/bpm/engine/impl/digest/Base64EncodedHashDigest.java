@@ -16,7 +16,7 @@
  */
 package org.camunda.bpm.engine.impl.digest;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -45,13 +45,8 @@ public abstract class Base64EncodedHashDigest {
 
   protected byte[] createByteHash(String password) {
     MessageDigest digest = createDigestInstance();
-    try {
-      digest.update(password.getBytes("UTF-8"));
-      return digest.digest();
-
-    } catch (UnsupportedEncodingException e) {
-      throw new ProcessEngineException("UnsupportedEncodingException while calculating password digest");
-    }
+    digest.update(password.getBytes(StandardCharsets.UTF_8));
+    return digest.digest();
   }
 
   protected MessageDigest createDigestInstance() {

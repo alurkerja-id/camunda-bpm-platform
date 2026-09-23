@@ -25,7 +25,7 @@ import org.joda.time.DateTime;
  * @author Sebastian Menski
  */
 public class DateTimeFunctions {
-  public static final String NOW = "now";
+  public static final String FUNCTION_NOW = "now";
   public static final String DATE_TIME = "dateTime";
 
   public static Date now() {

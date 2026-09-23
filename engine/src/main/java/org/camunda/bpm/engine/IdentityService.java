@@ -472,7 +472,7 @@ public interface IdentityService {
    * @deprecated remote system accounts are no longer part of the identity service; keep such
    *             credentials outside the engine
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   void setUserAccount(String userId, String userPassword, String accountName, String accountUsername, String accountPassword, Map<String, String> accountDetails);
 
   /**
@@ -480,7 +480,7 @@ public interface IdentityService {
    *
    * @deprecated remote system accounts are no longer part of the identity service
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   List<String> getUserAccountNames(String userId);
 
   /**
@@ -488,7 +488,7 @@ public interface IdentityService {
    *
    * @deprecated remote system accounts are no longer part of the identity service
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   Account getUserAccount(String userId, String userPassword, String accountName);
 
   /**
@@ -496,7 +496,7 @@ public interface IdentityService {
    *
    * @deprecated remote system accounts are no longer part of the identity service
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   void deleteUserAccount(String userId, String accountName);
 
 }

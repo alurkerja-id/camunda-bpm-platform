@@ -28,11 +28,11 @@ import org.camunda.bpm.engine.impl.util.ClassLoaderUtil;
 
 public abstract class AbstractEjbProcessApplication extends AbstractProcessApplication {
 
-  private static ProcessApplicationLogger LOG = ProcessEngineLogger.PROCESS_APPLICATION_LOGGER;
+  private static final ProcessApplicationLogger LOG = ProcessEngineLogger.PROCESS_APPLICATION_LOGGER;
 
-  protected static String MODULE_NAME_PATH  = "java:module/ModuleName";
-  protected static String JAVA_APP_APP_NAME_PATH = "java:app/AppName";
-  protected static String EJB_CONTEXT_PATH = "java:comp/EJBContext";
+  protected static final String MODULE_NAME_PATH  = "java:module/ModuleName";
+  protected static final String JAVA_APP_APP_NAME_PATH = "java:app/AppName";
+  protected static final String EJB_CONTEXT_PATH = "java:comp/EJBContext";
 
   protected ProcessApplicationInterface selfReference;
 

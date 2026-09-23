@@ -16,6 +16,7 @@
  */
 package org.camunda.bpm.engine.impl.form.validator;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -92,12 +93,9 @@ public class FormValidators {
 
   protected FormFieldValidator createValidatorInstance(Class<? extends FormFieldValidator> validator) {
     try {
-      return validator.newInstance();
+      return validator.getDeclaredConstructor().newInstance();
 
-    } catch (InstantiationException e) {
-      throw new ProcessEngineException("Could not instantiate validator", e);
-
-    } catch (IllegalAccessException e) {
+    } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
       throw new ProcessEngineException("Could not instantiate validator", e);
 
     }

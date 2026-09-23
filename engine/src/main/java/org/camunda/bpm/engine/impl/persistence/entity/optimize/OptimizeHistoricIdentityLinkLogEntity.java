@@ -20,8 +20,6 @@ import org.camunda.bpm.engine.impl.persistence.entity.HistoricIdentityLinkLogEnt
 
 public class OptimizeHistoricIdentityLinkLogEntity extends HistoricIdentityLinkLogEntity {
 
-	protected String processInstanceId;
-
 	@Override
 	public String getProcessInstanceId() {
 		return processInstanceId;

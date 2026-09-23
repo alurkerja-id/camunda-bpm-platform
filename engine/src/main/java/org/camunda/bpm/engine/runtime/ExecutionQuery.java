@@ -162,7 +162,7 @@ public interface ExecutionQuery extends Query<ExecutionQuery, Execution> {
    *
    * @deprecated use {@link #signalEventSubscriptionName(String)}
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   ExecutionQuery signalEventSubscription(String signalName);
 
   /**

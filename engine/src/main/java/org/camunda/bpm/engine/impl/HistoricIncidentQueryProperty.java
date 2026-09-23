@@ -22,7 +22,11 @@ import org.camunda.bpm.engine.query.QueryProperty;
  * @author Roman Smirnov
  *
  */
-public interface HistoricIncidentQueryProperty {
+public final class HistoricIncidentQueryProperty {
+
+  private HistoricIncidentQueryProperty() {
+  }
+
 
   public static final QueryProperty INCIDENT_ID = new QueryPropertyImpl("ID_");
   public static final QueryProperty INCIDENT_MESSAGE = new QueryPropertyImpl("INCIDENT_MSG_");

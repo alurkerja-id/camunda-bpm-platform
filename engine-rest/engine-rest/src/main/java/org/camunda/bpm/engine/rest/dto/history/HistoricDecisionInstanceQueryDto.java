@@ -41,7 +41,7 @@ public class HistoricDecisionInstanceQueryDto extends AbstractQueryDto<HistoricD
   public static final String SORT_BY_EVALUATION_TIME_VALUE = "evaluationTime";
   public static final String SORT_BY_TENANT_ID = "tenantId";
 
-  public static final List<String> VALID_SORT_BY_VALUES;
+  protected static final List<String> VALID_SORT_BY_VALUES;
 
   static {
     VALID_SORT_BY_VALUES = new ArrayList<String>();

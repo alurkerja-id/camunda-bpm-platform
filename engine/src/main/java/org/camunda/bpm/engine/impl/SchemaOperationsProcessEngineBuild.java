@@ -20,7 +20,6 @@ import org.camunda.bpm.engine.ProcessEngineConfiguration;
 import org.camunda.bpm.engine.SchemaOperationsCommand;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.db.EnginePersistenceLogger;
 import org.camunda.bpm.engine.impl.db.PersistenceSession;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
 
@@ -31,8 +30,6 @@ import org.camunda.bpm.engine.impl.interceptor.CommandContext;
  * @author Daniel Meyer
  */
 public class SchemaOperationsProcessEngineBuild implements SchemaOperationsCommand {
-
-  private final static EnginePersistenceLogger LOG = ProcessEngineLogger.PERSISTENCE_LOGGER;
 
   @Override
   public Void execute(CommandContext commandContext) {

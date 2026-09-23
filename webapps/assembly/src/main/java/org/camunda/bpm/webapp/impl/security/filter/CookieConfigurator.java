@@ -55,15 +55,15 @@ public class CookieConfigurator {
       isSameSiteCookieEnabled = true; // default
     }
 
-    String sameSiteCookieValue = filterConfig.getInitParameter(SAME_SITE_VALUE_PARAM);
+    String sameSiteCookieValueParam = filterConfig.getInitParameter(SAME_SITE_VALUE_PARAM);
     String sameSiteCookieOption = filterConfig.getInitParameter(SAME_SITE_OPTION_PARAM);
 
-    if (!ServletFilterUtil.isEmpty(sameSiteCookieValue) && !ServletFilterUtil.isEmpty(sameSiteCookieOption)) {
+    if (!ServletFilterUtil.isEmpty(sameSiteCookieValueParam) && !ServletFilterUtil.isEmpty(sameSiteCookieOption)) {
       throw new ProcessEngineException("Please either configure " + SAME_SITE_OPTION_PARAM +
         " or " + SAME_SITE_VALUE_PARAM + ".");
 
-    } else if (!ServletFilterUtil.isEmpty(sameSiteCookieValue)) {
-      this.sameSiteCookieValue = sameSiteCookieValue;
+    } else if (!ServletFilterUtil.isEmpty(sameSiteCookieValueParam)) {
+      this.sameSiteCookieValue = sameSiteCookieValueParam;
 
     } else if (!ServletFilterUtil.isEmpty(sameSiteCookieOption)) {
 

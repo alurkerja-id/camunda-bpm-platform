@@ -84,25 +84,25 @@ public interface JobQuery extends Query<JobQuery, Job> {
   /** Only select jobs where the duedate is lower then the given date.
    * @deprecated
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   JobQuery duedateLowerThen(Date date);
 
   /** Only select jobs where the duedate is lower then or equals the given date.
    * @deprecated
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   JobQuery duedateLowerThenOrEquals(Date date);
 
   /** Only select jobs where the duedate is higher then the given date.
    * @deprecated
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   JobQuery duedateHigherThen(Date date);
 
   /** Only select jobs where the duedate is higher then or equals the given date.
    * @deprecated
    */
-  @Deprecated
+  @Deprecated(forRemoval = false)
   JobQuery duedateHigherThenOrEquals(Date date);
 
   /** Only select jobs created before the given date. */

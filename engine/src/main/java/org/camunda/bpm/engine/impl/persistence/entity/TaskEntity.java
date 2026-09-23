@@ -182,16 +182,16 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   protected List<VariableInstanceLifecycleListener<VariableInstanceEntity>> customLifecycleListeners;
 
   // name references of tracked properties
-  public static final String ASSIGNEE = "assignee";
+  public static final String ASSIGNEE_PROPERTY = "assignee";
   public static final String DELEGATION = "delegation";
-  public static final String DELETE = "delete";
-  public static final String DESCRIPTION = "description";
+  public static final String DELETE_PROPERTY = "delete";
+  public static final String DESCRIPTION_PROPERTY = "description";
   public static final String DUE_DATE = "dueDate";
   public static final String FOLLOW_UP_DATE = "followUpDate";
-  public static final String NAME = "name";
-  public static final String OWNER = "owner";
+  public static final String NAME_PROPERTY = "name";
+  public static final String OWNER_PROPERTY = "owner";
   public static final String PARENT_TASK = "parentTask";
-  public static final String PRIORITY = "priority";
+  public static final String PRIORITY_PROPERTY = "priority";
   public static final String CASE_INSTANCE_ID = "caseInstanceId";
 
   /**
@@ -883,14 +883,14 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   @Override
   public void setName(String taskName) {
     registerCommandContextCloseListener();
-    propertyChanged(NAME, this.name, taskName);
+    propertyChanged(NAME_PROPERTY, this.name, taskName);
     this.name = taskName;
   }
 
   @Override
   public void setDescription(String description) {
     registerCommandContextCloseListener();
-    propertyChanged(DESCRIPTION, this.description, description);
+    propertyChanged(DESCRIPTION_PROPERTY, this.description, description);
     this.description = description;
   }
 
@@ -906,7 +906,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
     }
 
     addIdentityLinkChanges(IdentityLinkType.ASSIGNEE, oldAssignee, assignee);
-    propertyChanged(ASSIGNEE, oldAssignee, assignee);
+    propertyChanged(ASSIGNEE_PROPERTY, oldAssignee, assignee);
     this.assignee = assignee;
 
     CommandContext commandContext = Context.getCommandContext();
@@ -935,7 +935,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
     }
 
     addIdentityLinkChanges(IdentityLinkType.OWNER, oldOwner, owner);
-    propertyChanged(OWNER, oldOwner, owner);
+    propertyChanged(OWNER_PROPERTY, oldOwner, owner);
     this.owner = owner;
 
     CommandContext commandContext = Context.getCommandContext();
@@ -958,7 +958,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   @Override
   public void setPriority(int priority) {
     registerCommandContextCloseListener();
-    propertyChanged(PRIORITY, this.priority, priority);
+    propertyChanged(PRIORITY_PROPERTY, this.priority, priority);
     this.priority = priority;
   }
 
@@ -1104,7 +1104,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
    * @return true if the next listener can be invoked; false if not
    */
   protected boolean invokeListener(CoreExecution currentExecution, String eventName, TaskListener taskListener) throws Exception {
-    boolean isBpmnTask = currentExecution instanceof ActivityExecution && currentExecution != null;
+    boolean isBpmnTask = currentExecution instanceof ActivityExecution;
     final TaskListenerInvocation listenerInvocation = new TaskListenerInvocation(taskListener, this, currentExecution);
 
     try {
@@ -1162,14 +1162,14 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   // authorizations ///////////////////////////////////////////////////////////
 
   public void fireAuthorizationProvider() {
-    PropertyChange assigneePropertyChange = propertyChanges.get(ASSIGNEE);
+    PropertyChange assigneePropertyChange = propertyChanges.get(ASSIGNEE_PROPERTY);
     if (assigneePropertyChange != null) {
       String oldAssignee = assigneePropertyChange.getOrgValueString();
       String newAssignee = assigneePropertyChange.getNewValueString();
       fireAssigneeAuthorizationProvider(oldAssignee, newAssignee);
     }
 
-    PropertyChange ownerPropertyChange = propertyChanges.get(OWNER);
+    PropertyChange ownerPropertyChange = propertyChanges.get(OWNER_PROPERTY);
     if (ownerPropertyChange != null) {
       String oldOwner = ownerPropertyChange.getOrgValueString();
       String newOwner = ownerPropertyChange.getNewValueString();
@@ -1229,7 +1229,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   }
 
   protected boolean fireAssignmentEvent() {
-    PropertyChange assigneePropertyChange = propertyChanges.get(ASSIGNEE);
+    PropertyChange assigneePropertyChange = propertyChanges.get(ASSIGNEE_PROPERTY);
     if (assigneePropertyChange != null) {
       return fireEvent(TaskListener.EVENTNAME_ASSIGNMENT);
     }
@@ -1238,11 +1238,11 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   }
 
   protected void fireAssigneeAuthorizationProvider(String oldAssignee, String newAssignee) {
-    fireAuthorizationProvider(ASSIGNEE, oldAssignee, newAssignee);
+    fireAuthorizationProvider(ASSIGNEE_PROPERTY, oldAssignee, newAssignee);
   }
 
   protected void fireOwnerAuthorizationProvider(String oldOwner, String newOwner) {
-    fireAuthorizationProvider(OWNER, oldOwner, newOwner);
+    fireAuthorizationProvider(OWNER_PROPERTY, oldOwner, newOwner);
   }
 
   protected void fireAuthorizationProvider(String property, String oldValue, String newValue) {
@@ -1250,10 +1250,10 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
       ResourceAuthorizationProvider provider = getResourceAuthorizationProvider();
 
       AuthorizationEntity[] authorizations = null;
-      if (ASSIGNEE.equals(property)) {
+      if (ASSIGNEE_PROPERTY.equals(property)) {
         authorizations = provider.newTaskAssignee(this, oldValue, newValue);
       }
-      else if (OWNER.equals(property)) {
+      else if (OWNER_PROPERTY.equals(property)) {
         authorizations = provider.newTaskOwner(this, oldValue, newValue);
       }
 
@@ -1650,7 +1650,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   public void logUserOperation(String operation) {
     if (UserOperationLogEntry.OPERATION_TYPE_COMPLETE.equals(operation) ||
         UserOperationLogEntry.OPERATION_TYPE_DELETE.equals(operation)) {
-      propertyChanged(DELETE, false, true);
+      propertyChanged(DELETE_PROPERTY, false, true);
     }
 
     final CommandContext commandContext = Context.getCommandContext();
@@ -1724,7 +1724,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
       processEngineConfiguration.getMetricsRegistry().markOccurrence(Metrics.ACTIVTY_INSTANCE_START);
     }
     if (Metrics.UNIQUE_TASK_WORKERS.equals(metricsName) && processEngineConfiguration.isTaskMetricsEnabled() &&
-        assignee != null && propertyChanges.containsKey(ASSIGNEE)) {
+        assignee != null && propertyChanges.containsKey(ASSIGNEE_PROPERTY)) {
       // assignee has changed and is not null, so mark a new task worker
       commandContext.getMeterLogManager().insert(new TaskMeterLogEntity(assignee, ClockUtil.getCurrentTime()));
     }
@@ -1805,7 +1805,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
     EscalationHandler.propagateEscalation(activityExecution, escalationCode);
   }
 
-  public static enum TaskState {
+  public enum TaskState {
 
     STATE_INIT ("Init"),
     STATE_CREATED ("Created"),

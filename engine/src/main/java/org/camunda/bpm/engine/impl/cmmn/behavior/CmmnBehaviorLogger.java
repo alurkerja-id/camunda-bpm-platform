@@ -28,7 +28,7 @@ import org.camunda.bpm.engine.impl.pvm.PvmException;
  */
 public class CmmnBehaviorLogger extends ProcessEngineLogger {
 
-  protected final String caseStateTransitionMessage = "Could not perform transition '{} on case execution with id '{}'.";
+  protected static final String caseStateTransitionMessage = "Could not perform transition '{} on case execution with id '{}'.";
 
   public ProcessEngineException ruleExpressionNotBooleanException(Object result) {
     return new ProcessEngineException(exceptionMessage(

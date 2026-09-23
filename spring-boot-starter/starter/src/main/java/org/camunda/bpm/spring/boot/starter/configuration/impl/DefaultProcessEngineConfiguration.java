@@ -57,7 +57,7 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
     String processEngineName = StringUtils.trimAllWhitespace(camundaBpmProperties.getProcessEngineName());
     if (!StringUtils.isEmpty(processEngineName) && !processEngineName.contains("-")) {
 
-      if (camundaBpmProperties.getGenerateUniqueProcessEngineName()) {
+      if (Boolean.TRUE.equals(camundaBpmProperties.getGenerateUniqueProcessEngineName())) {
         if (!processEngineName.equals(ProcessEngines.NAME_DEFAULT)) {
           throw new RuntimeException(String.format("A unique processEngineName cannot be generated "
             + "if a custom processEngineName is already set: %s", processEngineName));
