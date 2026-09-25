@@ -1,0 +1,18 @@
+# Distributed-scan CRITICAL/HIGH findings with no available fix, verified against
+# upstream release feeds on 2026-09-25 (see task Collabs #138525 / Tasking
+# 8db79fe5-b5a4-45e2-a46d-8ddb676e39c7 for the full investigation trail).
+# Each entry below has exactly one reason. Do not add a bare CVE id without one.
+
+# org.springframework:spring-core 5.3.39 (engine-spring/core, engine-spring) — this is
+# a separate legacy Spring 5 compatibility module (property version.spring.framework,
+# distinct from version.spring.framework6 used everywhere else). 5.3.39 is the newest
+# release published in the 5.3.x line on Maven Central; there is no patched 5.3.x
+# release for this CVE and jumping to Spring 6 would break the module's purpose
+# (Spring 5 API compatibility). Escalated to Purwa as an open decision.
+CVE-2025-41249
+
+# angular (AngularJS) 1.8.2 (webapps/frontend) — AngularJS 1.x reached end-of-life;
+# no further releases are published for any CVE in this line. Full migration off
+# AngularJS is a separate, much larger initiative than this task's scope.
+CVE-2024-21490
+CVE-2026-11998

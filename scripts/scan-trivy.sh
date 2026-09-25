@@ -63,6 +63,14 @@ SKIP_DIRS=(
   "test-utils/testcontainers"
   "test-utils/assert"
   "engine-cdi"
+  # openapi-generator-maven-plugin runs at phase=generate-test-sources (see
+  # engine-rest/engine-rest-openapi/pom.xml) — this client is test-scope only,
+  # never packaged into the production camunda-engine-rest artifact. Its
+  # generated pom also hardcodes its own gson-version (2.8.5) inside the
+  # generator's bundled template, independent of the source pom's
+  # gson-version=2.8.9 — a template-default landmine, not a real dependency
+  # of anything shipped.
+  "engine-rest/engine-rest-openapi/target/camunda-openapi-client"
 )
 SKIP_ARGS=()
 for d in "${SKIP_DIRS[@]}"; do
@@ -77,9 +85,14 @@ trivy fs . \
   --severity "${SEVERITY_FAIL},MEDIUM,LOW" \
   --exit-code 0 \
   --format json -o trivy-result-full.json
-trivy fs . --scanners vuln --offline-scan --timeout "${TIMEOUT}" \
-  --format template --template "@contrib/html.tpl" -o trivy-result-full.html \
-  2>/dev/null || echo "(html.tpl not found locally — json report is authoritative, see trivy-result-full.json)"
+trivy convert --format template --template "@html.tpl" \
+  -o trivy-result-full.html trivy-result-full.json
+# trivy-result.html (no suffix) is the one file in this pair that's actually
+# committed to git (README's original, pre-script command target) — keep it in
+# sync with the full scan so it doesn't go stale again like it did before this
+# script existed.
+trivy convert --format template --template "@html.tpl" \
+  -o trivy-result.html trivy-result-full.json
 
 echo "=== distributed (production-consumed) scan ==="
 trivy fs . \
@@ -90,9 +103,8 @@ trivy fs . \
   --exit-code 0 \
   "${SKIP_ARGS[@]}" \
   --format json -o trivy-result-distributed.json
-trivy fs . --scanners vuln --offline-scan --timeout "${TIMEOUT}" "${SKIP_ARGS[@]}" \
-  --format template --template "@contrib/html.tpl" -o trivy-result-distributed.html \
-  2>/dev/null || echo "(html.tpl not found locally — json report is authoritative, see trivy-result-distributed.json)"
+trivy convert --format template --template "@html.tpl" \
+  -o trivy-result-distributed.html trivy-result-distributed.json
 
 echo
 echo "Reports written: trivy-result-full.json, trivy-result-distributed.json"
