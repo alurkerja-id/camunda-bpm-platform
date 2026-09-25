@@ -38,9 +38,32 @@
         <artifactId>jakarta.persistence-api</artifactId>
         <version>3.2.0</version>
       </dependency>
+      <!-- Trivy: tomcat-embed-* managed by the imported spring-boot-dependencies BOM (11.0.24)
+           is CRITICAL. Setting the <tomcat.version> property has no effect here because this
+           project imports spring-boot-dependencies (scope=import) instead of extending
+           spring-boot-starter-parent — Spring Boot's property-override convention only works
+           for the latter, since import-scope BOM entries are resolved against the BOM's own
+           model. Override the three embed artifacts directly instead; direct entries always
+           win over ones brought in by an import. Stay on the 11.x line — 10.1.x would be a
+           Servlet API major downgrade. -->
+      <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-core</artifactId>
+        <version>11.0.26</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-el</artifactId>
+        <version>11.0.26</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-websocket</artifactId>
+        <version>11.0.26</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
-  
+
   <profiles>
     <profile>
       <id>distro</id>
