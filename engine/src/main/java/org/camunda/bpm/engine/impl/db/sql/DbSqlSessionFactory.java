@@ -144,7 +144,8 @@ public class DbSqlSessionFactory implements SessionFactory {
 
   private static final Map<String, String> databaseSpecificExtractTimeUnitFromDateMutable = new HashMap<>();
   public static final Map<String, String> databaseSpecificExtractTimeUnitFromDate = Collections.unmodifiableMap(databaseSpecificExtractTimeUnitFromDateMutable);
-  public static final Map<String, String> databaseSpecificAuthCheckMethodSuffix = new HashMap<>();
+  private static final Map<String, String> databaseSpecificAuthCheckMethodSuffixMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificAuthCheckMethodSuffix = Collections.unmodifiableMap(databaseSpecificAuthCheckMethodSuffixMutable);
 
 
   /*
@@ -764,7 +765,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificAuthJoinStartMutable.put(MSSQL, defaultAuthOnStart);
     databaseSpecificAuthJoinEndMutable.put(MSSQL, defaultAuthOnEnd);
     databaseSpecificAuthJoinSeparatorMutable.put(MSSQL, defaultAuthOnSeparator);
-    databaseSpecificAuthCheckMethodSuffix.put(MSSQL, "_mssql");
+    databaseSpecificAuthCheckMethodSuffixMutable.put(MSSQL, "_mssql");
 
     databaseSpecificAuth1JoinStartMutable.put(MSSQL, defaultAuthOnStart);
     databaseSpecificAuth1JoinEndMutable.put(MSSQL, defaultAuthOnEnd);
