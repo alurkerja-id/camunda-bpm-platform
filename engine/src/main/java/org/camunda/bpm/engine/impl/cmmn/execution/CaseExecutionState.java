@@ -16,6 +16,8 @@
  */
 package org.camunda.bpm.engine.impl.cmmn.execution;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,8 +28,6 @@ import java.util.Map;
  *
  */
 public interface CaseExecutionState {
-
-  Map<Integer, CaseExecutionState> CASE_EXECUTION_STATES = new HashMap<Integer, CaseExecutionState>();
 
   CaseExecutionState NEW = new CaseExecutionStateImpl(0, "new");
   CaseExecutionState AVAILABLE = new CaseExecutionStateImpl(1, "available");
@@ -49,9 +49,20 @@ public interface CaseExecutionState {
 
   int getStateCode();
 
+  /** Looks up a state by its code; calling this initializes all predefined states. */
+  static CaseExecutionState getStateForCode(Integer stateCode) {
+    return CaseExecutionStateImpl.getStateForCode(stateCode);
+  }
+
+  static Collection<CaseExecutionState> getAllStates() {
+    return CaseExecutionStateImpl.getAllStates();
+  }
+
   ///////////////////////////////////////////////////// default implementation
 
   static class CaseExecutionStateImpl implements CaseExecutionState {
+
+    private static final Map<Integer, CaseExecutionState> CASE_EXECUTION_STATES = new HashMap<Integer, CaseExecutionState>();
 
     public final int stateCode;
     protected final String name;
@@ -65,6 +76,10 @@ public interface CaseExecutionState {
 
     public static CaseExecutionState getStateForCode(Integer stateCode) {
       return CASE_EXECUTION_STATES.get(stateCode);
+    }
+
+    public static Collection<CaseExecutionState> getAllStates() {
+      return Collections.unmodifiableCollection(CASE_EXECUTION_STATES.values());
     }
 
     @Override
