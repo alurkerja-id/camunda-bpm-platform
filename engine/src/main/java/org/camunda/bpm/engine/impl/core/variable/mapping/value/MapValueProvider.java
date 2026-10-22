@@ -31,7 +31,7 @@ public class MapValueProvider implements ParameterValueProvider {
 
   protected SortedMap<ParameterValueProvider, ParameterValueProvider> providerMap;
 
-  public MapValueProvider(TreeMap<ParameterValueProvider, ParameterValueProvider> providerMap) {
+  public MapValueProvider(SortedMap<ParameterValueProvider, ParameterValueProvider> providerMap) {
     this.providerMap = providerMap;
   }
 
