@@ -128,7 +128,8 @@ public class DbSqlSessionFactory implements SessionFactory {
   private static final Map<String, String> databaseSpecificCollationForCaseSensitivityMutable = new HashMap<>();
   public static final Map<String, String> databaseSpecificCollationForCaseSensitivity = Collections.unmodifiableMap(databaseSpecificCollationForCaseSensitivityMutable);
 
-  public static final Map<String, String> databaseSpecificAuthJoinStart = new HashMap<>();
+  private static final Map<String, String> databaseSpecificAuthJoinStartMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificAuthJoinStart = Collections.unmodifiableMap(databaseSpecificAuthJoinStartMutable);
   public static final Map<String, String> databaseSpecificAuthJoinEnd = new HashMap<>();
   public static final Map<String, String> databaseSpecificAuthJoinSeparator = new HashMap<>();
 
@@ -202,7 +203,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificCollationForCaseSensitivityMutable.put(H2, "");
 
-    databaseSpecificAuthJoinStart.put(H2, defaultAuthOnStart);
+    databaseSpecificAuthJoinStartMutable.put(H2, defaultAuthOnStart);
     databaseSpecificAuthJoinEnd.put(H2, defaultAuthOnEnd);
     databaseSpecificAuthJoinSeparator.put(H2, defaultAuthOnSeparator);
 
@@ -266,7 +267,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificCollationForCaseSensitivityMutable.put(MYSQL, "");
 
-    databaseSpecificAuthJoinStart.put(MYSQL, "=");
+    databaseSpecificAuthJoinStartMutable.put(MYSQL, "=");
     databaseSpecificAuthJoinEnd.put(MYSQL, "");
     databaseSpecificAuthJoinSeparator.put(MYSQL, "OR AUTH.RESOURCE_ID_ =");
 
@@ -409,7 +410,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificCollationForCaseSensitivityMutable.put(POSTGRES, "");
 
-    databaseSpecificAuthJoinStart.put(POSTGRES, defaultAuthOnStart);
+    databaseSpecificAuthJoinStartMutable.put(POSTGRES, defaultAuthOnStart);
     databaseSpecificAuthJoinEnd.put(POSTGRES, defaultAuthOnEnd);
     databaseSpecificAuthJoinSeparator.put(POSTGRES, defaultAuthOnSeparator);
 
@@ -562,7 +563,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificCollationForCaseSensitivityMutable.put(ORACLE, "");
 
-    databaseSpecificAuthJoinStart.put(ORACLE, defaultAuthOnStart);
+    databaseSpecificAuthJoinStartMutable.put(ORACLE, defaultAuthOnStart);
     databaseSpecificAuthJoinEnd.put(ORACLE, defaultAuthOnEnd);
     databaseSpecificAuthJoinSeparator.put(ORACLE, defaultAuthOnSeparator);
 
@@ -655,7 +656,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificCollationForCaseSensitivityMutable.put(DB2, "");
 
-    databaseSpecificAuthJoinStart.put(DB2, defaultAuthOnStart);
+    databaseSpecificAuthJoinStartMutable.put(DB2, defaultAuthOnStart);
     databaseSpecificAuthJoinEnd.put(DB2, defaultAuthOnEnd);
     databaseSpecificAuthJoinSeparator.put(DB2, defaultAuthOnSeparator);
 
@@ -754,7 +755,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificCollationForCaseSensitivityMutable.put(MSSQL, "COLLATE Latin1_General_CS_AS");
 
-    databaseSpecificAuthJoinStart.put(MSSQL, defaultAuthOnStart);
+    databaseSpecificAuthJoinStartMutable.put(MSSQL, defaultAuthOnStart);
     databaseSpecificAuthJoinEnd.put(MSSQL, defaultAuthOnEnd);
     databaseSpecificAuthJoinSeparator.put(MSSQL, defaultAuthOnSeparator);
     databaseSpecificAuthCheckMethodSuffix.put(MSSQL, "_mssql");
