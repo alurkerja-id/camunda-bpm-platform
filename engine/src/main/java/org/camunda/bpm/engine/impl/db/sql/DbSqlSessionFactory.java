@@ -44,7 +44,8 @@ public class DbSqlSessionFactory implements SessionFactory {
 
   protected static final Map<String, Map<String, String>> databaseSpecificStatements = new HashMap<>();
 
-  public static final Map<String, String> databaseSpecificLimitBeforeStatements = new HashMap<>();
+  private static final Map<String, String> databaseSpecificLimitBeforeStatementsMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificLimitBeforeStatements = Collections.unmodifiableMap(databaseSpecificLimitBeforeStatementsMutable);
   public static final Map<String, String> databaseSpecificLimitAfterStatements = new HashMap<>();
   //limit statements that can be used to select first N rows without OFFSET
   public static final Map<String, String> databaseSpecificLimitBeforeWithoutOffsetStatements = new HashMap<>();
@@ -130,7 +131,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     String defaultExtractTimeUnitFromDate = "EXTRACT(${extractTimeUnit} FROM ${extractDateColumn})";
 
     // h2
-    databaseSpecificLimitBeforeStatements.put(H2, "");
+    databaseSpecificLimitBeforeStatementsMutable.put(H2, "");
     optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatements.put(H2, "");
     databaseSpecificLimitAfterStatements.put(H2, "LIMIT #{maxResults} OFFSET #{firstResult}");
     optimizeDatabaseSpecificLimitAfterWithoutOffsetStatements.put(H2, "LIMIT #{maxResults}");
@@ -194,7 +195,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     // mysql specific
 
-    databaseSpecificLimitBeforeStatements.put(MYSQL, "");
+    databaseSpecificLimitBeforeStatementsMutable.put(MYSQL, "");
     optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatements.put(MYSQL, "");
     databaseSpecificLimitAfterStatements.put(MYSQL, "LIMIT #{maxResults} OFFSET #{firstResult}");
     optimizeDatabaseSpecificLimitAfterWithoutOffsetStatements.put(MYSQL, "LIMIT #{maxResults}");
@@ -340,7 +341,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     // postgres specific
 
-    databaseSpecificLimitBeforeStatements.put(POSTGRES, "");
+    databaseSpecificLimitBeforeStatementsMutable.put(POSTGRES, "");
     optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatements.put(POSTGRES, "");
     databaseSpecificLimitAfterStatements.put(POSTGRES, "LIMIT #{maxResults} OFFSET #{firstResult}");
     optimizeDatabaseSpecificLimitAfterWithoutOffsetStatements.put(POSTGRES, "LIMIT #{maxResults}");
@@ -490,7 +491,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificNumericCast.put(POSTGRES, "");
 
     // oracle
-    databaseSpecificLimitBeforeStatements.put(ORACLE, "select * from ( select a.*, ROWNUM rnum from (");
+    databaseSpecificLimitBeforeStatementsMutable.put(ORACLE, "select * from ( select a.*, ROWNUM rnum from (");
     optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatements.put(ORACLE, "select * from ( select a.*, ROWNUM rnum from (");
     databaseSpecificLimitAfterStatements.put(ORACLE, "  ) a where ROWNUM < #{lastRow}) where rnum  >= #{firstRow}");
     optimizeDatabaseSpecificLimitAfterWithoutOffsetStatements.put(ORACLE, "  ) a where ROWNUM <= #{maxResults})");
@@ -583,7 +584,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     dbSpecificConstants.put(ORACLE, constants);
 
     // db2
-    databaseSpecificLimitBeforeStatements.put(DB2, "");
+    databaseSpecificLimitBeforeStatementsMutable.put(DB2, "");
     optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatements.put(DB2, "");
     databaseSpecificLimitAfterStatements.put(DB2, "LIMIT #{maxResults} OFFSET #{firstResult}");
     databaseSpecificInnerLimitAfterStatements.put(DB2, databaseSpecificLimitAfterStatements.get(DB2));
@@ -680,7 +681,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     dbSpecificConstants.put(DB2, constants);
 
     // mssql
-    databaseSpecificLimitBeforeStatements.put(MSSQL, "SELECT SUB.* FROM (");
+    databaseSpecificLimitBeforeStatementsMutable.put(MSSQL, "SELECT SUB.* FROM (");
     optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatements.put(MSSQL, "");
     databaseSpecificInnerLimitAfterStatements.put(MSSQL, ")RES ) SUB WHERE SUB.rnk >= #{firstRow} AND SUB.rnk < #{lastRow}");
     databaseSpecificLimitAfterStatements.put(MSSQL, databaseSpecificInnerLimitAfterStatements.get(MSSQL) + " ORDER BY SUB.rnk");
