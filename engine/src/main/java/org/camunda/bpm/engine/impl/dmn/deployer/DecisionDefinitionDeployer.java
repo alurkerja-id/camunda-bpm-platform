@@ -44,13 +44,17 @@ public class DecisionDefinitionDeployer extends AbstractDefinitionDeployer<Decis
 
   protected static final DecisionLogger LOG = ProcessEngineLogger.DECISION_LOGGER;
 
-  public static final String[] DMN_RESOURCE_SUFFIXES = new String[] { "dmn11.xml", "dmn" };
+  private static final String[] DMN_RESOURCE_SUFFIXES = new String[] { "dmn11.xml", "dmn" };
+
+  public static String[] getDmnResourceSuffixes() {
+    return DMN_RESOURCE_SUFFIXES.clone();
+  }
 
   protected DmnTransformer transformer;
 
   @Override
   protected String[] getResourcesSuffixes() {
-    return DMN_RESOURCE_SUFFIXES;
+    return getDmnResourceSuffixes();
   }
 
   @Override
