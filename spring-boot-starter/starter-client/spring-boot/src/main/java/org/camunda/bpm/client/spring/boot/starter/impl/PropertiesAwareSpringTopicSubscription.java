@@ -16,11 +16,12 @@
  */
 package org.camunda.bpm.client.spring.boot.starter.impl;
 
+import org.camunda.bpm.client.ExternalTaskClient;
 import org.camunda.bpm.client.spring.boot.starter.ClientProperties;
 import org.camunda.bpm.client.spring.impl.subscription.SpringTopicSubscriptionImpl;
 import org.camunda.bpm.client.spring.impl.subscription.SubscriptionConfiguration;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationEvent;
 
@@ -28,8 +29,14 @@ import java.util.function.Predicate;
 
 public class PropertiesAwareSpringTopicSubscription extends SpringTopicSubscriptionImpl {
 
-  @Autowired
-  protected ClientProperties clientProperties;
+  protected final ClientProperties clientProperties;
+
+  public PropertiesAwareSpringTopicSubscription(ExternalTaskClient client,
+                                                ApplicationEventPublisher applicationEventPublisher,
+                                                ClientProperties clientProperties) {
+    super(client, applicationEventPublisher);
+    this.clientProperties = clientProperties;
+  }
 
   @Override
   public void afterPropertiesSet() throws Exception {
