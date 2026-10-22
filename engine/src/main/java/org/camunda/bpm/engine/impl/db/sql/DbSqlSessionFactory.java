@@ -119,7 +119,8 @@ public class DbSqlSessionFactory implements SessionFactory {
   private static final Map<String, String> databaseSpecificNumericCastMutable = new HashMap<>();
   public static final Map<String, String> databaseSpecificNumericCast = Collections.unmodifiableMap(databaseSpecificNumericCastMutable);
 
-  public static final Map<String, Map<String, String>> dbSpecificConstants = new HashMap<>();
+  private static final Map<String, Map<String, String>> dbSpecificConstantsMutable = new HashMap<>();
+  public static final Map<String, Map<String, String>> dbSpecificConstants = Collections.unmodifiableMap(dbSpecificConstantsMutable);
 
   public static final Map<String, String> databaseSpecificDaysComparator = new HashMap<>();
 
@@ -220,7 +221,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     constants.put("constant.varchar.cast", "'${key}'");
     constants.put("constant.integer.cast", "NULL");
     constants.put("constant.null.reporter", "NULL AS REPORTER_");
-    dbSpecificConstants.put(H2, constants);
+    dbSpecificConstantsMutable.put(H2, Collections.unmodifiableMap(constants));
 
     // mysql specific
 
@@ -366,7 +367,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     constants.put("constant.varchar.cast", "'${key}'");
     constants.put("constant.integer.cast", "NULL");
     constants.put("constant.null.reporter", "NULL AS REPORTER_");
-    dbSpecificConstants.put(MYSQL, constants);
+    dbSpecificConstantsMutable.put(MYSQL, Collections.unmodifiableMap(constants));
 
     // postgres specific
 
@@ -515,7 +516,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     constants.put("constant.varchar.cast", "cast('${key}' as varchar(64))");
     constants.put("constant.integer.cast", "cast(NULL as integer)");
     constants.put("constant.null.reporter", "CAST(NULL AS VARCHAR) AS REPORTER_");
-    dbSpecificConstants.put(POSTGRES, constants);
+    dbSpecificConstantsMutable.put(POSTGRES, Collections.unmodifiableMap(constants));
     databaseSpecificDaysComparator.put(POSTGRES, "EXTRACT (DAY FROM #{currentTimestamp} - ${date}) >= ${days}");
     databaseSpecificNumericCastMutable.put(POSTGRES, "");
 
@@ -610,7 +611,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     constants.put("constant.varchar.cast", "'${key}'");
     constants.put("constant.integer.cast", "NULL");
     constants.put("constant.null.reporter", "NULL AS REPORTER_");
-    dbSpecificConstants.put(ORACLE, constants);
+    dbSpecificConstantsMutable.put(ORACLE, Collections.unmodifiableMap(constants));
 
     // db2
     databaseSpecificLimitBeforeStatementsMutable.put(DB2, "");
@@ -707,7 +708,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     constants.put("constant.varchar.cast", "cast('${key}' as varchar(64))");
     constants.put("constant.integer.cast", "cast(NULL as integer)");
     constants.put("constant.null.reporter", "CAST(NULL AS VARCHAR(255)) AS REPORTER_");
-    dbSpecificConstants.put(DB2, constants);
+    dbSpecificConstantsMutable.put(DB2, Collections.unmodifiableMap(constants));
 
     // mssql
     databaseSpecificLimitBeforeStatementsMutable.put(MSSQL, "SELECT SUB.* FROM (");
@@ -847,7 +848,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     constants.put("constant.varchar.cast", "'${key}'");
     constants.put("constant.integer.cast", "NULL");
     constants.put("constant.null.reporter", "NULL AS REPORTER_");
-    dbSpecificConstants.put(MSSQL, constants);
+    dbSpecificConstantsMutable.put(MSSQL, Collections.unmodifiableMap(constants));
   }
 
   protected String databaseType;
