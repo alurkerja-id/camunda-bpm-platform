@@ -90,9 +90,9 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
 
   protected static final String PARENT_COMPLETE = "parentComplete";
 
-  public static final List<String> TASK_OR_STAGE_CREATE_EVENTS = Arrays.asList(
+  public static final List<String> TASK_OR_STAGE_CREATE_EVENTS = Collections.unmodifiableList(Arrays.asList(
       CaseExecutionListener.CREATE
-    );
+    ));
 
   public static final List<String> TASK_OR_STAGE_UPDATE_EVENTS = Arrays.asList(
       CaseExecutionListener.ENABLE,
