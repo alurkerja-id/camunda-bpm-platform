@@ -16,6 +16,7 @@
  */
 package org.camunda.bpm.engine.impl.form.handler;
 
+import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -63,7 +64,7 @@ public class DefaultFormHandler implements FormHandler {
   public static final String FORM_REF_BINDING_DEPLOYMENT = "deployment";
   public static final String FORM_REF_BINDING_LATEST = "latest";
   public static final String FORM_REF_BINDING_VERSION = "version";
-  public static final List<String> ALLOWED_FORM_REF_BINDINGS = Arrays.asList(FORM_REF_BINDING_DEPLOYMENT, FORM_REF_BINDING_LATEST, FORM_REF_BINDING_VERSION);
+  public static final List<String> ALLOWED_FORM_REF_BINDINGS = Collections.unmodifiableList(Arrays.asList(FORM_REF_BINDING_DEPLOYMENT, FORM_REF_BINDING_LATEST, FORM_REF_BINDING_VERSION));
 
   protected String deploymentId;
   protected String businessKeyFieldId;
