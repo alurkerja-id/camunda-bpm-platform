@@ -137,12 +137,12 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
       CaseExecutionListener.CREATE
     ));
 
-  public static final List<String> CASE_PLAN_MODEL_UPDATE_EVENTS = Arrays.asList(
+  public static final List<String> CASE_PLAN_MODEL_UPDATE_EVENTS = Collections.unmodifiableList(Arrays.asList(
       CaseExecutionListener.TERMINATE,
       CaseExecutionListener.SUSPEND,
       CaseExecutionListener.COMPLETE,
       CaseExecutionListener.RE_ACTIVATE
-    );
+    ));
 
   public static final List<String> CASE_PLAN_MODEL_CLOSE_EVENTS = Arrays.asList(
       CaseExecutionListener.CLOSE
