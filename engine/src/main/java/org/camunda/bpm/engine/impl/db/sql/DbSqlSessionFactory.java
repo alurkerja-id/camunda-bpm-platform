@@ -132,7 +132,8 @@ public class DbSqlSessionFactory implements SessionFactory {
   public static final Map<String, String> databaseSpecificAuthJoinStart = Collections.unmodifiableMap(databaseSpecificAuthJoinStartMutable);
   private static final Map<String, String> databaseSpecificAuthJoinEndMutable = new HashMap<>();
   public static final Map<String, String> databaseSpecificAuthJoinEnd = Collections.unmodifiableMap(databaseSpecificAuthJoinEndMutable);
-  public static final Map<String, String> databaseSpecificAuthJoinSeparator = new HashMap<>();
+  private static final Map<String, String> databaseSpecificAuthJoinSeparatorMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificAuthJoinSeparator = Collections.unmodifiableMap(databaseSpecificAuthJoinSeparatorMutable);
 
   public static final Map<String, String> databaseSpecificAuth1JoinStart = new HashMap<>();
   public static final Map<String, String> databaseSpecificAuth1JoinEnd = new HashMap<>();
@@ -206,7 +207,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificAuthJoinStartMutable.put(H2, defaultAuthOnStart);
     databaseSpecificAuthJoinEndMutable.put(H2, defaultAuthOnEnd);
-    databaseSpecificAuthJoinSeparator.put(H2, defaultAuthOnSeparator);
+    databaseSpecificAuthJoinSeparatorMutable.put(H2, defaultAuthOnSeparator);
 
     databaseSpecificAuth1JoinStart.put(H2, defaultAuthOnStart);
     databaseSpecificAuth1JoinEnd.put(H2, defaultAuthOnEnd);
@@ -270,7 +271,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificAuthJoinStartMutable.put(MYSQL, "=");
     databaseSpecificAuthJoinEndMutable.put(MYSQL, "");
-    databaseSpecificAuthJoinSeparator.put(MYSQL, "OR AUTH.RESOURCE_ID_ =");
+    databaseSpecificAuthJoinSeparatorMutable.put(MYSQL, "OR AUTH.RESOURCE_ID_ =");
 
     databaseSpecificAuth1JoinStart.put(MYSQL, "=");
     databaseSpecificAuth1JoinEnd.put(MYSQL, "");
@@ -413,7 +414,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificAuthJoinStartMutable.put(POSTGRES, defaultAuthOnStart);
     databaseSpecificAuthJoinEndMutable.put(POSTGRES, defaultAuthOnEnd);
-    databaseSpecificAuthJoinSeparator.put(POSTGRES, defaultAuthOnSeparator);
+    databaseSpecificAuthJoinSeparatorMutable.put(POSTGRES, defaultAuthOnSeparator);
 
     databaseSpecificAuth1JoinStart.put(POSTGRES, defaultAuthOnStart);
     databaseSpecificAuth1JoinEnd.put(POSTGRES, defaultAuthOnEnd);
@@ -566,7 +567,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificAuthJoinStartMutable.put(ORACLE, defaultAuthOnStart);
     databaseSpecificAuthJoinEndMutable.put(ORACLE, defaultAuthOnEnd);
-    databaseSpecificAuthJoinSeparator.put(ORACLE, defaultAuthOnSeparator);
+    databaseSpecificAuthJoinSeparatorMutable.put(ORACLE, defaultAuthOnSeparator);
 
     databaseSpecificAuth1JoinStart.put(ORACLE, defaultAuthOnStart);
     databaseSpecificAuth1JoinEnd.put(ORACLE, defaultAuthOnEnd);
@@ -659,7 +660,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificAuthJoinStartMutable.put(DB2, defaultAuthOnStart);
     databaseSpecificAuthJoinEndMutable.put(DB2, defaultAuthOnEnd);
-    databaseSpecificAuthJoinSeparator.put(DB2, defaultAuthOnSeparator);
+    databaseSpecificAuthJoinSeparatorMutable.put(DB2, defaultAuthOnSeparator);
 
     databaseSpecificAuth1JoinStart.put(DB2, defaultAuthOnStart);
     databaseSpecificAuth1JoinEnd.put(DB2, defaultAuthOnEnd);
@@ -758,7 +759,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificAuthJoinStartMutable.put(MSSQL, defaultAuthOnStart);
     databaseSpecificAuthJoinEndMutable.put(MSSQL, defaultAuthOnEnd);
-    databaseSpecificAuthJoinSeparator.put(MSSQL, defaultAuthOnSeparator);
+    databaseSpecificAuthJoinSeparatorMutable.put(MSSQL, defaultAuthOnSeparator);
     databaseSpecificAuthCheckMethodSuffix.put(MSSQL, "_mssql");
 
     databaseSpecificAuth1JoinStart.put(MSSQL, defaultAuthOnStart);
