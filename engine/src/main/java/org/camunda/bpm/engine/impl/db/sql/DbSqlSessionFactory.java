@@ -110,7 +110,8 @@ public class DbSqlSessionFactory implements SessionFactory {
 
   private static final Map<String, String> databaseSpecificTrueConstantMutable = new HashMap<>();
   public static final Map<String, String> databaseSpecificTrueConstant = Collections.unmodifiableMap(databaseSpecificTrueConstantMutable);
-  public static final Map<String, String> databaseSpecificFalseConstant = new HashMap<>();
+  private static final Map<String, String> databaseSpecificFalseConstantMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificFalseConstant = Collections.unmodifiableMap(databaseSpecificFalseConstantMutable);
 
   public static final Map<String, String> databaseSpecificDistinct = new HashMap<>();
 
@@ -189,7 +190,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificDummyTableMutable.put(H2, "");
     databaseSpecificTrueConstantMutable.put(H2, "true");
-    databaseSpecificFalseConstant.put(H2, "false");
+    databaseSpecificFalseConstantMutable.put(H2, "false");
     databaseSpecificIfNullMutable.put(H2, "IFNULL");
 
     databaseSpecificDaysComparator.put(H2, "DATEDIFF(DAY, ${date}, #{currentTimestamp}) >= ${days}");
@@ -253,7 +254,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificDummyTableMutable.put(MYSQL, "");
     databaseSpecificTrueConstantMutable.put(MYSQL, "1");
-    databaseSpecificFalseConstant.put(MYSQL, "0");
+    databaseSpecificFalseConstantMutable.put(MYSQL, "0");
     databaseSpecificIfNullMutable.put(MYSQL, "IFNULL");
 
     databaseSpecificDaysComparator.put(MYSQL, "DATEDIFF(#{currentTimestamp}, ${date}) >= ${days}");
@@ -398,7 +399,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificDummyTableMutable.put(POSTGRES, "");
     databaseSpecificTrueConstantMutable.put(POSTGRES, "true");
-    databaseSpecificFalseConstant.put(POSTGRES, "false");
+    databaseSpecificFalseConstantMutable.put(POSTGRES, "false");
     databaseSpecificIfNullMutable.put(POSTGRES, "COALESCE");
 
     databaseSpecificCollationForCaseSensitivity.put(POSTGRES, "");
@@ -549,7 +550,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificDatepart3Mutable.put(ORACLE, "))");
 
     databaseSpecificTrueConstantMutable.put(ORACLE, "1");
-    databaseSpecificFalseConstant.put(ORACLE, "0");
+    databaseSpecificFalseConstantMutable.put(ORACLE, "0");
     databaseSpecificIfNullMutable.put(ORACLE, "NVL");
 
     databaseSpecificDaysComparator.put(ORACLE, "${date} <= #{currentTimestamp} - ${days}");
@@ -642,7 +643,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificDummyTableMutable.put(DB2, "FROM SYSIBM.SYSDUMMY1");
     databaseSpecificTrueConstantMutable.put(DB2, "1");
-    databaseSpecificFalseConstant.put(DB2, "0");
+    databaseSpecificFalseConstantMutable.put(DB2, "0");
     databaseSpecificIfNullMutable.put(DB2, "NVL");
 
     databaseSpecificDaysComparator.put(DB2, "${date} + ${days} DAYS <= #{currentTimestamp}");
@@ -741,7 +742,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificDummyTableMutable.put(MSSQL, "");
     databaseSpecificTrueConstantMutable.put(MSSQL, "1");
-    databaseSpecificFalseConstant.put(MSSQL, "0");
+    databaseSpecificFalseConstantMutable.put(MSSQL, "0");
     databaseSpecificIfNullMutable.put(MSSQL, "ISNULL");
 
     databaseSpecificDaysComparator.put(MSSQL, "DATEDIFF(DAY, ${date}, #{currentTimestamp}) >= ${days}");
