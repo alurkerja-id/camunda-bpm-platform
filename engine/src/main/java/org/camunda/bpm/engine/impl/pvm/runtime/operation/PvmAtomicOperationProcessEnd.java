@@ -58,28 +58,14 @@ public class PvmAtomicOperationProcessEnd extends PvmAtomicOperationActivityInst
     // copy variables before destroying the ended sub process instance
     if (superExecution != null) {
       PvmActivity activity = superExecution.getActivity();
-      subProcessActivityBehavior = (SubProcessActivityBehavior) activity.getActivityBehavior();
-      try {
-        subProcessActivityBehavior.passOutputVariables(superExecution, execution);
-      } catch (RuntimeException e) {
-        LOG.exceptionWhileCompletingSupProcess(execution, e);
-        throw e;
-      } catch (Exception e) {
-        LOG.exceptionWhileCompletingSupProcess(execution, e);
-        throw new ProcessEngineException("Error while completing sub process of execution " + execution, e);
-      }
+      SubProcessActivityBehavior passingBehavior = (SubProcessActivityBehavior) activity.getActivityBehavior();
+      subProcessActivityBehavior = passingBehavior;
+      runCompletingSuperProcess(execution, () -> passingBehavior.passOutputVariables(superExecution, execution));
     } else if (superCaseExecution != null) {
       CmmnActivity activity = superCaseExecution.getActivity();
-      transferVariablesBehavior = (TransferVariablesActivityBehavior) activity.getActivityBehavior();
-      try {
-        transferVariablesBehavior.transferVariables(execution, superCaseExecution);
-      } catch (RuntimeException e) {
-        LOG.exceptionWhileCompletingSupProcess(execution, e);
-        throw e;
-      } catch (Exception e) {
-        LOG.exceptionWhileCompletingSupProcess(execution, e);
-        throw new ProcessEngineException("Error while completing sub process of execution " + execution, e);
-      }
+      TransferVariablesActivityBehavior transferringBehavior = (TransferVariablesActivityBehavior) activity.getActivityBehavior();
+      transferVariablesBehavior = transferringBehavior;
+      runCompletingSuperProcess(execution, () -> transferringBehavior.transferVariables(execution, superCaseExecution));
     }
 
     execution.destroy();
@@ -88,18 +74,28 @@ public class PvmAtomicOperationProcessEnd extends PvmAtomicOperationActivityInst
     // and trigger execution afterwards
     if (superExecution != null) {
       superExecution.setSubProcessInstance(null);
-      try {
-        subProcessActivityBehavior.completed(superExecution);
-      } catch (RuntimeException e) {
-        LOG.exceptionWhileCompletingSupProcess(execution, e);
-        throw e;
-      } catch (Exception e) {
-        LOG.exceptionWhileCompletingSupProcess(execution, e);
-        throw new ProcessEngineException("Error while completing sub process of execution " + execution, e);
-      }
+      SubProcessActivityBehavior completingBehavior = subProcessActivityBehavior;
+      runCompletingSuperProcess(execution, () -> completingBehavior.completed(superExecution));
     } else if (superCaseExecution != null) {
       superCaseExecution.complete();
     }
+  }
+
+  protected void runCompletingSuperProcess(PvmExecutionImpl execution, SuperProcessAction action) {
+    try {
+      action.run();
+    } catch (RuntimeException e) {
+      LOG.exceptionWhileCompletingSupProcess(execution, e);
+      throw e;
+    } catch (Exception e) {
+      LOG.exceptionWhileCompletingSupProcess(execution, e);
+      throw new ProcessEngineException("Error while completing sub process of execution " + execution, e);
+    }
+  }
+
+  @FunctionalInterface
+  protected interface SuperProcessAction {
+    void run() throws Exception;
   }
 
   @Override

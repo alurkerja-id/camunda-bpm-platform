@@ -76,37 +76,44 @@ public class PvmAtomicOperationDeleteCascadeFireActivityEnd extends PvmAtomicOpe
 
     } else {
       if (execution.isScope()) {
-        ProcessEngineConfigurationImpl engineConfiguration = Context.getProcessEngineConfiguration();
-
-        // execution was canceled and output mapping for activity is marked as skippable
-        boolean alwaysSkipIoMappings =
-            execution instanceof ExecutionEntity &&
-            !execution.isProcessInstanceExecution() &&
-            execution.isCanceled() &&
-            engineConfiguration.isSkipOutputMappingOnCanceledActivities();
-
-        execution.destroy(alwaysSkipIoMappings);
+        destroyScopeExecution(execution);
       }
 
       // remove this execution and its concurrent parent (if exists)
       execution.remove();
 
-      boolean continueRemoval = !execution.isDeleteRoot();
-
-      if (continueRemoval) {
-        PvmExecutionImpl propagatingExecution = execution.getParent();
-        if (propagatingExecution != null && !propagatingExecution.isScope() && !propagatingExecution.hasChildren()) {
-          propagatingExecution.remove();
-          continueRemoval = !propagatingExecution.isDeleteRoot();
-          propagatingExecution = propagatingExecution.getParent();
-        }
-
-        // continue deletion with the next scope execution
-        // set activity on parent in case the parent is an inactive scope execution and activity has been set to 'null'.
-        if (continueRemoval && propagatingExecution != null && propagatingExecution.getActivity() == null && activity != null && activity.getFlowScope() != null) {
-          propagatingExecution.setActivity(getFlowScopeActivity(activity));
-        }
+      if (!execution.isDeleteRoot()) {
+        continueRemoval(execution, activity);
       }
+    }
+  }
+
+  protected void destroyScopeExecution(PvmExecutionImpl execution) {
+    ProcessEngineConfigurationImpl engineConfiguration = Context.getProcessEngineConfiguration();
+
+    // execution was canceled and output mapping for activity is marked as skippable
+    boolean alwaysSkipIoMappings =
+        execution instanceof ExecutionEntity &&
+        !execution.isProcessInstanceExecution() &&
+        execution.isCanceled() &&
+        engineConfiguration.isSkipOutputMappingOnCanceledActivities();
+
+    execution.destroy(alwaysSkipIoMappings);
+  }
+
+  protected void continueRemoval(PvmExecutionImpl execution, PvmActivity activity) {
+    boolean continueRemoval = true;
+    PvmExecutionImpl propagatingExecution = execution.getParent();
+    if (propagatingExecution != null && !propagatingExecution.isScope() && !propagatingExecution.hasChildren()) {
+      propagatingExecution.remove();
+      continueRemoval = !propagatingExecution.isDeleteRoot();
+      propagatingExecution = propagatingExecution.getParent();
+    }
+
+    // continue deletion with the next scope execution
+    // set activity on parent in case the parent is an inactive scope execution and activity has been set to 'null'.
+    if (continueRemoval && propagatingExecution != null && propagatingExecution.getActivity() == null && activity != null && activity.getFlowScope() != null) {
+      propagatingExecution.setActivity(getFlowScopeActivity(activity));
     }
   }
 
