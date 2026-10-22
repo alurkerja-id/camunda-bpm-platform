@@ -115,9 +115,9 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
 
   public static final List<String> TASK_OR_STAGE_EVENTS = new ArrayList<String>();
 
-  public static final List<String> EVENT_LISTENER_OR_MILESTONE_CREATE_EVENTS = Arrays.asList(
+  public static final List<String> EVENT_LISTENER_OR_MILESTONE_CREATE_EVENTS = Collections.unmodifiableList(Arrays.asList(
       CaseExecutionListener.CREATE
-    );
+    ));
 
   public static final List<String> EVENT_LISTENER_OR_MILESTONE_UPDATE_EVENTS = Arrays.asList(
       CaseExecutionListener.SUSPEND,
