@@ -95,7 +95,8 @@ public class DbSqlSessionFactory implements SessionFactory {
   private static final Map<String, String> databaseSpecificBitAnd3Mutable = new HashMap<>();
   public static final Map<String, String> databaseSpecificBitAnd3 = Collections.unmodifiableMap(databaseSpecificBitAnd3Mutable);
 
-  public static final Map<String, String> databaseSpecificDatepart1 = new HashMap<>();
+  private static final Map<String, String> databaseSpecificDatepart1Mutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificDatepart1 = Collections.unmodifiableMap(databaseSpecificDatepart1Mutable);
   public static final Map<String, String> databaseSpecificDatepart2 = new HashMap<>();
   public static final Map<String, String> databaseSpecificDatepart3 = new HashMap<>();
 
@@ -177,7 +178,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificBitAnd1Mutable.put(H2, "BITAND(");
     databaseSpecificBitAnd2Mutable.put(H2, ",CAST(");
     databaseSpecificBitAnd3Mutable.put(H2, " AS BIGINT))");
-    databaseSpecificDatepart1.put(H2, "");
+    databaseSpecificDatepart1Mutable.put(H2, "");
     databaseSpecificDatepart2.put(H2, "(");
     databaseSpecificDatepart3.put(H2, ")");
 
@@ -241,7 +242,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificBitAnd1Mutable.put(MYSQL, "");
     databaseSpecificBitAnd2Mutable.put(MYSQL, " & ");
     databaseSpecificBitAnd3Mutable.put(MYSQL, "");
-    databaseSpecificDatepart1.put(MYSQL, "");
+    databaseSpecificDatepart1Mutable.put(MYSQL, "");
     databaseSpecificDatepart2.put(MYSQL, "(");
     databaseSpecificDatepart3.put(MYSQL, ")");
 
@@ -386,7 +387,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificBitAnd1Mutable.put(POSTGRES, "");
     databaseSpecificBitAnd2Mutable.put(POSTGRES, " & ");
     databaseSpecificBitAnd3Mutable.put(POSTGRES, "");
-    databaseSpecificDatepart1.put(POSTGRES, "extract(");
+    databaseSpecificDatepart1Mutable.put(POSTGRES, "extract(");
     databaseSpecificDatepart2.put(POSTGRES, " from ");
     databaseSpecificDatepart3.put(POSTGRES, ")");
 
@@ -538,7 +539,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificBitAnd1Mutable.put(ORACLE, "BITAND(");
     databaseSpecificBitAnd2Mutable.put(ORACLE, ",");
     databaseSpecificBitAnd3Mutable.put(ORACLE, ")");
-    databaseSpecificDatepart1.put(ORACLE, "to_number(to_char(");
+    databaseSpecificDatepart1Mutable.put(ORACLE, "to_number(to_char(");
     databaseSpecificDatepart2.put(ORACLE, ",");
     databaseSpecificDatepart3.put(ORACLE, "))");
 
@@ -630,7 +631,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificBitAnd1Mutable.put(DB2, "BITAND(");
     databaseSpecificBitAnd2Mutable.put(DB2, ", CAST(");
     databaseSpecificBitAnd3Mutable.put(DB2, " AS Integer))");
-    databaseSpecificDatepart1.put(DB2, "");
+    databaseSpecificDatepart1Mutable.put(DB2, "");
     databaseSpecificDatepart2.put(DB2, "(");
     databaseSpecificDatepart3.put(DB2, ")");
 
@@ -729,7 +730,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificBitAnd1Mutable.put(MSSQL, "");
     databaseSpecificBitAnd2Mutable.put(MSSQL, " &");
     databaseSpecificBitAnd3Mutable.put(MSSQL, "");
-    databaseSpecificDatepart1.put(MSSQL, "datepart(");
+    databaseSpecificDatepart1Mutable.put(MSSQL, "datepart(");
     databaseSpecificDatepart2.put(MSSQL, ",");
     databaseSpecificDatepart3.put(MSSQL, ")");
 
