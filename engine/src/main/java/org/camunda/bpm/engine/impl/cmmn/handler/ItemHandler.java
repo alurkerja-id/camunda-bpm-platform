@@ -124,12 +124,12 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
       CaseExecutionListener.RESUME
     ));
 
-  public static final List<String> EVENT_LISTENER_OR_MILESTONE_END_EVENTS = Arrays.asList(
+  public static final List<String> EVENT_LISTENER_OR_MILESTONE_END_EVENTS = Collections.unmodifiableList(Arrays.asList(
       CaseExecutionListener.TERMINATE,
       CaseExecutionListener.PARENT_TERMINATE,
       CaseExecutionListener.OCCUR,
       PARENT_COMPLETE
-    );
+    ));
 
   public static final List<String> EVENT_LISTENER_OR_MILESTONE_EVENTS = new ArrayList<String>();
 
