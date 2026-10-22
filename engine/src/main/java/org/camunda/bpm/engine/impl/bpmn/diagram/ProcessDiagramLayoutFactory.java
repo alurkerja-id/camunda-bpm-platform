@@ -241,7 +241,7 @@ public class ProcessDiagramLayoutFactory {
   
     int marginTop = 0;
     for (int row = 0; row < height; row++) {
-      if (rowIsWhite.getOrDefault(row, true)) {
+      if (isWhite(rowIsWhite, row)) {
         ++marginTop;
       } else {
         // Margin Top Found
@@ -251,7 +251,7 @@ public class ProcessDiagramLayoutFactory {
     
     int marginLeft = 0;
     for (int column = 0; column < width; column++) {
-      if (columnIsWhite.getOrDefault(column, true)) {
+      if (isWhite(columnIsWhite, column)) {
         ++marginLeft;
       } else {
         // Margin Left Found
@@ -261,7 +261,7 @@ public class ProcessDiagramLayoutFactory {
     
     int marginRight = 0;
     for (int column = width - 1; column >= 0; column--) {
-      if (columnIsWhite.getOrDefault(column, true)) {
+      if (isWhite(columnIsWhite, column)) {
         ++marginRight;
       } else {
         // Margin Right Found
@@ -271,7 +271,7 @@ public class ProcessDiagramLayoutFactory {
     
     int marginBottom = 0;
     for (int row = height -1; row >= 0; row--) {
-      if (rowIsWhite.getOrDefault(row, true)) {
+      if (isWhite(rowIsWhite, row)) {
         ++marginBottom;
       } else {
         // Margin Bottom Found
@@ -396,5 +396,9 @@ public class ProcessDiagramLayoutFactory {
     factory.setNamespaceAware(true);
 
     return factory;
+  }
+
+  private static boolean isWhite(Map<Integer, Boolean> isWhiteByIndex, int index) {
+    return Boolean.TRUE.equals(isWhiteByIndex.getOrDefault(index, true));
   }
 }
