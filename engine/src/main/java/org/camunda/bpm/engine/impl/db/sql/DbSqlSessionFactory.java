@@ -80,7 +80,8 @@ public class DbSqlSessionFactory implements SessionFactory {
   private static final Map<String, String> optimizeDatabaseSpecificLimitAfterWithoutOffsetStatementsMutable = new HashMap<>();
   public static final Map<String, String> optimizeDatabaseSpecificLimitAfterWithoutOffsetStatements = Collections.unmodifiableMap(optimizeDatabaseSpecificLimitAfterWithoutOffsetStatementsMutable);
 
-  public static final Map<String, String> databaseSpecificEscapeChar = new HashMap<>();
+  private static final Map<String, String> databaseSpecificEscapeCharMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificEscapeChar = Collections.unmodifiableMap(databaseSpecificEscapeCharMutable);
 
   public static final Map<String, String> databaseSpecificOrderByStatements = new HashMap<>();
   public static final Map<String, String> databaseSpecificLimitBeforeNativeQueryStatements = new HashMap<>();
@@ -166,7 +167,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificCountDistinctBeforeEndMutable.put(H2, defaultDistinctCountBeforeEnd);
     databaseSpecificCountDistinctAfterEndMutable.put(H2, defaultDistinctCountAfterEnd);
 
-    databaseSpecificEscapeChar.put(H2, defaultEscapeChar);
+    databaseSpecificEscapeCharMutable.put(H2, defaultEscapeChar);
 
     databaseSpecificBitAnd1.put(H2, "BITAND(");
     databaseSpecificBitAnd2.put(H2, ",CAST(");
@@ -230,7 +231,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificCountDistinctBeforeEndMutable.put(MYSQL, defaultDistinctCountBeforeEnd);
     databaseSpecificCountDistinctAfterEndMutable.put(MYSQL, defaultDistinctCountAfterEnd);
 
-    databaseSpecificEscapeChar.put(MYSQL, "'\\\\'");
+    databaseSpecificEscapeCharMutable.put(MYSQL, "'\\\\'");
 
     databaseSpecificBitAnd1.put(MYSQL, "");
     databaseSpecificBitAnd2.put(MYSQL, " & ");
@@ -375,7 +376,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificCountDistinctBeforeEndMutable.put(POSTGRES, "");
     databaseSpecificCountDistinctAfterEndMutable.put(POSTGRES, ") countDistinct");
 
-    databaseSpecificEscapeChar.put(POSTGRES, defaultEscapeChar);
+    databaseSpecificEscapeCharMutable.put(POSTGRES, defaultEscapeChar);
 
     databaseSpecificBitAnd1.put(POSTGRES, "");
     databaseSpecificBitAnd2.put(POSTGRES, " & ");
@@ -526,7 +527,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificCountDistinctBeforeEndMutable.put(ORACLE, defaultDistinctCountBeforeEnd);
     databaseSpecificCountDistinctAfterEndMutable.put(ORACLE, defaultDistinctCountAfterEnd);
 
-    databaseSpecificEscapeChar.put(ORACLE, defaultEscapeChar);
+    databaseSpecificEscapeCharMutable.put(ORACLE, defaultEscapeChar);
 
     databaseSpecificDummyTable.put(ORACLE, "FROM DUAL");
     databaseSpecificBitAnd1.put(ORACLE, "BITAND(");
@@ -619,7 +620,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificCountDistinctBeforeEndMutable.put(DB2, defaultDistinctCountBeforeEnd);
     databaseSpecificCountDistinctAfterEndMutable.put(DB2, defaultDistinctCountAfterEnd);
 
-    databaseSpecificEscapeChar.put(DB2, defaultEscapeChar);
+    databaseSpecificEscapeCharMutable.put(DB2, defaultEscapeChar);
 
     databaseSpecificBitAnd1.put(DB2, "BITAND(");
     databaseSpecificBitAnd2.put(DB2, ", CAST(");
@@ -718,7 +719,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificCountDistinctBeforeEndMutable.put(MSSQL, defaultDistinctCountBeforeEnd);
     databaseSpecificCountDistinctAfterEndMutable.put(MSSQL, defaultDistinctCountAfterEnd);
 
-    databaseSpecificEscapeChar.put(MSSQL, defaultEscapeChar);
+    databaseSpecificEscapeCharMutable.put(MSSQL, defaultEscapeChar);
 
     databaseSpecificBitAnd1.put(MSSQL, "");
     databaseSpecificBitAnd2.put(MSSQL, " &");
