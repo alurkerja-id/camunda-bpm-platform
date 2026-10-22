@@ -70,7 +70,8 @@ public class DbSqlSessionFactory implements SessionFactory {
   // count distinct statements
   private static final Map<String, String> databaseSpecificCountDistinctBeforeStartMutable = new HashMap<>();
   public static final Map<String, String> databaseSpecificCountDistinctBeforeStart = Collections.unmodifiableMap(databaseSpecificCountDistinctBeforeStartMutable);
-  public static final Map<String, String> databaseSpecificCountDistinctBeforeEnd = new HashMap<>();
+  private static final Map<String, String> databaseSpecificCountDistinctBeforeEndMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificCountDistinctBeforeEnd = Collections.unmodifiableMap(databaseSpecificCountDistinctBeforeEndMutable);
   public static final Map<String, String> databaseSpecificCountDistinctAfterEnd = new HashMap<>();
 
   public static final Map<String, String> optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatements = new HashMap<>();
@@ -159,7 +160,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificNumericCast.put(H2, "");
 
     databaseSpecificCountDistinctBeforeStartMutable.put(H2, defaultDistinctCountBeforeStart);
-    databaseSpecificCountDistinctBeforeEnd.put(H2, defaultDistinctCountBeforeEnd);
+    databaseSpecificCountDistinctBeforeEndMutable.put(H2, defaultDistinctCountBeforeEnd);
     databaseSpecificCountDistinctAfterEnd.put(H2, defaultDistinctCountAfterEnd);
 
     databaseSpecificEscapeChar.put(H2, defaultEscapeChar);
@@ -223,7 +224,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificNumericCast.put(MYSQL, "");
 
     databaseSpecificCountDistinctBeforeStartMutable.put(MYSQL, defaultDistinctCountBeforeStart);
-    databaseSpecificCountDistinctBeforeEnd.put(MYSQL, defaultDistinctCountBeforeEnd);
+    databaseSpecificCountDistinctBeforeEndMutable.put(MYSQL, defaultDistinctCountBeforeEnd);
     databaseSpecificCountDistinctAfterEnd.put(MYSQL, defaultDistinctCountAfterEnd);
 
     databaseSpecificEscapeChar.put(MYSQL, "'\\\\'");
@@ -368,7 +369,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificDistinct.put(POSTGRES, "distinct");
 
     databaseSpecificCountDistinctBeforeStartMutable.put(POSTGRES, "SELECT COUNT(*) FROM (SELECT DISTINCT");
-    databaseSpecificCountDistinctBeforeEnd.put(POSTGRES, "");
+    databaseSpecificCountDistinctBeforeEndMutable.put(POSTGRES, "");
     databaseSpecificCountDistinctAfterEnd.put(POSTGRES, ") countDistinct");
 
     databaseSpecificEscapeChar.put(POSTGRES, defaultEscapeChar);
@@ -519,7 +520,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificNumericCast.put(ORACLE, "");
 
     databaseSpecificCountDistinctBeforeStartMutable.put(ORACLE, defaultDistinctCountBeforeStart);
-    databaseSpecificCountDistinctBeforeEnd.put(ORACLE, defaultDistinctCountBeforeEnd);
+    databaseSpecificCountDistinctBeforeEndMutable.put(ORACLE, defaultDistinctCountBeforeEnd);
     databaseSpecificCountDistinctAfterEnd.put(ORACLE, defaultDistinctCountAfterEnd);
 
     databaseSpecificEscapeChar.put(ORACLE, defaultEscapeChar);
@@ -612,7 +613,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificNumericCast.put(DB2, "");
 
     databaseSpecificCountDistinctBeforeStartMutable.put(DB2, defaultDistinctCountBeforeStart);
-    databaseSpecificCountDistinctBeforeEnd.put(DB2, defaultDistinctCountBeforeEnd);
+    databaseSpecificCountDistinctBeforeEndMutable.put(DB2, defaultDistinctCountBeforeEnd);
     databaseSpecificCountDistinctAfterEnd.put(DB2, defaultDistinctCountAfterEnd);
 
     databaseSpecificEscapeChar.put(DB2, defaultEscapeChar);
@@ -711,7 +712,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificNumericCast.put(MSSQL, "");
 
     databaseSpecificCountDistinctBeforeStartMutable.put(MSSQL, defaultDistinctCountBeforeStart);
-    databaseSpecificCountDistinctBeforeEnd.put(MSSQL, defaultDistinctCountBeforeEnd);
+    databaseSpecificCountDistinctBeforeEndMutable.put(MSSQL, defaultDistinctCountBeforeEnd);
     databaseSpecificCountDistinctAfterEnd.put(MSSQL, defaultDistinctCountAfterEnd);
 
     databaseSpecificEscapeChar.put(MSSQL, defaultEscapeChar);
