@@ -17,6 +17,7 @@
 package org.camunda.bpm.engine.impl.db.sql;
 
 import java.sql.Connection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
