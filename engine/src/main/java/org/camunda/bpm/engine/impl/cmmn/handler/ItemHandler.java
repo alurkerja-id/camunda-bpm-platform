@@ -148,7 +148,7 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
       CaseExecutionListener.CLOSE
     ));
 
-  public static final List<String> CASE_PLAN_MODEL_EVENTS = new ArrayList<String>();
+  public static final List<String> CASE_PLAN_MODEL_EVENTS;
 
   public static final List<String> DEFAULT_VARIABLE_EVENTS = Collections.unmodifiableList(Arrays.asList(
       VariableListener.CREATE,
@@ -157,6 +157,12 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
     ));
 
   static {
+    List<String> CASE_PLAN_MODEL_EVENTSMutable = new ArrayList<String>();
+    CASE_PLAN_MODEL_EVENTSMutable.addAll(CASE_PLAN_MODEL_CREATE_EVENTS);
+    CASE_PLAN_MODEL_EVENTSMutable.addAll(CASE_PLAN_MODEL_UPDATE_EVENTS);
+    CASE_PLAN_MODEL_EVENTSMutable.addAll(CASE_PLAN_MODEL_CLOSE_EVENTS);
+    CASE_PLAN_MODEL_EVENTS = Collections.unmodifiableList(CASE_PLAN_MODEL_EVENTSMutable);
+
     List<String> EVENT_LISTENER_OR_MILESTONE_EVENTSMutable = new ArrayList<String>();
     EVENT_LISTENER_OR_MILESTONE_EVENTSMutable.addAll(EVENT_LISTENER_OR_MILESTONE_CREATE_EVENTS);
     EVENT_LISTENER_OR_MILESTONE_EVENTSMutable.addAll(EVENT_LISTENER_OR_MILESTONE_UPDATE_EVENTS);
@@ -171,9 +177,6 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
 
 
 
-    CASE_PLAN_MODEL_EVENTS.addAll(CASE_PLAN_MODEL_CREATE_EVENTS);
-    CASE_PLAN_MODEL_EVENTS.addAll(CASE_PLAN_MODEL_UPDATE_EVENTS);
-    CASE_PLAN_MODEL_EVENTS.addAll(CASE_PLAN_MODEL_CLOSE_EVENTS);
   }
 
   protected CmmnActivity createActivity(CmmnElement element, CmmnHandlerContext context) {
