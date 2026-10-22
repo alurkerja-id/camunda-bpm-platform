@@ -150,11 +150,11 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
 
   public static final List<String> CASE_PLAN_MODEL_EVENTS = new ArrayList<String>();
 
-  public static final List<String> DEFAULT_VARIABLE_EVENTS = Arrays.asList(
+  public static final List<String> DEFAULT_VARIABLE_EVENTS = Collections.unmodifiableList(Arrays.asList(
       VariableListener.CREATE,
       VariableListener.DELETE,
       VariableListener.UPDATE
-  );
+    ));
 
   static {
     TASK_OR_STAGE_EVENTS.addAll(TASK_OR_STAGE_CREATE_EVENTS);
