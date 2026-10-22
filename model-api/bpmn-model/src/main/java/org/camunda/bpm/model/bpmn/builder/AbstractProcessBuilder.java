@@ -85,7 +85,7 @@ public abstract class AbstractProcessBuilder<B extends AbstractProcessBuilder<B>
    * @return the builder object
    */
   public B camundaHistoryTimeToLive(Integer historyTimeToLive) {
-    element.setCamundaHistoryTimeToLive(historyTimeToLive);
+    element.setCamundaHistoryTimeToLiveString(historyTimeToLive == null ? null : String.valueOf(historyTimeToLive));
     return myself;
   }
 
