@@ -149,6 +149,6 @@ public class VersionedDeploymentHandler implements DeploymentHandler {
   }
 
   protected boolean isBpmnResource(Resource resource) {
-    return StringUtil.hasAnySuffix(resource.getName(), BpmnDeployer.BPMN_RESOURCE_SUFFIXES);
+    return StringUtil.hasAnySuffix(resource.getName(), BpmnDeployer.getBpmnResourceSuffixes());
   }
 }

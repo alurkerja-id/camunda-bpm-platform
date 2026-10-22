@@ -1500,7 +1500,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
   }
 
   private String deployProcessString(String processString) {
-    String resourceName = "xmlString." + BpmnDeployer.BPMN_RESOURCE_SUFFIXES[0];
+    String resourceName = "xmlString." + BpmnDeployer.getBpmnResourceSuffixes()[0];
     return repositoryService.createDeployment().addString(resourceName, processString).deploy().getId();
   }
 
