@@ -40,7 +40,14 @@ public class DbSqlSessionFactory implements SessionFactory {
   public static final String H2 = "h2";
   public static final String MYSQL = "mysql";
   public static final String POSTGRES = "postgres";
-  public static final String[] SUPPORTED_DATABASES = {MSSQL, DB2, ORACLE, H2, MYSQL, POSTGRES};
+  private static final String[] SUPPORTED_DATABASES = {MSSQL, DB2, ORACLE, H2, MYSQL, POSTGRES};
+
+  /**
+   * @return a copy of the supported database types
+   */
+  public static String[] getSupportedDatabases() {
+    return SUPPORTED_DATABASES.clone();
+  }
 
   protected static final Map<String, Map<String, String>> databaseSpecificStatements = new HashMap<>();
 
