@@ -116,7 +116,8 @@ public class DbSqlSessionFactory implements SessionFactory {
   private static final Map<String, String> databaseSpecificDistinctMutable = new HashMap<>();
   public static final Map<String, String> databaseSpecificDistinct = Collections.unmodifiableMap(databaseSpecificDistinctMutable);
 
-  public static final Map<String, String> databaseSpecificNumericCast = new HashMap<>();
+  private static final Map<String, String> databaseSpecificNumericCastMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificNumericCast = Collections.unmodifiableMap(databaseSpecificNumericCastMutable);
 
   public static final Map<String, Map<String, String>> dbSpecificConstants = new HashMap<>();
 
@@ -174,7 +175,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificOrderByStatementsMutable.put(H2, defaultOrderBy);
     databaseSpecificLimitBeforeNativeQueryStatementsMutable.put(H2, "");
     databaseSpecificDistinctMutable.put(H2, "distinct");
-    databaseSpecificNumericCast.put(H2, "");
+    databaseSpecificNumericCastMutable.put(H2, "");
 
     databaseSpecificCountDistinctBeforeStartMutable.put(H2, defaultDistinctCountBeforeStart);
     databaseSpecificCountDistinctBeforeEndMutable.put(H2, defaultDistinctCountBeforeEnd);
@@ -238,7 +239,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificOrderByStatementsMutable.put(MYSQL, defaultOrderBy);
     databaseSpecificLimitBeforeNativeQueryStatementsMutable.put(MYSQL, "");
     databaseSpecificDistinctMutable.put(MYSQL, "distinct");
-    databaseSpecificNumericCast.put(MYSQL, "");
+    databaseSpecificNumericCastMutable.put(MYSQL, "");
 
     databaseSpecificCountDistinctBeforeStartMutable.put(MYSQL, defaultDistinctCountBeforeStart);
     databaseSpecificCountDistinctBeforeEndMutable.put(MYSQL, defaultDistinctCountBeforeEnd);
@@ -516,7 +517,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     constants.put("constant.null.reporter", "CAST(NULL AS VARCHAR) AS REPORTER_");
     dbSpecificConstants.put(POSTGRES, constants);
     databaseSpecificDaysComparator.put(POSTGRES, "EXTRACT (DAY FROM #{currentTimestamp} - ${date}) >= ${days}");
-    databaseSpecificNumericCast.put(POSTGRES, "");
+    databaseSpecificNumericCastMutable.put(POSTGRES, "");
 
     // oracle
     databaseSpecificLimitBeforeStatementsMutable.put(ORACLE, "select * from ( select a.*, ROWNUM rnum from (");
@@ -534,7 +535,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificOrderByStatementsMutable.put(ORACLE, defaultOrderBy);
     databaseSpecificLimitBeforeNativeQueryStatementsMutable.put(ORACLE, "");
     databaseSpecificDistinctMutable.put(ORACLE, "distinct");
-    databaseSpecificNumericCast.put(ORACLE, "");
+    databaseSpecificNumericCastMutable.put(ORACLE, "");
 
     databaseSpecificCountDistinctBeforeStartMutable.put(ORACLE, defaultDistinctCountBeforeStart);
     databaseSpecificCountDistinctBeforeEndMutable.put(ORACLE, defaultDistinctCountBeforeEnd);
@@ -627,7 +628,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificOrderByStatementsMutable.put(DB2, defaultOrderBy);
     databaseSpecificLimitBeforeNativeQueryStatementsMutable.put(DB2, "");
     databaseSpecificDistinctMutable.put(DB2, "distinct");
-    databaseSpecificNumericCast.put(DB2, "");
+    databaseSpecificNumericCastMutable.put(DB2, "");
 
     databaseSpecificCountDistinctBeforeStartMutable.put(DB2, defaultDistinctCountBeforeStart);
     databaseSpecificCountDistinctBeforeEndMutable.put(DB2, defaultDistinctCountBeforeEnd);
@@ -726,7 +727,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificOrderByStatementsMutable.put(MSSQL, "");
     databaseSpecificLimitBeforeNativeQueryStatementsMutable.put(MSSQL, "SELECT SUB.* FROM ( select RES.* , row_number() over (ORDER BY ${internalOrderBy}) rnk FROM (");
     databaseSpecificDistinctMutable.put(MSSQL, "");
-    databaseSpecificNumericCast.put(MSSQL, "");
+    databaseSpecificNumericCastMutable.put(MSSQL, "");
 
     databaseSpecificCountDistinctBeforeStartMutable.put(MSSQL, defaultDistinctCountBeforeStart);
     databaseSpecificCountDistinctBeforeEndMutable.put(MSSQL, defaultDistinctCountBeforeEnd);
