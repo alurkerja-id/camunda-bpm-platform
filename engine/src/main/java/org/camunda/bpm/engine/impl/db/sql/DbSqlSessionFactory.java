@@ -54,7 +54,8 @@ public class DbSqlSessionFactory implements SessionFactory {
   private static final Map<String, String> databaseSpecificLimitAfterWithoutOffsetStatementsMutable = new HashMap<>();
   public static final Map<String, String> databaseSpecificLimitAfterWithoutOffsetStatements = Collections.unmodifiableMap(databaseSpecificLimitAfterWithoutOffsetStatementsMutable);
   // limitAfter statements that can be used with subqueries
-  public static final Map<String, String> databaseSpecificInnerLimitAfterStatements = new HashMap<>();
+  private static final Map<String, String> databaseSpecificInnerLimitAfterStatementsMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificInnerLimitAfterStatements = Collections.unmodifiableMap(databaseSpecificInnerLimitAfterStatementsMutable);
   public static final Map<String, String> databaseSpecificLimitBetweenStatements = new HashMap<>();
   public static final Map<String, String> databaseSpecificLimitBetweenFilterStatements = new HashMap<>();
   public static final Map<String, String> databaseSpecificLimitBetweenAcquisitionStatements = new HashMap<>();
@@ -140,7 +141,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     optimizeDatabaseSpecificLimitAfterWithoutOffsetStatements.put(H2, "LIMIT #{maxResults}");
     databaseSpecificLimitBeforeWithoutOffsetStatementsMutable.put(H2, "");
     databaseSpecificLimitAfterWithoutOffsetStatementsMutable.put(H2, "LIMIT #{maxResults}");
-    databaseSpecificInnerLimitAfterStatements.put(H2, databaseSpecificLimitAfterStatements.get(H2));
+    databaseSpecificInnerLimitAfterStatementsMutable.put(H2, databaseSpecificLimitAfterStatements.get(H2));
     databaseSpecificLimitBetweenStatements.put(H2, "");
     databaseSpecificLimitBetweenFilterStatements.put(H2, "");
     databaseSpecificLimitBetweenAcquisitionStatements.put(H2, "");
@@ -204,7 +205,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     optimizeDatabaseSpecificLimitAfterWithoutOffsetStatements.put(MYSQL, "LIMIT #{maxResults}");
     databaseSpecificLimitBeforeWithoutOffsetStatementsMutable.put(MYSQL, "");
     databaseSpecificLimitAfterWithoutOffsetStatementsMutable.put(MYSQL, "LIMIT #{maxResults}");
-    databaseSpecificInnerLimitAfterStatements.put(MYSQL, databaseSpecificLimitAfterStatements.get(MYSQL));
+    databaseSpecificInnerLimitAfterStatementsMutable.put(MYSQL, databaseSpecificLimitAfterStatements.get(MYSQL));
     databaseSpecificLimitBetweenStatements.put(MYSQL, "");
     databaseSpecificLimitBetweenFilterStatements.put(MYSQL, "");
     databaseSpecificLimitBetweenAcquisitionStatements.put(MYSQL, "");
@@ -350,7 +351,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     optimizeDatabaseSpecificLimitAfterWithoutOffsetStatements.put(POSTGRES, "LIMIT #{maxResults}");
     databaseSpecificLimitBeforeWithoutOffsetStatementsMutable.put(POSTGRES, "");
     databaseSpecificLimitAfterWithoutOffsetStatementsMutable.put(POSTGRES, "LIMIT #{maxResults}");
-    databaseSpecificInnerLimitAfterStatements.put(POSTGRES, databaseSpecificLimitAfterStatements.get(POSTGRES));
+    databaseSpecificInnerLimitAfterStatementsMutable.put(POSTGRES, databaseSpecificLimitAfterStatements.get(POSTGRES));
     databaseSpecificLimitBetweenStatements.put(POSTGRES, "");
     databaseSpecificLimitBetweenFilterStatements.put(POSTGRES, "");
     databaseSpecificLimitBetweenAcquisitionStatements.put(POSTGRES, "");
@@ -500,7 +501,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     optimizeDatabaseSpecificLimitAfterWithoutOffsetStatements.put(ORACLE, "  ) a where ROWNUM <= #{maxResults})");
     databaseSpecificLimitBeforeWithoutOffsetStatementsMutable.put(ORACLE, "");
     databaseSpecificLimitAfterWithoutOffsetStatementsMutable.put(ORACLE, "AND ROWNUM <= #{maxResults}");
-    databaseSpecificInnerLimitAfterStatements.put(ORACLE, databaseSpecificLimitAfterStatements.get(ORACLE));
+    databaseSpecificInnerLimitAfterStatementsMutable.put(ORACLE, databaseSpecificLimitAfterStatements.get(ORACLE));
     databaseSpecificLimitBetweenStatements.put(ORACLE, "");
     databaseSpecificLimitBetweenFilterStatements.put(ORACLE, "");
     databaseSpecificLimitBetweenAcquisitionStatements.put(ORACLE, "");
@@ -590,7 +591,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificLimitBeforeStatementsMutable.put(DB2, "");
     optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatements.put(DB2, "");
     databaseSpecificLimitAfterStatementsMutable.put(DB2, "LIMIT #{maxResults} OFFSET #{firstResult}");
-    databaseSpecificInnerLimitAfterStatements.put(DB2, databaseSpecificLimitAfterStatements.get(DB2));
+    databaseSpecificInnerLimitAfterStatementsMutable.put(DB2, databaseSpecificLimitAfterStatements.get(DB2));
     optimizeDatabaseSpecificLimitAfterWithoutOffsetStatements.put(DB2, "LIMIT #{maxResults}");
     databaseSpecificLimitBetweenStatements.put(DB2, "");
     databaseSpecificLimitBetweenFilterStatements.put(DB2, "");
@@ -686,7 +687,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     // mssql
     databaseSpecificLimitBeforeStatementsMutable.put(MSSQL, "SELECT SUB.* FROM (");
     optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatements.put(MSSQL, "");
-    databaseSpecificInnerLimitAfterStatements.put(MSSQL, ")RES ) SUB WHERE SUB.rnk >= #{firstRow} AND SUB.rnk < #{lastRow}");
+    databaseSpecificInnerLimitAfterStatementsMutable.put(MSSQL, ")RES ) SUB WHERE SUB.rnk >= #{firstRow} AND SUB.rnk < #{lastRow}");
     databaseSpecificLimitAfterStatementsMutable.put(MSSQL, databaseSpecificInnerLimitAfterStatements.get(MSSQL) + " ORDER BY SUB.rnk");
     optimizeDatabaseSpecificLimitAfterWithoutOffsetStatements.put(MSSQL, "");
     String mssqlLimitBetweenWithoutColumns = ", row_number() over (ORDER BY ${internalOrderBy}) rnk FROM ( select distinct ";
