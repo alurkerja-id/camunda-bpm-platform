@@ -125,7 +125,8 @@ public class DbSqlSessionFactory implements SessionFactory {
   private static final Map<String, String> databaseSpecificDaysComparatorMutable = new HashMap<>();
   public static final Map<String, String> databaseSpecificDaysComparator = Collections.unmodifiableMap(databaseSpecificDaysComparatorMutable);
 
-  public static final Map<String, String> databaseSpecificCollationForCaseSensitivity = new HashMap<>();
+  private static final Map<String, String> databaseSpecificCollationForCaseSensitivityMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificCollationForCaseSensitivity = Collections.unmodifiableMap(databaseSpecificCollationForCaseSensitivityMutable);
 
   public static final Map<String, String> databaseSpecificAuthJoinStart = new HashMap<>();
   public static final Map<String, String> databaseSpecificAuthJoinEnd = new HashMap<>();
@@ -199,7 +200,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificDaysComparatorMutable.put(H2, "DATEDIFF(DAY, ${date}, #{currentTimestamp}) >= ${days}");
 
-    databaseSpecificCollationForCaseSensitivity.put(H2, "");
+    databaseSpecificCollationForCaseSensitivityMutable.put(H2, "");
 
     databaseSpecificAuthJoinStart.put(H2, defaultAuthOnStart);
     databaseSpecificAuthJoinEnd.put(H2, defaultAuthOnEnd);
@@ -263,7 +264,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificDaysComparatorMutable.put(MYSQL, "DATEDIFF(#{currentTimestamp}, ${date}) >= ${days}");
 
-    databaseSpecificCollationForCaseSensitivity.put(MYSQL, "");
+    databaseSpecificCollationForCaseSensitivityMutable.put(MYSQL, "");
 
     databaseSpecificAuthJoinStart.put(MYSQL, "=");
     databaseSpecificAuthJoinEnd.put(MYSQL, "");
@@ -406,7 +407,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificFalseConstantMutable.put(POSTGRES, "false");
     databaseSpecificIfNullMutable.put(POSTGRES, "COALESCE");
 
-    databaseSpecificCollationForCaseSensitivity.put(POSTGRES, "");
+    databaseSpecificCollationForCaseSensitivityMutable.put(POSTGRES, "");
 
     databaseSpecificAuthJoinStart.put(POSTGRES, defaultAuthOnStart);
     databaseSpecificAuthJoinEnd.put(POSTGRES, defaultAuthOnEnd);
@@ -559,7 +560,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificDaysComparatorMutable.put(ORACLE, "${date} <= #{currentTimestamp} - ${days}");
 
-    databaseSpecificCollationForCaseSensitivity.put(ORACLE, "");
+    databaseSpecificCollationForCaseSensitivityMutable.put(ORACLE, "");
 
     databaseSpecificAuthJoinStart.put(ORACLE, defaultAuthOnStart);
     databaseSpecificAuthJoinEnd.put(ORACLE, defaultAuthOnEnd);
@@ -652,7 +653,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificDaysComparatorMutable.put(DB2, "${date} + ${days} DAYS <= #{currentTimestamp}");
 
-    databaseSpecificCollationForCaseSensitivity.put(DB2, "");
+    databaseSpecificCollationForCaseSensitivityMutable.put(DB2, "");
 
     databaseSpecificAuthJoinStart.put(DB2, defaultAuthOnStart);
     databaseSpecificAuthJoinEnd.put(DB2, defaultAuthOnEnd);
@@ -751,7 +752,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificDaysComparatorMutable.put(MSSQL, "DATEDIFF(DAY, ${date}, #{currentTimestamp}) >= ${days}");
 
-    databaseSpecificCollationForCaseSensitivity.put(MSSQL, "COLLATE Latin1_General_CS_AS");
+    databaseSpecificCollationForCaseSensitivityMutable.put(MSSQL, "COLLATE Latin1_General_CS_AS");
 
     databaseSpecificAuthJoinStart.put(MSSQL, defaultAuthOnStart);
     databaseSpecificAuthJoinEnd.put(MSSQL, defaultAuthOnEnd);
