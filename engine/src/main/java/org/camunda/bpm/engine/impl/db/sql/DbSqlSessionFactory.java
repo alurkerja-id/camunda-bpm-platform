@@ -68,7 +68,8 @@ public class DbSqlSessionFactory implements SessionFactory {
   private static final Map<String, String> databaseSpecificLimitAfterInUpdateMutable = new HashMap<>();
   public static final Map<String, String> databaseSpecificLimitAfterInUpdate = Collections.unmodifiableMap(databaseSpecificLimitAfterInUpdateMutable);
   // count distinct statements
-  public static final Map<String, String> databaseSpecificCountDistinctBeforeStart = new HashMap<>();
+  private static final Map<String, String> databaseSpecificCountDistinctBeforeStartMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificCountDistinctBeforeStart = Collections.unmodifiableMap(databaseSpecificCountDistinctBeforeStartMutable);
   public static final Map<String, String> databaseSpecificCountDistinctBeforeEnd = new HashMap<>();
   public static final Map<String, String> databaseSpecificCountDistinctAfterEnd = new HashMap<>();
 
@@ -157,7 +158,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificDistinct.put(H2, "distinct");
     databaseSpecificNumericCast.put(H2, "");
 
-    databaseSpecificCountDistinctBeforeStart.put(H2, defaultDistinctCountBeforeStart);
+    databaseSpecificCountDistinctBeforeStartMutable.put(H2, defaultDistinctCountBeforeStart);
     databaseSpecificCountDistinctBeforeEnd.put(H2, defaultDistinctCountBeforeEnd);
     databaseSpecificCountDistinctAfterEnd.put(H2, defaultDistinctCountAfterEnd);
 
@@ -221,7 +222,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificDistinct.put(MYSQL, "distinct");
     databaseSpecificNumericCast.put(MYSQL, "");
 
-    databaseSpecificCountDistinctBeforeStart.put(MYSQL, defaultDistinctCountBeforeStart);
+    databaseSpecificCountDistinctBeforeStartMutable.put(MYSQL, defaultDistinctCountBeforeStart);
     databaseSpecificCountDistinctBeforeEnd.put(MYSQL, defaultDistinctCountBeforeEnd);
     databaseSpecificCountDistinctAfterEnd.put(MYSQL, defaultDistinctCountAfterEnd);
 
@@ -366,7 +367,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificLimitBeforeNativeQueryStatements.put(POSTGRES, "");
     databaseSpecificDistinct.put(POSTGRES, "distinct");
 
-    databaseSpecificCountDistinctBeforeStart.put(POSTGRES, "SELECT COUNT(*) FROM (SELECT DISTINCT");
+    databaseSpecificCountDistinctBeforeStartMutable.put(POSTGRES, "SELECT COUNT(*) FROM (SELECT DISTINCT");
     databaseSpecificCountDistinctBeforeEnd.put(POSTGRES, "");
     databaseSpecificCountDistinctAfterEnd.put(POSTGRES, ") countDistinct");
 
@@ -517,7 +518,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificDistinct.put(ORACLE, "distinct");
     databaseSpecificNumericCast.put(ORACLE, "");
 
-    databaseSpecificCountDistinctBeforeStart.put(ORACLE, defaultDistinctCountBeforeStart);
+    databaseSpecificCountDistinctBeforeStartMutable.put(ORACLE, defaultDistinctCountBeforeStart);
     databaseSpecificCountDistinctBeforeEnd.put(ORACLE, defaultDistinctCountBeforeEnd);
     databaseSpecificCountDistinctAfterEnd.put(ORACLE, defaultDistinctCountAfterEnd);
 
@@ -610,7 +611,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificDistinct.put(DB2, "distinct");
     databaseSpecificNumericCast.put(DB2, "");
 
-    databaseSpecificCountDistinctBeforeStart.put(DB2, defaultDistinctCountBeforeStart);
+    databaseSpecificCountDistinctBeforeStartMutable.put(DB2, defaultDistinctCountBeforeStart);
     databaseSpecificCountDistinctBeforeEnd.put(DB2, defaultDistinctCountBeforeEnd);
     databaseSpecificCountDistinctAfterEnd.put(DB2, defaultDistinctCountAfterEnd);
 
@@ -709,7 +710,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificDistinct.put(MSSQL, "");
     databaseSpecificNumericCast.put(MSSQL, "");
 
-    databaseSpecificCountDistinctBeforeStart.put(MSSQL, defaultDistinctCountBeforeStart);
+    databaseSpecificCountDistinctBeforeStartMutable.put(MSSQL, defaultDistinctCountBeforeStart);
     databaseSpecificCountDistinctBeforeEnd.put(MSSQL, defaultDistinctCountBeforeEnd);
     databaseSpecificCountDistinctAfterEnd.put(MSSQL, defaultDistinctCountAfterEnd);
 
