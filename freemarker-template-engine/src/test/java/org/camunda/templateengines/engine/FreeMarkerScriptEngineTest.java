@@ -136,4 +136,40 @@ public class FreeMarkerScriptEngineTest {
     }
   }
 
+
+  @Test
+  public void testFactoryIsLazyAndCached() {
+    org.camunda.templateengines.FreeMarkerScriptEngine engine = new org.camunda.templateengines.FreeMarkerScriptEngine();
+    assertThat(engine.getFactory()).isInstanceOf(org.camunda.templateengines.FreeMarkerScriptEngineFactory.class);
+    assertThat(engine.getFactory()).isSameAs(engine.getFactory());
+  }
+
+  @Test
+  public void testEvalWithReader() throws ScriptException {
+    bindings.put("name", "reader");
+    assertThat(scriptEngine.eval(new java.io.StringReader("Hi ${name}"), bindings)).isEqualTo("Hi reader");
+  }
+
+  @Test
+  public void testFilenameFromContextUsedInErrors() {
+    org.camunda.templateengines.FreeMarkerScriptEngine engine = new org.camunda.templateengines.FreeMarkerScriptEngine();
+    engine.getContext().setAttribute(ScriptEngine.FILENAME, "my.ftl", ScriptContext.ENGINE_SCOPE);
+    try {
+      engine.eval("${}");
+      fail("Expected a ScriptException");
+    } catch (ScriptException e) {
+      assertThat(e.getMessage()).contains("my.ftl");
+    }
+  }
+
+  @Test
+  public void testDefaultFilenameIsUnknown() {
+    org.camunda.templateengines.FreeMarkerScriptEngine engine = new org.camunda.templateengines.FreeMarkerScriptEngine();
+    try {
+      engine.eval("${}");
+      fail("Expected a ScriptException");
+    } catch (ScriptException e) {
+      assertThat(e.getMessage()).contains("unknown");
+    }
+  }
 }
