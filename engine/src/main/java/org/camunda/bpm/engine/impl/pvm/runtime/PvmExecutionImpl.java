@@ -2045,18 +2045,12 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
       return;
     }
 
-    continueIfExecutionDoesNotAffectNextOperation(new Callback<PvmExecutionImpl, Void>() {
-      @Override
-      public Void callback(PvmExecutionImpl execution) {
-        dispatchScopeEvents(execution);
-        return null;
-      }
-    }, new Callback<PvmExecutionImpl, Void>(){
-      @Override
-      public Void callback(PvmExecutionImpl execution) {
-        continueExecutionIfNotCanceled(continuation, execution);
-        return null;
-      }
+    continueIfExecutionDoesNotAffectNextOperation(dispatching -> {
+      dispatchScopeEvents(dispatching);
+      return null;
+    }, continuing -> {
+      continueExecutionIfNotCanceled(continuation, continuing);
+      return null;
     }, execution);
   }
 

@@ -46,14 +46,10 @@ public class PvmAtomicOperationTransitionNotifyListenerEnd extends PvmAtomicOper
       execution.setProcessInstanceStarting(false);
     }
 
-    execution.dispatchDelayedEventsAndPerformOperation(new Callback<PvmExecutionImpl, Void>() {
-
-      @Override
-      public Void callback(PvmExecutionImpl execution) {
-        execution.leaveActivityInstance();
-        execution.performOperation(TRANSITION_DESTROY_SCOPE);
-        return null;
-      }
+    execution.dispatchDelayedEventsAndPerformOperation(leavingExecution -> {
+      leavingExecution.leaveActivityInstance();
+      leavingExecution.performOperation(TRANSITION_DESTROY_SCOPE);
+      return null;
     });
   }
 
