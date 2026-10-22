@@ -892,6 +892,11 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
       flowScope = targetTransition.getSource().getFlowScope();
     }
 
+    if (flowScope == null) {
+      throw new ProcessEngineException("Cannot determine the flow scope to instantiate under " + this
+          + ": the activity stack is empty and neither a target activity nor a target transition with a flow scope was given");
+    }
+
     PvmExecutionImpl propagatingExecution = null;
     if (flowScope.getActivityBehavior() instanceof ModificationObserverBehavior) {
       ModificationObserverBehavior flowScopeBehavior = (ModificationObserverBehavior) flowScope.getActivityBehavior();
