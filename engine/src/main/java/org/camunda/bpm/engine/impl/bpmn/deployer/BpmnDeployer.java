@@ -72,7 +72,11 @@ public class BpmnDeployer extends AbstractDefinitionDeployer<ProcessDefinitionEn
 
   public static final BpmnParseLogger LOG = ProcessEngineLogger.BPMN_PARSE_LOGGER;
 
-  public static final String[] BPMN_RESOURCE_SUFFIXES = new String[] { "bpmn20.xml", "bpmn" };
+  private static final String[] BPMN_RESOURCE_SUFFIXES = new String[] { "bpmn20.xml", "bpmn" };
+
+  public static String[] getBpmnResourceSuffixes() {
+    return BPMN_RESOURCE_SUFFIXES.clone();
+  }
 
   protected static final PropertyMapKey<String, List<JobDeclaration<?, ?>>> JOB_DECLARATIONS_PROPERTY =
       new PropertyMapKey<>("JOB_DECLARATIONS_PROPERTY");
@@ -84,7 +88,7 @@ public class BpmnDeployer extends AbstractDefinitionDeployer<ProcessDefinitionEn
 
   @Override
   protected String[] getResourcesSuffixes() {
-    return BPMN_RESOURCE_SUFFIXES;
+    return getBpmnResourceSuffixes();
   }
 
   @Override
