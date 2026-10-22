@@ -113,7 +113,7 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
       PARENT_COMPLETE
     ));
 
-  public static final List<String> TASK_OR_STAGE_EVENTS = new ArrayList<String>();
+  public static final List<String> TASK_OR_STAGE_EVENTS;
 
   public static final List<String> EVENT_LISTENER_OR_MILESTONE_CREATE_EVENTS = Collections.unmodifiableList(Arrays.asList(
       CaseExecutionListener.CREATE
@@ -157,9 +157,12 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
     ));
 
   static {
-    TASK_OR_STAGE_EVENTS.addAll(TASK_OR_STAGE_CREATE_EVENTS);
-    TASK_OR_STAGE_EVENTS.addAll(TASK_OR_STAGE_UPDATE_EVENTS);
-    TASK_OR_STAGE_EVENTS.addAll(TASK_OR_STAGE_END_EVENTS);
+    List<String> TASK_OR_STAGE_EVENTSMutable = new ArrayList<String>();
+    TASK_OR_STAGE_EVENTSMutable.addAll(TASK_OR_STAGE_CREATE_EVENTS);
+    TASK_OR_STAGE_EVENTSMutable.addAll(TASK_OR_STAGE_UPDATE_EVENTS);
+    TASK_OR_STAGE_EVENTSMutable.addAll(TASK_OR_STAGE_END_EVENTS);
+    TASK_OR_STAGE_EVENTS = Collections.unmodifiableList(TASK_OR_STAGE_EVENTSMutable);
+
 
     EVENT_LISTENER_OR_MILESTONE_EVENTS.addAll(EVENT_LISTENER_OR_MILESTONE_CREATE_EVENTS);
     EVENT_LISTENER_OR_MILESTONE_EVENTS.addAll(EVENT_LISTENER_OR_MILESTONE_UPDATE_EVENTS);
