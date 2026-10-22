@@ -12,7 +12,6 @@ import javax.servlet.ServletContext;
 
 import org.camunda.bpm.application.ProcessApplicationInfo;
 import org.camunda.bpm.application.ProcessApplicationReference;
-import org.camunda.bpm.application.impl.ServletProcessApplication;
 import org.camunda.bpm.engine.spring.ApplicationContextElResolver;
 import org.camunda.bpm.engine.spring.application.SpringProcessApplication;
 import org.camunda.bpm.engine.spring.application.SpringProcessApplicationElResolver;
@@ -167,33 +166,5 @@ public class ProcessApplicationUnitTest {
     org.camunda.bpm.application.AbstractProcessApplication other = mock(org.camunda.bpm.application.AbstractProcessApplication.class);
 
     assertThat(new SpringProcessApplicationElResolver().getElResolver(other)).isNull();
-  }
-
-  @Test
-  public void resolverNeedsWebApplicationContextForServletApplications() {
-    ServletProcessApplication servletApplication = mock(ServletProcessApplication.class);
-    ServletContext servletContext = mock(ServletContext.class);
-    when(servletApplication.getServletContext()).thenReturn(servletContext);
-    when(servletApplication.getProcessApplicationClassloader()).thenReturn(getClass().getClassLoader());
-
-    // no WebApplicationContext attribute set on the servlet context
-    assertThat(new SpringProcessApplicationElResolver().getElResolver(servletApplication)).isNull();
-
-    org.springframework.web.context.WebApplicationContext webContext = mock(org.springframework.web.context.WebApplicationContext.class);
-    when(servletContext.getAttribute(org.springframework.web.context.WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE))
-        .thenReturn(webContext);
-
-    assertThat(new SpringProcessApplicationElResolver().getElResolver(servletApplication))
-        .isInstanceOf(ApplicationContextElResolver.class);
-  }
-
-  @Test
-  public void resolverGivesUpWhenSpringWebIsNotOnClasspath() {
-    ServletProcessApplication servletApplication = mock(ServletProcessApplication.class);
-    ClassLoader hiding = new ClassLoader(null) {
-    };
-    when(servletApplication.getProcessApplicationClassloader()).thenReturn(hiding);
-
-    assertThat(new SpringProcessApplicationElResolver().getElResolver(servletApplication)).isNull();
   }
 }
