@@ -165,6 +165,23 @@ public final class BpmnParseUtil {
   /**
    * @throws BpmnParseException if the parameter is invalid
    */
+  protected static ParameterValueProvider parseMapValueProvider(Element mapElement) {
+    TreeMap<ParameterValueProvider, ParameterValueProvider> providerMap = new TreeMap<>();
+    for (Element entryElement : mapElement.elements("entry")) {
+      // entry must provide key
+      String keyAttribute = entryElement.attribute("key");
+      if(keyAttribute == null || keyAttribute.isEmpty()) {
+        throw new BpmnParseException("Missing attribute 'key' for 'entry' element", entryElement);
+      }
+      // parse nested provider
+      providerMap.put(new ElValueProvider(getExpressionManager().createExpression(keyAttribute)), parseNestedParamValueProvider(entryElement));
+    }
+    return new MapValueProvider(providerMap);
+  }
+
+  /**
+   * @throws BpmnParseException if the parameter is invalid
+   */
   protected static ParameterValueProvider parseParamValueProvider(Element parameterElement) {
 
     // LIST
@@ -179,17 +196,7 @@ public final class BpmnParseUtil {
 
     // MAP
     if("map".equals(parameterElement.getTagName())) {
-      TreeMap<ParameterValueProvider, ParameterValueProvider> providerMap = new TreeMap<>();
-      for (Element entryElement : parameterElement.elements("entry")) {
-        // entry must provide key
-        String keyAttribute = entryElement.attribute("key");
-        if(keyAttribute == null || keyAttribute.isEmpty()) {
-          throw new BpmnParseException("Missing attribute 'key' for 'entry' element", entryElement);
-        }
-        // parse nested provider
-        providerMap.put(new ElValueProvider(getExpressionManager().createExpression(keyAttribute)), parseNestedParamValueProvider(entryElement));
-      }
-      return new MapValueProvider(providerMap);
+      return parseMapValueProvider(parameterElement);
     }
 
     // SCRIPT
