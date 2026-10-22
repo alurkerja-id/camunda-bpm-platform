@@ -21,6 +21,7 @@ import static org.camunda.bpm.engine.delegate.CaseExecutionListener.TERMINATE;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Collection;
 import java.util.List;
 
