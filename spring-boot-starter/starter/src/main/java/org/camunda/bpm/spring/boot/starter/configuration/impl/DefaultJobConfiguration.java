@@ -30,6 +30,8 @@ import org.camunda.bpm.spring.boot.starter.configuration.CamundaJobConfiguration
 import org.camunda.bpm.spring.boot.starter.event.JobExecutorStartingEventListener;
 import org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties;
 import org.camunda.bpm.spring.boot.starter.property.JobExecutionProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -43,6 +45,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
  * Prepares JobExecutor and registers all known custom JobHandlers.
  */
 public class DefaultJobConfiguration extends AbstractCamundaConfiguration implements CamundaJobConfiguration {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultJobConfiguration.class);
 
   @Autowired
   protected JobExecutor jobExecutor;
@@ -59,7 +63,7 @@ public class DefaultJobConfiguration extends AbstractCamundaConfiguration implem
   protected void registerCustomJobHandlers(SpringProcessEngineConfiguration configuration) {
     configuration.setCustomJobHandlers(join(configuration.getCustomJobHandlers(), customJobHandlers));
     for (JobHandler<?> jobHandler : configuration.getCustomJobHandlers()) {
-      logger.info("Register Custom JobHandler: '{}'", jobHandler.getType());
+      LOGGER.info("Register Custom JobHandler: '{}'", jobHandler.getType());
     }
   }
 

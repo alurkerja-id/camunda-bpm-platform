@@ -124,7 +124,7 @@ public class SpringBootProcessApplication extends SpringProcessApplication {
 
     @Override
     public void setServletContext(ServletContext servletContext) {
-      if (!StringUtils.isEmpty(servletContext.getContextPath())) {
+      if (StringUtils.hasLength(servletContext.getContextPath())) {
         contextPath = servletContext.getContextPath();
       }
     }

@@ -18,6 +18,8 @@ package org.camunda.bpm.spring.boot.starter.configuration.impl;
 
 import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.camunda.bpm.spring.boot.starter.configuration.CamundaDeploymentConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -32,6 +34,8 @@ import java.util.stream.Collectors;
 import static java.util.Collections.EMPTY_SET;
 
 public class DefaultDeploymentConfiguration extends AbstractCamundaConfiguration implements CamundaDeploymentConfiguration {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDeploymentConfiguration.class);
 
   @Override
   public void preInit(SpringProcessEngineConfiguration configuration) {
@@ -49,17 +53,17 @@ public class DefaultDeploymentConfiguration extends AbstractCamundaConfiguration
 
     try {
       final String[] resourcePattern = camundaBpmProperties.getDeploymentResourcePattern();
-      logger.debug("resolving deployment resources for pattern {}", (Object[]) resourcePattern);
+      LOGGER.debug("resolving deployment resources for pattern {}", (Object[]) resourcePattern);
       resolver.setValue(resourcePattern);
 
       return Arrays.stream((Resource[])resolver.getValue())
-        .peek(resource -> logger.debug("processing deployment resource {}", resource))
+        .peek(resource -> LOGGER.debug("processing deployment resource {}", resource))
         .filter(this::isFile)
-        .peek(resource -> logger.debug("added deployment resource {}", resource))
+        .peek(resource -> LOGGER.debug("added deployment resource {}", resource))
         .collect(Collectors.toSet());
 
     } catch (final RuntimeException e) {
-      logger.error("unable to resolve resources", e);
+      LOGGER.error("unable to resolve resources", e);
     }
     return EMPTY_SET;
   }
@@ -74,17 +78,17 @@ public class DefaultDeploymentConfiguration extends AbstractCamundaConfiguration
           URL url = resource.getURL();
           return !url.toString().endsWith("/");
         } catch (IOException e) {
-          logger.debug("unable to handle " + resource + " as URL", e);
+          LOGGER.debug("unable to handle " + resource + " as URL", e);
         }
       } else {
         try {
           return !resource.getFile().isDirectory();
         } catch (IOException e) {
-          logger.debug("unable to handle " + resource + " as file", e);
+          LOGGER.debug("unable to handle " + resource + " as file", e);
         }
       }
     }
-    logger.warn("unable to determine if resource {} is a deployable resource", resource);
+    LOGGER.warn("unable to determine if resource {} is a deployable resource", resource);
     return false;
   }
 

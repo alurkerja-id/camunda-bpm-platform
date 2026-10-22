@@ -21,12 +21,16 @@ import org.camunda.bpm.engine.impl.cfg.IdGenerator;
 import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.camunda.bpm.spring.boot.starter.configuration.CamundaProcessEngineConfiguration;
 import org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
 public class DefaultProcessEngineConfiguration extends AbstractCamundaConfiguration implements CamundaProcessEngineConfiguration {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultProcessEngineConfiguration.class);
 
   @Autowired
   private Optional<IdGenerator> idGenerator;
@@ -49,13 +53,13 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
     if (StringUtils.hasText(defaultSerializationFormat)) {
       configuration.setDefaultSerializationFormat(defaultSerializationFormat);
     } else {
-      logger.warn("Ignoring invalid defaultSerializationFormat='{}'", defaultSerializationFormat);
+      LOGGER.warn("Ignoring invalid defaultSerializationFormat='{}'", defaultSerializationFormat);
     }
   }
 
   private void setProcessEngineName(SpringProcessEngineConfiguration configuration) {
     String processEngineName = StringUtils.trimAllWhitespace(camundaBpmProperties.getProcessEngineName());
-    if (!StringUtils.isEmpty(processEngineName) && !processEngineName.contains("-")) {
+    if (StringUtils.hasLength(processEngineName) && !processEngineName.contains("-")) {
 
       if (Boolean.TRUE.equals(camundaBpmProperties.getGenerateUniqueProcessEngineName())) {
         if (!processEngineName.equals(ProcessEngines.NAME_DEFAULT)) {
@@ -67,7 +71,7 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
 
       configuration.setProcessEngineName(processEngineName);
     } else {
-      logger.warn("Ignoring invalid processEngineName='{}' - must not be null, blank or contain hyphen", camundaBpmProperties.getProcessEngineName());
+      LOGGER.warn("Ignoring invalid processEngineName='{}' - must not be null, blank or contain hyphen", camundaBpmProperties.getProcessEngineName());
     }
   }
 
