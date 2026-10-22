@@ -94,14 +94,6 @@ public abstract class AbstractRestQueryParametersDto<T> extends QueryParameters 
   }
 
   public String getInternalOrderBy() {
-    return getOrderBy();
-  }
-
-  /**
-   * @deprecated part of the old sorting parameters; use {@link #getInternalOrderBy()}
-   */
-  @Deprecated(forRemoval = false)
-  public String getOrderBy() {
     if (sortBy != null) {
       if (sortOrder == null || sortOrder.isEmpty()) {
         sortOrder = SORT_ORDER_ASC_VALUE;
@@ -109,6 +101,14 @@ public abstract class AbstractRestQueryParametersDto<T> extends QueryParameters 
       return String.format("%s %s", getOrderByValue(sortBy), sortOrder);
     }
     return DEFAULT_ORDER;
+  }
+
+  /**
+   * @deprecated part of the old sorting parameters; use {@link #getInternalOrderBy()}
+   */
+  @Deprecated(forRemoval = false)
+  public String getOrderBy() {
+    return getInternalOrderBy();
   }
 
   protected abstract String getOrderByValue(String sortBy);

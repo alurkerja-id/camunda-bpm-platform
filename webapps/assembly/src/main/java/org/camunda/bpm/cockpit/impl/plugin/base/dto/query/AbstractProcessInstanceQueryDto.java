@@ -180,7 +180,7 @@ public abstract class AbstractProcessInstanceQueryDto<T extends ProcessInstanceD
   }
 
   public String getOuterOrderBy() {
-    String outerOrderBy = getOrderBy();
+    String outerOrderBy = getInternalOrderBy();
     if (outerOrderBy == null || outerOrderBy.isEmpty()) {
       return "ID_ asc";
     }
