@@ -142,7 +142,8 @@ public class DbSqlSessionFactory implements SessionFactory {
   private static final Map<String, String> databaseSpecificAuth1JoinSeparatorMutable = new HashMap<>();
   public static final Map<String, String> databaseSpecificAuth1JoinSeparator = Collections.unmodifiableMap(databaseSpecificAuth1JoinSeparatorMutable);
 
-  public static final Map<String, String> databaseSpecificExtractTimeUnitFromDate = new HashMap<>();
+  private static final Map<String, String> databaseSpecificExtractTimeUnitFromDateMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificExtractTimeUnitFromDate = Collections.unmodifiableMap(databaseSpecificExtractTimeUnitFromDateMutable);
   public static final Map<String, String> databaseSpecificAuthCheckMethodSuffix = new HashMap<>();
 
 
@@ -216,7 +217,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificAuth1JoinEndMutable.put(H2, defaultAuthOnEnd);
     databaseSpecificAuth1JoinSeparatorMutable.put(H2, defaultAuthOnSeparator);
 
-    databaseSpecificExtractTimeUnitFromDate.put(H2, defaultExtractTimeUnitFromDate);
+    databaseSpecificExtractTimeUnitFromDateMutable.put(H2, defaultExtractTimeUnitFromDate);
 
     HashMap<String, String> constants = new HashMap<>();
     constants.put("constant.event", "'event'");
@@ -280,7 +281,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificAuth1JoinEndMutable.put(MYSQL, "");
     databaseSpecificAuth1JoinSeparatorMutable.put(MYSQL, "OR AUTH1.RESOURCE_ID_ =");
 
-    databaseSpecificExtractTimeUnitFromDate.put(MYSQL, defaultExtractTimeUnitFromDate);
+    databaseSpecificExtractTimeUnitFromDateMutable.put(MYSQL, defaultExtractTimeUnitFromDate);
 
     addDatabaseSpecificStatement(MYSQL, "toggleForeignKey", "toggleForeignKey_mysql");
     addDatabaseSpecificStatement(MYSQL, "selectDeploymentsByQueryCriteria", "selectDeploymentsByQueryCriteria_mysql");
@@ -423,7 +424,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificAuth1JoinEndMutable.put(POSTGRES, defaultAuthOnEnd);
     databaseSpecificAuth1JoinSeparatorMutable.put(POSTGRES, defaultAuthOnSeparator);
 
-    databaseSpecificExtractTimeUnitFromDate.put(POSTGRES, defaultExtractTimeUnitFromDate);
+    databaseSpecificExtractTimeUnitFromDateMutable.put(POSTGRES, defaultExtractTimeUnitFromDate);
 
     addDatabaseSpecificStatement(POSTGRES, "insertByteArray", "insertByteArray_postgres");
     addDatabaseSpecificStatement(POSTGRES, "updateByteArray", "updateByteArray_postgres");
@@ -576,7 +577,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificAuth1JoinEndMutable.put(ORACLE, defaultAuthOnEnd);
     databaseSpecificAuth1JoinSeparatorMutable.put(ORACLE, defaultAuthOnSeparator);
 
-    databaseSpecificExtractTimeUnitFromDate.put(ORACLE, defaultExtractTimeUnitFromDate);
+    databaseSpecificExtractTimeUnitFromDateMutable.put(ORACLE, defaultExtractTimeUnitFromDate);
 
     addDatabaseSpecificStatement(ORACLE, "selectHistoricProcessInstanceDurationReport", "selectHistoricProcessInstanceDurationReport_oracle");
     addDatabaseSpecificStatement(ORACLE, "selectHistoricTaskInstanceDurationReport", "selectHistoricTaskInstanceDurationReport_oracle");
@@ -669,7 +670,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificAuth1JoinEndMutable.put(DB2, defaultAuthOnEnd);
     databaseSpecificAuth1JoinSeparatorMutable.put(DB2, defaultAuthOnSeparator);
 
-    databaseSpecificExtractTimeUnitFromDate.put(DB2, defaultExtractTimeUnitFromDate);
+    databaseSpecificExtractTimeUnitFromDateMutable.put(DB2, defaultExtractTimeUnitFromDate);
 
     addDatabaseSpecificStatement(DB2, "selectMeterLogAggregatedByTimeInterval", "selectMeterLogAggregatedByTimeInterval_db2_or_mssql");
     addDatabaseSpecificStatement(DB2, "selectExecutionByNativeQuery", "selectExecutionByNativeQuery_mssql_or_db2");
@@ -769,7 +770,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificAuth1JoinEndMutable.put(MSSQL, defaultAuthOnEnd);
     databaseSpecificAuth1JoinSeparatorMutable.put(MSSQL, defaultAuthOnSeparator);
 
-    databaseSpecificExtractTimeUnitFromDate.put(MSSQL, "DATEPART(${extractTimeUnit}, ${extractDateColumn})");
+    databaseSpecificExtractTimeUnitFromDateMutable.put(MSSQL, "DATEPART(${extractTimeUnit}, ${extractDateColumn})");
 
     addDatabaseSpecificStatement(MSSQL, "selectMeterLogAggregatedByTimeInterval", "selectMeterLogAggregatedByTimeInterval_db2_or_mssql");
     addDatabaseSpecificStatement(MSSQL, "selectExecutionByNativeQuery", "selectExecutionByNativeQuery_mssql_or_db2");
