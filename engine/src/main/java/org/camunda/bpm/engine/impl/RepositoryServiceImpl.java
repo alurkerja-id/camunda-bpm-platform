@@ -410,10 +410,7 @@ public class RepositoryServiceImpl extends ServiceImpl implements RepositoryServ
     } catch (NullValueException e) {
       throw new NotValidException(e.getMessage(), e);
 
-    } catch (CaseDefinitionNotFoundException e) {
-      throw new NotFoundException(e.getMessage(), e);
-
-    } catch (DeploymentResourceNotFoundException e) {
+    } catch (CaseDefinitionNotFoundException | DeploymentResourceNotFoundException e) {
       throw new NotFoundException(e.getMessage(), e);
 
     }
