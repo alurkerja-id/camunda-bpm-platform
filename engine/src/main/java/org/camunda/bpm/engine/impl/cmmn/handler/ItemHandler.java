@@ -106,12 +106,12 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
       CaseExecutionListener.PARENT_RESUME
     ));
 
-  public static final List<String> TASK_OR_STAGE_END_EVENTS = Arrays.asList(
+  public static final List<String> TASK_OR_STAGE_END_EVENTS = Collections.unmodifiableList(Arrays.asList(
       CaseExecutionListener.TERMINATE,
       CaseExecutionListener.EXIT,
       CaseExecutionListener.COMPLETE,
       PARENT_COMPLETE
-    );
+    ));
 
   public static final List<String> TASK_OR_STAGE_EVENTS = new ArrayList<String>();
 
