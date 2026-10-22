@@ -55,6 +55,22 @@ public class ElValueProvider implements ParameterValueProvider, Comparable<ElVal
   }
 
   @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    return compareTo((ElValueProvider) obj) == 0;
+  }
+
+  @Override
+  public int hashCode() {
+    return expression.getExpressionText().hashCode();
+  }
+
+  @Override
   public boolean isDynamic() {
     return !getExpression().isLiteralText();
   }
