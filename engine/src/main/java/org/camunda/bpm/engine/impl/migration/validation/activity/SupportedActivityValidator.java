@@ -33,7 +33,7 @@ public class SupportedActivityValidator implements MigrationActivityValidator {
 
   public static final SupportedActivityValidator INSTANCE = new SupportedActivityValidator();
 
-  public static final List<Class<? extends ActivityBehavior>> SUPPORTED_ACTIVITY_BEHAVIORS = new ArrayList<Class<? extends ActivityBehavior>>();
+  private static final List<Class<? extends ActivityBehavior>> SUPPORTED_ACTIVITY_BEHAVIORS = new ArrayList<Class<? extends ActivityBehavior>>();
 
   static {
     SUPPORTED_ACTIVITY_BEHAVIORS.add(SubProcessActivityBehavior.class);
