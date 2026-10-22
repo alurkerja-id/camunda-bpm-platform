@@ -65,7 +65,8 @@ public class DbSqlSessionFactory implements SessionFactory {
   // limit before and after for update queries
   private static final Map<String, String> databaseSpecificLimitBeforeInUpdateMutable = new HashMap<>();
   public static final Map<String, String> databaseSpecificLimitBeforeInUpdate = Collections.unmodifiableMap(databaseSpecificLimitBeforeInUpdateMutable);
-  public static final Map<String, String> databaseSpecificLimitAfterInUpdate = new HashMap<>();
+  private static final Map<String, String> databaseSpecificLimitAfterInUpdateMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificLimitAfterInUpdate = Collections.unmodifiableMap(databaseSpecificLimitAfterInUpdateMutable);
   // count distinct statements
   public static final Map<String, String> databaseSpecificCountDistinctBeforeStart = new HashMap<>();
   public static final Map<String, String> databaseSpecificCountDistinctBeforeEnd = new HashMap<>();
@@ -150,7 +151,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificLimitBetweenFilterStatementsMutable.put(H2, "");
     databaseSpecificLimitBetweenAcquisitionStatementsMutable.put(H2, "");
     databaseSpecificLimitBeforeInUpdateMutable.put(H2, "");
-    databaseSpecificLimitAfterInUpdate.put(H2, "");
+    databaseSpecificLimitAfterInUpdateMutable.put(H2, "");
     databaseSpecificOrderByStatements.put(H2, defaultOrderBy);
     databaseSpecificLimitBeforeNativeQueryStatements.put(H2, "");
     databaseSpecificDistinct.put(H2, "distinct");
@@ -214,7 +215,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificLimitBetweenFilterStatementsMutable.put(MYSQL, "");
     databaseSpecificLimitBetweenAcquisitionStatementsMutable.put(MYSQL, "");
     databaseSpecificLimitBeforeInUpdateMutable.put(MYSQL, "INNER JOIN ( SELECT ID_ FROM ");
-    databaseSpecificLimitAfterInUpdate.put(MYSQL, databaseSpecificLimitAfterWithoutOffsetStatements.get(MYSQL) + ") tmp USING (ID_)");
+    databaseSpecificLimitAfterInUpdateMutable.put(MYSQL, databaseSpecificLimitAfterWithoutOffsetStatements.get(MYSQL) + ") tmp USING (ID_)");
     databaseSpecificOrderByStatements.put(MYSQL, defaultOrderBy);
     databaseSpecificLimitBeforeNativeQueryStatements.put(MYSQL, "");
     databaseSpecificDistinct.put(MYSQL, "distinct");
@@ -360,7 +361,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificLimitBetweenFilterStatementsMutable.put(POSTGRES, "");
     databaseSpecificLimitBetweenAcquisitionStatementsMutable.put(POSTGRES, "");
     databaseSpecificLimitBeforeInUpdateMutable.put(POSTGRES, "WHERE ID_ IN (SELECT ID_ FROM ");
-    databaseSpecificLimitAfterInUpdate.put(POSTGRES, databaseSpecificLimitAfterWithoutOffsetStatements.get(POSTGRES) + ")");
+    databaseSpecificLimitAfterInUpdateMutable.put(POSTGRES, databaseSpecificLimitAfterWithoutOffsetStatements.get(POSTGRES) + ")");
     databaseSpecificOrderByStatements.put(POSTGRES, defaultOrderBy);
     databaseSpecificLimitBeforeNativeQueryStatements.put(POSTGRES, "");
     databaseSpecificDistinct.put(POSTGRES, "distinct");
@@ -510,7 +511,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificLimitBetweenFilterStatementsMutable.put(ORACLE, "");
     databaseSpecificLimitBetweenAcquisitionStatementsMutable.put(ORACLE, "");
     databaseSpecificLimitBeforeInUpdateMutable.put(ORACLE, "");
-    databaseSpecificLimitAfterInUpdate.put(ORACLE, "");
+    databaseSpecificLimitAfterInUpdateMutable.put(ORACLE, "");
     databaseSpecificOrderByStatements.put(ORACLE, defaultOrderBy);
     databaseSpecificLimitBeforeNativeQueryStatements.put(ORACLE, "");
     databaseSpecificDistinct.put(ORACLE, "distinct");
@@ -601,7 +602,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificLimitBetweenFilterStatementsMutable.put(DB2, "");
     databaseSpecificLimitBetweenAcquisitionStatementsMutable.put(DB2, "");
     databaseSpecificLimitBeforeInUpdateMutable.put(DB2, "");
-    databaseSpecificLimitAfterInUpdate.put(DB2, "");
+    databaseSpecificLimitAfterInUpdateMutable.put(DB2, "");
     databaseSpecificLimitBeforeWithoutOffsetStatementsMutable.put(DB2, "");
     databaseSpecificLimitAfterWithoutOffsetStatementsMutable.put(DB2, "LIMIT #{maxResults}");
     databaseSpecificOrderByStatements.put(DB2, defaultOrderBy);
@@ -700,7 +701,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificLimitBetweenAcquisitionStatementsMutable.put(MSSQL, mssqlLimitBetweenWithoutColumns
         + "RES.ID_, RES.REV_, RES.TYPE_, RES.LOCK_EXP_TIME_, RES.LOCK_OWNER_, RES.EXCLUSIVE_, RES.ROOT_PROC_INST_ID_, RES.PROCESS_INSTANCE_ID_, RES.DUEDATE_, RES.PRIORITY_ ");
     databaseSpecificLimitBeforeInUpdateMutable.put(MSSQL, "");
-    databaseSpecificLimitAfterInUpdate.put(MSSQL, "");
+    databaseSpecificLimitAfterInUpdateMutable.put(MSSQL, "");
     databaseSpecificLimitBeforeWithoutOffsetStatementsMutable.put(MSSQL, "TOP (#{maxResults})");
     databaseSpecificLimitAfterWithoutOffsetStatementsMutable.put(MSSQL, "");
     databaseSpecificOrderByStatements.put(MSSQL, "");
