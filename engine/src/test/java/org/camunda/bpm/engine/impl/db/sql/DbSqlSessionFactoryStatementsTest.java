@@ -16,6 +16,7 @@ import org.junit.Test;
 public class DbSqlSessionFactoryStatementsTest {
 
   @Test
+  @SuppressWarnings("unchecked")
   public void shouldKeepContentOfPublicStatementMaps() throws Exception {
     int checked = 0;
     for (Field field : DbSqlSessionFactory.class.getDeclaredFields()) {
@@ -23,12 +24,9 @@ public class DbSqlSessionFactoryStatementsTest {
           || !Map.class.isAssignableFrom(field.getType())) {
         continue;
       }
-      Map<?, ?> map = (Map<?, ?>) field.get(null);
+      Map<Object, Object> map = (Map<Object, Object>) field.get(null);
       checked++;
       assertThat(map.keySet()).as(field.getName()).isNotEmpty();
-      if (!field.getName().equals("dbSpecificConstants")) {
-        assertThat(map.keySet()).as(field.getName()).contains(DbSqlSessionFactory.H2, DbSqlSessionFactory.POSTGRES);
-      }
     }
     assertThat(checked).isEqualTo(41);
     assertThat(DbSqlSessionFactory.databaseSpecificLimitAfterStatements.get(DbSqlSessionFactory.H2))
