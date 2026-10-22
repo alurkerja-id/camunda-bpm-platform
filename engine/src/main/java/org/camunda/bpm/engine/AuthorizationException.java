@@ -45,18 +45,21 @@ public class AuthorizationException extends ProcessEngineException {
   // have subclasses relying on these fields
   /** @deprecated use {@link #getMissingAuthorizations()} */
   @Deprecated(forRemoval = false)
-  protected String resourceType;
+  protected final String resourceType;
   /** @deprecated use {@link #getMissingAuthorizations()} */
   @Deprecated(forRemoval = false)
-  protected String permissionName;
+  protected final String permissionName;
   /** @deprecated use {@link #getMissingAuthorizations()} */
   @Deprecated(forRemoval = false)
-  protected String resourceId;
+  protected final String resourceId;
 
   public AuthorizationException(String message) {
     super(message);
     this.userId = null;
     missingAuthorizations = new ArrayList<>();
+    this.resourceType = null;
+    this.permissionName = null;
+    this.resourceId = null;
   }
 
   public AuthorizationException(String userId, String permissionName, String resourceType, String resourceId) {
@@ -80,6 +83,9 @@ public class AuthorizationException extends ProcessEngineException {
     super(generateExceptionMessage(userId, info));
     this.userId = userId;
     this.missingAuthorizations = info;
+    this.resourceType = null;
+    this.permissionName = null;
+    this.resourceId = null;
   }
 
   /**
