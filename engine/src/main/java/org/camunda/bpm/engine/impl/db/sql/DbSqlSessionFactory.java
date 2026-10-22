@@ -139,7 +139,8 @@ public class DbSqlSessionFactory implements SessionFactory {
   public static final Map<String, String> databaseSpecificAuth1JoinStart = Collections.unmodifiableMap(databaseSpecificAuth1JoinStartMutable);
   private static final Map<String, String> databaseSpecificAuth1JoinEndMutable = new HashMap<>();
   public static final Map<String, String> databaseSpecificAuth1JoinEnd = Collections.unmodifiableMap(databaseSpecificAuth1JoinEndMutable);
-  public static final Map<String, String> databaseSpecificAuth1JoinSeparator = new HashMap<>();
+  private static final Map<String, String> databaseSpecificAuth1JoinSeparatorMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificAuth1JoinSeparator = Collections.unmodifiableMap(databaseSpecificAuth1JoinSeparatorMutable);
 
   public static final Map<String, String> databaseSpecificExtractTimeUnitFromDate = new HashMap<>();
   public static final Map<String, String> databaseSpecificAuthCheckMethodSuffix = new HashMap<>();
@@ -213,7 +214,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificAuth1JoinStartMutable.put(H2, defaultAuthOnStart);
     databaseSpecificAuth1JoinEndMutable.put(H2, defaultAuthOnEnd);
-    databaseSpecificAuth1JoinSeparator.put(H2, defaultAuthOnSeparator);
+    databaseSpecificAuth1JoinSeparatorMutable.put(H2, defaultAuthOnSeparator);
 
     databaseSpecificExtractTimeUnitFromDate.put(H2, defaultExtractTimeUnitFromDate);
 
@@ -277,7 +278,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificAuth1JoinStartMutable.put(MYSQL, "=");
     databaseSpecificAuth1JoinEndMutable.put(MYSQL, "");
-    databaseSpecificAuth1JoinSeparator.put(MYSQL, "OR AUTH1.RESOURCE_ID_ =");
+    databaseSpecificAuth1JoinSeparatorMutable.put(MYSQL, "OR AUTH1.RESOURCE_ID_ =");
 
     databaseSpecificExtractTimeUnitFromDate.put(MYSQL, defaultExtractTimeUnitFromDate);
 
@@ -420,7 +421,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificAuth1JoinStartMutable.put(POSTGRES, defaultAuthOnStart);
     databaseSpecificAuth1JoinEndMutable.put(POSTGRES, defaultAuthOnEnd);
-    databaseSpecificAuth1JoinSeparator.put(POSTGRES, defaultAuthOnSeparator);
+    databaseSpecificAuth1JoinSeparatorMutable.put(POSTGRES, defaultAuthOnSeparator);
 
     databaseSpecificExtractTimeUnitFromDate.put(POSTGRES, defaultExtractTimeUnitFromDate);
 
@@ -573,7 +574,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificAuth1JoinStartMutable.put(ORACLE, defaultAuthOnStart);
     databaseSpecificAuth1JoinEndMutable.put(ORACLE, defaultAuthOnEnd);
-    databaseSpecificAuth1JoinSeparator.put(ORACLE, defaultAuthOnSeparator);
+    databaseSpecificAuth1JoinSeparatorMutable.put(ORACLE, defaultAuthOnSeparator);
 
     databaseSpecificExtractTimeUnitFromDate.put(ORACLE, defaultExtractTimeUnitFromDate);
 
@@ -666,7 +667,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificAuth1JoinStartMutable.put(DB2, defaultAuthOnStart);
     databaseSpecificAuth1JoinEndMutable.put(DB2, defaultAuthOnEnd);
-    databaseSpecificAuth1JoinSeparator.put(DB2, defaultAuthOnSeparator);
+    databaseSpecificAuth1JoinSeparatorMutable.put(DB2, defaultAuthOnSeparator);
 
     databaseSpecificExtractTimeUnitFromDate.put(DB2, defaultExtractTimeUnitFromDate);
 
@@ -766,7 +767,7 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificAuth1JoinStartMutable.put(MSSQL, defaultAuthOnStart);
     databaseSpecificAuth1JoinEndMutable.put(MSSQL, defaultAuthOnEnd);
-    databaseSpecificAuth1JoinSeparator.put(MSSQL, defaultAuthOnSeparator);
+    databaseSpecificAuth1JoinSeparatorMutable.put(MSSQL, defaultAuthOnSeparator);
 
     databaseSpecificExtractTimeUnitFromDate.put(MSSQL, "DATEPART(${extractTimeUnit}, ${extractDateColumn})");
 
