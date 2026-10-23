@@ -62,7 +62,7 @@ public class ProcessApplicationScanningUtil {
       classLoader.loadClass("org.jboss.vfs.VFS");
       scanner = new VfsProcessApplicationScanner();
     }
-    catch (Throwable t) {
+    catch (Exception | LinkageError t) {
       scanner = new ClassPathProcessApplicationScanner();
     }
 

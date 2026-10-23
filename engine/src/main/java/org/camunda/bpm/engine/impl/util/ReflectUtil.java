@@ -76,7 +76,7 @@ public abstract class ReflectUtil {
        LOG.debugClassLoading(className, "custom classloader", classLoader);
        clazz = Class.forName(className, true, classLoader);
      }
-     catch(Throwable t) {
+     catch(Exception | LinkageError t) {
        throwable = t;
      }
    }
@@ -88,7 +88,7 @@ public abstract class ReflectUtil {
          clazz = Class.forName(className, true, contextClassloader);
        }
      }
-     catch(Throwable t) {
+     catch(Exception | LinkageError t) {
        if(throwable == null) {
          throwable = t;
        }
@@ -99,7 +99,7 @@ public abstract class ReflectUtil {
          LOG.debugClassLoading(className, "local classloader", localClassloader);
          clazz = Class.forName(className, true, localClassloader);
        }
-       catch(Throwable t) {
+       catch(Exception | LinkageError t) {
          if(throwable == null) {
            throwable = t;
          }
