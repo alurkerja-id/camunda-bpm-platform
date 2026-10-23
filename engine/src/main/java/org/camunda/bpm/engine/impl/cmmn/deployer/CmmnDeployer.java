@@ -39,14 +39,18 @@ import org.camunda.bpm.engine.impl.persistence.entity.ResourceEntity;
  */
 public class CmmnDeployer extends AbstractDefinitionDeployer<CaseDefinitionEntity> {
 
-  public static final String[] CMMN_RESOURCE_SUFFIXES = new String[] { "cmmn11.xml", "cmmn10.xml", "cmmn" };
+  private static final String[] CMMN_RESOURCE_SUFFIXES = new String[] { "cmmn11.xml", "cmmn10.xml", "cmmn" };
+
+  public static String[] getCmmnResourceSuffixes() {
+    return CMMN_RESOURCE_SUFFIXES.clone();
+  }
 
   protected ExpressionManager expressionManager;
   protected CmmnTransformer transformer;
 
   @Override
   protected String[] getResourcesSuffixes() {
-    return CMMN_RESOURCE_SUFFIXES;
+    return getCmmnResourceSuffixes();
   }
 
   @Override

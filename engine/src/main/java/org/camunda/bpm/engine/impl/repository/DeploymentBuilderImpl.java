@@ -113,7 +113,7 @@ public class DeploymentBuilderImpl implements DeploymentBuilder, Serializable {
   public DeploymentBuilder addModelInstance(String resourceName, CmmnModelInstance modelInstance) {
     ensureNotNull("modelInstance", modelInstance);
 
-    validateResouceName(resourceName, CmmnDeployer.CMMN_RESOURCE_SUFFIXES);
+    validateResouceName(resourceName, CmmnDeployer.getCmmnResourceSuffixes());
 
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     Cmmn.writeModelToStream(outputStream, modelInstance);
@@ -125,7 +125,7 @@ public class DeploymentBuilderImpl implements DeploymentBuilder, Serializable {
   public DeploymentBuilder addModelInstance(String resourceName, BpmnModelInstance modelInstance) {
     ensureNotNull("modelInstance", modelInstance);
 
-    validateResouceName(resourceName, BpmnDeployer.BPMN_RESOURCE_SUFFIXES);
+    validateResouceName(resourceName, BpmnDeployer.getBpmnResourceSuffixes());
 
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     Bpmn.writeModelToStream(outputStream, modelInstance);
@@ -137,7 +137,7 @@ public class DeploymentBuilderImpl implements DeploymentBuilder, Serializable {
   public DeploymentBuilder addModelInstance(String resourceName, DmnModelInstance modelInstance) {
     ensureNotNull("modelInstance", modelInstance);
 
-    validateResouceName(resourceName, DecisionDefinitionDeployer.DMN_RESOURCE_SUFFIXES);
+    validateResouceName(resourceName, DecisionDefinitionDeployer.getDmnResourceSuffixes());
 
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     Dmn.writeModelToStream(outputStream, modelInstance);

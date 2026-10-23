@@ -855,7 +855,7 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
 
   @Override
   public CaseExecutionState getCurrentState() {
-    return CaseExecutionState.CASE_EXECUTION_STATES.get(getState());
+    return CaseExecutionState.getStateForCode(getState());
   }
 
   @Override
@@ -944,7 +944,7 @@ public abstract class CmmnExecution extends CoreExecution implements CmmnCaseIns
 
   @Override
   public CaseExecutionState getPreviousState() {
-    return CaseExecutionState.CASE_EXECUTION_STATES.get(getPrevious());
+    return CaseExecutionState.getStateForCode(getPrevious());
   }
 
   public int getPrevious() {

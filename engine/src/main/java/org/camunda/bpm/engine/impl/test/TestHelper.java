@@ -81,9 +81,9 @@ public abstract class TestHelper {
   protected final static List<String> RESOURCE_SUFFIXES = new ArrayList<>();
 
   static {
-    RESOURCE_SUFFIXES.addAll(Arrays.asList(BpmnDeployer.BPMN_RESOURCE_SUFFIXES));
-    RESOURCE_SUFFIXES.addAll(Arrays.asList(CmmnDeployer.CMMN_RESOURCE_SUFFIXES));
-    RESOURCE_SUFFIXES.addAll(Arrays.asList(DecisionDefinitionDeployer.DMN_RESOURCE_SUFFIXES));
+    RESOURCE_SUFFIXES.addAll(Arrays.asList(BpmnDeployer.getBpmnResourceSuffixes()));
+    RESOURCE_SUFFIXES.addAll(Arrays.asList(CmmnDeployer.getCmmnResourceSuffixes()));
+    RESOURCE_SUFFIXES.addAll(Arrays.asList(DecisionDefinitionDeployer.getDmnResourceSuffixes()));
   }
 
   /**
@@ -182,7 +182,7 @@ public abstract class TestHelper {
    * get a resource location by convention based on a class (type) and a
    * relative resource name. The return value will be the full classpath
    * location of the type, plus a suffix built from the name parameter:
-   * <code>BpmnDeployer.BPMN_RESOURCE_SUFFIXES</code>.
+   * <code>BpmnDeployer.getBpmnResourceSuffixes()</code>.
    * The first resource matching a suffix will be returned.
    */
   public static String getBpmnProcessDefinitionResource(Class< ? > type, String name) {
@@ -193,7 +193,7 @@ public abstract class TestHelper {
         return resource;
       }
     }
-    return createResourceName(type, name, BpmnDeployer.BPMN_RESOURCE_SUFFIXES[0]);
+    return createResourceName(type, name, BpmnDeployer.getBpmnResourceSuffixes()[0]);
   }
 
   private static String createResourceName(Class< ? > type, String name, String suffix) {
