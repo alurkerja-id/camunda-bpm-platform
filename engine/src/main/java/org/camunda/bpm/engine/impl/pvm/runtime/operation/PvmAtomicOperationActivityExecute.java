@@ -21,7 +21,6 @@ import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.pvm.PvmLogger;
 import org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior;
 import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.pvm.runtime.Callback;
 import org.camunda.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
 
 import static org.camunda.bpm.engine.impl.util.ActivityBehaviorUtil.getActivityBehavior;

@@ -18,7 +18,6 @@ package org.camunda.bpm.engine.impl.pvm.runtime.operation;
 
 import org.camunda.bpm.engine.delegate.ExecutionListener;
 import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
-import org.camunda.bpm.engine.impl.pvm.runtime.Callback;
 import org.camunda.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
 
 
