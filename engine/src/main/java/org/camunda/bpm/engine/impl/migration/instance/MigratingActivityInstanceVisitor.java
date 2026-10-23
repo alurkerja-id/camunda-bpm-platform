@@ -16,6 +16,7 @@
  */
 package org.camunda.bpm.engine.impl.migration.instance;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -59,13 +60,18 @@ public class MigratingActivityInstanceVisitor extends MigratingProcessElementIns
 
     ExecutionEntity newParentExecution = ancestorActivityInstance.createAttachableExecution();
 
+    // the scopes to instantiate are the non-existing flow scopes of an activity, i.e. always activities;
+    // a ClassCastException here would flag a broken invariant instead of silently missing in the lookup below
+    List<PvmActivity> activitiesToInstantiate = new ArrayList<>();
+    for (ScopeImpl scope : scopesToInstantiate) {
+      activitiesToInstantiate.add((PvmActivity) scope);
+    }
+
     Map<PvmActivity, PvmExecutionImpl> createdExecutions =
-        newParentExecution.instantiateScopes((List) scopesToInstantiate, skipCustomListeners, skipIoMappings);
+        newParentExecution.instantiateScopes(activitiesToInstantiate, skipCustomListeners, skipIoMappings);
 
     for (ScopeImpl scope : scopesToInstantiate) {
-      // the map is keyed by PvmActivity and the scopes handed to instantiateScopes above are
-      // ActivityImpl, which implements it; without the cast the lookup was typed to always miss
-      ExecutionEntity createdExecution = (ExecutionEntity) createdExecutions.get(scope);
+      ExecutionEntity createdExecution = (ExecutionEntity) createdExecutions.get((PvmActivity) scope);
       createdExecution.setActivity(null);
       createdExecution.setActive(false);
       executionBranch.visited(new MigratingActivityInstance(scope, createdExecution));

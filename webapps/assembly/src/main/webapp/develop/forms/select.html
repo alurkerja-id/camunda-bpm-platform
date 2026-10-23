@@ -17,7 +17,7 @@
     <!-- choice list and label -->
     <div class="form-group">
       <label for="choiceList" class="control-label">Choose</label>
-      <select ng-change="selectionChanged(choice)" class="form-control" name="choice" required ng-model="choice">
+      <select id="choiceList" ng-change="selectionChanged(choice)" class="form-control" name="choice" required ng-model="choice">
         <option value="WS Generic">WebService Generic</option>
         <option value="WS Generated">WebService Generated</option>
       </select>
@@ -33,7 +33,7 @@
     </p>
 
     <div style="display: none;">
-      <input form-field type="string" name="serviceTaskType" />
+      <input id="serviceTaskType" aria-label="Service task type" form-field type="string" name="serviceTaskType" />
     </div>
   </div>
 </form>
