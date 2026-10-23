@@ -14,15 +14,13 @@
 # expecting a quick answer, and check the tail of the log for the surefire
 # summary (tests run / failures / errors) before trusting the Sonar numbers.
 #
-# `-P '!it-runtime'` works around a real build-ordering bug, not a scan
-# decision: clients/java/client's `it-runtime` profile (active by default)
-# needs the tar.gz built by distro/tomcat, which sits ~120 modules LATER in
-# the reactor — so on a clean clone (empty local .m2) this profile always
-# hangs Cargo trying to start a Tomcat container against an artifact that
-# does not exist yet, with no clear build-failure message (had to kill it
-# manually after a multi-minute stall to find this). Filed as a separate
-# fix (module reordering, or make it-runtime genuinely opt-in); until then,
-# this flag is required for the script to finish on a clean checkout.
+# `clients/java/client`'s Cargo ITs run for real: the `it-runtime` profile (active by default)
+# makes camunda-tomcat-assembly a reactor dependency of the client, so the Tomcat it boots is
+# built in this same reactor, never taken from a stale ~/.m2. Do NOT add `!it-runtime` to `-P`:
+# it drops that reactor edge and a ~/.m2 assembly from before a Tomcat bump fails the build with
+# "apache-tomcat-X/conf is not a directory", skipping ~150 modules. (The earlier belief that the
+# profile "hangs on a clean checkout" was really an IT/pom port mismatch, 50080 vs 50180, fixed in
+# clients/java/client.)
 #
 # `integration-test-spring-boot-starter` adds the spring-boot-starter / Camunda Run
 # modules whose tests only run under that profile; without it their coverage is missing
@@ -31,7 +29,7 @@
 # the rest off and `distro` in engine-rest skips its whole test suite.
 #
 # `-Dcargo.rmi.port` is a second, independent workaround for the SAME
-# clients/java/client module: even with `it-runtime` disabled, the module's
+# clients/java/client module: the module's
 # `cargo-maven3-plugin` `start-container`/`stop-container` executions are
 # bound directly in <build><plugins> (not gated by any profile), so they
 # always run. Cargo's RMI port (used for its own start/stop signalling, not
@@ -60,7 +58,7 @@ CARGO_RMI_PORT="${CARGO_RMI_PORT:-50205}"
 
 ./mvnw -B clean install \
   "-Dmaven.test.failure.ignore=true" \
-  -P 'integration-test-spring-boot-starter,!it-runtime' \
+  -P integration-test-spring-boot-starter \
   "-Dcargo.rmi.port=${CARGO_RMI_PORT}" \
   org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
   "-Dsonar.host.url=${SONAR_HOST_URL}" \
