@@ -29,13 +29,11 @@ import org.camunda.bpm.engine.impl.db.entitymanager.OptimisticLockingResult;
 import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbEntityOperation;
 import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbOperation;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.jobexecutor.JobDeclaration;
 import org.camunda.bpm.engine.impl.persistence.entity.ByteArrayEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.ByteArrayManager;
 import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.JobManager;
-import org.camunda.bpm.engine.impl.persistence.entity.MessageEntity;
 import org.camunda.bpm.engine.impl.util.ClockUtil;
 import org.camunda.bpm.engine.impl.util.JsonUtil;
 
@@ -45,9 +43,6 @@ import org.camunda.bpm.engine.impl.util.JsonUtil;
  * @author Askar Akhmerov
  */
 public abstract class AbstractBatchJobHandler<T extends BatchConfiguration> implements BatchJobHandler<T>, OptimisticLockingListener {
-
-  @Override
-  public abstract JobDeclaration<BatchJobContext, MessageEntity> getJobDeclaration();
 
   @Override
   public boolean createJobs(BatchEntity batch) {
@@ -129,17 +124,14 @@ public abstract class AbstractBatchJobHandler<T extends BatchConfiguration> impl
     // see https://jira.camunda.com/browse/CAM-11188
     int elementsToRemove = idMappings.getOverallIdCount() - ids.size();
     if (elementsToRemove > 0) {
-      for (Iterator<DeploymentMapping> iterator = idMappings.iterator(); iterator.hasNext();) {
+      for (Iterator<DeploymentMapping> iterator = idMappings.iterator(); iterator.hasNext() && elementsToRemove > 0;) {
         DeploymentMapping deploymentMapping = iterator.next();
         if (deploymentMapping.getCount() <= elementsToRemove) {
           iterator.remove();
           elementsToRemove -= deploymentMapping.getCount();
-          if (elementsToRemove == 0) {
-            break;
-          }
         } else {
           deploymentMapping.removeIds(elementsToRemove);
-          break;
+          elementsToRemove = 0;
         }
       }
     }

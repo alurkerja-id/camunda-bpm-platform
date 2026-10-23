@@ -254,7 +254,7 @@ public class ProcessDiagramLayoutFactory {
   protected int countLeadingWhite(Map<Integer, Boolean> isWhite, int size) {
     int margin = 0;
     for (int index = 0; index < size; index++) {
-      if (isWhite.getOrDefault(index, true)) {
+      if (isWhite(isWhite, index)) {
         ++margin;
       } else {
         // Margin found
@@ -267,7 +267,7 @@ public class ProcessDiagramLayoutFactory {
   protected int countTrailingWhite(Map<Integer, Boolean> isWhite, int size) {
     int margin = 0;
     for (int index = size - 1; index >= 0; index--) {
-      if (isWhite.getOrDefault(index, true)) {
+      if (isWhite(isWhite, index)) {
         ++margin;
       } else {
         // Margin found
@@ -386,5 +386,9 @@ public class ProcessDiagramLayoutFactory {
     factory.setNamespaceAware(true);
 
     return factory;
+  }
+
+  private static boolean isWhite(Map<Integer, Boolean> isWhiteByIndex, int index) {
+    return Boolean.TRUE.equals(isWhiteByIndex.getOrDefault(index, true));
   }
 }
