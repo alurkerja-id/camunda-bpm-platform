@@ -53,7 +53,6 @@ public class PvmAtomicOperationProcessEnd extends PvmAtomicOperationActivityInst
     CmmnActivityExecution superCaseExecution = execution.getSuperCaseExecution();
 
     SubProcessActivityBehavior subProcessActivityBehavior = null;
-    TransferVariablesActivityBehavior transferVariablesBehavior = null;
 
     // copy variables before destroying the ended sub process instance
     if (superExecution != null) {
@@ -64,7 +63,6 @@ public class PvmAtomicOperationProcessEnd extends PvmAtomicOperationActivityInst
     } else if (superCaseExecution != null) {
       CmmnActivity activity = superCaseExecution.getActivity();
       TransferVariablesActivityBehavior transferringBehavior = (TransferVariablesActivityBehavior) activity.getActivityBehavior();
-      transferVariablesBehavior = transferringBehavior;
       runCompletingSuperProcess(execution, () -> transferringBehavior.transferVariables(execution, superCaseExecution));
     }
 

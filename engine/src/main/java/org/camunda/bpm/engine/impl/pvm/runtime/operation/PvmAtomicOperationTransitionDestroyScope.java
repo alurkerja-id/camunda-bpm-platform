@@ -65,10 +65,8 @@ public class PvmAtomicOperationTransitionDestroyScope implements PvmAtomicOperat
         propagatingExecution = destroyScope(execution);
       }
 
-    } else {
-      // activity is not scope => nothing to do
-      propagatingExecution = execution;
     }
+    // else: activity is not scope => nothing to do, execution is the propagating execution
 
     // take the specified transitions
     if (transitionsToTake.isEmpty()) {
@@ -123,11 +121,11 @@ public class PvmAtomicOperationTransitionDestroyScope implements PvmAtomicOperat
         concurrentExecution = scopeExecution.createConcurrentExecution();
 
         if (i == 1 && !propagatingExecution.isConcurrent()) {
-          outgoingExecutions.remove(0);
           // get a hold of the concurrent execution that replaced the scope propagating execution
           PvmExecutionImpl replacingExecution = findReplacingExecution(scopeExecution, propagatingExecution);
 
-          outgoingExecutions.add(new OutgoingExecution(replacingExecution, transitionsToTake.get(0)));
+          // only the entry of the first transition exists at this point: replace it
+          outgoingExecutions.set(0, new OutgoingExecution(replacingExecution, transitionsToTake.get(0)));
         }
       }
 
