@@ -577,24 +577,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
       PvmExecutionImpl lastConcurrent = getNonEventScopeExecutions().get(0);
       if (lastConcurrent.isConcurrent()) {
         if (!lastConcurrent.isScope()) {
-          setActivity(lastConcurrent.getActivity());
-          setTransition(lastConcurrent.getTransition());
-          this.replace(lastConcurrent);
-
-          // Move children of lastConcurrent one level up
-          if (lastConcurrent.hasChildren()) {
-            for (PvmExecutionImpl childExecution : lastConcurrent.getExecutionsAsCopy()) {
-              childExecution.setParent(this);
-            }
-          }
-
-          // Make sure parent execution is re-activated when the last concurrent
-          // child execution is active
-          if (!isActive() && lastConcurrent.isActive()) {
-            setActive(true);
-          }
-
-          lastConcurrent.remove();
+          pruneNonScopeConcurrentChild(lastConcurrent);
         } else {
           // legacy behavior
           LegacyBehavior.pruneConcurrentScope(lastConcurrent);
@@ -605,6 +588,27 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
 
     return false;
 
+  }
+
+  protected void pruneNonScopeConcurrentChild(PvmExecutionImpl lastConcurrent) {
+    setActivity(lastConcurrent.getActivity());
+    setTransition(lastConcurrent.getTransition());
+    this.replace(lastConcurrent);
+
+    // Move children of lastConcurrent one level up
+    if (lastConcurrent.hasChildren()) {
+      for (PvmExecutionImpl childExecution : lastConcurrent.getExecutionsAsCopy()) {
+        childExecution.setParent(this);
+      }
+    }
+
+    // Make sure parent execution is re-activated when the last concurrent
+    // child execution is active
+    if (!isActive() && lastConcurrent.isActive()) {
+      setActive(true);
+    }
+
+    lastConcurrent.remove();
   }
 
   @Override

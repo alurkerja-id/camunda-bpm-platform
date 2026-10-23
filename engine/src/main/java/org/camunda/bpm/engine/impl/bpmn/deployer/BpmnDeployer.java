@@ -188,23 +188,7 @@ public class BpmnDeployer extends AbstractDefinitionDeployer<ProcessDefinitionEn
       LegacyBehavior.migrateMultiInstanceJobDefinitions(processDefinition, existingDefinitions);
 
       for (JobDeclaration<?, ?> jobDeclaration : jobDeclarations) {
-        boolean jobDefinitionExists = false;
-        // find matching job definition entity
-        for (JobDefinition jobDefinitionEntity : existingDefinitions) {
-
-          // activity id needs to match
-          boolean activityIdMatches = jobDeclaration.getActivityId().equals(jobDefinitionEntity.getActivityId());
-          // handler type (e.g. 'async-continuation' needs to match
-          boolean handlerTypeMatches = jobDeclaration.getJobHandlerType().equals(jobDefinitionEntity.getJobType());
-          // configuration (e.g. 'async-before', 'async-after' needs to match
-          boolean configurationMatches = jobDeclaration.getJobConfiguration().equals(jobDefinitionEntity.getJobConfiguration());
-
-          if(activityIdMatches && handlerTypeMatches && configurationMatches) {
-            jobDeclaration.setJobDefinitionId(jobDefinitionEntity.getId());
-            jobDefinitionExists = true;
-            break;
-          }
-        }
+        boolean jobDefinitionExists = assignExistingJobDefinition(jobDeclaration, existingDefinitions);
 
         if(!jobDefinitionExists) {
           // not found: create new definition
@@ -214,6 +198,25 @@ public class BpmnDeployer extends AbstractDefinitionDeployer<ProcessDefinitionEn
       }
     }
 
+  }
+
+  protected boolean assignExistingJobDefinition(JobDeclaration<?, ?> jobDeclaration, List<JobDefinitionEntity> existingDefinitions) {
+    // find matching job definition entity
+    for (JobDefinition jobDefinitionEntity : existingDefinitions) {
+
+      // activity id needs to match
+      boolean activityIdMatches = jobDeclaration.getActivityId().equals(jobDefinitionEntity.getActivityId());
+      // handler type (e.g. 'async-continuation' needs to match
+      boolean handlerTypeMatches = jobDeclaration.getJobHandlerType().equals(jobDefinitionEntity.getJobType());
+      // configuration (e.g. 'async-before', 'async-after' needs to match
+      boolean configurationMatches = jobDeclaration.getJobConfiguration().equals(jobDefinitionEntity.getJobConfiguration());
+
+      if(activityIdMatches && handlerTypeMatches && configurationMatches) {
+        jobDeclaration.setJobDefinitionId(jobDefinitionEntity.getId());
+        return true;
+      }
+    }
+    return false;
   }
 
   protected void createJobDefinition(ProcessDefinition processDefinition, JobDeclaration<?, ?> jobDeclaration) {
