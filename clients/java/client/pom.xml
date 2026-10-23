@@ -316,8 +316,20 @@
     </plugins>
 
     <testResources>
+      <!-- Only this file is filtered: it must follow ${tomcat.connector.http.port}. The rest of
+           src/it/resources (BPMN models, ...) contains ${...} expressions that must stay literal. -->
       <testResource>
         <directory>src/it/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>integration-rules.properties</include>
+        </includes>
+      </testResource>
+      <testResource>
+        <directory>src/it/resources</directory>
+        <excludes>
+          <exclude>integration-rules.properties</exclude>
+        </excludes>
       </testResource>
       <testResource>
         <directory>src/test/resources</directory>
