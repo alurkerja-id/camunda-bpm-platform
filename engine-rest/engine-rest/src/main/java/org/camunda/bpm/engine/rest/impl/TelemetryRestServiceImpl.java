@@ -30,6 +30,9 @@ public class TelemetryRestServiceImpl extends AbstractRestProcessEngineAware imp
     super(engineName, objectMapper);
   }
 
+  /**
+   * @deprecated Telemetry configuration through the REST API is deprecated, see the interface.
+   */
   @Deprecated(forRemoval = false)
   @Override
   public void configureTelemetry(TelemetryConfigurationDto dto) {
@@ -40,6 +43,9 @@ public class TelemetryRestServiceImpl extends AbstractRestProcessEngineAware imp
     managementService.toggleTelemetry(enableTelemetry);
   }
 
+  /**
+   * @deprecated Telemetry configuration through the REST API is deprecated, see the interface.
+   */
   @Deprecated(forRemoval = false)
   @Override
   public TelemetryConfigurationDto getTelemetryConfiguration() {

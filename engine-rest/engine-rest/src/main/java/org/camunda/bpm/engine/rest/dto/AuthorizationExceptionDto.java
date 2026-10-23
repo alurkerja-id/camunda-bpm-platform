@@ -54,9 +54,9 @@ public class AuthorizationExceptionDto extends ExceptionDto {
     List<MissingAuthorization> missing = e.getMissingAuthorizations();
     if (missing.size() == 1) {
       MissingAuthorization single = missing.get(0);
-      dto.setPermissionName(single.getViolatedPermissionName());
-      dto.setResourceId(single.getResourceId());
-      dto.setResourceName(single.getResourceType());
+      dto.permissionName = single.getViolatedPermissionName();
+      dto.resourceId = single.getResourceId();
+      dto.resourceName = single.getResourceType();
     }
     
     return dto;
