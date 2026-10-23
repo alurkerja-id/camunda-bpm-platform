@@ -45,7 +45,7 @@ public class SchemaLogTestCase {
   protected final static String CREATE_SCRIPT_FOLDER = BASE_PATH + "/create";
   protected final static String UPGRADE_SCRIPT_FOLDER = BASE_PATH + "/upgrade";
   protected final static List<String> SCRIPT_FOLDERS = Arrays.asList(CREATE_SCRIPT_FOLDER, UPGRADE_SCRIPT_FOLDER);
-  protected final static String[] DATABASES = DbSqlSessionFactory.SUPPORTED_DATABASES;
+  protected final static String[] DATABASES = DbSqlSessionFactory.getSupportedDatabases();
 
   @Rule
   public ProcessEngineRule rule = new ProvidedProcessEngineRule();
