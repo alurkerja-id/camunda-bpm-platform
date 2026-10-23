@@ -102,28 +102,32 @@ public class BpmnActivityBehavior {
     } else if (!transitionsToTake.isEmpty()) {
       execution.leaveActivityViaTransitions(transitionsToTake, Arrays.asList(execution));
     } else {
+      leaveWithoutMatchingTransition(execution, defaultSequenceFlow, outgoingTransitions);
+    }
+  }
 
-      if (defaultSequenceFlow != null) {
-        PvmTransition defaultTransition = execution.getActivity().findOutgoingTransition(defaultSequenceFlow);
-        if (defaultTransition != null) {
-          execution.leaveActivityViaTransition(defaultTransition);
-        } else {
-          throw LOG.missingDefaultFlowException(execution.getActivity().getId(), defaultSequenceFlow);
-        }
+  protected void leaveWithoutMatchingTransition(ActivityExecution execution, String defaultSequenceFlow,
+          List<PvmTransition> outgoingTransitions) {
+    if (defaultSequenceFlow != null) {
+      PvmTransition defaultTransition = execution.getActivity().findOutgoingTransition(defaultSequenceFlow);
+      if (defaultTransition != null) {
+        execution.leaveActivityViaTransition(defaultTransition);
+      } else {
+        throw LOG.missingDefaultFlowException(execution.getActivity().getId(), defaultSequenceFlow);
+      }
 
-      } else if (!outgoingTransitions.isEmpty()) {
-        throw LOG.missingConditionalFlowException(execution.getActivity().getId());
+    } else if (!outgoingTransitions.isEmpty()) {
+      throw LOG.missingConditionalFlowException(execution.getActivity().getId());
+
+    } else {
+
+      if (((ActivityImpl) execution.getActivity()).isCompensationHandler() && isAncestorCompensationThrowing(execution)) {
+
+       execution.endCompensation();
 
       } else {
-
-        if (((ActivityImpl) execution.getActivity()).isCompensationHandler() && isAncestorCompensationThrowing(execution)) {
-
-         execution.endCompensation();
-
-        } else {
-          LOG.missingOutgoingSequenceFlow(execution.getActivity().getId());
-          execution.end(true);
-        }
+        LOG.missingOutgoingSequenceFlow(execution.getActivity().getId());
+        execution.end(true);
       }
     }
   }

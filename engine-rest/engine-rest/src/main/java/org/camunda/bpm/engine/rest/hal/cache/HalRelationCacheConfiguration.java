@@ -98,7 +98,7 @@ public class HalRelationCacheConfiguration {
   protected void parseCacheConfigurations(JsonNode jsonConfiguration) {
     JsonNode jsonNode = jsonConfiguration.get(CONFIG_CACHES);
     if (jsonNode != null) {
-      Iterator<Entry<String, JsonNode>> configuredCaches = jsonNode.fields();
+      Iterator<Entry<String, JsonNode>> configuredCaches = jsonNode.properties().iterator();
       while (configuredCaches.hasNext()) {
         Entry<String, JsonNode> cacheConfiguration = configuredCaches.next();
         parseCacheConfiguration(cacheConfiguration.getKey(), cacheConfiguration.getValue());

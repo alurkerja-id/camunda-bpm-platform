@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class DefaultHistoryConfiguration extends AbstractCamundaConfiguration implements CamundaHistoryConfiguration {
 
+
   @Autowired(required = false)
   protected HistoryEventHandler historyEventHandler;
 

@@ -18,7 +18,6 @@ package org.camunda.bpm.engine.impl.pvm.runtime.operation;
 
 import org.camunda.bpm.engine.delegate.ExecutionListener;
 import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
-import org.camunda.bpm.engine.impl.pvm.runtime.Callback;
 import org.camunda.bpm.engine.impl.pvm.runtime.LegacyBehavior;
 import org.camunda.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
 
@@ -64,21 +63,15 @@ public class PvmAtomicOperationProcessStart extends AbstractPvmEventAtomicOperat
 
   protected void eventNotificationsCompleted(PvmExecutionImpl execution) {
 
-    execution.continueIfExecutionDoesNotAffectNextOperation(new Callback<PvmExecutionImpl, Void>() {
-      @Override
-      public Void callback(PvmExecutionImpl execution) {
-        execution.dispatchEvent(null);
-        return null;
-      }
-    }, new Callback<PvmExecutionImpl, Void>() {
-      @Override
-      public Void callback(PvmExecutionImpl execution) {
+    execution.continueIfExecutionDoesNotAffectNextOperation(dispatching -> {
+      dispatching.dispatchEvent(null);
+      return null;
+    }, starting -> {
 
-        execution.setIgnoreAsync(true);
-        execution.performOperation(ACTIVITY_START_CREATE_SCOPE);
+      starting.setIgnoreAsync(true);
+      starting.performOperation(ACTIVITY_START_CREATE_SCOPE);
 
-        return null;
-      }
+      return null;
     }, execution);
 
   }

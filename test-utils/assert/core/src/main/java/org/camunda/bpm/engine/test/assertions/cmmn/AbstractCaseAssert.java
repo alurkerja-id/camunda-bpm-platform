@@ -527,7 +527,7 @@ public abstract class AbstractCaseAssert<S extends AbstractCaseAssert<S, A>, A e
                 "Expected %s to be in state '%s', but found it to be '%s'!",
                 toString(actual),
                 state,
-                CaseExecutionState.CASE_EXECUTION_STATES.get(actualState))).isEqualTo(state.getStateCode());
+                CaseExecutionState.getStateForCode(actualState))).isEqualTo(state.getStateCode());
     @SuppressWarnings("unchecked")
     S self = (S) this;
     return self;

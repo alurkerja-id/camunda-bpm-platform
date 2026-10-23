@@ -68,35 +68,19 @@ public class DefaultDmnHistoryEventProducer implements DmnHistoryEventProducer {
 
   @Override
   public HistoryEvent createDecisionEvaluatedEvt(final DelegateExecution execution, final DmnDecisionEvaluationEvent evaluationEvent) {
-    return createHistoryEvent(evaluationEvent, new HistoricDecisionInstanceSupplier() {
-
-      @Override
-      public HistoricDecisionInstanceEntity createHistoricDecisionInstance(DmnDecisionLogicEvaluationEvent evaluationEvent, HistoricDecisionInstanceEntity rootDecisionInstance) {
-        return createDecisionEvaluatedEvt(evaluationEvent, (ExecutionEntity) execution);
-      }
-    });
+    return createHistoryEvent(evaluationEvent, (logicEvaluationEvent, rootDecisionInstance) ->
+      createDecisionEvaluatedEvt(logicEvaluationEvent, (ExecutionEntity) execution));
   }
 
   @Override
   public HistoryEvent createDecisionEvaluatedEvt(final DelegateCaseExecution execution, final DmnDecisionEvaluationEvent evaluationEvent) {
-    return createHistoryEvent(evaluationEvent, new HistoricDecisionInstanceSupplier() {
-
-      @Override
-      public HistoricDecisionInstanceEntity createHistoricDecisionInstance(DmnDecisionLogicEvaluationEvent evaluationEvent, HistoricDecisionInstanceEntity rootDecisionInstance) {
-        return createDecisionEvaluatedEvt(evaluationEvent, (CaseExecutionEntity) execution);
-      }
-    });
+    return createHistoryEvent(evaluationEvent, (logicEvaluationEvent, rootDecisionInstance) ->
+      createDecisionEvaluatedEvt(logicEvaluationEvent, (CaseExecutionEntity) execution));
   }
 
   @Override
   public HistoryEvent createDecisionEvaluatedEvt(final DmnDecisionEvaluationEvent evaluationEvent) {
-    return createHistoryEvent(evaluationEvent, new HistoricDecisionInstanceSupplier() {
-
-      @Override
-      public HistoricDecisionInstanceEntity createHistoricDecisionInstance(DmnDecisionLogicEvaluationEvent evaluationEvent, HistoricDecisionInstanceEntity rootDecisionInstance) {
-        return createDecisionEvaluatedEvt(evaluationEvent, rootDecisionInstance);
-      }
-    });
+    return createHistoryEvent(evaluationEvent, this::createDecisionEvaluatedEvt);
   }
 
   protected interface HistoricDecisionInstanceSupplier {

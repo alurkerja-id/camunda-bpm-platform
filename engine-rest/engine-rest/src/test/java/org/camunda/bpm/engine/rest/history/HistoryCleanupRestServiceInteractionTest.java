@@ -44,6 +44,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -66,8 +67,6 @@ public class HistoryCleanupRestServiceInteractionTest extends AbstractRestServic
     List<Job> mockJobs = MockProvider.createMockJobs();
     when(historyServiceMock.cleanUpHistoryAsync(anyBoolean()))
         .thenReturn(mockJob);
-    when(historyServiceMock.findHistoryCleanupJob())
-        .thenReturn(mockJob);
     when(historyServiceMock.findHistoryCleanupJobs())
     .thenReturn(mockJobs);
 
@@ -82,20 +81,20 @@ public class HistoryCleanupRestServiceInteractionTest extends AbstractRestServic
         .expect().statusCode(Status.OK.getStatusCode())
         .when().get(FIND_HISTORY_CLEANUP_JOB_URL);
 
-   verify(historyServiceMock).findHistoryCleanupJob();
+   verify(historyServiceMock).findHistoryCleanupJobs();
   }
 
   @Test
   public void testFindNoHistoryCleanupJob() {
-    when(historyServiceMock.findHistoryCleanupJob())
-        .thenReturn(null);
+    when(historyServiceMock.findHistoryCleanupJobs())
+        .thenReturn(Collections.emptyList());
 
     given().contentType(ContentType.JSON)
         .then()
         .expect().statusCode(Status.NOT_FOUND.getStatusCode())
         .when().get(FIND_HISTORY_CLEANUP_JOB_URL);
 
-   verify(historyServiceMock).findHistoryCleanupJob();
+   verify(historyServiceMock).findHistoryCleanupJobs();
   }
 
   @Test

@@ -62,7 +62,7 @@ public class ProcessApplicationScanningUtil {
       classLoader.loadClass("org.jboss.vfs.VFS");
       scanner = new VfsProcessApplicationScanner();
     }
-    catch (Throwable t) {
+    catch (Exception | LinkageError t) {
       scanner = new ClassPathProcessApplicationScanner();
     }
 
@@ -71,9 +71,9 @@ public class ProcessApplicationScanningUtil {
   }
 
   public static boolean isDeployable(String filename) {
-    return hasSuffix(filename, BpmnDeployer.BPMN_RESOURCE_SUFFIXES)
-      || hasSuffix(filename, CmmnDeployer.CMMN_RESOURCE_SUFFIXES)
-      || hasSuffix(filename, DecisionDefinitionDeployer.DMN_RESOURCE_SUFFIXES);
+    return hasSuffix(filename, BpmnDeployer.getBpmnResourceSuffixes())
+      || hasSuffix(filename, CmmnDeployer.getCmmnResourceSuffixes())
+      || hasSuffix(filename, DecisionDefinitionDeployer.getDmnResourceSuffixes());
   }
 
   public static boolean isDeployable(String filename, String[] additionalResourceSuffixes) {
@@ -96,14 +96,14 @@ public class ProcessApplicationScanningUtil {
   public static boolean isDiagram(String fileName, String modelFileName) {
     // the three deployers do not declare their own diagram suffixes; naming them here suggested
     // three different lists where there is only the one their common parent declares
-    String[] diagramSuffixes = AbstractDefinitionDeployer.DIAGRAM_SUFFIXES;
+    String[] diagramSuffixes = AbstractDefinitionDeployer.getDefaultDiagramSuffixes();
 
     // process resources
-    boolean isBpmnDiagram = checkDiagram(fileName, modelFileName, diagramSuffixes, BpmnDeployer.BPMN_RESOURCE_SUFFIXES);
+    boolean isBpmnDiagram = checkDiagram(fileName, modelFileName, diagramSuffixes, BpmnDeployer.getBpmnResourceSuffixes());
     // case resources
-    boolean isCmmnDiagram = checkDiagram(fileName, modelFileName, diagramSuffixes, CmmnDeployer.CMMN_RESOURCE_SUFFIXES);
+    boolean isCmmnDiagram = checkDiagram(fileName, modelFileName, diagramSuffixes, CmmnDeployer.getCmmnResourceSuffixes());
     // decision resources
-    boolean isDmnDiagram = checkDiagram(fileName, modelFileName, diagramSuffixes, DecisionDefinitionDeployer.DMN_RESOURCE_SUFFIXES);
+    boolean isDmnDiagram = checkDiagram(fileName, modelFileName, diagramSuffixes, DecisionDefinitionDeployer.getDmnResourceSuffixes());
 
     return isBpmnDiagram || isCmmnDiagram || isDmnDiagram;
   }

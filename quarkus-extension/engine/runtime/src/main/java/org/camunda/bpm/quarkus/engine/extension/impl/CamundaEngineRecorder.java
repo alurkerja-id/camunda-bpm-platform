@@ -19,7 +19,7 @@ package org.camunda.bpm.quarkus.engine.extension.impl;
 import static com.arjuna.ats.jta.TransactionManager.transactionManager;
 import static io.quarkus.datasource.common.runtime.DataSourceUtil.DEFAULT_DATASOURCE_NAME;
 
-import io.quarkus.agroal.runtime.DataSources;
+import io.quarkus.agroal.runtime.AgroalDataSourceUtil;
 import io.quarkus.arc.Arc;
 import io.quarkus.arc.runtime.BeanContainer;
 import io.quarkus.runtime.RuntimeValue;
@@ -63,7 +63,7 @@ public class CamundaEngineRecorder {
 
     if (configuration.getDataSource() == null) {
       String datasource = config.datasource().orElse(DEFAULT_DATASOURCE_NAME);
-      configuration.setDataSource(DataSources.fromName(datasource));
+      configuration.setDataSource(AgroalDataSourceUtil.dataSourceInstance(datasource).get());
     }
 
     if (configuration.getTransactionManager() == null) {

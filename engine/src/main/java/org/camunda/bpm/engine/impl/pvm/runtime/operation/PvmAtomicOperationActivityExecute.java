@@ -21,7 +21,6 @@ import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.pvm.PvmLogger;
 import org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior;
 import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.pvm.runtime.Callback;
 import org.camunda.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
 
 import static org.camunda.bpm.engine.impl.util.ActivityBehaviorUtil.getActivityBehavior;
@@ -42,33 +41,26 @@ public class PvmAtomicOperationActivityExecute implements PvmAtomicOperation {
   public void execute(PvmExecutionImpl execution) {
     execution.activityInstanceStarted();
 
-    execution.continueIfExecutionDoesNotAffectNextOperation(new Callback<PvmExecutionImpl, Void>() {
-      @Override
-      public Void callback(PvmExecutionImpl execution) {
-        if (execution.getActivity().isScope()) {
-          execution.dispatchEvent(null);
-        }
-        return null;
+    execution.continueIfExecutionDoesNotAffectNextOperation(scopedExecution -> {
+      if (scopedExecution.getActivity().isScope()) {
+        scopedExecution.dispatchEvent(null);
       }
-    }, new Callback<PvmExecutionImpl, Void>() {
+      return null;
+    }, activityExecution -> {
 
-      @Override
-      public Void callback(PvmExecutionImpl execution) {
+      ActivityBehavior activityBehavior = getActivityBehavior(activityExecution);
 
-        ActivityBehavior activityBehavior = getActivityBehavior(execution);
+      ActivityImpl activity = activityExecution.getActivity();
+      LOG.debugExecutesActivity(activityExecution, activity, activityBehavior.getClass().getName());
 
-        ActivityImpl activity = execution.getActivity();
-        LOG.debugExecutesActivity(execution, activity, activityBehavior.getClass().getName());
-
-        try {
-          activityBehavior.execute(execution);
-        } catch (RuntimeException e) {
-          throw e;
-        } catch (Exception e) {
-          throw new PvmException("couldn't execute activity <" + activity.getProperty("type") + " id=\"" + activity.getId() + "\" ...>: " + e.getMessage(), e);
-        }
-        return null;
+      try {
+        activityBehavior.execute(activityExecution);
+      } catch (RuntimeException e) {
+        throw e;
+      } catch (Exception e) {
+        throw new PvmException("couldn't execute activity <" + activity.getProperty("type") + " id=\"" + activity.getId() + "\" ...>: " + e.getMessage(), e);
       }
+      return null;
     }, execution);
   }
 

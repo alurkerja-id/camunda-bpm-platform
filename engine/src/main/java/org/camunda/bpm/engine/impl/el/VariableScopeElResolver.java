@@ -57,16 +57,10 @@ public class VariableScopeElResolver extends ELResolver {
       if (base == null) {
         String variable = (String) property; // according to javadoc, can only be a String
 
-        if( EXECUTION_KEY.equals(property) && variableScope instanceof ExecutionEntity
-                || TASK_KEY.equals(property) && variableScope instanceof TaskEntity
-                || variableScope instanceof CaseExecutionEntity
-                && (CASE_EXECUTION_KEY.equals(property) || EXECUTION_KEY.equals(property)) ) {
+        if (resolvesToVariableScope(variableScope, property)) {
           context.setPropertyResolved(true);
           return variableScope;
-        } else if(EXTERNAL_TASK_KEY.equals(property)
-            && variableScope instanceof ExecutionEntity
-            && ((ExecutionEntity) variableScope).getActivity() != null
-            && ((ExecutionEntity) variableScope).getActivity().getActivityBehavior() instanceof ExternalTaskActivityBehavior) {
+        } else if (resolvesToExternalTask(variableScope, property)) {
           List<ExternalTaskEntity> externalTasks = ((ExecutionEntity) variableScope).getExternalTasks();
           if(externalTasks.size() != 1) {
             throw new ProcessEngineException("Could not resolve expression to single external task entity.");
@@ -93,6 +87,20 @@ public class VariableScopeElResolver extends ELResolver {
     // It will use the bean resolved in this resolver as base.
 
     return null;
+  }
+
+  protected boolean resolvesToVariableScope(VariableScope variableScope, Object property) {
+    return EXECUTION_KEY.equals(property) && variableScope instanceof ExecutionEntity
+        || TASK_KEY.equals(property) && variableScope instanceof TaskEntity
+        || variableScope instanceof CaseExecutionEntity
+        && (CASE_EXECUTION_KEY.equals(property) || EXECUTION_KEY.equals(property));
+  }
+
+  protected boolean resolvesToExternalTask(VariableScope variableScope, Object property) {
+    return EXTERNAL_TASK_KEY.equals(property)
+        && variableScope instanceof ExecutionEntity
+        && ((ExecutionEntity) variableScope).getActivity() != null
+        && ((ExecutionEntity) variableScope).getActivity().getActivityBehavior() instanceof ExternalTaskActivityBehavior;
   }
 
   @Override

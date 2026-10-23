@@ -181,12 +181,9 @@ public class CompensationUtil {
     // <LEGACY>: different flow scopes may have the same scope execution =>
     // collect subscriptions in a set
     final Set<EventSubscriptionEntity> subscriptions = new HashSet<EventSubscriptionEntity>();
-    TreeVisitor<ScopeImpl> eventSubscriptionCollector = new TreeVisitor<ScopeImpl>() {
-      @Override
-      public void visit(ScopeImpl obj) {
-        PvmExecutionImpl execution = scopeExecutionMapping.get(obj);
-        subscriptions.addAll(((ExecutionEntity) execution).getCompensateEventSubscriptions());
-      }
+    TreeVisitor<ScopeImpl> eventSubscriptionCollector = (TreeVisitor<ScopeImpl>) obj -> {
+      PvmExecutionImpl scopeExecution = scopeExecutionMapping.get(obj);
+      subscriptions.addAll(((ExecutionEntity) scopeExecution).getCompensateEventSubscriptions());
     };
 
     new FlowScopeWalker(activity).addPostVisitor(eventSubscriptionCollector).walkUntil(element -> {

@@ -131,10 +131,7 @@ public class ProcessDiagramLayoutFactory {
   }
 
   protected DiagramNode getDiagramBoundsFromBpmnDi(Document bpmnModel) {
-    Double minX = null;
-    Double minY = null;
-    Double maxX = null;
-    Double maxY = null;
+    BoundsAccumulator bounds = new BoundsAccumulator();
   
     // Node positions and dimensions
     NodeList setOfBounds = bpmnModel.getElementsByTagNameNS(BpmnParser.BPMN_DC_NS, "Bounds");
@@ -145,22 +142,10 @@ public class ProcessDiagramLayoutFactory {
       Double width = Double.valueOf(element.getAttribute("width"));
       Double height = Double.valueOf(element.getAttribute("height"));
   
-      if (x == 0.0 && y == 0.0 && width == 0.0 && height == 0.0) {
-        // Ignore empty labels like the ones produced by Yaoqiang:
-        // <bpmndi:BPMNLabel><dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/></bpmndi:BPMNLabel>
-      } else {
-        if (minX == null || x < minX) {
-          minX = x;
-        }
-        if (minY == null || y < minY) {
-          minY = y;
-        }
-        if (maxX == null || maxX < (x + width)) {
-          maxX = (x + width);
-        }
-        if (maxY == null || maxY < (y + height)) {
-          maxY = (y + height);
-        }
+      // Ignore empty labels like the ones produced by Yaoqiang:
+      // <bpmndi:BPMNLabel><dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/></bpmndi:BPMNLabel>
+      if (!(x == 0.0 && y == 0.0 && width == 0.0 && height == 0.0)) {
+        bounds.include(x, y, x + width, y + height);
       }
     }
   
@@ -171,26 +156,37 @@ public class ProcessDiagramLayoutFactory {
       Double x = Double.valueOf(waypoint.getAttribute("x"));
       Double y = Double.valueOf(waypoint.getAttribute("y"));
   
-      if (minX == null || x < minX) {
-        minX = x;
-      }
-      if (minY == null || y < minY) {
-        minY = y;
-      }
-      if (maxX == null || maxX < x) {
-        maxX = x;
-      }
-      if (maxY == null || maxY < y) {
-        maxY = y;
-      }
+      bounds.include(x, y, x, y);
     }
   
     DiagramNode diagramBounds = new DiagramNode("BPMNDiagram");
-    diagramBounds.setX(minX);
-    diagramBounds.setY(minY);
-    diagramBounds.setWidth(maxX - minX);
-    diagramBounds.setHeight(maxY - minY);
+    diagramBounds.setX(bounds.minX);
+    diagramBounds.setY(bounds.minY);
+    diagramBounds.setWidth(bounds.maxX - bounds.minX);
+    diagramBounds.setHeight(bounds.maxY - bounds.minY);
     return diagramBounds;
+  }
+
+  protected static class BoundsAccumulator {
+    Double minX;
+    Double minY;
+    Double maxX;
+    Double maxY;
+
+    void include(double left, double top, double right, double bottom) {
+      if (minX == null || left < minX) {
+        minX = left;
+      }
+      if (minY == null || top < minY) {
+        minY = top;
+      }
+      if (maxX == null || maxX < right) {
+        maxX = right;
+      }
+      if (maxY == null || maxY < bottom) {
+        maxY = bottom;
+      }
+    }
   }
 
   protected DiagramNode getDiagramBoundsFromImage(InputStream imageStream) {
@@ -226,12 +222,7 @@ public class ProcessDiagramLayoutFactory {
           if (!columnIsWhite.containsKey(column)) {
             columnIsWhite.put(column, true);
           }
-          int pixel = image.getRGB(column, row);
-          int alpha = (pixel >> 24) & 0xff;
-          int red   = (pixel >> 16) & 0xff;
-          int green = (pixel >>  8) & 0xff;
-          int blue  = (pixel >>  0) & 0xff;
-          if (!(alpha == 0 || (red >= GREY_THRESHOLD && green >= GREY_THRESHOLD && blue >= GREY_THRESHOLD))) {
+          if (isVisiblePixel(image.getRGB(column, row))) {
             rowIsWhite.put(row, false);
             columnIsWhite.put(column, false);
           }
@@ -239,45 +230,10 @@ public class ProcessDiagramLayoutFactory {
       }
     }
   
-    int marginTop = 0;
-    for (int row = 0; row < height; row++) {
-      if (isWhite(rowIsWhite, row)) {
-        ++marginTop;
-      } else {
-        // Margin Top Found
-        break;
-      }
-    }
-    
-    int marginLeft = 0;
-    for (int column = 0; column < width; column++) {
-      if (isWhite(columnIsWhite, column)) {
-        ++marginLeft;
-      } else {
-        // Margin Left Found
-        break;
-      }
-    }
-    
-    int marginRight = 0;
-    for (int column = width - 1; column >= 0; column--) {
-      if (isWhite(columnIsWhite, column)) {
-        ++marginRight;
-      } else {
-        // Margin Right Found
-        break;
-      }
-    }
-    
-    int marginBottom = 0;
-    for (int row = height -1; row >= 0; row--) {
-      if (isWhite(rowIsWhite, row)) {
-        ++marginBottom;
-      } else {
-        // Margin Bottom Found
-        break;
-      }
-    }
+    int marginTop = countLeadingWhite(rowIsWhite, height);
+    int marginLeft = countLeadingWhite(columnIsWhite, width);
+    int marginRight = countTrailingWhite(columnIsWhite, width);
+    int marginBottom = countTrailingWhite(rowIsWhite, height);
     
     DiagramNode diagramBoundsImage = new DiagramNode();
     diagramBoundsImage.setX((double) marginLeft);
@@ -285,6 +241,40 @@ public class ProcessDiagramLayoutFactory {
     diagramBoundsImage.setWidth((double) (width - marginRight - marginLeft));
     diagramBoundsImage.setHeight((double) (height - marginBottom - marginTop));
     return diagramBoundsImage;
+  }
+
+  protected boolean isVisiblePixel(int pixel) {
+    int alpha = (pixel >> 24) & 0xff;
+    int red   = (pixel >> 16) & 0xff;
+    int green = (pixel >>  8) & 0xff;
+    int blue  = (pixel >>  0) & 0xff;
+    return !(alpha == 0 || (red >= GREY_THRESHOLD && green >= GREY_THRESHOLD && blue >= GREY_THRESHOLD));
+  }
+
+  protected int countLeadingWhite(Map<Integer, Boolean> isWhite, int size) {
+    int margin = 0;
+    for (int index = 0; index < size; index++) {
+      if (isWhite(isWhite, index)) {
+        ++margin;
+      } else {
+        // Margin found
+        break;
+      }
+    }
+    return margin;
+  }
+
+  protected int countTrailingWhite(Map<Integer, Boolean> isWhite, int size) {
+    int margin = 0;
+    for (int index = size - 1; index >= 0; index--) {
+      if (isWhite(isWhite, index)) {
+        ++margin;
+      } else {
+        // Margin found
+        break;
+      }
+    }
+    return margin;
   }
 
   protected Map<String, DiagramNode> getElementBoundsFromBpmnDi(Document bpmnModel) {

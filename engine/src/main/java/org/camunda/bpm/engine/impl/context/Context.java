@@ -201,28 +201,31 @@ public class Context {
       ProcessApplicationInterface processApplication = processApplicationReference.getProcessApplication();
       setCurrentProcessApplication(processApplicationReference);
 
-      try {
-        // wrap callback
-        ProcessApplicationClassloaderInterceptor<T> wrappedCallback = new ProcessApplicationClassloaderInterceptor<T>(callback);
-        // execute wrapped callback
-        return processApplication.execute(wrappedCallback, invocationContext);
-
-      } catch (Exception e) {
-
-        // unwrap exception
-        if(e.getCause() instanceof RuntimeException) {
-          throw (RuntimeException) e.getCause();
-        }else {
-          throw new ProcessEngineException("Unexpected exeption while executing within process application ", e);
-        }
-
-      } finally {
-        removeCurrentProcessApplication();
-      }
-
+      return executeWrappedCallback(callback, processApplication, invocationContext);
 
     } catch (ProcessApplicationUnavailableException e) {
       throw new ProcessEngineException("Cannot switch to process application '"+paName+"' for execution: "+e.getMessage(), e);
+    }
+  }
+
+  protected static <T> T executeWrappedCallback(Callable<T> callback, ProcessApplicationInterface processApplication, InvocationContext invocationContext) {
+    try {
+      // wrap callback
+      ProcessApplicationClassloaderInterceptor<T> wrappedCallback = new ProcessApplicationClassloaderInterceptor<T>(callback);
+      // execute wrapped callback
+      return processApplication.execute(wrappedCallback, invocationContext);
+
+    } catch (Exception e) {
+
+      // unwrap exception
+      if(e.getCause() instanceof RuntimeException) {
+        throw (RuntimeException) e.getCause();
+      }else {
+        throw new ProcessEngineException("Unexpected exeption while executing within process application ", e);
+      }
+
+    } finally {
+      removeCurrentProcessApplication();
     }
   }
 }

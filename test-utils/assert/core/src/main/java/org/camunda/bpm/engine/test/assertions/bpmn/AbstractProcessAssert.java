@@ -111,8 +111,10 @@ public abstract class AbstractProcessAssert<S extends AbstractProcessAssert<S, A
 
   private static Map<Class<?>, AbstractProcessAssert<?, ?>> getLastAsserts() {
     Map<Class<?>, AbstractProcessAssert<?, ?>> asserts = lastAsserts.get();
-    if (asserts == null)
-      lastAsserts.set(asserts = new HashMap<>());
+    if (asserts == null) {
+      asserts = new HashMap<>();
+      lastAsserts.set(asserts);
+    }
     return asserts;
   }
 

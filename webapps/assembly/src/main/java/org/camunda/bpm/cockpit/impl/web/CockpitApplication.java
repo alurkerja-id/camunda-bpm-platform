@@ -61,6 +61,6 @@ public class CockpitApplication extends Application {
   }
 
   private List<CockpitPlugin> getCockpitPlugins() {
-    return Cockpit.getRuntimeDelegate().getPluginRegistry().getPlugins();
+    return Cockpit.getRuntimeDelegate().getAppPluginRegistry().getPlugins();
   }
 }

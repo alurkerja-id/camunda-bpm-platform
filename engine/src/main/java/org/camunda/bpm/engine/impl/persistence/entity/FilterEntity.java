@@ -16,6 +16,7 @@
  */
 package org.camunda.bpm.engine.impl.persistence.entity;
 
+import java.util.Collections;
 import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotEmpty;
 import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNull;
@@ -51,10 +52,12 @@ public class FilterEntity implements Filter, Serializable, DbEntity, HasDbRevisi
   private static final long serialVersionUID = 1L;
   protected static final EnginePersistenceLogger LOG = ProcessEngineLogger.PERSISTENCE_LOGGER;
 
-  public final static Map<String, JsonObjectConverter<?>> queryConverter = new HashMap<String, JsonObjectConverter<?>>();
+  public final static Map<String, JsonObjectConverter<?>> queryConverter;
 
   static {
-    queryConverter.put(EntityTypes.TASK, new JsonTaskQueryConverter());
+    Map<String, JsonObjectConverter<?>> converters = new HashMap<String, JsonObjectConverter<?>>();
+    converters.put(EntityTypes.TASK, new JsonTaskQueryConverter());
+    queryConverter = Collections.unmodifiableMap(converters);
   }
 
   protected String id;

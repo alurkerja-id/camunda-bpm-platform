@@ -135,12 +135,7 @@ public abstract class Parse extends DefaultHandler {
       InputStream inputStream = streamSource.getInputStream();
 
       SAXParser saxParser = parser.getSaxParser();
-      try {
-        saxParser.setProperty(JAXP_ACCESS_EXTERNAL_SCHEMA, resolveAccessExternalSchemaProperty());
-      } catch (Exception e) {
-        // ignore unavailable option
-        LOG.logAccessExternalSchemaNotSupported(e);
-      }
+      setAccessExternalSchema(saxParser);
       if (schemaResource != null) {
         saxParser.setProperty(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
         saxParser.setProperty(JAXP_SCHEMA_SOURCE, schemaResource);
@@ -151,6 +146,15 @@ public abstract class Parse extends DefaultHandler {
     }
 
     return this;
+  }
+
+  protected void setAccessExternalSchema(SAXParser saxParser) {
+    try {
+      saxParser.setProperty(JAXP_ACCESS_EXTERNAL_SCHEMA, resolveAccessExternalSchemaProperty());
+    } catch (Exception e) {
+      // ignore unavailable option
+      LOG.logAccessExternalSchemaNotSupported(e);
+    }
   }
 
   /*
