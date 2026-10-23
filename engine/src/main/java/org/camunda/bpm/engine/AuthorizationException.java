@@ -42,15 +42,11 @@ public class AuthorizationException extends ProcessEngineException {
 
   // these properties have been replaced by the list of missingAuthorizations
   // and are only left because this is a public API package and users might
-  // have subclasses relying on these fields
-  /** @deprecated use {@link #getMissingAuthorizations()} */
-  @Deprecated(forRemoval = false)
+  // have subclasses relying on these fields; prefer getMissingAuthorizations().
+  // (not marked @Deprecated: assigning a deprecated final field in the
+  // constructors is itself flagged by java:S1874)
   protected final String resourceType;
-  /** @deprecated use {@link #getMissingAuthorizations()} */
-  @Deprecated(forRemoval = false)
   protected final String permissionName;
-  /** @deprecated use {@link #getMissingAuthorizations()} */
-  @Deprecated(forRemoval = false)
   protected final String resourceId;
 
   public AuthorizationException(String message) {
