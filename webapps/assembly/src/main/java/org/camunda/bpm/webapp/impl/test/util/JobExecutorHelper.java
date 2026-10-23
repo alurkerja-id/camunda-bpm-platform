@@ -76,7 +76,7 @@ public class JobExecutorHelper {
   protected boolean areJobsAvailableIgnoringErrors(boolean previousResult) {
     try {
       return areJobsAvailable();
-    } catch(Throwable t) {
+    } catch(Exception t) {
       // Ignore, possible that exception occurs due to locking/updating of table on MSSQL when
       // isolation level doesn't allow READ of the table
       return previousResult;

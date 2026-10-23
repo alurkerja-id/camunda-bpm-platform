@@ -55,7 +55,7 @@ public class SpinValueMapperFactory {
     } catch (ClassCastException e) {
       throw LOGGER.spinValueMapperCastException(e, CustomValueMapper.class.getName());
 
-    } catch (Throwable e) {
+    } catch (ReflectiveOperationException | RuntimeException e) {
       throw LOGGER.spinValueMapperException(e);
 
     }
@@ -68,7 +68,7 @@ public class SpinValueMapperFactory {
     } catch (ClassNotFoundException ignored) {
       // engine plugin is not on class path => ignore
 
-    } catch (Throwable e) {
+    } catch (LinkageError | RuntimeException e) {
       throw LOGGER.spinValueMapperException(e);
 
     }
