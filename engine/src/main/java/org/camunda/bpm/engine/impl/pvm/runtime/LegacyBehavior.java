@@ -157,29 +157,33 @@ public class LegacyBehavior {
     if(performLegacyBehavior) {
       LOG.endConcurrentExecutionInEventSubprocess();
       // notify the grandparent flow scope in a similar way PvmAtomicOperationAcitivtyEnd does
-      ScopeImpl flowScope = endedExecution.getActivity().getFlowScope();
+      notifyGrandparentFlowScope(scopeExecution, endedExecution);
+    }
+
+    return performLegacyBehavior;
+  }
+
+  protected static void notifyGrandparentFlowScope(ActivityExecution scopeExecution, ActivityExecution endedExecution) {
+    ScopeImpl flowScope = endedExecution.getActivity().getFlowScope();
+    if (flowScope != null) {
+      flowScope = flowScope.getFlowScope();
+
       if (flowScope != null) {
-        flowScope = flowScope.getFlowScope();
+        if (flowScope == endedExecution.getActivity().getProcessDefinition()) {
+          endedExecution.remove();
+          scopeExecution.tryPruneLastConcurrentChild();
+          scopeExecution.forceUpdate();
+        }
+        else {
+          PvmActivity flowScopeActivity = (PvmActivity) flowScope;
 
-        if (flowScope != null) {
-          if (flowScope == endedExecution.getActivity().getProcessDefinition()) {
-            endedExecution.remove();
-            scopeExecution.tryPruneLastConcurrentChild();
-            scopeExecution.forceUpdate();
-          }
-          else {
-            PvmActivity flowScopeActivity = (PvmActivity) flowScope;
-
-            ActivityBehavior activityBehavior = flowScopeActivity.getActivityBehavior();
-            if (activityBehavior instanceof CompositeActivityBehavior) {
-              ((CompositeActivityBehavior) activityBehavior).concurrentChildExecutionEnded(scopeExecution, endedExecution);
-            }
+          ActivityBehavior activityBehavior = flowScopeActivity.getActivityBehavior();
+          if (activityBehavior instanceof CompositeActivityBehavior) {
+            ((CompositeActivityBehavior) activityBehavior).concurrentChildExecutionEnded(scopeExecution, endedExecution);
           }
         }
       }
     }
-
-    return performLegacyBehavior;
   }
 
   /**

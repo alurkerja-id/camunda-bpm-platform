@@ -71,18 +71,21 @@ public class ExclusiveGatewayActivityBehavior extends GatewayActivityBehavior {
     if (outgoingSeqFlow != null) {
       execution.leaveActivityViaTransition(outgoingSeqFlow);
     } else {
+      leaveViaDefaultFlow(execution, defaultSequenceFlow);
+    }
+  }
 
-      if (defaultSequenceFlow != null) {
-        PvmTransition defaultTransition = execution.getActivity().findOutgoingTransition(defaultSequenceFlow);
-        if (defaultTransition != null) {
-          execution.leaveActivityViaTransition(defaultTransition);
-        } else {
-          throw LOG.missingDefaultFlowException(execution.getActivity().getId(), defaultSequenceFlow);
-        }
+  protected void leaveViaDefaultFlow(ActivityExecution execution, String defaultSequenceFlow) {
+    if (defaultSequenceFlow != null) {
+      PvmTransition defaultTransition = execution.getActivity().findOutgoingTransition(defaultSequenceFlow);
+      if (defaultTransition != null) {
+        execution.leaveActivityViaTransition(defaultTransition);
       } else {
-        //No sequence flow could be found, not even a default one
-        throw LOG.stuckExecutionException(execution.getActivity().getId());
+        throw LOG.missingDefaultFlowException(execution.getActivity().getId(), defaultSequenceFlow);
       }
+    } else {
+      //No sequence flow could be found, not even a default one
+      throw LOG.stuckExecutionException(execution.getActivity().getId());
     }
   }
 

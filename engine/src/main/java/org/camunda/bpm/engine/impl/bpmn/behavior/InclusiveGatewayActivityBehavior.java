@@ -56,38 +56,47 @@ public class InclusiveGatewayActivityBehavior extends GatewayActivityBehavior {
 
       List<ActivityExecution> joinedExecutions = execution.findInactiveConcurrentExecutions(activity);
       String defaultSequenceFlow = (String) execution.getActivity().getProperty("default");
-      List<PvmTransition> transitionsToTake = new ArrayList<PvmTransition>();
-
-      // find matching non-default sequence flows
-      for (PvmTransition outgoingTransition : execution.getActivity().getOutgoingTransitions()) {
-        if (defaultSequenceFlow == null || !outgoingTransition.getId().equals(defaultSequenceFlow)) {
-          Condition condition = (Condition) outgoingTransition.getProperty(BpmnParse.PROPERTYNAME_CONDITION);
-          if (condition == null || condition.evaluate(execution)) {
-            transitionsToTake.add(outgoingTransition);
-          }
-        }
-      }
+      List<PvmTransition> transitionsToTake = findMatchingTransitions(execution, defaultSequenceFlow);
 
       // if none found, add default flow
       if (transitionsToTake.isEmpty()) {
-        if (defaultSequenceFlow != null) {
-          PvmTransition defaultTransition = execution.getActivity().findOutgoingTransition(defaultSequenceFlow);
-          if (defaultTransition == null) {
-            throw LOG.missingDefaultFlowException(execution.getActivity().getId(), defaultSequenceFlow);
-          }
-
-          transitionsToTake.add(defaultTransition);
-
-        } else {
-          // No sequence flow could be found, not even a default one
-          throw LOG.stuckExecutionException(execution.getActivity().getId());
-        }
+        transitionsToTake.add(findDefaultTransition(execution, defaultSequenceFlow));
       }
 
       // take the flows found
       execution.leaveActivityViaTransitions(transitionsToTake, joinedExecutions);
     } else {
       LOG.noActivityActivation(activity.getId());
+    }
+  }
+
+  protected List<PvmTransition> findMatchingTransitions(ActivityExecution execution, String defaultSequenceFlow) {
+    List<PvmTransition> transitionsToTake = new ArrayList<PvmTransition>();
+
+    // find matching non-default sequence flows
+    for (PvmTransition outgoingTransition : execution.getActivity().getOutgoingTransitions()) {
+      if (defaultSequenceFlow == null || !outgoingTransition.getId().equals(defaultSequenceFlow)) {
+        Condition condition = (Condition) outgoingTransition.getProperty(BpmnParse.PROPERTYNAME_CONDITION);
+        if (condition == null || condition.evaluate(execution)) {
+          transitionsToTake.add(outgoingTransition);
+        }
+      }
+    }
+    return transitionsToTake;
+  }
+
+  protected PvmTransition findDefaultTransition(ActivityExecution execution, String defaultSequenceFlow) {
+    if (defaultSequenceFlow != null) {
+      PvmTransition defaultTransition = execution.getActivity().findOutgoingTransition(defaultSequenceFlow);
+      if (defaultTransition == null) {
+        throw LOG.missingDefaultFlowException(execution.getActivity().getId(), defaultSequenceFlow);
+      }
+
+      return defaultTransition;
+
+    } else {
+      // No sequence flow could be found, not even a default one
+      throw LOG.stuckExecutionException(execution.getActivity().getId());
     }
   }
 
@@ -155,31 +164,7 @@ public class InclusiveGatewayActivityBehavior extends GatewayActivityBehavior {
     List<PvmTransition> outgoingTransitions = srcActivity.getOutgoingTransitions();
 
     if (outgoingTransitions.isEmpty()) {
-
-      if (srcActivity.getActivityBehavior() instanceof EventBasedGatewayActivityBehavior) {
-
-        ActivityImpl eventBasedGateway = (ActivityImpl) srcActivity;
-        Set<ActivityImpl> eventActivities = eventBasedGateway.getEventActivities();
-
-        for (ActivityImpl eventActivity : eventActivities) {
-          boolean isReachable = isReachable(eventActivity, targetActivity, visitedActivities);
-
-          if (isReachable) {
-            return true;
-          }
-        }
-
-      }
-      else {
-
-        ScopeImpl flowScope = srcActivity.getFlowScope();
-        if (flowScope instanceof PvmActivity) {
-          return isReachable((PvmActivity) flowScope, targetActivity, visitedActivities);
-        }
-
-      }
-
-      return false;
+      return isReachableWithoutOutgoingTransitions(srcActivity, targetActivity, visitedActivities);
     }
     else {
       for (PvmTransition pvmTransition : outgoingTransitions) {
@@ -195,6 +180,33 @@ public class InclusiveGatewayActivityBehavior extends GatewayActivityBehavior {
 
         }
       }
+    }
+
+    return false;
+  }
+
+  protected boolean isReachableWithoutOutgoingTransitions(PvmActivity srcActivity, PvmActivity targetActivity, Set<PvmActivity> visitedActivities) {
+    if (srcActivity.getActivityBehavior() instanceof EventBasedGatewayActivityBehavior) {
+
+      ActivityImpl eventBasedGateway = (ActivityImpl) srcActivity;
+      Set<ActivityImpl> eventActivities = eventBasedGateway.getEventActivities();
+
+      for (ActivityImpl eventActivity : eventActivities) {
+        boolean isReachable = isReachable(eventActivity, targetActivity, visitedActivities);
+
+        if (isReachable) {
+          return true;
+        }
+      }
+
+    }
+    else {
+
+      ScopeImpl flowScope = srcActivity.getFlowScope();
+      if (flowScope instanceof PvmActivity) {
+        return isReachable((PvmActivity) flowScope, targetActivity, visitedActivities);
+      }
+
     }
 
     return false;
