@@ -19,6 +19,7 @@ package org.camunda.bpm.engine.rest.dto;
 import java.util.List;
 
 import org.camunda.bpm.engine.AuthorizationException;
+import org.camunda.bpm.engine.authorization.MissingAuthorization;
 
 /**
  * <p>Dto for {@link AuthorizationException}</p>
@@ -48,9 +49,15 @@ public class AuthorizationExceptionDto extends ExceptionDto {
     
     dto.setUserId(e.getUserId());
     dto.setMissingAuthorizations(MissingAuthorizationDto.fromInfo(e.getMissingAuthorizations()));
-    dto.setPermissionName(e.getViolatedPermissionName());
-    dto.setResourceId(e.getResourceId());
-    dto.setResourceName(e.getResourceType());
+
+    // the single-valued fields are only populated when exactly one authorization is missing
+    List<MissingAuthorization> missing = e.getMissingAuthorizations();
+    if (missing.size() == 1) {
+      MissingAuthorization single = missing.get(0);
+      dto.permissionName = single.getViolatedPermissionName();
+      dto.resourceId = single.getResourceId();
+      dto.resourceName = single.getResourceType();
+    }
     
     return dto;
   }
