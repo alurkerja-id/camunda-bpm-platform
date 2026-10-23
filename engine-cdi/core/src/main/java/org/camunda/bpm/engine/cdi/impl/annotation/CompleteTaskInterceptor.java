@@ -39,7 +39,12 @@ public class CompleteTaskInterceptor implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  @Inject BusinessProcess businessProcess;
+  protected final BusinessProcess businessProcess;
+
+  @Inject
+  public CompleteTaskInterceptor(BusinessProcess businessProcess) {
+    this.businessProcess = businessProcess;
+  }
 
   @AroundInvoke
   public Object invoke(InvocationContext ctx) throws Exception {
