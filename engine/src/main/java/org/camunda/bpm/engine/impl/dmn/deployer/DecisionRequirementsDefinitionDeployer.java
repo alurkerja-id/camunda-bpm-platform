@@ -51,7 +51,7 @@ public class DecisionRequirementsDefinitionDeployer extends AbstractDefinitionDe
   protected String[] getResourcesSuffixes() {
     // since the DecisionDefinitionDeployer uses the result of this cacheDeployer, make sure that
     // it process the same DMN resources
-    return DecisionDefinitionDeployer.DMN_RESOURCE_SUFFIXES;
+    return DecisionDefinitionDeployer.getDmnResourceSuffixes();
   }
 
   @Override

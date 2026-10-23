@@ -54,6 +54,17 @@ public class DeploymentMappings extends ArrayList<DeploymentMapping> {
     return false;
   }
 
+  // overallIdCount is derived from the elements, so list equality already covers it
+  @Override
+  public boolean equals(Object o) {
+    return super.equals(o);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
+  }
+
   public int getOverallIdCount() {
     return overallIdCount;
   }

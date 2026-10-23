@@ -165,4 +165,54 @@ public class ConcurrentLruCacheTest {
   }
 
 
+
+  @Test
+  public void removeEntryAndReportSizeAndKeys() {
+    ConcurrentLruCache<String, String> lru = new ConcurrentLruCache<String, String>(3);
+    assertThat(lru.isEmpty()).isTrue();
+
+    lru.put("a", "1");
+    lru.put("b", "2");
+
+    assertThat(lru.isEmpty()).isFalse();
+    assertThat(lru.size()).isEqualTo(2);
+    assertThat(lru.keySet()).containsExactlyInAnyOrder("a", "b");
+
+    lru.remove("a");
+
+    assertThat(lru.get("a")).isNull();
+    assertThat(lru.size()).isEqualTo(1);
+    assertThat(lru.keySet()).containsExactly("b");
+  }
+
+  @Test
+  public void overwritingKeyDoesNotEvictOthers() {
+    ConcurrentLruCache<String, String> lru = new ConcurrentLruCache<String, String>(2);
+    lru.put("a", "1");
+    lru.put("b", "2");
+    lru.put("a", "3");
+    lru.put("a", "4");
+
+    assertThat(lru.size()).isEqualTo(2);
+    assertThat(lru.get("a")).isEqualTo("4");
+    assertThat(lru.get("b")).isEqualTo("2");
+  }
+
+  @Test
+  public void zeroCapacityCacheHoldsNothing() {
+    ConcurrentLruCache<String, String> lru = new ConcurrentLruCache<String, String>(0);
+    lru.put("a", "1");
+
+    assertThat(lru.isEmpty()).isTrue();
+  }
+
+  @Test
+  public void negativeCapacityIsRejected() {
+    try {
+      new ConcurrentLruCache<String, String>(-1);
+      org.junit.Assert.fail("expected IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      // expected
+    }
+  }
 }

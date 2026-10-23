@@ -57,12 +57,7 @@ public class JobExecutorHelper {
       try {
         while (areJobsAvailable && !task.isTimeLimitExceeded()) {
           Thread.sleep(intervalMillis);
-          try {
-            areJobsAvailable = areJobsAvailable();
-          } catch(Exception t) {
-            // Ignore, possible that exception occurs due to locking/updating of table on MSSQL when
-            // isolation level doesn't allow READ of the table
-          }
+          areJobsAvailable = areJobsAvailableIgnoringErrors(areJobsAvailable);
         }
       } catch (InterruptedException e) {
         Thread.currentThread().interrupt();
@@ -75,6 +70,16 @@ public class JobExecutorHelper {
 
     } finally {
       jobExecutor.shutdown();
+    }
+  }
+
+  protected boolean areJobsAvailableIgnoringErrors(boolean previousResult) {
+    try {
+      return areJobsAvailable();
+    } catch(Exception t) {
+      // Ignore, possible that exception occurs due to locking/updating of table on MSSQL when
+      // isolation level doesn't allow READ of the table
+      return previousResult;
     }
   }
 

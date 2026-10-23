@@ -27,11 +27,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import org.camunda.bpm.engine.impl.ProcessEngineInfoImpl;
 import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.util.IoUtil;
@@ -103,12 +101,13 @@ public abstract class ProcessEngines {
       }
 
       // Remove duplicated configuration URL's using set. Some classloaders may return identical URL's twice, causing duplicate startups
-      Set<URL> configUrls = new HashSet<URL>();
+      // (keyed by external form, as URL#equals/hashCode may trigger host name resolution)
+      Map<String, URL> configUrls = new LinkedHashMap<String, URL>();
       while (resources.hasMoreElements()) {
-        configUrls.add( resources.nextElement() );
+        URL resource = resources.nextElement();
+        configUrls.put(resource.toExternalForm(), resource);
       }
-      for (Iterator<URL> iterator = configUrls.iterator(); iterator.hasNext();) {
-        URL resource = iterator.next();
+      for (URL resource : configUrls.values()) {
         initProcessEngineFromResource(resource);
       }
 

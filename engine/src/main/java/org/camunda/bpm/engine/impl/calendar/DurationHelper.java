@@ -78,15 +78,19 @@ public class DurationHelper {
       end = expression.size() == 1 ? null : DateTimeUtil.parseDate(expression.get(1));
     } else {
       start = DateTimeUtil.parseDate(expression.get(0));
-      if (isDuration(expression.get(1))) {
-        period = parsePeriod(expression.get(1));
-      } else {
-        end = DateTimeUtil.parseDate(expression.get(1));
-        period = datatypeFactory.newDuration(end.getTime()-start.getTime());
-      }
+      parsePeriodOrEnd(expression.get(1));
     }
     if (start == null && end == null) {
       start = startDate == null ? ClockUtil.getCurrentTime() : startDate;
+    }
+  }
+
+  protected void parsePeriodOrEnd(String expression) throws Exception {
+    if (isDuration(expression)) {
+      period = parsePeriod(expression);
+    } else {
+      end = DateTimeUtil.parseDate(expression);
+      period = datatypeFactory.newDuration(end.getTime()-start.getTime());
     }
   }
 

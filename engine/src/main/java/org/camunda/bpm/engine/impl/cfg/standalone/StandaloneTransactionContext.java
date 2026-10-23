@@ -95,20 +95,7 @@ public class StandaloneTransactionContext implements TransactionContext {
   @Override
   public void rollback() {
     try {
-      try {
-        LOG.debugTransactionOperation("firing event rollback...");
-        fireTransactionEvent(TransactionState.ROLLINGBACK);
-
-      }
-      catch (Throwable exception) {
-        LOG.exceptionWhileFiringEvent(TransactionState.ROLLINGBACK, exception);
-        Context.getCommandInvocationContext().trySetThrowable(exception);
-      }
-      finally {
-        LOG.debugTransactionOperation("rolling back the persistence session...");
-        getPersistenceProvider().rollback();
-      }
-
+      fireRollingBackAndRollbackSession();
     }
     catch (Throwable exception) {
       LOG.exceptionWhileFiringEvent(TransactionState.ROLLINGBACK, exception);
@@ -117,6 +104,22 @@ public class StandaloneTransactionContext implements TransactionContext {
     finally {
       LOG.debugFiringEventRolledBack();
       fireTransactionEvent(TransactionState.ROLLED_BACK);
+    }
+  }
+
+  protected void fireRollingBackAndRollbackSession() {
+    try {
+      LOG.debugTransactionOperation("firing event rollback...");
+      fireTransactionEvent(TransactionState.ROLLINGBACK);
+
+    }
+    catch (Throwable exception) {
+      LOG.exceptionWhileFiringEvent(TransactionState.ROLLINGBACK, exception);
+      Context.getCommandInvocationContext().trySetThrowable(exception);
+    }
+    finally {
+      LOG.debugTransactionOperation("rolling back the persistence session...");
+      getPersistenceProvider().rollback();
     }
   }
 

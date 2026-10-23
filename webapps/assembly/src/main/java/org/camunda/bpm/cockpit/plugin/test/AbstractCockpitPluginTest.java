@@ -16,9 +16,11 @@
  */
 package org.camunda.bpm.cockpit.plugin.test;
 
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.LogManager;
 
 import org.apache.ibatis.logging.LogFactory;
 import org.camunda.bpm.cockpit.Cockpit;
@@ -27,7 +29,9 @@ import org.camunda.bpm.cockpit.db.QueryService;
 import org.camunda.bpm.cockpit.impl.DefaultCockpitRuntimeDelegate;
 import org.camunda.bpm.engine.ManagementService;
 import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.util.LogUtil;
+import org.camunda.bpm.engine.impl.pvm.PvmException;
+import org.camunda.bpm.engine.impl.util.IoUtil;
+import org.camunda.bpm.engine.impl.util.ReflectUtil;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.DeploymentBuilder;
 import org.camunda.bpm.engine.runtime.Job;
@@ -49,11 +53,29 @@ public abstract class AbstractCockpitPluginTest {
   private static final String DEFAULT_BPMN_RESOURCE_NAME = "process.bpmn20.xml";
 
   static {
-    LogUtil.readJavaUtilLoggingConfigFromClasspath();
+    readJavaUtilLoggingConfigFromClasspath();
 
     // this ensures that mybatis uses the jdk logging
     LogFactory.useJdkLogging();
     // with an upgrade of mybatis, this might have to become org.mybatis.generator.logging.LogFactory.forceJavaLogging();
+  }
+
+  private static void readJavaUtilLoggingConfigFromClasspath() {
+    InputStream inputStream = ReflectUtil.getResourceAsStream("logging.properties");
+    try {
+      if (inputStream != null) {
+        LogManager.getLogManager().readConfiguration(inputStream);
+
+        String redirectCommons = LogManager.getLogManager().getProperty("redirect.commons.logging");
+        if ((redirectCommons != null) && (!redirectCommons.equalsIgnoreCase("false"))) {
+          System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.Jdk14Logger");
+        }
+      }
+    } catch (Exception e) {
+      throw new PvmException("couldn't initialize logging properly", e);
+    } finally {
+      IoUtil.closeSilently(inputStream);
+    }
   }
 
   @Rule

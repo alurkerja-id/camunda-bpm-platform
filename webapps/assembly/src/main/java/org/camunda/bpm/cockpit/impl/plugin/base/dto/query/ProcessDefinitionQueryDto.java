@@ -104,7 +104,7 @@ public class ProcessDefinitionQueryDto extends AbstractRestQueryParametersDto<Pr
 
   @Override
   protected String getOrderByValue(String sortBy) {
-    return super.getOrderBy();
+    return super.getInternalOrderBy();
   }
 
   @Override

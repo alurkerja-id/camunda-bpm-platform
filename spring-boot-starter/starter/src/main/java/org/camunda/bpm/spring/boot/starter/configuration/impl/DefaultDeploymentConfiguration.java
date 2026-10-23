@@ -25,13 +25,13 @@ import org.springframework.core.io.support.ResourceArrayPropertyEditor;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static java.util.Collections.EMPTY_SET;
 
 public class DefaultDeploymentConfiguration extends AbstractCamundaConfiguration implements CamundaDeploymentConfiguration {
+
 
   @Override
   public void preInit(SpringProcessEngineConfiguration configuration) {
@@ -52,11 +52,15 @@ public class DefaultDeploymentConfiguration extends AbstractCamundaConfiguration
       logger.debug("resolving deployment resources for pattern {}", (Object[]) resourcePattern);
       resolver.setValue(resourcePattern);
 
-      return Arrays.stream((Resource[])resolver.getValue())
-        .peek(resource -> logger.debug("processing deployment resource {}", resource))
-        .filter(this::isFile)
-        .peek(resource -> logger.debug("added deployment resource {}", resource))
-        .collect(Collectors.toSet());
+      final Set<Resource> deploymentResources = new HashSet<>();
+      for (final Resource resource : (Resource[]) resolver.getValue()) {
+        logger.debug("processing deployment resource {}", resource);
+        if (isFile(resource)) {
+          logger.debug("added deployment resource {}", resource);
+          deploymentResources.add(resource);
+        }
+      }
+      return deploymentResources;
 
     } catch (final RuntimeException e) {
       logger.error("unable to resolve resources", e);

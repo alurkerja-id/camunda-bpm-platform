@@ -86,6 +86,46 @@ public class ReflectUtilTest {
 
   // class loading -------------------------------------------------------------------------------
 
+  public static class FailsInitWithException {
+
+    static {
+      if (true) {
+        throw new IllegalStateException("init failed");
+      }
+    }
+  }
+
+  public static class FailsInitWithStackOverflow {
+
+    static {
+      if (true) {
+        throw new StackOverflowError("init overflow");
+      }
+    }
+  }
+
+  @Test
+  public void shouldWrapMissingClassInProcessEngineException() {
+    assertThatThrownBy(() -> ReflectUtil.loadClass("org.camunda.does.not.Exist"))
+        .isInstanceOf(ProcessEngineException.class)
+        .hasCauseInstanceOf(ClassNotFoundException.class);
+  }
+
+  @Test
+  public void shouldWrapLinkageErrorFromClassInitialization() {
+    assertThatThrownBy(() -> ReflectUtil.loadClass(FailsInitWithException.class.getName()))
+        .isInstanceOf(ProcessEngineException.class)
+        .hasCauseInstanceOf(LinkageError.class);
+  }
+
+  // deliberate change (java:S1181): only Exception and LinkageError are collected as the
+  // class-loading failure, a VirtualMachineError-style Error is no longer swallowed
+  @Test
+  public void shouldNotSwallowNonLinkageErrorFromClassInitialization() {
+    assertThatThrownBy(() -> ReflectUtil.loadClass(FailsInitWithStackOverflow.class.getName()))
+        .isInstanceOf(StackOverflowError.class);
+  }
+
   @Test
   public void shouldExposeAClassLoader() {
     assertThat(ReflectUtil.getClassLoader()).isNotNull();

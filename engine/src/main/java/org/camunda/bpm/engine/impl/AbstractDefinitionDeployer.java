@@ -44,7 +44,11 @@ import org.camunda.bpm.engine.impl.repository.ResourceDefinitionEntity;
  */
 public abstract class AbstractDefinitionDeployer<DefinitionEntity extends ResourceDefinitionEntity> implements Deployer {
 
-  public static final String[] DIAGRAM_SUFFIXES = new String[] { "png", "jpg", "gif", "svg" };
+  private static final String[] DIAGRAM_SUFFIXES = new String[] { "png", "jpg", "gif", "svg" };
+
+  public static String[] getDefaultDiagramSuffixes() {
+    return DIAGRAM_SUFFIXES.clone();
+  }
 
   private static final CommandLogger LOG = ProcessEngineLogger.CMD_LOGGER;
 
@@ -179,7 +183,7 @@ public abstract class AbstractDefinitionDeployer<DefinitionEntity extends Resour
   }
 
   protected String[] getDiagramSuffixes() {
-    return DIAGRAM_SUFFIXES;
+    return getDefaultDiagramSuffixes();
   }
 
   protected void ensureNoDuplicateDefinitionKeys(List<DefinitionEntity> definitions) {

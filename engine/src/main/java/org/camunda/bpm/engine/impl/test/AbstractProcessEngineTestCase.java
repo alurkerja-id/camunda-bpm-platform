@@ -276,12 +276,7 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
       try {
         while (areJobsAvailable && !task.isTimeLimitExceeded()) {
           Thread.sleep(intervalMillis);
-          try {
-            areJobsAvailable = areJobsAvailable();
-          } catch(Throwable t) {
-            // Ignore, possible that exception occurs due to locking/updating of table on MSSQL when
-            // isolation level doesn't allow READ of the table
-          }
+          areJobsAvailable = areJobsAvailableIgnoringErrors(areJobsAvailable);
         }
       } catch (InterruptedException e) {
         Thread.currentThread().interrupt();
@@ -386,6 +381,16 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
 
     if (recursive) {
       executeAvailableJobs(jobsExecuted, expectedExecutions, ignoreLessExecutions, recursive);
+    }
+  }
+
+  protected boolean areJobsAvailableIgnoringErrors(boolean previousResult) {
+    try {
+      return areJobsAvailable();
+    } catch(Throwable t) {
+      // Ignore, possible that exception occurs due to locking/updating of table on MSSQL when
+      // isolation level doesn't allow READ of the table
+      return previousResult;
     }
   }
 

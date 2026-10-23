@@ -25,7 +25,6 @@ import org.camunda.bpm.client.task.ExternalTaskHandler;
 import org.camunda.bpm.client.topic.TopicSubscription;
 import org.camunda.bpm.client.topic.TopicSubscriptionBuilder;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -46,11 +45,15 @@ public class SpringTopicSubscriptionImpl
   protected TopicSubscriptionBuilder topicSubscriptionBuilder;
   protected TopicSubscription topicSubscription;
 
-  @Autowired
-  protected ExternalTaskClient client;
+  protected final ExternalTaskClient client;
 
-  @Autowired
-  protected ApplicationEventPublisher applicationEventPublisher;
+  protected final ApplicationEventPublisher applicationEventPublisher;
+
+  public SpringTopicSubscriptionImpl(ExternalTaskClient client,
+                                     ApplicationEventPublisher applicationEventPublisher) {
+    this.client = client;
+    this.applicationEventPublisher = applicationEventPublisher;
+  }
 
   protected Predicate<ApplicationEvent> isEventThatCanStartSubscription() {
     return ContextRefreshedEvent.class::isInstance;

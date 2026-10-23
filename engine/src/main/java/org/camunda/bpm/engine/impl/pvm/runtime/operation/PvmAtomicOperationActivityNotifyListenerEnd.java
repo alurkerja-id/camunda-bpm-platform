@@ -18,7 +18,6 @@ package org.camunda.bpm.engine.impl.pvm.runtime.operation;
 
 import org.camunda.bpm.engine.delegate.ExecutionListener;
 import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
-import org.camunda.bpm.engine.impl.pvm.runtime.Callback;
 import org.camunda.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
 
 /**
@@ -39,15 +38,11 @@ public class PvmAtomicOperationActivityNotifyListenerEnd extends PvmAtomicOperat
   protected void eventNotificationsCompleted(PvmExecutionImpl execution) {
 
     // perform activity end behavior
-    execution.dispatchDelayedEventsAndPerformOperation(new Callback<PvmExecutionImpl, Void>() {
-
-      @Override
-      public Void callback(PvmExecutionImpl execution) {
-        execution.leaveActivityInstance();
-        execution.setActivityInstanceId(null);
-        execution.performOperation(ACTIVITY_END);
-        return null;
-      }
+    execution.dispatchDelayedEventsAndPerformOperation((PvmExecutionImpl endingExecution) -> {
+      endingExecution.leaveActivityInstance();
+      endingExecution.setActivityInstanceId(null);
+      endingExecution.performOperation(ACTIVITY_END);
+      return null;
     });
   }
 
