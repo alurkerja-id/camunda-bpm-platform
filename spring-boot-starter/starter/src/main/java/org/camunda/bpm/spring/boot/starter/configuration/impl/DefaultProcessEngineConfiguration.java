@@ -28,6 +28,7 @@ import java.util.Optional;
 
 public class DefaultProcessEngineConfiguration extends AbstractCamundaConfiguration implements CamundaProcessEngineConfiguration {
 
+
   @Autowired
   private Optional<IdGenerator> idGenerator;
 
@@ -55,7 +56,7 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
 
   private void setProcessEngineName(SpringProcessEngineConfiguration configuration) {
     String processEngineName = StringUtils.trimAllWhitespace(camundaBpmProperties.getProcessEngineName());
-    if (!StringUtils.isEmpty(processEngineName) && !processEngineName.contains("-")) {
+    if (StringUtils.hasLength(processEngineName) && !processEngineName.contains("-")) {
 
       if (Boolean.TRUE.equals(camundaBpmProperties.getGenerateUniqueProcessEngineName())) {
         if (!processEngineName.equals(ProcessEngines.NAME_DEFAULT)) {

@@ -61,7 +61,7 @@ public class CamundaBpmProperties {
   }
 
   public static String getUniqueName(String name) {
-    return name + RandomStringUtils.randomAlphanumeric(10);
+    return name + RandomStringUtils.secure().nextAlphanumeric(10);
   }
 
   /**

@@ -44,6 +44,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
  */
 public class DefaultJobConfiguration extends AbstractCamundaConfiguration implements CamundaJobConfiguration {
 
+
   @Autowired
   protected JobExecutor jobExecutor;
 
