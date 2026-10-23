@@ -21,12 +21,16 @@ import org.camunda.bpm.engine.impl.cfg.IdGenerator;
 import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.camunda.bpm.spring.boot.starter.configuration.CamundaProcessEngineConfiguration;
 import org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
 public class DefaultProcessEngineConfiguration extends AbstractCamundaConfiguration implements CamundaProcessEngineConfiguration {
+
+  private static final Logger CONFIG_LOG = LoggerFactory.getLogger(DefaultProcessEngineConfiguration.class);
 
 
   @Autowired
@@ -50,7 +54,7 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
     if (StringUtils.hasText(defaultSerializationFormat)) {
       configuration.setDefaultSerializationFormat(defaultSerializationFormat);
     } else {
-      logger.warn("Ignoring invalid defaultSerializationFormat='{}'", defaultSerializationFormat);
+      CONFIG_LOG.warn("Ignoring invalid defaultSerializationFormat='{}'", defaultSerializationFormat);
     }
   }
 
@@ -68,7 +72,7 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
 
       configuration.setProcessEngineName(processEngineName);
     } else {
-      logger.warn("Ignoring invalid processEngineName='{}' - must not be null, blank or contain hyphen", camundaBpmProperties.getProcessEngineName());
+      CONFIG_LOG.warn("Ignoring invalid processEngineName='{}' - must not be null, blank or contain hyphen", camundaBpmProperties.getProcessEngineName());
     }
   }
 
