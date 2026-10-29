@@ -22,6 +22,7 @@ import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -214,6 +215,9 @@ public class ProcessEngineAuthenticationFilterFlowTest {
   @Test
   public void shouldDoNothingOnDestroy() {
     filter.destroy();
+
+    verifyNoInteractions(engine, identityService, provider, request, response, chain);
+    assertThat(addressedEngineName).isNull();
   }
 
 }
