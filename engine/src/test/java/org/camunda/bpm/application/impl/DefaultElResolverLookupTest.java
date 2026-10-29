@@ -96,4 +96,9 @@ public class DefaultElResolverLookupTest {
 
     assertThat(resolver).isInstanceOf(org.camunda.bpm.impl.juel.jakarta.el.CompositeELResolver.class);
   }
+
+  @Test
+  public void shouldBeInstantiableUtilityClass() {
+    assertThat(new DefaultElResolverLookup()).isNotNull();
+  }
 }

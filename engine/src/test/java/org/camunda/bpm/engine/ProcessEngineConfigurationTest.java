@@ -30,6 +30,44 @@ public class ProcessEngineConfigurationTest {
     return new ByteArrayInputStream(CFG.getBytes(StandardCharsets.UTF_8));
   }
 
+  /** a configuration without any overriding getters/setters, so the base class accessors are the ones exercised */
+  static class BareConfiguration extends ProcessEngineConfiguration {
+    @Override
+    public ProcessEngine buildProcessEngine() {
+      return null;
+    }
+  }
+
+  @Test
+  public void shouldFallBackToActivitiConfigurationWhenCamundaConfigurationIsMissing() throws Exception {
+    java.io.File root = java.nio.file.Files.createTempDirectory("pec-test").toFile();
+    java.io.File activiti = new java.io.File(root, "activiti.cfg.xml");
+    java.nio.file.Files.write(activiti.toPath(), CFG.getBytes(StandardCharsets.UTF_8));
+    ClassLoader original = Thread.currentThread().getContextClassLoader();
+    ClassLoader hidingCamunda = new java.net.URLClassLoader(new java.net.URL[] { root.toURI().toURL() }, original) {
+      @Override
+      public java.net.URL getResource(String name) {
+        return "camunda.cfg.xml".equals(name) ? null : super.getResource(name);
+      }
+
+      @Override
+      public java.io.InputStream getResourceAsStream(String name) {
+        return "camunda.cfg.xml".equals(name) ? null : super.getResourceAsStream(name);
+      }
+    };
+    try {
+      Thread.currentThread().setContextClassLoader(hidingCamunda);
+
+      ProcessEngineConfiguration configuration = ProcessEngineConfiguration.createProcessEngineConfigurationFromResourceDefault();
+
+      assertThat(configuration.getProcessEngineName()).isEqualTo("cfg-test");
+    } finally {
+      Thread.currentThread().setContextClassLoader(original);
+      activiti.delete();
+      root.delete();
+    }
+  }
+
   @Test
   public void shouldCreateStandaloneConfigurations() {
     assertThat(ProcessEngineConfiguration.createStandaloneProcessEngineConfiguration())
@@ -79,6 +117,12 @@ public class ProcessEngineConfigurationTest {
     } else if (type == boolean.class || type == Boolean.class) {
       return flip;
     }
+    if (type == List.class) {
+      return flip ? java.util.Collections.singletonList("x") : java.util.Collections.singletonList("y");
+    }
+    if (!type.isPrimitive() && !Modifier.isFinal(type.getModifiers()) && type != Object.class) {
+      return org.mockito.Mockito.mock(type);
+    }
     return null;
   }
 
@@ -105,7 +149,7 @@ public class ProcessEngineConfigurationTest {
     int verified = 0;
 
     for (boolean flip : new boolean[] { true, false }) {
-      ProcessEngineConfiguration configuration = new StandaloneInMemProcessEngineConfiguration();
+      ProcessEngineConfiguration configuration = new BareConfiguration();
       for (Method setter : ProcessEngineConfiguration.class.getMethods()) {
         if (!setter.getName().startsWith("set") || setter.getParameterCount() != 1
             || Modifier.isStatic(setter.getModifiers()) || setter.getDeclaringClass() != ProcessEngineConfiguration.class) {
@@ -124,7 +168,7 @@ public class ProcessEngineConfigurationTest {
         Object returned = setter.invoke(configuration, value);
         Object actual = getter.invoke(configuration);
         verified++;
-        if (!value.equals(actual)) {
+        if (!value.equals(actual) && value != actual) {
           mismatches.add(setter.getName() + " set " + value + " but " + getter.getName() + " returned " + actual);
         }
         if (setter.getReturnType() != void.class) {
@@ -135,5 +179,15 @@ public class ProcessEngineConfigurationTest {
 
     assertThat(verified).isGreaterThan(100);
     assertThat(mismatches).isEmpty();
+  }
+
+  @Test
+  public void shouldHoldHistoryLevelCommand() {
+    ProcessEngineConfiguration configuration = new BareConfiguration();
+    org.camunda.bpm.engine.impl.HistoryLevelSetupCommand command = new org.camunda.bpm.engine.impl.HistoryLevelSetupCommand();
+
+    configuration.setHistoryLevelCommand(command);
+
+    assertThat(configuration.getHistoryLevelCommand()).isSameAs(command);
   }
 }

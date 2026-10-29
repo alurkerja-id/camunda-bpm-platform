@@ -114,4 +114,49 @@ public class AbstractEjbProcessApplicationTest {
         .hasCause(failure);
     assertThat(Thread.currentThread().getContextClassLoader()).isSameAs(original);
   }
+
+  public static class FakeJndiFactory implements javax.naming.spi.InitialContextFactory {
+    static final java.util.Map<String, Object> BINDINGS = new java.util.HashMap<>();
+
+    @Override
+    public javax.naming.Context getInitialContext(java.util.Hashtable<?, ?> environment) {
+      javax.naming.Context context = org.mockito.Mockito.mock(javax.naming.Context.class);
+      try {
+        org.mockito.Mockito.when(context.lookup(org.mockito.ArgumentMatchers.anyString()))
+            .thenAnswer(invocation -> BINDINGS.get(invocation.<String>getArgument(0)));
+      } catch (javax.naming.NamingException e) {
+        throw new IllegalStateException(e);
+      }
+      return context;
+    }
+  }
+
+  private String lookupName(String appName, String moduleName) {
+    String previous = System.getProperty(javax.naming.Context.INITIAL_CONTEXT_FACTORY);
+    System.setProperty(javax.naming.Context.INITIAL_CONTEXT_FACTORY, FakeJndiFactory.class.getName());
+    FakeJndiFactory.BINDINGS.clear();
+    FakeJndiFactory.BINDINGS.put("java:app/AppName", appName);
+    FakeJndiFactory.BINDINGS.put("java:module/ModuleName", moduleName);
+    try {
+      return new TestEjbPa().autodetectProcessApplicationName();
+    } finally {
+      FakeJndiFactory.BINDINGS.clear();
+      if (previous == null) {
+        System.clearProperty(javax.naming.Context.INITIAL_CONTEXT_FACTORY);
+      } else {
+        System.setProperty(javax.naming.Context.INITIAL_CONTEXT_FACTORY, previous);
+      }
+    }
+  }
+
+  @Test
+  public void shouldCombineAppAndModuleNameFromJndi() {
+    assertThat(lookupName("ear", "module")).isEqualTo("ear/module");
+  }
+
+  @Test
+  public void shouldUseAppNameWhenModuleNameEqualsOrIsMissing() {
+    assertThat(lookupName("ear", "ear")).isEqualTo("ear");
+    assertThat(lookupName("ear", null)).isEqualTo("ear");
+  }
 }

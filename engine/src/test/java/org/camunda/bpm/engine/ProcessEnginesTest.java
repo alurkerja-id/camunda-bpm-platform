@@ -238,4 +238,155 @@ public class ProcessEnginesTest {
 
     assertThat(ProcessEngines.getProcessEngines()).containsEntry("keep", engine);
   }
+
+  @Test
+  public void shouldFailInitWhenResourcesCannotBeRetrieved() {
+    Thread.currentThread().setContextClassLoader(new ClassLoader(originalClassLoader) {
+      @Override
+      public java.util.Enumeration<URL> getResources(String name) throws java.io.IOException {
+        throw new java.io.IOException("no " + name);
+      }
+    });
+
+    assertThatThrownBy(() -> ProcessEngines.init(true))
+        .isInstanceOf(ProcessEngineException.class)
+        .hasMessageContaining("problem retrieving camunda.cfg.xml and activiti.cfg.xml resources");
+    assertThat(ProcessEngines.isInitialized).isFalse();
+  }
+
+  @Test
+  public void shouldSilentlyStopInitWhenResourcesCannotBeRetrievedAndNotForced() {
+    Thread.currentThread().setContextClassLoader(new ClassLoader(originalClassLoader) {
+      @Override
+      public java.util.Enumeration<URL> getResources(String name) throws java.io.IOException {
+        throw new java.io.IOException("no " + name);
+      }
+    });
+
+    ProcessEngines.init(false);
+
+    assertThat(ProcessEngines.isInitialized).isFalse();
+    assertThat(ProcessEngines.getProcessEngines()).isEmpty();
+  }
+
+  @Test
+  public void shouldFailInitWhenOnlyContextResourceLookupFails() {
+    Thread.currentThread().setContextClassLoader(new ClassLoader(originalClassLoader) {
+      @Override
+      public java.util.Enumeration<URL> getResources(String name) throws java.io.IOException {
+        if ("activiti-context.xml".equals(name)) {
+          throw new java.io.IOException("no context");
+        }
+        return java.util.Collections.emptyEnumeration();
+      }
+    });
+
+    assertThatThrownBy(() -> ProcessEngines.init(true))
+        .isInstanceOf(ProcessEngineException.class)
+        .hasMessageContaining("problem retrieving activiti-context.xml resources");
+
+    ProcessEngines.init(false);
+    assertThat(ProcessEngines.isInitialized).isFalse();
+  }
+
+  @Test
+  public void shouldFailInitWhenSpringSupportIsMissingForContextResource() throws Exception {
+    File root = folder.newFolder();
+    File context = new File(root, "activiti-context.xml");
+    Files.write(context.toPath(), "<beans/>".getBytes(StandardCharsets.UTF_8));
+    final URL contextUrl = context.toURI().toURL();
+    Thread.currentThread().setContextClassLoader(new ClassLoader(originalClassLoader) {
+      @Override
+      public java.util.Enumeration<URL> getResources(String name) throws java.io.IOException {
+        if ("activiti-context.xml".equals(name)) {
+          return java.util.Collections.enumeration(java.util.Collections.singletonList(contextUrl));
+        }
+        return java.util.Collections.emptyEnumeration();
+      }
+    });
+
+    assertThatThrownBy(() -> ProcessEngines.init())
+        .isInstanceOf(ProcessEngineException.class)
+        .hasMessageContaining("couldn't initialize process engine from spring configuration resource");
+  }
+
+  @Test
+  public void shouldRecordFailureWhenConfigurationStreamCannotBeOpened() throws Exception {
+    final URL unreadable = new URL("unreadable", "localhost", -1, "/camunda.cfg.xml", new java.net.URLStreamHandler() {
+      @Override
+      protected java.net.URLConnection openConnection(URL u) throws java.io.IOException {
+        throw new java.io.IOException("cannot open");
+      }
+    });
+    Thread.currentThread().setContextClassLoader(new ClassLoader(originalClassLoader) {
+      @Override
+      public java.util.Enumeration<URL> getResources(String name) throws java.io.IOException {
+        if ("camunda.cfg.xml".equals(name)) {
+          return java.util.Collections.enumeration(java.util.Collections.singletonList(unreadable));
+        }
+        return java.util.Collections.emptyEnumeration();
+      }
+    });
+
+    ProcessEngines.init();
+
+    assertThat(ProcessEngines.getProcessEngineInfos()).hasSize(1);
+    ProcessEngineInfo info = ProcessEngines.getProcessEngineInfos().get(0);
+    assertThat(info.getException()).contains("couldn't open resource stream");
+    assertThat(info.getName()).isNull();
+  }
+
+  @Test
+  public void shouldDescribeUnnamedEngineWhenClosingFails() {
+    ProcessEngine unnamed = mock(ProcessEngine.class);
+    when(unnamed.getName()).thenReturn(null);
+    doThrow(new IllegalStateException("close failed")).when(unnamed).close();
+    ProcessEngines.isInitialized = true;
+    ProcessEngines.registerProcessEngine(unnamed);
+
+    ProcessEngines.destroy();
+
+    verify(unnamed).close();
+    assertThat(ProcessEngines.getProcessEngines()).isEmpty();
+  }
+
+  @Test
+  public void shouldAllowSubclassing() {
+    assertThat(new ProcessEngines() { }).isInstanceOf(ProcessEngines.class);
+  }
+
+  @Test
+  public void shouldFallBackToActivitiConfigurationLookupWhenCamundaLookupFails() throws Exception {
+    final List<String> requested = new ArrayList<>();
+    Thread.currentThread().setContextClassLoader(new ClassLoader(originalClassLoader) {
+      @Override
+      public java.util.Enumeration<URL> getResources(String name) throws java.io.IOException {
+        requested.add(name);
+        if ("camunda.cfg.xml".equals(name)) {
+          throw new java.io.IOException("no camunda");
+        }
+        return java.util.Collections.emptyEnumeration();
+      }
+    });
+
+    ProcessEngines.init();
+
+    assertThat(requested).containsExactly("camunda.cfg.xml", "activiti.cfg.xml", "activiti-context.xml");
+    assertThat(ProcessEngines.isInitialized).isTrue();
+  }
+
+  @Test
+  public void shouldRecreateEngineMapWhenItWasCleared() {
+    ProcessEngines.processEngines = null;
+    Thread.currentThread().setContextClassLoader(new ClassLoader(originalClassLoader) {
+      @Override
+      public java.util.Enumeration<URL> getResources(String name) {
+        return java.util.Collections.emptyEnumeration();
+      }
+    });
+
+    ProcessEngines.init();
+
+    assertThat(ProcessEngines.getProcessEngines()).isNotNull().isEmpty();
+  }
 }
