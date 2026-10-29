@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" targetNamespace="http://camunda.org/test">
+  <process id="convMethod" isExecutable="true">
+    <startEvent id="start"/>
+    <sequenceFlow id="f" sourceRef="start" targetRef="wait"/>
+    <userTask id="wait"/>
+  </process>
+</definitions>
