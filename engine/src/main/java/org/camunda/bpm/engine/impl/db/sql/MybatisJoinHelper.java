@@ -31,7 +31,7 @@ public class MybatisJoinHelper {
 
   protected static final EnginePersistenceLogger LOG = ProcessEngineLogger.PERSISTENCE_LOGGER;
   protected static final String DEFAULT_ORDER = "RES.ID_ asc";
-  public static final Map<String, MyBatisTableMapping> mappings = new HashMap<String, MyBatisTableMapping>();
+  private static final Map<String, MyBatisTableMapping> mappings = new HashMap<String, MyBatisTableMapping>();
 
   static {
     mappings.put(QueryOrderingProperty.RELATION_VARIABLE, new VariableTableMapping());

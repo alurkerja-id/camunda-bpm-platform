@@ -22,12 +22,13 @@ import org.camunda.bpm.client.spring.boot.starter.ClientProperties;
 import org.camunda.bpm.client.spring.impl.client.ClientConfiguration;
 import org.camunda.bpm.client.spring.impl.client.ClientFactory;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 public class PropertiesAwareClientFactory extends ClientFactory {
 
-  @Autowired
-  protected ClientProperties clientProperties;
+  protected final ClientProperties clientProperties;
+
+  public PropertiesAwareClientFactory(ClientProperties clientProperties) {
+    this.clientProperties = clientProperties;
+  }
 
   @Override
   public void afterPropertiesSet() throws Exception {

@@ -29,7 +29,4 @@ import org.camunda.bpm.model.cmmn.instance.CmmnElement;
  */
 public abstract class CmmnElementHandler<T extends CmmnElement, E> implements ModelElementHandler<T, CmmnHandlerContext, E> {
 
-  @Override
-  public abstract E handleElement(T element, CmmnHandlerContext context);
-
 }

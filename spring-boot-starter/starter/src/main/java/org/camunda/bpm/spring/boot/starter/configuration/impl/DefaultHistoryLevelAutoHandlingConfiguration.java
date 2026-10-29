@@ -33,7 +33,7 @@ public class DefaultHistoryLevelAutoHandlingConfiguration extends AbstractCamund
   @Override
   public void preInit(SpringProcessEngineConfiguration configuration) {
     final String determineHistoryLevel = historyLevelDeterminator.determineHistoryLevel();
-    if (!StringUtils.isEmpty(determineHistoryLevel)) {
+    if (StringUtils.hasLength(determineHistoryLevel)) {
       configuration.setHistory(determineHistoryLevel);
     }
   }

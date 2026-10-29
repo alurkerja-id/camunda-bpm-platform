@@ -74,44 +74,49 @@ public class PvmAtomicOperationActivityEnd implements PvmAtomicOperation {
 
     // 1. flow scope = Process Definition
     if(flowScope == activity.getProcessDefinition()) {
-
-      // 1.1 concurrent execution => end + tryPrune()
-      if(propagatingExecution.isConcurrent()) {
-        propagatingExecution.remove();
-        propagatingExecution.getParent().tryPruneLastConcurrentChild();
-        propagatingExecution.getParent().forceUpdate();
-      }
-      else {
-        // 1.2 Process End
-        propagatingExecution.setEnded(true);
-        if (!propagatingExecution.isPreserveScope()) {
-          propagatingExecution.performOperation(PROCESS_END);
-        }
-      }
+      endInProcessDefinition(propagatingExecution);
     }
     else {
       // 2. flowScope != process definition
-      PvmActivity flowScopeActivity = (PvmActivity) flowScope;
+      endInCompositeScope(activity, (PvmActivity) flowScope, propagatingExecution);
+    }
+  }
 
-      ActivityBehavior activityBehavior = flowScopeActivity.getActivityBehavior();
-      if (activityBehavior instanceof CompositeActivityBehavior) {
-        CompositeActivityBehavior compositeActivityBehavior = (CompositeActivityBehavior) activityBehavior;
-        // 2.1 Concurrent execution => composite behavior.concurrentExecutionEnded()
-        if(propagatingExecution.isConcurrent() && !LegacyBehavior.isConcurrentScope(propagatingExecution)) {
-          compositeActivityBehavior.concurrentChildExecutionEnded(propagatingExecution.getParent(), propagatingExecution);
-        }
-        else {
-          // 2.2 Scope Execution => composite behavior.complete()
-          propagatingExecution.setActivity(flowScopeActivity);
-          compositeActivityBehavior.complete(propagatingExecution);
-        }
+  protected void endInProcessDefinition(PvmExecutionImpl propagatingExecution) {
+    // 1.1 concurrent execution => end + tryPrune()
+    if(propagatingExecution.isConcurrent()) {
+      propagatingExecution.remove();
+      propagatingExecution.getParent().tryPruneLastConcurrentChild();
+      propagatingExecution.getParent().forceUpdate();
+    }
+    else {
+      // 1.2 Process End
+      propagatingExecution.setEnded(true);
+      if (!propagatingExecution.isPreserveScope()) {
+        propagatingExecution.performOperation(PROCESS_END);
+      }
+    }
+  }
 
+  protected void endInCompositeScope(PvmActivity activity, PvmActivity flowScopeActivity, PvmExecutionImpl propagatingExecution) {
+    ActivityBehavior activityBehavior = flowScopeActivity.getActivityBehavior();
+    if (activityBehavior instanceof CompositeActivityBehavior) {
+      CompositeActivityBehavior compositeActivityBehavior = (CompositeActivityBehavior) activityBehavior;
+      // 2.1 Concurrent execution => composite behavior.concurrentExecutionEnded()
+      if(propagatingExecution.isConcurrent() && !LegacyBehavior.isConcurrentScope(propagatingExecution)) {
+        compositeActivityBehavior.concurrentChildExecutionEnded(propagatingExecution.getParent(), propagatingExecution);
       }
       else {
-        // activity behavior is not composite => this is unexpected
-        throw new ProcessEngineException("Expected behavior of composite scope "+activity
-            +" to be a CompositeActivityBehavior but got "+activityBehavior);
+        // 2.2 Scope Execution => composite behavior.complete()
+        propagatingExecution.setActivity(flowScopeActivity);
+        compositeActivityBehavior.complete(propagatingExecution);
       }
+
+    }
+    else {
+      // activity behavior is not composite => this is unexpected
+      throw new ProcessEngineException("Expected behavior of composite scope "+activity
+          +" to be a CompositeActivityBehavior but got "+activityBehavior);
     }
   }
 

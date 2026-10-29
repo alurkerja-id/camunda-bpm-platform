@@ -59,28 +59,10 @@ public class PvmAtomicOperationTransitionDestroyScope implements PvmAtomicOperat
     execution.setTransitionsToTake(null);
 
     // check whether the current scope needs to be destroyed
-    if (execution.isScope() && activity.isScope()) {
-
-      if (!LegacyBehavior.destroySecondNonScope(execution)) {
-        if (execution.isConcurrent()) {
-          // legacy behavior
-          LegacyBehavior.destroyConcurrentScope(execution);
-        }
-        else {
-          propagatingExecution = execution.getParent();
-          LOG.debugDestroyScope(execution, propagatingExecution);
-          execution.destroy();
-          propagatingExecution.setActivity(execution.getActivity());
-          propagatingExecution.setTransition(execution.getTransition());
-          propagatingExecution.setActive(true);
-          execution.remove();
-        }
-      }
-
-    } else {
-      // activity is not scope => nothing to do
-      propagatingExecution = execution;
+    if (execution.isScope() && activity.isScope() && !LegacyBehavior.destroySecondNonScope(execution)) {
+      propagatingExecution = destroyScope(execution);
     }
+    // else: activity is not scope => nothing to do, execution is the propagating execution
 
     // take the specified transitions
     if (transitionsToTake.isEmpty()) {
@@ -92,51 +74,76 @@ public class PvmAtomicOperationTransitionDestroyScope implements PvmAtomicOperat
       propagatingExecution.take();
     }
     else {
-      propagatingExecution.inactivate();
-
-      List<OutgoingExecution> outgoingExecutions = new ArrayList<OutgoingExecution>();
-
-      for (int i = 0; i < transitionsToTake.size(); i++) {
-        PvmTransition transition = transitionsToTake.get(i);
-
-        PvmExecutionImpl scopeExecution = propagatingExecution.isScope() ?
-            propagatingExecution : propagatingExecution.getParent();
-
-        // reuse concurrent, propagating execution for first transition
-        PvmExecutionImpl concurrentExecution = null;
-        if (i == 0) {
-          concurrentExecution = propagatingExecution;
-        }
-        else {
-          concurrentExecution = scopeExecution.createConcurrentExecution();
-
-          if (i == 1 && !propagatingExecution.isConcurrent()) {
-            outgoingExecutions.remove(0);
-            // get a hold of the concurrent execution that replaced the scope propagating execution
-            PvmExecutionImpl replacingExecution = null;
-            for (PvmExecutionImpl concurrentChild : scopeExecution.getNonEventScopeExecutions())  {
-              if (concurrentChild != propagatingExecution) {
-                replacingExecution = concurrentChild;
-                break;
-              }
-            }
-
-            outgoingExecutions.add(new OutgoingExecution(replacingExecution, transitionsToTake.get(0)));
-          }
-        }
-
-        outgoingExecutions.add(new OutgoingExecution(concurrentExecution, transition));
-      }
-
-      // start executions in reverse order (order will be reversed again in command context with the effect that they are
-      // actually be started in correct order :) )
-      Collections.reverse(outgoingExecutions);
-
-      for (OutgoingExecution outgoingExecution : outgoingExecutions) {
-        outgoingExecution.take();
-      }
+      takeMultipleTransitions(propagatingExecution, transitionsToTake);
     }
 
+  }
+
+  protected PvmExecutionImpl destroyScope(PvmExecutionImpl execution) {
+    PvmExecutionImpl propagatingExecution = execution;
+    if (execution.isConcurrent()) {
+      // legacy behavior
+      LegacyBehavior.destroyConcurrentScope(execution);
+    }
+    else {
+      propagatingExecution = execution.getParent();
+      LOG.debugDestroyScope(execution, propagatingExecution);
+      execution.destroy();
+      propagatingExecution.setActivity(execution.getActivity());
+      propagatingExecution.setTransition(execution.getTransition());
+      propagatingExecution.setActive(true);
+      execution.remove();
+    }
+    return propagatingExecution;
+  }
+
+  protected void takeMultipleTransitions(PvmExecutionImpl propagatingExecution, List<PvmTransition> transitionsToTake) {
+    propagatingExecution.inactivate();
+
+    List<OutgoingExecution> outgoingExecutions = new ArrayList<OutgoingExecution>();
+
+    for (int i = 0; i < transitionsToTake.size(); i++) {
+      PvmTransition transition = transitionsToTake.get(i);
+
+      PvmExecutionImpl scopeExecution = propagatingExecution.isScope() ?
+          propagatingExecution : propagatingExecution.getParent();
+
+      // reuse concurrent, propagating execution for first transition
+      PvmExecutionImpl concurrentExecution = null;
+      if (i == 0) {
+        concurrentExecution = propagatingExecution;
+      }
+      else {
+        concurrentExecution = scopeExecution.createConcurrentExecution();
+
+        if (i == 1 && !propagatingExecution.isConcurrent()) {
+          // get a hold of the concurrent execution that replaced the scope propagating execution
+          PvmExecutionImpl replacingExecution = findReplacingExecution(scopeExecution, propagatingExecution);
+
+          // only the entry of the first transition exists at this point: replace it
+          outgoingExecutions.set(0, new OutgoingExecution(replacingExecution, transitionsToTake.get(0)));
+        }
+      }
+
+      outgoingExecutions.add(new OutgoingExecution(concurrentExecution, transition));
+    }
+
+    // start executions in reverse order (order will be reversed again in command context with the effect that they are
+    // actually be started in correct order :) )
+    Collections.reverse(outgoingExecutions);
+
+    for (OutgoingExecution outgoingExecution : outgoingExecutions) {
+      outgoingExecution.take();
+    }
+  }
+
+  protected PvmExecutionImpl findReplacingExecution(PvmExecutionImpl scopeExecution, PvmExecutionImpl propagatingExecution) {
+    for (PvmExecutionImpl concurrentChild : scopeExecution.getNonEventScopeExecutions())  {
+      if (concurrentChild != propagatingExecution) {
+        return concurrentChild;
+      }
+    }
+    return null;
   }
 
   @Override

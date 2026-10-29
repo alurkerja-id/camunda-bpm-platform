@@ -582,11 +582,11 @@ public class DeployCmd implements Command<DeploymentWithDefinitions>, Serializab
   }
 
   protected boolean isBpmnResource(Resource resourceEntity) {
-    return StringUtil.hasAnySuffix(resourceEntity.getName(), BpmnDeployer.BPMN_RESOURCE_SUFFIXES);
+    return StringUtil.hasAnySuffix(resourceEntity.getName(), BpmnDeployer.getBpmnResourceSuffixes());
   }
 
   protected boolean isCmmnResource(Resource resourceEntity) {
-    return StringUtil.hasAnySuffix(resourceEntity.getName(), CmmnDeployer.CMMN_RESOURCE_SUFFIXES);
+    return StringUtil.hasAnySuffix(resourceEntity.getName(), CmmnDeployer.getCmmnResourceSuffixes());
   }
 
   // ensures

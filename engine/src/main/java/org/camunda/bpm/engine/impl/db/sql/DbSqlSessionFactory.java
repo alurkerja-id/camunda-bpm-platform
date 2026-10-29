@@ -17,6 +17,7 @@
 package org.camunda.bpm.engine.impl.db.sql;
 
 import java.sql.Connection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,71 +40,119 @@ public class DbSqlSessionFactory implements SessionFactory {
   public static final String H2 = "h2";
   public static final String MYSQL = "mysql";
   public static final String POSTGRES = "postgres";
-  public static final String[] SUPPORTED_DATABASES = {MSSQL, DB2, ORACLE, H2, MYSQL, POSTGRES};
+  private static final String[] SUPPORTED_DATABASES = {MSSQL, DB2, ORACLE, H2, MYSQL, POSTGRES};
+
+  /**
+   * @return a copy of the supported database types
+   */
+  public static String[] getSupportedDatabases() {
+    return SUPPORTED_DATABASES.clone();
+  }
 
   protected static final Map<String, Map<String, String>> databaseSpecificStatements = new HashMap<>();
 
-  public static final Map<String, String> databaseSpecificLimitBeforeStatements = new HashMap<>();
-  public static final Map<String, String> databaseSpecificLimitAfterStatements = new HashMap<>();
+  private static final Map<String, String> databaseSpecificLimitBeforeStatementsMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificLimitBeforeStatements = Collections.unmodifiableMap(databaseSpecificLimitBeforeStatementsMutable);
+  private static final Map<String, String> databaseSpecificLimitAfterStatementsMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificLimitAfterStatements = Collections.unmodifiableMap(databaseSpecificLimitAfterStatementsMutable);
   //limit statements that can be used to select first N rows without OFFSET
-  public static final Map<String, String> databaseSpecificLimitBeforeWithoutOffsetStatements = new HashMap<>();
-  public static final Map<String, String> databaseSpecificLimitAfterWithoutOffsetStatements = new HashMap<>();
+  private static final Map<String, String> databaseSpecificLimitBeforeWithoutOffsetStatementsMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificLimitBeforeWithoutOffsetStatements = Collections.unmodifiableMap(databaseSpecificLimitBeforeWithoutOffsetStatementsMutable);
+  private static final Map<String, String> databaseSpecificLimitAfterWithoutOffsetStatementsMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificLimitAfterWithoutOffsetStatements = Collections.unmodifiableMap(databaseSpecificLimitAfterWithoutOffsetStatementsMutable);
   // limitAfter statements that can be used with subqueries
-  public static final Map<String, String> databaseSpecificInnerLimitAfterStatements = new HashMap<>();
-  public static final Map<String, String> databaseSpecificLimitBetweenStatements = new HashMap<>();
-  public static final Map<String, String> databaseSpecificLimitBetweenFilterStatements = new HashMap<>();
-  public static final Map<String, String> databaseSpecificLimitBetweenAcquisitionStatements = new HashMap<>();
+  private static final Map<String, String> databaseSpecificInnerLimitAfterStatementsMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificInnerLimitAfterStatements = Collections.unmodifiableMap(databaseSpecificInnerLimitAfterStatementsMutable);
+  private static final Map<String, String> databaseSpecificLimitBetweenStatementsMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificLimitBetweenStatements = Collections.unmodifiableMap(databaseSpecificLimitBetweenStatementsMutable);
+  private static final Map<String, String> databaseSpecificLimitBetweenFilterStatementsMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificLimitBetweenFilterStatements = Collections.unmodifiableMap(databaseSpecificLimitBetweenFilterStatementsMutable);
+  private static final Map<String, String> databaseSpecificLimitBetweenAcquisitionStatementsMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificLimitBetweenAcquisitionStatements = Collections.unmodifiableMap(databaseSpecificLimitBetweenAcquisitionStatementsMutable);
   // limit before and after for update queries
-  public static final Map<String, String> databaseSpecificLimitBeforeInUpdate = new HashMap<>();
-  public static final Map<String, String> databaseSpecificLimitAfterInUpdate = new HashMap<>();
+  private static final Map<String, String> databaseSpecificLimitBeforeInUpdateMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificLimitBeforeInUpdate = Collections.unmodifiableMap(databaseSpecificLimitBeforeInUpdateMutable);
+  private static final Map<String, String> databaseSpecificLimitAfterInUpdateMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificLimitAfterInUpdate = Collections.unmodifiableMap(databaseSpecificLimitAfterInUpdateMutable);
   // count distinct statements
-  public static final Map<String, String> databaseSpecificCountDistinctBeforeStart = new HashMap<>();
-  public static final Map<String, String> databaseSpecificCountDistinctBeforeEnd = new HashMap<>();
-  public static final Map<String, String> databaseSpecificCountDistinctAfterEnd = new HashMap<>();
+  private static final Map<String, String> databaseSpecificCountDistinctBeforeStartMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificCountDistinctBeforeStart = Collections.unmodifiableMap(databaseSpecificCountDistinctBeforeStartMutable);
+  private static final Map<String, String> databaseSpecificCountDistinctBeforeEndMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificCountDistinctBeforeEnd = Collections.unmodifiableMap(databaseSpecificCountDistinctBeforeEndMutable);
+  private static final Map<String, String> databaseSpecificCountDistinctAfterEndMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificCountDistinctAfterEnd = Collections.unmodifiableMap(databaseSpecificCountDistinctAfterEndMutable);
 
-  public static final Map<String, String> optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatements = new HashMap<>();
-  public static final Map<String, String> optimizeDatabaseSpecificLimitAfterWithoutOffsetStatements = new HashMap<>();
+  private static final Map<String, String> optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatementsMutable = new HashMap<>();
+  public static final Map<String, String> optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatements = Collections.unmodifiableMap(optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatementsMutable);
+  private static final Map<String, String> optimizeDatabaseSpecificLimitAfterWithoutOffsetStatementsMutable = new HashMap<>();
+  public static final Map<String, String> optimizeDatabaseSpecificLimitAfterWithoutOffsetStatements = Collections.unmodifiableMap(optimizeDatabaseSpecificLimitAfterWithoutOffsetStatementsMutable);
 
-  public static final Map<String, String> databaseSpecificEscapeChar = new HashMap<>();
+  private static final Map<String, String> databaseSpecificEscapeCharMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificEscapeChar = Collections.unmodifiableMap(databaseSpecificEscapeCharMutable);
 
-  public static final Map<String, String> databaseSpecificOrderByStatements = new HashMap<>();
-  public static final Map<String, String> databaseSpecificLimitBeforeNativeQueryStatements = new HashMap<>();
+  private static final Map<String, String> databaseSpecificOrderByStatementsMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificOrderByStatements = Collections.unmodifiableMap(databaseSpecificOrderByStatementsMutable);
+  private static final Map<String, String> databaseSpecificLimitBeforeNativeQueryStatementsMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificLimitBeforeNativeQueryStatements = Collections.unmodifiableMap(databaseSpecificLimitBeforeNativeQueryStatementsMutable);
 
-  public static final Map<String, String> databaseSpecificBitAnd1 = new HashMap<>();
-  public static final Map<String, String> databaseSpecificBitAnd2 = new HashMap<>();
-  public static final Map<String, String> databaseSpecificBitAnd3 = new HashMap<>();
+  private static final Map<String, String> databaseSpecificBitAnd1Mutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificBitAnd1 = Collections.unmodifiableMap(databaseSpecificBitAnd1Mutable);
+  private static final Map<String, String> databaseSpecificBitAnd2Mutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificBitAnd2 = Collections.unmodifiableMap(databaseSpecificBitAnd2Mutable);
+  private static final Map<String, String> databaseSpecificBitAnd3Mutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificBitAnd3 = Collections.unmodifiableMap(databaseSpecificBitAnd3Mutable);
 
-  public static final Map<String, String> databaseSpecificDatepart1 = new HashMap<>();
-  public static final Map<String, String> databaseSpecificDatepart2 = new HashMap<>();
-  public static final Map<String, String> databaseSpecificDatepart3 = new HashMap<>();
+  private static final Map<String, String> databaseSpecificDatepart1Mutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificDatepart1 = Collections.unmodifiableMap(databaseSpecificDatepart1Mutable);
+  private static final Map<String, String> databaseSpecificDatepart2Mutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificDatepart2 = Collections.unmodifiableMap(databaseSpecificDatepart2Mutable);
+  private static final Map<String, String> databaseSpecificDatepart3Mutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificDatepart3 = Collections.unmodifiableMap(databaseSpecificDatepart3Mutable);
 
-  public static final Map<String, String> databaseSpecificDummyTable = new HashMap<>();
+  private static final Map<String, String> databaseSpecificDummyTableMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificDummyTable = Collections.unmodifiableMap(databaseSpecificDummyTableMutable);
 
-  public static final Map<String, String> databaseSpecificIfNull = new HashMap<>();
+  private static final Map<String, String> databaseSpecificIfNullMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificIfNull = Collections.unmodifiableMap(databaseSpecificIfNullMutable);
 
-  public static final Map<String, String> databaseSpecificTrueConstant = new HashMap<>();
-  public static final Map<String, String> databaseSpecificFalseConstant = new HashMap<>();
+  private static final Map<String, String> databaseSpecificTrueConstantMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificTrueConstant = Collections.unmodifiableMap(databaseSpecificTrueConstantMutable);
+  private static final Map<String, String> databaseSpecificFalseConstantMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificFalseConstant = Collections.unmodifiableMap(databaseSpecificFalseConstantMutable);
 
-  public static final Map<String, String> databaseSpecificDistinct = new HashMap<>();
+  private static final Map<String, String> databaseSpecificDistinctMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificDistinct = Collections.unmodifiableMap(databaseSpecificDistinctMutable);
 
-  public static final Map<String, String> databaseSpecificNumericCast = new HashMap<>();
+  private static final Map<String, String> databaseSpecificNumericCastMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificNumericCast = Collections.unmodifiableMap(databaseSpecificNumericCastMutable);
 
-  public static final Map<String, Map<String, String>> dbSpecificConstants = new HashMap<>();
+  private static final Map<String, Map<String, String>> dbSpecificConstantsMutable = new HashMap<>();
+  public static final Map<String, Map<String, String>> dbSpecificConstants = Collections.unmodifiableMap(dbSpecificConstantsMutable);
 
-  public static final Map<String, String> databaseSpecificDaysComparator = new HashMap<>();
+  private static final Map<String, String> databaseSpecificDaysComparatorMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificDaysComparator = Collections.unmodifiableMap(databaseSpecificDaysComparatorMutable);
 
-  public static final Map<String, String> databaseSpecificCollationForCaseSensitivity = new HashMap<>();
+  private static final Map<String, String> databaseSpecificCollationForCaseSensitivityMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificCollationForCaseSensitivity = Collections.unmodifiableMap(databaseSpecificCollationForCaseSensitivityMutable);
 
-  public static final Map<String, String> databaseSpecificAuthJoinStart = new HashMap<>();
-  public static final Map<String, String> databaseSpecificAuthJoinEnd = new HashMap<>();
-  public static final Map<String, String> databaseSpecificAuthJoinSeparator = new HashMap<>();
+  private static final Map<String, String> databaseSpecificAuthJoinStartMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificAuthJoinStart = Collections.unmodifiableMap(databaseSpecificAuthJoinStartMutable);
+  private static final Map<String, String> databaseSpecificAuthJoinEndMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificAuthJoinEnd = Collections.unmodifiableMap(databaseSpecificAuthJoinEndMutable);
+  private static final Map<String, String> databaseSpecificAuthJoinSeparatorMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificAuthJoinSeparator = Collections.unmodifiableMap(databaseSpecificAuthJoinSeparatorMutable);
 
-  public static final Map<String, String> databaseSpecificAuth1JoinStart = new HashMap<>();
-  public static final Map<String, String> databaseSpecificAuth1JoinEnd = new HashMap<>();
-  public static final Map<String, String> databaseSpecificAuth1JoinSeparator = new HashMap<>();
+  private static final Map<String, String> databaseSpecificAuth1JoinStartMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificAuth1JoinStart = Collections.unmodifiableMap(databaseSpecificAuth1JoinStartMutable);
+  private static final Map<String, String> databaseSpecificAuth1JoinEndMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificAuth1JoinEnd = Collections.unmodifiableMap(databaseSpecificAuth1JoinEndMutable);
+  private static final Map<String, String> databaseSpecificAuth1JoinSeparatorMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificAuth1JoinSeparator = Collections.unmodifiableMap(databaseSpecificAuth1JoinSeparatorMutable);
 
-  public static final Map<String, String> databaseSpecificExtractTimeUnitFromDate = new HashMap<>();
-  public static final Map<String, String> databaseSpecificAuthCheckMethodSuffix = new HashMap<>();
+  private static final Map<String, String> databaseSpecificExtractTimeUnitFromDateMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificExtractTimeUnitFromDate = Collections.unmodifiableMap(databaseSpecificExtractTimeUnitFromDateMutable);
+  private static final Map<String, String> databaseSpecificAuthCheckMethodSuffixMutable = new HashMap<>();
+  public static final Map<String, String> databaseSpecificAuthCheckMethodSuffix = Collections.unmodifiableMap(databaseSpecificAuthCheckMethodSuffixMutable);
 
 
   /*
@@ -129,54 +178,54 @@ public class DbSqlSessionFactory implements SessionFactory {
     String defaultExtractTimeUnitFromDate = "EXTRACT(${extractTimeUnit} FROM ${extractDateColumn})";
 
     // h2
-    databaseSpecificLimitBeforeStatements.put(H2, "");
-    optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatements.put(H2, "");
-    databaseSpecificLimitAfterStatements.put(H2, "LIMIT #{maxResults} OFFSET #{firstResult}");
-    optimizeDatabaseSpecificLimitAfterWithoutOffsetStatements.put(H2, "LIMIT #{maxResults}");
-    databaseSpecificLimitBeforeWithoutOffsetStatements.put(H2, "");
-    databaseSpecificLimitAfterWithoutOffsetStatements.put(H2, "LIMIT #{maxResults}");
-    databaseSpecificInnerLimitAfterStatements.put(H2, databaseSpecificLimitAfterStatements.get(H2));
-    databaseSpecificLimitBetweenStatements.put(H2, "");
-    databaseSpecificLimitBetweenFilterStatements.put(H2, "");
-    databaseSpecificLimitBetweenAcquisitionStatements.put(H2, "");
-    databaseSpecificLimitBeforeInUpdate.put(H2, "");
-    databaseSpecificLimitAfterInUpdate.put(H2, "");
-    databaseSpecificOrderByStatements.put(H2, defaultOrderBy);
-    databaseSpecificLimitBeforeNativeQueryStatements.put(H2, "");
-    databaseSpecificDistinct.put(H2, "distinct");
-    databaseSpecificNumericCast.put(H2, "");
+    databaseSpecificLimitBeforeStatementsMutable.put(H2, "");
+    optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatementsMutable.put(H2, "");
+    databaseSpecificLimitAfterStatementsMutable.put(H2, "LIMIT #{maxResults} OFFSET #{firstResult}");
+    optimizeDatabaseSpecificLimitAfterWithoutOffsetStatementsMutable.put(H2, "LIMIT #{maxResults}");
+    databaseSpecificLimitBeforeWithoutOffsetStatementsMutable.put(H2, "");
+    databaseSpecificLimitAfterWithoutOffsetStatementsMutable.put(H2, "LIMIT #{maxResults}");
+    databaseSpecificInnerLimitAfterStatementsMutable.put(H2, databaseSpecificLimitAfterStatements.get(H2));
+    databaseSpecificLimitBetweenStatementsMutable.put(H2, "");
+    databaseSpecificLimitBetweenFilterStatementsMutable.put(H2, "");
+    databaseSpecificLimitBetweenAcquisitionStatementsMutable.put(H2, "");
+    databaseSpecificLimitBeforeInUpdateMutable.put(H2, "");
+    databaseSpecificLimitAfterInUpdateMutable.put(H2, "");
+    databaseSpecificOrderByStatementsMutable.put(H2, defaultOrderBy);
+    databaseSpecificLimitBeforeNativeQueryStatementsMutable.put(H2, "");
+    databaseSpecificDistinctMutable.put(H2, "distinct");
+    databaseSpecificNumericCastMutable.put(H2, "");
 
-    databaseSpecificCountDistinctBeforeStart.put(H2, defaultDistinctCountBeforeStart);
-    databaseSpecificCountDistinctBeforeEnd.put(H2, defaultDistinctCountBeforeEnd);
-    databaseSpecificCountDistinctAfterEnd.put(H2, defaultDistinctCountAfterEnd);
+    databaseSpecificCountDistinctBeforeStartMutable.put(H2, defaultDistinctCountBeforeStart);
+    databaseSpecificCountDistinctBeforeEndMutable.put(H2, defaultDistinctCountBeforeEnd);
+    databaseSpecificCountDistinctAfterEndMutable.put(H2, defaultDistinctCountAfterEnd);
 
-    databaseSpecificEscapeChar.put(H2, defaultEscapeChar);
+    databaseSpecificEscapeCharMutable.put(H2, defaultEscapeChar);
 
-    databaseSpecificBitAnd1.put(H2, "BITAND(");
-    databaseSpecificBitAnd2.put(H2, ",CAST(");
-    databaseSpecificBitAnd3.put(H2, " AS BIGINT))");
-    databaseSpecificDatepart1.put(H2, "");
-    databaseSpecificDatepart2.put(H2, "(");
-    databaseSpecificDatepart3.put(H2, ")");
+    databaseSpecificBitAnd1Mutable.put(H2, "BITAND(");
+    databaseSpecificBitAnd2Mutable.put(H2, ",CAST(");
+    databaseSpecificBitAnd3Mutable.put(H2, " AS BIGINT))");
+    databaseSpecificDatepart1Mutable.put(H2, "");
+    databaseSpecificDatepart2Mutable.put(H2, "(");
+    databaseSpecificDatepart3Mutable.put(H2, ")");
 
-    databaseSpecificDummyTable.put(H2, "");
-    databaseSpecificTrueConstant.put(H2, "true");
-    databaseSpecificFalseConstant.put(H2, "false");
-    databaseSpecificIfNull.put(H2, "IFNULL");
+    databaseSpecificDummyTableMutable.put(H2, "");
+    databaseSpecificTrueConstantMutable.put(H2, "true");
+    databaseSpecificFalseConstantMutable.put(H2, "false");
+    databaseSpecificIfNullMutable.put(H2, "IFNULL");
 
-    databaseSpecificDaysComparator.put(H2, "DATEDIFF(DAY, ${date}, #{currentTimestamp}) >= ${days}");
+    databaseSpecificDaysComparatorMutable.put(H2, "DATEDIFF(DAY, ${date}, #{currentTimestamp}) >= ${days}");
 
-    databaseSpecificCollationForCaseSensitivity.put(H2, "");
+    databaseSpecificCollationForCaseSensitivityMutable.put(H2, "");
 
-    databaseSpecificAuthJoinStart.put(H2, defaultAuthOnStart);
-    databaseSpecificAuthJoinEnd.put(H2, defaultAuthOnEnd);
-    databaseSpecificAuthJoinSeparator.put(H2, defaultAuthOnSeparator);
+    databaseSpecificAuthJoinStartMutable.put(H2, defaultAuthOnStart);
+    databaseSpecificAuthJoinEndMutable.put(H2, defaultAuthOnEnd);
+    databaseSpecificAuthJoinSeparatorMutable.put(H2, defaultAuthOnSeparator);
 
-    databaseSpecificAuth1JoinStart.put(H2, defaultAuthOnStart);
-    databaseSpecificAuth1JoinEnd.put(H2, defaultAuthOnEnd);
-    databaseSpecificAuth1JoinSeparator.put(H2, defaultAuthOnSeparator);
+    databaseSpecificAuth1JoinStartMutable.put(H2, defaultAuthOnStart);
+    databaseSpecificAuth1JoinEndMutable.put(H2, defaultAuthOnEnd);
+    databaseSpecificAuth1JoinSeparatorMutable.put(H2, defaultAuthOnSeparator);
 
-    databaseSpecificExtractTimeUnitFromDate.put(H2, defaultExtractTimeUnitFromDate);
+    databaseSpecificExtractTimeUnitFromDateMutable.put(H2, defaultExtractTimeUnitFromDate);
 
     HashMap<String, String> constants = new HashMap<>();
     constants.put("constant.event", "'event'");
@@ -189,58 +238,58 @@ public class DbSqlSessionFactory implements SessionFactory {
     constants.put("constant.varchar.cast", "'${key}'");
     constants.put("constant.integer.cast", "NULL");
     constants.put("constant.null.reporter", "NULL AS REPORTER_");
-    dbSpecificConstants.put(H2, constants);
+    dbSpecificConstantsMutable.put(H2, Collections.unmodifiableMap(constants));
 
     // mysql specific
 
-    databaseSpecificLimitBeforeStatements.put(MYSQL, "");
-    optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatements.put(MYSQL, "");
-    databaseSpecificLimitAfterStatements.put(MYSQL, "LIMIT #{maxResults} OFFSET #{firstResult}");
-    optimizeDatabaseSpecificLimitAfterWithoutOffsetStatements.put(MYSQL, "LIMIT #{maxResults}");
-    databaseSpecificLimitBeforeWithoutOffsetStatements.put(MYSQL, "");
-    databaseSpecificLimitAfterWithoutOffsetStatements.put(MYSQL, "LIMIT #{maxResults}");
-    databaseSpecificInnerLimitAfterStatements.put(MYSQL, databaseSpecificLimitAfterStatements.get(MYSQL));
-    databaseSpecificLimitBetweenStatements.put(MYSQL, "");
-    databaseSpecificLimitBetweenFilterStatements.put(MYSQL, "");
-    databaseSpecificLimitBetweenAcquisitionStatements.put(MYSQL, "");
-    databaseSpecificLimitBeforeInUpdate.put(MYSQL, "INNER JOIN ( SELECT ID_ FROM ");
-    databaseSpecificLimitAfterInUpdate.put(MYSQL, databaseSpecificLimitAfterWithoutOffsetStatements.get(MYSQL) + ") tmp USING (ID_)");
-    databaseSpecificOrderByStatements.put(MYSQL, defaultOrderBy);
-    databaseSpecificLimitBeforeNativeQueryStatements.put(MYSQL, "");
-    databaseSpecificDistinct.put(MYSQL, "distinct");
-    databaseSpecificNumericCast.put(MYSQL, "");
+    databaseSpecificLimitBeforeStatementsMutable.put(MYSQL, "");
+    optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatementsMutable.put(MYSQL, "");
+    databaseSpecificLimitAfterStatementsMutable.put(MYSQL, "LIMIT #{maxResults} OFFSET #{firstResult}");
+    optimizeDatabaseSpecificLimitAfterWithoutOffsetStatementsMutable.put(MYSQL, "LIMIT #{maxResults}");
+    databaseSpecificLimitBeforeWithoutOffsetStatementsMutable.put(MYSQL, "");
+    databaseSpecificLimitAfterWithoutOffsetStatementsMutable.put(MYSQL, "LIMIT #{maxResults}");
+    databaseSpecificInnerLimitAfterStatementsMutable.put(MYSQL, databaseSpecificLimitAfterStatements.get(MYSQL));
+    databaseSpecificLimitBetweenStatementsMutable.put(MYSQL, "");
+    databaseSpecificLimitBetweenFilterStatementsMutable.put(MYSQL, "");
+    databaseSpecificLimitBetweenAcquisitionStatementsMutable.put(MYSQL, "");
+    databaseSpecificLimitBeforeInUpdateMutable.put(MYSQL, "INNER JOIN ( SELECT ID_ FROM ");
+    databaseSpecificLimitAfterInUpdateMutable.put(MYSQL, databaseSpecificLimitAfterWithoutOffsetStatements.get(MYSQL) + ") tmp USING (ID_)");
+    databaseSpecificOrderByStatementsMutable.put(MYSQL, defaultOrderBy);
+    databaseSpecificLimitBeforeNativeQueryStatementsMutable.put(MYSQL, "");
+    databaseSpecificDistinctMutable.put(MYSQL, "distinct");
+    databaseSpecificNumericCastMutable.put(MYSQL, "");
 
-    databaseSpecificCountDistinctBeforeStart.put(MYSQL, defaultDistinctCountBeforeStart);
-    databaseSpecificCountDistinctBeforeEnd.put(MYSQL, defaultDistinctCountBeforeEnd);
-    databaseSpecificCountDistinctAfterEnd.put(MYSQL, defaultDistinctCountAfterEnd);
+    databaseSpecificCountDistinctBeforeStartMutable.put(MYSQL, defaultDistinctCountBeforeStart);
+    databaseSpecificCountDistinctBeforeEndMutable.put(MYSQL, defaultDistinctCountBeforeEnd);
+    databaseSpecificCountDistinctAfterEndMutable.put(MYSQL, defaultDistinctCountAfterEnd);
 
-    databaseSpecificEscapeChar.put(MYSQL, "'\\\\'");
+    databaseSpecificEscapeCharMutable.put(MYSQL, "'\\\\'");
 
-    databaseSpecificBitAnd1.put(MYSQL, "");
-    databaseSpecificBitAnd2.put(MYSQL, " & ");
-    databaseSpecificBitAnd3.put(MYSQL, "");
-    databaseSpecificDatepart1.put(MYSQL, "");
-    databaseSpecificDatepart2.put(MYSQL, "(");
-    databaseSpecificDatepart3.put(MYSQL, ")");
+    databaseSpecificBitAnd1Mutable.put(MYSQL, "");
+    databaseSpecificBitAnd2Mutable.put(MYSQL, " & ");
+    databaseSpecificBitAnd3Mutable.put(MYSQL, "");
+    databaseSpecificDatepart1Mutable.put(MYSQL, "");
+    databaseSpecificDatepart2Mutable.put(MYSQL, "(");
+    databaseSpecificDatepart3Mutable.put(MYSQL, ")");
 
-    databaseSpecificDummyTable.put(MYSQL, "");
-    databaseSpecificTrueConstant.put(MYSQL, "1");
-    databaseSpecificFalseConstant.put(MYSQL, "0");
-    databaseSpecificIfNull.put(MYSQL, "IFNULL");
+    databaseSpecificDummyTableMutable.put(MYSQL, "");
+    databaseSpecificTrueConstantMutable.put(MYSQL, "1");
+    databaseSpecificFalseConstantMutable.put(MYSQL, "0");
+    databaseSpecificIfNullMutable.put(MYSQL, "IFNULL");
 
-    databaseSpecificDaysComparator.put(MYSQL, "DATEDIFF(#{currentTimestamp}, ${date}) >= ${days}");
+    databaseSpecificDaysComparatorMutable.put(MYSQL, "DATEDIFF(#{currentTimestamp}, ${date}) >= ${days}");
 
-    databaseSpecificCollationForCaseSensitivity.put(MYSQL, "");
+    databaseSpecificCollationForCaseSensitivityMutable.put(MYSQL, "");
 
-    databaseSpecificAuthJoinStart.put(MYSQL, "=");
-    databaseSpecificAuthJoinEnd.put(MYSQL, "");
-    databaseSpecificAuthJoinSeparator.put(MYSQL, "OR AUTH.RESOURCE_ID_ =");
+    databaseSpecificAuthJoinStartMutable.put(MYSQL, "=");
+    databaseSpecificAuthJoinEndMutable.put(MYSQL, "");
+    databaseSpecificAuthJoinSeparatorMutable.put(MYSQL, "OR AUTH.RESOURCE_ID_ =");
 
-    databaseSpecificAuth1JoinStart.put(MYSQL, "=");
-    databaseSpecificAuth1JoinEnd.put(MYSQL, "");
-    databaseSpecificAuth1JoinSeparator.put(MYSQL, "OR AUTH1.RESOURCE_ID_ =");
+    databaseSpecificAuth1JoinStartMutable.put(MYSQL, "=");
+    databaseSpecificAuth1JoinEndMutable.put(MYSQL, "");
+    databaseSpecificAuth1JoinSeparatorMutable.put(MYSQL, "OR AUTH1.RESOURCE_ID_ =");
 
-    databaseSpecificExtractTimeUnitFromDate.put(MYSQL, defaultExtractTimeUnitFromDate);
+    databaseSpecificExtractTimeUnitFromDateMutable.put(MYSQL, defaultExtractTimeUnitFromDate);
 
     addDatabaseSpecificStatement(MYSQL, "toggleForeignKey", "toggleForeignKey_mysql");
     addDatabaseSpecificStatement(MYSQL, "selectDeploymentsByQueryCriteria", "selectDeploymentsByQueryCriteria_mysql");
@@ -335,55 +384,55 @@ public class DbSqlSessionFactory implements SessionFactory {
     constants.put("constant.varchar.cast", "'${key}'");
     constants.put("constant.integer.cast", "NULL");
     constants.put("constant.null.reporter", "NULL AS REPORTER_");
-    dbSpecificConstants.put(MYSQL, constants);
+    dbSpecificConstantsMutable.put(MYSQL, Collections.unmodifiableMap(constants));
 
     // postgres specific
 
-    databaseSpecificLimitBeforeStatements.put(POSTGRES, "");
-    optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatements.put(POSTGRES, "");
-    databaseSpecificLimitAfterStatements.put(POSTGRES, "LIMIT #{maxResults} OFFSET #{firstResult}");
-    optimizeDatabaseSpecificLimitAfterWithoutOffsetStatements.put(POSTGRES, "LIMIT #{maxResults}");
-    databaseSpecificLimitBeforeWithoutOffsetStatements.put(POSTGRES, "");
-    databaseSpecificLimitAfterWithoutOffsetStatements.put(POSTGRES, "LIMIT #{maxResults}");
-    databaseSpecificInnerLimitAfterStatements.put(POSTGRES, databaseSpecificLimitAfterStatements.get(POSTGRES));
-    databaseSpecificLimitBetweenStatements.put(POSTGRES, "");
-    databaseSpecificLimitBetweenFilterStatements.put(POSTGRES, "");
-    databaseSpecificLimitBetweenAcquisitionStatements.put(POSTGRES, "");
-    databaseSpecificLimitBeforeInUpdate.put(POSTGRES, "WHERE ID_ IN (SELECT ID_ FROM ");
-    databaseSpecificLimitAfterInUpdate.put(POSTGRES, databaseSpecificLimitAfterWithoutOffsetStatements.get(POSTGRES) + ")");
-    databaseSpecificOrderByStatements.put(POSTGRES, defaultOrderBy);
-    databaseSpecificLimitBeforeNativeQueryStatements.put(POSTGRES, "");
-    databaseSpecificDistinct.put(POSTGRES, "distinct");
+    databaseSpecificLimitBeforeStatementsMutable.put(POSTGRES, "");
+    optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatementsMutable.put(POSTGRES, "");
+    databaseSpecificLimitAfterStatementsMutable.put(POSTGRES, "LIMIT #{maxResults} OFFSET #{firstResult}");
+    optimizeDatabaseSpecificLimitAfterWithoutOffsetStatementsMutable.put(POSTGRES, "LIMIT #{maxResults}");
+    databaseSpecificLimitBeforeWithoutOffsetStatementsMutable.put(POSTGRES, "");
+    databaseSpecificLimitAfterWithoutOffsetStatementsMutable.put(POSTGRES, "LIMIT #{maxResults}");
+    databaseSpecificInnerLimitAfterStatementsMutable.put(POSTGRES, databaseSpecificLimitAfterStatements.get(POSTGRES));
+    databaseSpecificLimitBetweenStatementsMutable.put(POSTGRES, "");
+    databaseSpecificLimitBetweenFilterStatementsMutable.put(POSTGRES, "");
+    databaseSpecificLimitBetweenAcquisitionStatementsMutable.put(POSTGRES, "");
+    databaseSpecificLimitBeforeInUpdateMutable.put(POSTGRES, "WHERE ID_ IN (SELECT ID_ FROM ");
+    databaseSpecificLimitAfterInUpdateMutable.put(POSTGRES, databaseSpecificLimitAfterWithoutOffsetStatements.get(POSTGRES) + ")");
+    databaseSpecificOrderByStatementsMutable.put(POSTGRES, defaultOrderBy);
+    databaseSpecificLimitBeforeNativeQueryStatementsMutable.put(POSTGRES, "");
+    databaseSpecificDistinctMutable.put(POSTGRES, "distinct");
 
-    databaseSpecificCountDistinctBeforeStart.put(POSTGRES, "SELECT COUNT(*) FROM (SELECT DISTINCT");
-    databaseSpecificCountDistinctBeforeEnd.put(POSTGRES, "");
-    databaseSpecificCountDistinctAfterEnd.put(POSTGRES, ") countDistinct");
+    databaseSpecificCountDistinctBeforeStartMutable.put(POSTGRES, "SELECT COUNT(*) FROM (SELECT DISTINCT");
+    databaseSpecificCountDistinctBeforeEndMutable.put(POSTGRES, "");
+    databaseSpecificCountDistinctAfterEndMutable.put(POSTGRES, ") countDistinct");
 
-    databaseSpecificEscapeChar.put(POSTGRES, defaultEscapeChar);
+    databaseSpecificEscapeCharMutable.put(POSTGRES, defaultEscapeChar);
 
-    databaseSpecificBitAnd1.put(POSTGRES, "");
-    databaseSpecificBitAnd2.put(POSTGRES, " & ");
-    databaseSpecificBitAnd3.put(POSTGRES, "");
-    databaseSpecificDatepart1.put(POSTGRES, "extract(");
-    databaseSpecificDatepart2.put(POSTGRES, " from ");
-    databaseSpecificDatepart3.put(POSTGRES, ")");
+    databaseSpecificBitAnd1Mutable.put(POSTGRES, "");
+    databaseSpecificBitAnd2Mutable.put(POSTGRES, " & ");
+    databaseSpecificBitAnd3Mutable.put(POSTGRES, "");
+    databaseSpecificDatepart1Mutable.put(POSTGRES, "extract(");
+    databaseSpecificDatepart2Mutable.put(POSTGRES, " from ");
+    databaseSpecificDatepart3Mutable.put(POSTGRES, ")");
 
-    databaseSpecificDummyTable.put(POSTGRES, "");
-    databaseSpecificTrueConstant.put(POSTGRES, "true");
-    databaseSpecificFalseConstant.put(POSTGRES, "false");
-    databaseSpecificIfNull.put(POSTGRES, "COALESCE");
+    databaseSpecificDummyTableMutable.put(POSTGRES, "");
+    databaseSpecificTrueConstantMutable.put(POSTGRES, "true");
+    databaseSpecificFalseConstantMutable.put(POSTGRES, "false");
+    databaseSpecificIfNullMutable.put(POSTGRES, "COALESCE");
 
-    databaseSpecificCollationForCaseSensitivity.put(POSTGRES, "");
+    databaseSpecificCollationForCaseSensitivityMutable.put(POSTGRES, "");
 
-    databaseSpecificAuthJoinStart.put(POSTGRES, defaultAuthOnStart);
-    databaseSpecificAuthJoinEnd.put(POSTGRES, defaultAuthOnEnd);
-    databaseSpecificAuthJoinSeparator.put(POSTGRES, defaultAuthOnSeparator);
+    databaseSpecificAuthJoinStartMutable.put(POSTGRES, defaultAuthOnStart);
+    databaseSpecificAuthJoinEndMutable.put(POSTGRES, defaultAuthOnEnd);
+    databaseSpecificAuthJoinSeparatorMutable.put(POSTGRES, defaultAuthOnSeparator);
 
-    databaseSpecificAuth1JoinStart.put(POSTGRES, defaultAuthOnStart);
-    databaseSpecificAuth1JoinEnd.put(POSTGRES, defaultAuthOnEnd);
-    databaseSpecificAuth1JoinSeparator.put(POSTGRES, defaultAuthOnSeparator);
+    databaseSpecificAuth1JoinStartMutable.put(POSTGRES, defaultAuthOnStart);
+    databaseSpecificAuth1JoinEndMutable.put(POSTGRES, defaultAuthOnEnd);
+    databaseSpecificAuth1JoinSeparatorMutable.put(POSTGRES, defaultAuthOnSeparator);
 
-    databaseSpecificExtractTimeUnitFromDate.put(POSTGRES, defaultExtractTimeUnitFromDate);
+    databaseSpecificExtractTimeUnitFromDateMutable.put(POSTGRES, defaultExtractTimeUnitFromDate);
 
     addDatabaseSpecificStatement(POSTGRES, "insertByteArray", "insertByteArray_postgres");
     addDatabaseSpecificStatement(POSTGRES, "updateByteArray", "updateByteArray_postgres");
@@ -484,59 +533,59 @@ public class DbSqlSessionFactory implements SessionFactory {
     constants.put("constant.varchar.cast", "cast('${key}' as varchar(64))");
     constants.put("constant.integer.cast", "cast(NULL as integer)");
     constants.put("constant.null.reporter", "CAST(NULL AS VARCHAR) AS REPORTER_");
-    dbSpecificConstants.put(POSTGRES, constants);
-    databaseSpecificDaysComparator.put(POSTGRES, "EXTRACT (DAY FROM #{currentTimestamp} - ${date}) >= ${days}");
-    databaseSpecificNumericCast.put(POSTGRES, "");
+    dbSpecificConstantsMutable.put(POSTGRES, Collections.unmodifiableMap(constants));
+    databaseSpecificDaysComparatorMutable.put(POSTGRES, "EXTRACT (DAY FROM #{currentTimestamp} - ${date}) >= ${days}");
+    databaseSpecificNumericCastMutable.put(POSTGRES, "");
 
     // oracle
-    databaseSpecificLimitBeforeStatements.put(ORACLE, "select * from ( select a.*, ROWNUM rnum from (");
-    optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatements.put(ORACLE, "select * from ( select a.*, ROWNUM rnum from (");
-    databaseSpecificLimitAfterStatements.put(ORACLE, "  ) a where ROWNUM < #{lastRow}) where rnum  >= #{firstRow}");
-    optimizeDatabaseSpecificLimitAfterWithoutOffsetStatements.put(ORACLE, "  ) a where ROWNUM <= #{maxResults})");
-    databaseSpecificLimitBeforeWithoutOffsetStatements.put(ORACLE, "");
-    databaseSpecificLimitAfterWithoutOffsetStatements.put(ORACLE, "AND ROWNUM <= #{maxResults}");
-    databaseSpecificInnerLimitAfterStatements.put(ORACLE, databaseSpecificLimitAfterStatements.get(ORACLE));
-    databaseSpecificLimitBetweenStatements.put(ORACLE, "");
-    databaseSpecificLimitBetweenFilterStatements.put(ORACLE, "");
-    databaseSpecificLimitBetweenAcquisitionStatements.put(ORACLE, "");
-    databaseSpecificLimitBeforeInUpdate.put(ORACLE, "");
-    databaseSpecificLimitAfterInUpdate.put(ORACLE, "");
-    databaseSpecificOrderByStatements.put(ORACLE, defaultOrderBy);
-    databaseSpecificLimitBeforeNativeQueryStatements.put(ORACLE, "");
-    databaseSpecificDistinct.put(ORACLE, "distinct");
-    databaseSpecificNumericCast.put(ORACLE, "");
+    databaseSpecificLimitBeforeStatementsMutable.put(ORACLE, "select * from ( select a.*, ROWNUM rnum from (");
+    optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatementsMutable.put(ORACLE, "select * from ( select a.*, ROWNUM rnum from (");
+    databaseSpecificLimitAfterStatementsMutable.put(ORACLE, "  ) a where ROWNUM < #{lastRow}) where rnum  >= #{firstRow}");
+    optimizeDatabaseSpecificLimitAfterWithoutOffsetStatementsMutable.put(ORACLE, "  ) a where ROWNUM <= #{maxResults})");
+    databaseSpecificLimitBeforeWithoutOffsetStatementsMutable.put(ORACLE, "");
+    databaseSpecificLimitAfterWithoutOffsetStatementsMutable.put(ORACLE, "AND ROWNUM <= #{maxResults}");
+    databaseSpecificInnerLimitAfterStatementsMutable.put(ORACLE, databaseSpecificLimitAfterStatements.get(ORACLE));
+    databaseSpecificLimitBetweenStatementsMutable.put(ORACLE, "");
+    databaseSpecificLimitBetweenFilterStatementsMutable.put(ORACLE, "");
+    databaseSpecificLimitBetweenAcquisitionStatementsMutable.put(ORACLE, "");
+    databaseSpecificLimitBeforeInUpdateMutable.put(ORACLE, "");
+    databaseSpecificLimitAfterInUpdateMutable.put(ORACLE, "");
+    databaseSpecificOrderByStatementsMutable.put(ORACLE, defaultOrderBy);
+    databaseSpecificLimitBeforeNativeQueryStatementsMutable.put(ORACLE, "");
+    databaseSpecificDistinctMutable.put(ORACLE, "distinct");
+    databaseSpecificNumericCastMutable.put(ORACLE, "");
 
-    databaseSpecificCountDistinctBeforeStart.put(ORACLE, defaultDistinctCountBeforeStart);
-    databaseSpecificCountDistinctBeforeEnd.put(ORACLE, defaultDistinctCountBeforeEnd);
-    databaseSpecificCountDistinctAfterEnd.put(ORACLE, defaultDistinctCountAfterEnd);
+    databaseSpecificCountDistinctBeforeStartMutable.put(ORACLE, defaultDistinctCountBeforeStart);
+    databaseSpecificCountDistinctBeforeEndMutable.put(ORACLE, defaultDistinctCountBeforeEnd);
+    databaseSpecificCountDistinctAfterEndMutable.put(ORACLE, defaultDistinctCountAfterEnd);
 
-    databaseSpecificEscapeChar.put(ORACLE, defaultEscapeChar);
+    databaseSpecificEscapeCharMutable.put(ORACLE, defaultEscapeChar);
 
-    databaseSpecificDummyTable.put(ORACLE, "FROM DUAL");
-    databaseSpecificBitAnd1.put(ORACLE, "BITAND(");
-    databaseSpecificBitAnd2.put(ORACLE, ",");
-    databaseSpecificBitAnd3.put(ORACLE, ")");
-    databaseSpecificDatepart1.put(ORACLE, "to_number(to_char(");
-    databaseSpecificDatepart2.put(ORACLE, ",");
-    databaseSpecificDatepart3.put(ORACLE, "))");
+    databaseSpecificDummyTableMutable.put(ORACLE, "FROM DUAL");
+    databaseSpecificBitAnd1Mutable.put(ORACLE, "BITAND(");
+    databaseSpecificBitAnd2Mutable.put(ORACLE, ",");
+    databaseSpecificBitAnd3Mutable.put(ORACLE, ")");
+    databaseSpecificDatepart1Mutable.put(ORACLE, "to_number(to_char(");
+    databaseSpecificDatepart2Mutable.put(ORACLE, ",");
+    databaseSpecificDatepart3Mutable.put(ORACLE, "))");
 
-    databaseSpecificTrueConstant.put(ORACLE, "1");
-    databaseSpecificFalseConstant.put(ORACLE, "0");
-    databaseSpecificIfNull.put(ORACLE, "NVL");
+    databaseSpecificTrueConstantMutable.put(ORACLE, "1");
+    databaseSpecificFalseConstantMutable.put(ORACLE, "0");
+    databaseSpecificIfNullMutable.put(ORACLE, "NVL");
 
-    databaseSpecificDaysComparator.put(ORACLE, "${date} <= #{currentTimestamp} - ${days}");
+    databaseSpecificDaysComparatorMutable.put(ORACLE, "${date} <= #{currentTimestamp} - ${days}");
 
-    databaseSpecificCollationForCaseSensitivity.put(ORACLE, "");
+    databaseSpecificCollationForCaseSensitivityMutable.put(ORACLE, "");
 
-    databaseSpecificAuthJoinStart.put(ORACLE, defaultAuthOnStart);
-    databaseSpecificAuthJoinEnd.put(ORACLE, defaultAuthOnEnd);
-    databaseSpecificAuthJoinSeparator.put(ORACLE, defaultAuthOnSeparator);
+    databaseSpecificAuthJoinStartMutable.put(ORACLE, defaultAuthOnStart);
+    databaseSpecificAuthJoinEndMutable.put(ORACLE, defaultAuthOnEnd);
+    databaseSpecificAuthJoinSeparatorMutable.put(ORACLE, defaultAuthOnSeparator);
 
-    databaseSpecificAuth1JoinStart.put(ORACLE, defaultAuthOnStart);
-    databaseSpecificAuth1JoinEnd.put(ORACLE, defaultAuthOnEnd);
-    databaseSpecificAuth1JoinSeparator.put(ORACLE, defaultAuthOnSeparator);
+    databaseSpecificAuth1JoinStartMutable.put(ORACLE, defaultAuthOnStart);
+    databaseSpecificAuth1JoinEndMutable.put(ORACLE, defaultAuthOnEnd);
+    databaseSpecificAuth1JoinSeparatorMutable.put(ORACLE, defaultAuthOnSeparator);
 
-    databaseSpecificExtractTimeUnitFromDate.put(ORACLE, defaultExtractTimeUnitFromDate);
+    databaseSpecificExtractTimeUnitFromDateMutable.put(ORACLE, defaultExtractTimeUnitFromDate);
 
     addDatabaseSpecificStatement(ORACLE, "selectHistoricProcessInstanceDurationReport", "selectHistoricProcessInstanceDurationReport_oracle");
     addDatabaseSpecificStatement(ORACLE, "selectHistoricTaskInstanceDurationReport", "selectHistoricTaskInstanceDurationReport_oracle");
@@ -579,57 +628,57 @@ public class DbSqlSessionFactory implements SessionFactory {
     constants.put("constant.varchar.cast", "'${key}'");
     constants.put("constant.integer.cast", "NULL");
     constants.put("constant.null.reporter", "NULL AS REPORTER_");
-    dbSpecificConstants.put(ORACLE, constants);
+    dbSpecificConstantsMutable.put(ORACLE, Collections.unmodifiableMap(constants));
 
     // db2
-    databaseSpecificLimitBeforeStatements.put(DB2, "");
-    optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatements.put(DB2, "");
-    databaseSpecificLimitAfterStatements.put(DB2, "LIMIT #{maxResults} OFFSET #{firstResult}");
-    databaseSpecificInnerLimitAfterStatements.put(DB2, databaseSpecificLimitAfterStatements.get(DB2));
-    optimizeDatabaseSpecificLimitAfterWithoutOffsetStatements.put(DB2, "LIMIT #{maxResults}");
-    databaseSpecificLimitBetweenStatements.put(DB2, "");
-    databaseSpecificLimitBetweenFilterStatements.put(DB2, "");
-    databaseSpecificLimitBetweenAcquisitionStatements.put(DB2, "");
-    databaseSpecificLimitBeforeInUpdate.put(DB2, "");
-    databaseSpecificLimitAfterInUpdate.put(DB2, "");
-    databaseSpecificLimitBeforeWithoutOffsetStatements.put(DB2, "");
-    databaseSpecificLimitAfterWithoutOffsetStatements.put(DB2, "LIMIT #{maxResults}");
-    databaseSpecificOrderByStatements.put(DB2, defaultOrderBy);
-    databaseSpecificLimitBeforeNativeQueryStatements.put(DB2, "");
-    databaseSpecificDistinct.put(DB2, "distinct");
-    databaseSpecificNumericCast.put(DB2, "");
+    databaseSpecificLimitBeforeStatementsMutable.put(DB2, "");
+    optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatementsMutable.put(DB2, "");
+    databaseSpecificLimitAfterStatementsMutable.put(DB2, "LIMIT #{maxResults} OFFSET #{firstResult}");
+    databaseSpecificInnerLimitAfterStatementsMutable.put(DB2, databaseSpecificLimitAfterStatements.get(DB2));
+    optimizeDatabaseSpecificLimitAfterWithoutOffsetStatementsMutable.put(DB2, "LIMIT #{maxResults}");
+    databaseSpecificLimitBetweenStatementsMutable.put(DB2, "");
+    databaseSpecificLimitBetweenFilterStatementsMutable.put(DB2, "");
+    databaseSpecificLimitBetweenAcquisitionStatementsMutable.put(DB2, "");
+    databaseSpecificLimitBeforeInUpdateMutable.put(DB2, "");
+    databaseSpecificLimitAfterInUpdateMutable.put(DB2, "");
+    databaseSpecificLimitBeforeWithoutOffsetStatementsMutable.put(DB2, "");
+    databaseSpecificLimitAfterWithoutOffsetStatementsMutable.put(DB2, "LIMIT #{maxResults}");
+    databaseSpecificOrderByStatementsMutable.put(DB2, defaultOrderBy);
+    databaseSpecificLimitBeforeNativeQueryStatementsMutable.put(DB2, "");
+    databaseSpecificDistinctMutable.put(DB2, "distinct");
+    databaseSpecificNumericCastMutable.put(DB2, "");
 
-    databaseSpecificCountDistinctBeforeStart.put(DB2, defaultDistinctCountBeforeStart);
-    databaseSpecificCountDistinctBeforeEnd.put(DB2, defaultDistinctCountBeforeEnd);
-    databaseSpecificCountDistinctAfterEnd.put(DB2, defaultDistinctCountAfterEnd);
+    databaseSpecificCountDistinctBeforeStartMutable.put(DB2, defaultDistinctCountBeforeStart);
+    databaseSpecificCountDistinctBeforeEndMutable.put(DB2, defaultDistinctCountBeforeEnd);
+    databaseSpecificCountDistinctAfterEndMutable.put(DB2, defaultDistinctCountAfterEnd);
 
-    databaseSpecificEscapeChar.put(DB2, defaultEscapeChar);
+    databaseSpecificEscapeCharMutable.put(DB2, defaultEscapeChar);
 
-    databaseSpecificBitAnd1.put(DB2, "BITAND(");
-    databaseSpecificBitAnd2.put(DB2, ", CAST(");
-    databaseSpecificBitAnd3.put(DB2, " AS Integer))");
-    databaseSpecificDatepart1.put(DB2, "");
-    databaseSpecificDatepart2.put(DB2, "(");
-    databaseSpecificDatepart3.put(DB2, ")");
+    databaseSpecificBitAnd1Mutable.put(DB2, "BITAND(");
+    databaseSpecificBitAnd2Mutable.put(DB2, ", CAST(");
+    databaseSpecificBitAnd3Mutable.put(DB2, " AS Integer))");
+    databaseSpecificDatepart1Mutable.put(DB2, "");
+    databaseSpecificDatepart2Mutable.put(DB2, "(");
+    databaseSpecificDatepart3Mutable.put(DB2, ")");
 
-    databaseSpecificDummyTable.put(DB2, "FROM SYSIBM.SYSDUMMY1");
-    databaseSpecificTrueConstant.put(DB2, "1");
-    databaseSpecificFalseConstant.put(DB2, "0");
-    databaseSpecificIfNull.put(DB2, "NVL");
+    databaseSpecificDummyTableMutable.put(DB2, "FROM SYSIBM.SYSDUMMY1");
+    databaseSpecificTrueConstantMutable.put(DB2, "1");
+    databaseSpecificFalseConstantMutable.put(DB2, "0");
+    databaseSpecificIfNullMutable.put(DB2, "NVL");
 
-    databaseSpecificDaysComparator.put(DB2, "${date} + ${days} DAYS <= #{currentTimestamp}");
+    databaseSpecificDaysComparatorMutable.put(DB2, "${date} + ${days} DAYS <= #{currentTimestamp}");
 
-    databaseSpecificCollationForCaseSensitivity.put(DB2, "");
+    databaseSpecificCollationForCaseSensitivityMutable.put(DB2, "");
 
-    databaseSpecificAuthJoinStart.put(DB2, defaultAuthOnStart);
-    databaseSpecificAuthJoinEnd.put(DB2, defaultAuthOnEnd);
-    databaseSpecificAuthJoinSeparator.put(DB2, defaultAuthOnSeparator);
+    databaseSpecificAuthJoinStartMutable.put(DB2, defaultAuthOnStart);
+    databaseSpecificAuthJoinEndMutable.put(DB2, defaultAuthOnEnd);
+    databaseSpecificAuthJoinSeparatorMutable.put(DB2, defaultAuthOnSeparator);
 
-    databaseSpecificAuth1JoinStart.put(DB2, defaultAuthOnStart);
-    databaseSpecificAuth1JoinEnd.put(DB2, defaultAuthOnEnd);
-    databaseSpecificAuth1JoinSeparator.put(DB2, defaultAuthOnSeparator);
+    databaseSpecificAuth1JoinStartMutable.put(DB2, defaultAuthOnStart);
+    databaseSpecificAuth1JoinEndMutable.put(DB2, defaultAuthOnEnd);
+    databaseSpecificAuth1JoinSeparatorMutable.put(DB2, defaultAuthOnSeparator);
 
-    databaseSpecificExtractTimeUnitFromDate.put(DB2, defaultExtractTimeUnitFromDate);
+    databaseSpecificExtractTimeUnitFromDateMutable.put(DB2, defaultExtractTimeUnitFromDate);
 
     addDatabaseSpecificStatement(DB2, "selectMeterLogAggregatedByTimeInterval", "selectMeterLogAggregatedByTimeInterval_db2_or_mssql");
     addDatabaseSpecificStatement(DB2, "selectExecutionByNativeQuery", "selectExecutionByNativeQuery_mssql_or_db2");
@@ -676,60 +725,60 @@ public class DbSqlSessionFactory implements SessionFactory {
     constants.put("constant.varchar.cast", "cast('${key}' as varchar(64))");
     constants.put("constant.integer.cast", "cast(NULL as integer)");
     constants.put("constant.null.reporter", "CAST(NULL AS VARCHAR(255)) AS REPORTER_");
-    dbSpecificConstants.put(DB2, constants);
+    dbSpecificConstantsMutable.put(DB2, Collections.unmodifiableMap(constants));
 
     // mssql
-    databaseSpecificLimitBeforeStatements.put(MSSQL, "SELECT SUB.* FROM (");
-    optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatements.put(MSSQL, "");
-    databaseSpecificInnerLimitAfterStatements.put(MSSQL, ")RES ) SUB WHERE SUB.rnk >= #{firstRow} AND SUB.rnk < #{lastRow}");
-    databaseSpecificLimitAfterStatements.put(MSSQL, databaseSpecificInnerLimitAfterStatements.get(MSSQL) + " ORDER BY SUB.rnk");
-    optimizeDatabaseSpecificLimitAfterWithoutOffsetStatements.put(MSSQL, "");
+    databaseSpecificLimitBeforeStatementsMutable.put(MSSQL, "SELECT SUB.* FROM (");
+    optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatementsMutable.put(MSSQL, "");
+    databaseSpecificInnerLimitAfterStatementsMutable.put(MSSQL, ")RES ) SUB WHERE SUB.rnk >= #{firstRow} AND SUB.rnk < #{lastRow}");
+    databaseSpecificLimitAfterStatementsMutable.put(MSSQL, databaseSpecificInnerLimitAfterStatements.get(MSSQL) + " ORDER BY SUB.rnk");
+    optimizeDatabaseSpecificLimitAfterWithoutOffsetStatementsMutable.put(MSSQL, "");
     String mssqlLimitBetweenWithoutColumns = ", row_number() over (ORDER BY ${internalOrderBy}) rnk FROM ( select distinct ";
-    databaseSpecificLimitBetweenStatements.put(MSSQL, mssqlLimitBetweenWithoutColumns + "RES.* ");
-    databaseSpecificLimitBetweenFilterStatements.put(MSSQL, "");
-    databaseSpecificLimitBetweenAcquisitionStatements.put(MSSQL, mssqlLimitBetweenWithoutColumns
+    databaseSpecificLimitBetweenStatementsMutable.put(MSSQL, mssqlLimitBetweenWithoutColumns + "RES.* ");
+    databaseSpecificLimitBetweenFilterStatementsMutable.put(MSSQL, "");
+    databaseSpecificLimitBetweenAcquisitionStatementsMutable.put(MSSQL, mssqlLimitBetweenWithoutColumns
         + "RES.ID_, RES.REV_, RES.TYPE_, RES.LOCK_EXP_TIME_, RES.LOCK_OWNER_, RES.EXCLUSIVE_, RES.ROOT_PROC_INST_ID_, RES.PROCESS_INSTANCE_ID_, RES.DUEDATE_, RES.PRIORITY_ ");
-    databaseSpecificLimitBeforeInUpdate.put(MSSQL, "");
-    databaseSpecificLimitAfterInUpdate.put(MSSQL, "");
-    databaseSpecificLimitBeforeWithoutOffsetStatements.put(MSSQL, "TOP (#{maxResults})");
-    databaseSpecificLimitAfterWithoutOffsetStatements.put(MSSQL, "");
-    databaseSpecificOrderByStatements.put(MSSQL, "");
-    databaseSpecificLimitBeforeNativeQueryStatements.put(MSSQL, "SELECT SUB.* FROM ( select RES.* , row_number() over (ORDER BY ${internalOrderBy}) rnk FROM (");
-    databaseSpecificDistinct.put(MSSQL, "");
-    databaseSpecificNumericCast.put(MSSQL, "");
+    databaseSpecificLimitBeforeInUpdateMutable.put(MSSQL, "");
+    databaseSpecificLimitAfterInUpdateMutable.put(MSSQL, "");
+    databaseSpecificLimitBeforeWithoutOffsetStatementsMutable.put(MSSQL, "TOP (#{maxResults})");
+    databaseSpecificLimitAfterWithoutOffsetStatementsMutable.put(MSSQL, "");
+    databaseSpecificOrderByStatementsMutable.put(MSSQL, "");
+    databaseSpecificLimitBeforeNativeQueryStatementsMutable.put(MSSQL, "SELECT SUB.* FROM ( select RES.* , row_number() over (ORDER BY ${internalOrderBy}) rnk FROM (");
+    databaseSpecificDistinctMutable.put(MSSQL, "");
+    databaseSpecificNumericCastMutable.put(MSSQL, "");
 
-    databaseSpecificCountDistinctBeforeStart.put(MSSQL, defaultDistinctCountBeforeStart);
-    databaseSpecificCountDistinctBeforeEnd.put(MSSQL, defaultDistinctCountBeforeEnd);
-    databaseSpecificCountDistinctAfterEnd.put(MSSQL, defaultDistinctCountAfterEnd);
+    databaseSpecificCountDistinctBeforeStartMutable.put(MSSQL, defaultDistinctCountBeforeStart);
+    databaseSpecificCountDistinctBeforeEndMutable.put(MSSQL, defaultDistinctCountBeforeEnd);
+    databaseSpecificCountDistinctAfterEndMutable.put(MSSQL, defaultDistinctCountAfterEnd);
 
-    databaseSpecificEscapeChar.put(MSSQL, defaultEscapeChar);
+    databaseSpecificEscapeCharMutable.put(MSSQL, defaultEscapeChar);
 
-    databaseSpecificBitAnd1.put(MSSQL, "");
-    databaseSpecificBitAnd2.put(MSSQL, " &");
-    databaseSpecificBitAnd3.put(MSSQL, "");
-    databaseSpecificDatepart1.put(MSSQL, "datepart(");
-    databaseSpecificDatepart2.put(MSSQL, ",");
-    databaseSpecificDatepart3.put(MSSQL, ")");
+    databaseSpecificBitAnd1Mutable.put(MSSQL, "");
+    databaseSpecificBitAnd2Mutable.put(MSSQL, " &");
+    databaseSpecificBitAnd3Mutable.put(MSSQL, "");
+    databaseSpecificDatepart1Mutable.put(MSSQL, "datepart(");
+    databaseSpecificDatepart2Mutable.put(MSSQL, ",");
+    databaseSpecificDatepart3Mutable.put(MSSQL, ")");
 
-    databaseSpecificDummyTable.put(MSSQL, "");
-    databaseSpecificTrueConstant.put(MSSQL, "1");
-    databaseSpecificFalseConstant.put(MSSQL, "0");
-    databaseSpecificIfNull.put(MSSQL, "ISNULL");
+    databaseSpecificDummyTableMutable.put(MSSQL, "");
+    databaseSpecificTrueConstantMutable.put(MSSQL, "1");
+    databaseSpecificFalseConstantMutable.put(MSSQL, "0");
+    databaseSpecificIfNullMutable.put(MSSQL, "ISNULL");
 
-    databaseSpecificDaysComparator.put(MSSQL, "DATEDIFF(DAY, ${date}, #{currentTimestamp}) >= ${days}");
+    databaseSpecificDaysComparatorMutable.put(MSSQL, "DATEDIFF(DAY, ${date}, #{currentTimestamp}) >= ${days}");
 
-    databaseSpecificCollationForCaseSensitivity.put(MSSQL, "COLLATE Latin1_General_CS_AS");
+    databaseSpecificCollationForCaseSensitivityMutable.put(MSSQL, "COLLATE Latin1_General_CS_AS");
 
-    databaseSpecificAuthJoinStart.put(MSSQL, defaultAuthOnStart);
-    databaseSpecificAuthJoinEnd.put(MSSQL, defaultAuthOnEnd);
-    databaseSpecificAuthJoinSeparator.put(MSSQL, defaultAuthOnSeparator);
-    databaseSpecificAuthCheckMethodSuffix.put(MSSQL, "_mssql");
+    databaseSpecificAuthJoinStartMutable.put(MSSQL, defaultAuthOnStart);
+    databaseSpecificAuthJoinEndMutable.put(MSSQL, defaultAuthOnEnd);
+    databaseSpecificAuthJoinSeparatorMutable.put(MSSQL, defaultAuthOnSeparator);
+    databaseSpecificAuthCheckMethodSuffixMutable.put(MSSQL, "_mssql");
 
-    databaseSpecificAuth1JoinStart.put(MSSQL, defaultAuthOnStart);
-    databaseSpecificAuth1JoinEnd.put(MSSQL, defaultAuthOnEnd);
-    databaseSpecificAuth1JoinSeparator.put(MSSQL, defaultAuthOnSeparator);
+    databaseSpecificAuth1JoinStartMutable.put(MSSQL, defaultAuthOnStart);
+    databaseSpecificAuth1JoinEndMutable.put(MSSQL, defaultAuthOnEnd);
+    databaseSpecificAuth1JoinSeparatorMutable.put(MSSQL, defaultAuthOnSeparator);
 
-    databaseSpecificExtractTimeUnitFromDate.put(MSSQL, "DATEPART(${extractTimeUnit}, ${extractDateColumn})");
+    databaseSpecificExtractTimeUnitFromDateMutable.put(MSSQL, "DATEPART(${extractTimeUnit}, ${extractDateColumn})");
 
     addDatabaseSpecificStatement(MSSQL, "selectMeterLogAggregatedByTimeInterval", "selectMeterLogAggregatedByTimeInterval_db2_or_mssql");
     addDatabaseSpecificStatement(MSSQL, "selectExecutionByNativeQuery", "selectExecutionByNativeQuery_mssql_or_db2");
@@ -816,7 +865,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     constants.put("constant.varchar.cast", "'${key}'");
     constants.put("constant.integer.cast", "NULL");
     constants.put("constant.null.reporter", "NULL AS REPORTER_");
-    dbSpecificConstants.put(MSSQL, constants);
+    dbSpecificConstantsMutable.put(MSSQL, Collections.unmodifiableMap(constants));
   }
 
   protected String databaseType;

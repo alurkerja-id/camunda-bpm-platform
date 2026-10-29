@@ -16,7 +16,7 @@
  */
 package org.camunda.bpm.engine.impl;
 
-
+import java.util.Objects;
 
 /**
  * Represents a variable value used in a task query.
@@ -53,5 +53,15 @@ public class TaskQueryVariableValue extends QueryVariableValue {
 
   public boolean isProcessInstanceVariable() {
     return isProcessInstanceVariable;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    return super.equals(o) && isProcessInstanceVariable == ((TaskQueryVariableValue) o).isProcessInstanceVariable;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), isProcessInstanceVariable);
   }
 }

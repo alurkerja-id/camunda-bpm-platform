@@ -18,6 +18,8 @@ package org.camunda.bpm.spring.boot.starter.configuration.impl;
 
 import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.camunda.bpm.spring.boot.starter.configuration.CamundaDeploymentConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -25,13 +27,15 @@ import org.springframework.core.io.support.ResourceArrayPropertyEditor;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static java.util.Collections.EMPTY_SET;
 
 public class DefaultDeploymentConfiguration extends AbstractCamundaConfiguration implements CamundaDeploymentConfiguration {
+
+  private static final Logger CONFIG_LOG = LoggerFactory.getLogger(DefaultDeploymentConfiguration.class);
+
 
   @Override
   public void preInit(SpringProcessEngineConfiguration configuration) {
@@ -49,17 +53,21 @@ public class DefaultDeploymentConfiguration extends AbstractCamundaConfiguration
 
     try {
       final String[] resourcePattern = camundaBpmProperties.getDeploymentResourcePattern();
-      logger.debug("resolving deployment resources for pattern {}", (Object[]) resourcePattern);
+      CONFIG_LOG.debug("resolving deployment resources for pattern {}", (Object[]) resourcePattern);
       resolver.setValue(resourcePattern);
 
-      return Arrays.stream((Resource[])resolver.getValue())
-        .peek(resource -> logger.debug("processing deployment resource {}", resource))
-        .filter(this::isFile)
-        .peek(resource -> logger.debug("added deployment resource {}", resource))
-        .collect(Collectors.toSet());
+      final Set<Resource> deploymentResources = new HashSet<>();
+      for (final Resource resource : (Resource[]) resolver.getValue()) {
+        CONFIG_LOG.debug("processing deployment resource {}", resource);
+        if (isFile(resource)) {
+          CONFIG_LOG.debug("added deployment resource {}", resource);
+          deploymentResources.add(resource);
+        }
+      }
+      return deploymentResources;
 
     } catch (final RuntimeException e) {
-      logger.error("unable to resolve resources", e);
+      CONFIG_LOG.error("unable to resolve resources", e);
     }
     return EMPTY_SET;
   }
@@ -74,17 +82,17 @@ public class DefaultDeploymentConfiguration extends AbstractCamundaConfiguration
           URL url = resource.getURL();
           return !url.toString().endsWith("/");
         } catch (IOException e) {
-          logger.debug("unable to handle " + resource + " as URL", e);
+          CONFIG_LOG.debug("unable to handle " + resource + " as URL", e);
         }
       } else {
         try {
           return !resource.getFile().isDirectory();
         } catch (IOException e) {
-          logger.debug("unable to handle " + resource + " as file", e);
+          CONFIG_LOG.debug("unable to handle " + resource + " as file", e);
         }
       }
     }
-    logger.warn("unable to determine if resource {} is a deployable resource", resource);
+    CONFIG_LOG.warn("unable to determine if resource {} is a deployable resource", resource);
     return false;
   }
 

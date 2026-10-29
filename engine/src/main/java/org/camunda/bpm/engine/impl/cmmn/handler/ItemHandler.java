@@ -21,6 +21,7 @@ import static org.camunda.bpm.engine.delegate.CaseExecutionListener.TERMINATE;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Collection;
 import java.util.List;
 
@@ -89,11 +90,11 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
 
   protected static final String PARENT_COMPLETE = "parentComplete";
 
-  public static final List<String> TASK_OR_STAGE_CREATE_EVENTS = Arrays.asList(
+  public static final List<String> TASK_OR_STAGE_CREATE_EVENTS = Collections.unmodifiableList(Arrays.asList(
       CaseExecutionListener.CREATE
-    );
+    ));
 
-  public static final List<String> TASK_OR_STAGE_UPDATE_EVENTS = Arrays.asList(
+  public static final List<String> TASK_OR_STAGE_UPDATE_EVENTS = Collections.unmodifiableList(Arrays.asList(
       CaseExecutionListener.ENABLE,
       CaseExecutionListener.DISABLE,
       CaseExecutionListener.RE_ENABLE,
@@ -103,70 +104,79 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
       CaseExecutionListener.PARENT_SUSPEND,
       CaseExecutionListener.RESUME,
       CaseExecutionListener.PARENT_RESUME
-    );
+    ));
 
-  public static final List<String> TASK_OR_STAGE_END_EVENTS = Arrays.asList(
+  public static final List<String> TASK_OR_STAGE_END_EVENTS = Collections.unmodifiableList(Arrays.asList(
       CaseExecutionListener.TERMINATE,
       CaseExecutionListener.EXIT,
       CaseExecutionListener.COMPLETE,
       PARENT_COMPLETE
-    );
+    ));
 
-  public static final List<String> TASK_OR_STAGE_EVENTS = new ArrayList<String>();
+  public static final List<String> TASK_OR_STAGE_EVENTS;
 
-  public static final List<String> EVENT_LISTENER_OR_MILESTONE_CREATE_EVENTS = Arrays.asList(
+  public static final List<String> EVENT_LISTENER_OR_MILESTONE_CREATE_EVENTS = Collections.unmodifiableList(Arrays.asList(
       CaseExecutionListener.CREATE
-    );
+    ));
 
-  public static final List<String> EVENT_LISTENER_OR_MILESTONE_UPDATE_EVENTS = Arrays.asList(
+  public static final List<String> EVENT_LISTENER_OR_MILESTONE_UPDATE_EVENTS = Collections.unmodifiableList(Arrays.asList(
       CaseExecutionListener.SUSPEND,
       CaseExecutionListener.RESUME
-    );
+    ));
 
-  public static final List<String> EVENT_LISTENER_OR_MILESTONE_END_EVENTS = Arrays.asList(
+  public static final List<String> EVENT_LISTENER_OR_MILESTONE_END_EVENTS = Collections.unmodifiableList(Arrays.asList(
       CaseExecutionListener.TERMINATE,
       CaseExecutionListener.PARENT_TERMINATE,
       CaseExecutionListener.OCCUR,
       PARENT_COMPLETE
-    );
+    ));
 
-  public static final List<String> EVENT_LISTENER_OR_MILESTONE_EVENTS = new ArrayList<String>();
+  public static final List<String> EVENT_LISTENER_OR_MILESTONE_EVENTS;
 
-  public static final List<String> CASE_PLAN_MODEL_CREATE_EVENTS = Arrays.asList(
+  public static final List<String> CASE_PLAN_MODEL_CREATE_EVENTS = Collections.unmodifiableList(Arrays.asList(
       CaseExecutionListener.CREATE
-    );
+    ));
 
-  public static final List<String> CASE_PLAN_MODEL_UPDATE_EVENTS = Arrays.asList(
+  public static final List<String> CASE_PLAN_MODEL_UPDATE_EVENTS = Collections.unmodifiableList(Arrays.asList(
       CaseExecutionListener.TERMINATE,
       CaseExecutionListener.SUSPEND,
       CaseExecutionListener.COMPLETE,
       CaseExecutionListener.RE_ACTIVATE
-    );
+    ));
 
-  public static final List<String> CASE_PLAN_MODEL_CLOSE_EVENTS = Arrays.asList(
+  public static final List<String> CASE_PLAN_MODEL_CLOSE_EVENTS = Collections.unmodifiableList(Arrays.asList(
       CaseExecutionListener.CLOSE
-    );
+    ));
 
-  public static final List<String> CASE_PLAN_MODEL_EVENTS = new ArrayList<String>();
+  public static final List<String> CASE_PLAN_MODEL_EVENTS;
 
-  public static final List<String> DEFAULT_VARIABLE_EVENTS = Arrays.asList(
+  public static final List<String> DEFAULT_VARIABLE_EVENTS = Collections.unmodifiableList(Arrays.asList(
       VariableListener.CREATE,
       VariableListener.DELETE,
       VariableListener.UPDATE
-  );
+    ));
 
   static {
-    TASK_OR_STAGE_EVENTS.addAll(TASK_OR_STAGE_CREATE_EVENTS);
-    TASK_OR_STAGE_EVENTS.addAll(TASK_OR_STAGE_UPDATE_EVENTS);
-    TASK_OR_STAGE_EVENTS.addAll(TASK_OR_STAGE_END_EVENTS);
+    List<String> CASE_PLAN_MODEL_EVENTSMutable = new ArrayList<String>();
+    CASE_PLAN_MODEL_EVENTSMutable.addAll(CASE_PLAN_MODEL_CREATE_EVENTS);
+    CASE_PLAN_MODEL_EVENTSMutable.addAll(CASE_PLAN_MODEL_UPDATE_EVENTS);
+    CASE_PLAN_MODEL_EVENTSMutable.addAll(CASE_PLAN_MODEL_CLOSE_EVENTS);
+    CASE_PLAN_MODEL_EVENTS = Collections.unmodifiableList(CASE_PLAN_MODEL_EVENTSMutable);
 
-    EVENT_LISTENER_OR_MILESTONE_EVENTS.addAll(EVENT_LISTENER_OR_MILESTONE_CREATE_EVENTS);
-    EVENT_LISTENER_OR_MILESTONE_EVENTS.addAll(EVENT_LISTENER_OR_MILESTONE_UPDATE_EVENTS);
-    EVENT_LISTENER_OR_MILESTONE_EVENTS.addAll(EVENT_LISTENER_OR_MILESTONE_END_EVENTS);
+    List<String> EVENT_LISTENER_OR_MILESTONE_EVENTSMutable = new ArrayList<String>();
+    EVENT_LISTENER_OR_MILESTONE_EVENTSMutable.addAll(EVENT_LISTENER_OR_MILESTONE_CREATE_EVENTS);
+    EVENT_LISTENER_OR_MILESTONE_EVENTSMutable.addAll(EVENT_LISTENER_OR_MILESTONE_UPDATE_EVENTS);
+    EVENT_LISTENER_OR_MILESTONE_EVENTSMutable.addAll(EVENT_LISTENER_OR_MILESTONE_END_EVENTS);
+    EVENT_LISTENER_OR_MILESTONE_EVENTS = Collections.unmodifiableList(EVENT_LISTENER_OR_MILESTONE_EVENTSMutable);
 
-    CASE_PLAN_MODEL_EVENTS.addAll(CASE_PLAN_MODEL_CREATE_EVENTS);
-    CASE_PLAN_MODEL_EVENTS.addAll(CASE_PLAN_MODEL_UPDATE_EVENTS);
-    CASE_PLAN_MODEL_EVENTS.addAll(CASE_PLAN_MODEL_CLOSE_EVENTS);
+    List<String> TASK_OR_STAGE_EVENTSMutable = new ArrayList<String>();
+    TASK_OR_STAGE_EVENTSMutable.addAll(TASK_OR_STAGE_CREATE_EVENTS);
+    TASK_OR_STAGE_EVENTSMutable.addAll(TASK_OR_STAGE_UPDATE_EVENTS);
+    TASK_OR_STAGE_EVENTSMutable.addAll(TASK_OR_STAGE_END_EVENTS);
+    TASK_OR_STAGE_EVENTS = Collections.unmodifiableList(TASK_OR_STAGE_EVENTSMutable);
+
+
+
   }
 
   protected CmmnActivity createActivity(CmmnElement element, CmmnHandlerContext context) {

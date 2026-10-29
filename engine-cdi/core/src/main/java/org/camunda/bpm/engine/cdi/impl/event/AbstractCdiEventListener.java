@@ -38,7 +38,7 @@ import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.camunda.bpm.engine.delegate.ExecutionListener;
 import org.camunda.bpm.engine.delegate.TaskListener;
 import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.context.ExecutionContext;
+import org.camunda.bpm.engine.impl.context.BpmnExecutionContext;
 import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.camunda.bpm.engine.impl.util.ClockUtil;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
@@ -91,7 +91,7 @@ public abstract class AbstractCdiEventListener implements TaskListener, Executio
   }
 
   protected BusinessProcessEvent createEvent(DelegateExecution execution) {
-    ProcessDefinition processDefinition = Context.getExecutionContext().getProcessDefinition();
+    ProcessDefinition processDefinition = Context.getBpmnExecutionContext().getProcessDefinition();
 
     // map type
     String eventName = execution.getEventName();
@@ -108,7 +108,7 @@ public abstract class AbstractCdiEventListener implements TaskListener, Executio
   }
 
   protected BusinessProcessEvent createEvent(DelegateTask task) {
-    ExecutionContext executionContext = Context.getExecutionContext();
+    BpmnExecutionContext executionContext = Context.getBpmnExecutionContext();
     ProcessDefinitionEntity processDefinition = null;
     if (executionContext != null) {
       processDefinition = executionContext.getProcessDefinition();

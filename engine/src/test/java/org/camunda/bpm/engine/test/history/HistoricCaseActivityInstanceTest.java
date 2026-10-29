@@ -1031,7 +1031,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
 
     private static final long serialVersionUID = 1L;
 
-    public final Collection<CaseExecutionState> ALL_STATES = CaseExecutionState.CASE_EXECUTION_STATES.values();
+    public final Collection<CaseExecutionState> ALL_STATES = CaseExecutionState.getAllStates();
     public final Collection<CaseExecutionState> ENDED_STATES = Arrays.asList(COMPLETED, TERMINATED);
     public final Collection<CaseExecutionState> NOT_ENDED_STATES;
 

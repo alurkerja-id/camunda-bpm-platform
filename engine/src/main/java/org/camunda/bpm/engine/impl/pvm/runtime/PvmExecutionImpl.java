@@ -577,24 +577,7 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
       PvmExecutionImpl lastConcurrent = getNonEventScopeExecutions().get(0);
       if (lastConcurrent.isConcurrent()) {
         if (!lastConcurrent.isScope()) {
-          setActivity(lastConcurrent.getActivity());
-          setTransition(lastConcurrent.getTransition());
-          this.replace(lastConcurrent);
-
-          // Move children of lastConcurrent one level up
-          if (lastConcurrent.hasChildren()) {
-            for (PvmExecutionImpl childExecution : lastConcurrent.getExecutionsAsCopy()) {
-              childExecution.setParent(this);
-            }
-          }
-
-          // Make sure parent execution is re-activated when the last concurrent
-          // child execution is active
-          if (!isActive() && lastConcurrent.isActive()) {
-            setActive(true);
-          }
-
-          lastConcurrent.remove();
+          pruneNonScopeConcurrentChild(lastConcurrent);
         } else {
           // legacy behavior
           LegacyBehavior.pruneConcurrentScope(lastConcurrent);
@@ -605,6 +588,27 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
 
     return false;
 
+  }
+
+  protected void pruneNonScopeConcurrentChild(PvmExecutionImpl lastConcurrent) {
+    setActivity(lastConcurrent.getActivity());
+    setTransition(lastConcurrent.getTransition());
+    this.replace(lastConcurrent);
+
+    // Move children of lastConcurrent one level up
+    if (lastConcurrent.hasChildren()) {
+      for (PvmExecutionImpl childExecution : lastConcurrent.getExecutionsAsCopy()) {
+        childExecution.setParent(this);
+      }
+    }
+
+    // Make sure parent execution is re-activated when the last concurrent
+    // child execution is active
+    if (!isActive() && lastConcurrent.isActive()) {
+      setActive(true);
+    }
+
+    lastConcurrent.remove();
   }
 
   @Override
@@ -890,6 +894,11 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
       flowScope = targetActivity.getFlowScope();
     } else if (targetTransition != null) {
       flowScope = targetTransition.getSource().getFlowScope();
+    }
+
+    if (flowScope == null) {
+      throw new ProcessEngineException("Cannot determine the flow scope to instantiate under " + this
+          + ": the activity stack is empty and neither a target activity nor a target transition with a flow scope was given");
     }
 
     PvmExecutionImpl propagatingExecution = null;
@@ -2045,18 +2054,12 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
       return;
     }
 
-    continueIfExecutionDoesNotAffectNextOperation(new Callback<PvmExecutionImpl, Void>() {
-      @Override
-      public Void callback(PvmExecutionImpl execution) {
-        dispatchScopeEvents(execution);
-        return null;
-      }
-    }, new Callback<PvmExecutionImpl, Void>(){
-      @Override
-      public Void callback(PvmExecutionImpl execution) {
-        continueExecutionIfNotCanceled(continuation, execution);
-        return null;
-      }
+    continueIfExecutionDoesNotAffectNextOperation(dispatching -> {
+      dispatchScopeEvents(dispatching);
+      return null;
+    }, continuing -> {
+      continueExecutionIfNotCanceled(continuation, continuing);
+      return null;
     }, execution);
   }
 

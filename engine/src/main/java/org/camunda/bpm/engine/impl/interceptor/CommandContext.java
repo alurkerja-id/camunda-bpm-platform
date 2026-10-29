@@ -178,43 +178,7 @@ public class CommandContext {
 
     try {
       try {
-        try {
-
-          if (commandInvocationContext.getThrowable() == null) {
-            fireCommandContextClose();
-            flushSessions();
-          }
-
-        } catch (Throwable exception) {
-          commandInvocationContext.trySetThrowable(exception);
-        } finally {
-
-          try {
-            if (commandInvocationContext.getThrowable() == null) {
-              transactionContext.commit();
-            }
-          } catch (Throwable exception) {
-            commandInvocationContext.trySetThrowable(exception);
-          }
-
-          if (commandInvocationContext.getThrowable() != null) {
-            // fire command failed (must not fail itself)
-            fireCommandFailed(commandInvocationContext.getThrowable());
-
-            if(shouldLogCmdException()) {
-              if (shouldLogInfo(commandInvocationContext.getThrowable())) {
-                LOG.infoException(commandInvocationContext.getThrowable());
-              }
-              else if (shouldLogFine(commandInvocationContext.getThrowable())) {
-                LOG.debugException(commandInvocationContext.getThrowable());
-              }
-              else {
-                  LOG.errorException(commandInvocationContext.getThrowable());
-              }
-            }
-            transactionContext.rollback();
-          }
-        }
+        flushCommitAndHandleFailure(commandInvocationContext);
       } catch (Throwable exception) {
         commandInvocationContext.trySetThrowable(exception);
       } finally {
@@ -226,6 +190,46 @@ public class CommandContext {
 
     // rethrow the original exception if there was one
     commandInvocationContext.rethrow();
+  }
+
+  protected void flushCommitAndHandleFailure(CommandInvocationContext commandInvocationContext) {
+    try {
+
+      if (commandInvocationContext.getThrowable() == null) {
+        fireCommandContextClose();
+        flushSessions();
+      }
+
+    } catch (Throwable exception) {
+      commandInvocationContext.trySetThrowable(exception);
+    } finally {
+
+      try {
+        if (commandInvocationContext.getThrowable() == null) {
+          transactionContext.commit();
+        }
+      } catch (Throwable exception) {
+        commandInvocationContext.trySetThrowable(exception);
+      }
+
+      if (commandInvocationContext.getThrowable() != null) {
+        // fire command failed (must not fail itself)
+        fireCommandFailed(commandInvocationContext.getThrowable());
+
+        if(shouldLogCmdException()) {
+          if (shouldLogInfo(commandInvocationContext.getThrowable())) {
+            LOG.infoException(commandInvocationContext.getThrowable());
+          }
+          else if (shouldLogFine(commandInvocationContext.getThrowable())) {
+            LOG.debugException(commandInvocationContext.getThrowable());
+          }
+          else {
+              LOG.errorException(commandInvocationContext.getThrowable());
+          }
+        }
+        transactionContext.rollback();
+      }
+    }
   }
 
   protected boolean shouldLogInfo(Throwable exception) {

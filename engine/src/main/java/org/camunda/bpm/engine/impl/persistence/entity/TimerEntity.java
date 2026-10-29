@@ -221,6 +221,17 @@ public class TimerEntity extends JobEntity {
     this.repeatOffset = repeatOffset;
   }
 
+  // identity of a job is class + id (see JobEntity); the extra state is deliberately not part of it
+  @Override
+  public boolean equals(Object obj) {
+    return super.equals(obj);
+  }
+
+  @Override
+  public int hashCode() {
+    return super.hashCode();
+  }
+
   @Override
   public String getType() {
     return TYPE;

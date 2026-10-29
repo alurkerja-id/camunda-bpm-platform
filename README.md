@@ -24,15 +24,21 @@ SONAR_TOKEN=<token> ./scripts/scan-sonar.sh
 which runs:
 
 ```
-./mvnw clean install "-Pintegration-test-spring-boot-starter,!it-runtime" "-Dmaven.test.failure.ignore=true" sonar:sonar "-Dsonar.token=<token>"
+./mvnw clean install -Pintegration-test-spring-boot-starter "-Dmaven.test.failure.ignore=true" sonar:sonar "-Dsonar.token=<token>"
 ```
 
 Host URL, project key and every exclusion live in `sonar-project.properties`, which the build reads
 during `initialize` — nothing has to be passed on the command line except the token.
 
-`!it-runtime` only switches off the Cargo/Tomcat integration tests of `clients/java/client`, which
-hang on a clean checkout (see the comments in the script). Apart from that, exactly one profile is
-activated, and it has to be that one. The six `distro*` profiles in the root pom are
+The Cargo/Tomcat integration tests of `clients/java/client` (`*IT`, ~260 tests) run for real as part
+of the scan, against the Tomcat built *in the same reactor*: the `it-runtime` profile (active unless
+`-DskipTests`) makes `camunda-tomcat-assembly` a reactor dependency of the client, so Maven builds it
+first and a stale assembly left in `~/.m2` (e.g. from before a Tomcat bump) is never used. A clean
+checkout needs no manual `install` step. Do not pass `!it-runtime`: that removes the reactor edge and
+brings the stale-assembly failure back ("`apache-tomcat-X/conf is not a directory`"). The test
+endpoint port comes from `tomcat.connector.http.port` in `clients/java/client/pom.xml` (the IT
+properties file is filtered with it), so changing the port in one place is enough. Apart from that,
+exactly one profile is activated, and it has to be that one. The six `distro*` profiles in the root pom are
 active by default, so a plain build already contains every module including `distro/run` and the
 `coverage-report` aggregator. Naming any of them on the command line makes things worse, not
 better, in two ways:
