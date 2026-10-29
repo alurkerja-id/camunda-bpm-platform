@@ -28,7 +28,6 @@ import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.runtime.ActivityInstance;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.RequiredHistoryLevel;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 
@@ -196,12 +195,7 @@ public class AbstractProcessEngineTestCaseTest extends PluggableProcessEngineTes
   }
 
   public void testAreJobsAvailableIgnoringErrorsKeepsPreviousResult() {
-    AbstractProcessEngineTestCase failing = new PluggableProcessEngineTestCase() {
-      @Override
-      public boolean areJobsAvailable() {
-        throw new IllegalStateException("table locked");
-      }
-    };
+    AbstractProcessEngineTestCase failing = new EngineCaseProbes.JobsQueryFails();
 
     assertTrue(failing.areJobsAvailableIgnoringErrors(true));
     assertFalse(failing.areJobsAvailableIgnoringErrors(false));
@@ -229,12 +223,7 @@ public class AbstractProcessEngineTestCaseTest extends PluggableProcessEngineTes
   }
 
   public void testWaitForJobExecutorToProcessAllJobsTimesOut() {
-    AbstractProcessEngineTestCase neverDone = new PluggableProcessEngineTestCase() {
-      @Override
-      public boolean areJobsAvailable() {
-        return true;
-      }
-    };
+    AbstractProcessEngineTestCase neverDone = new EngineCaseProbes.JobsAlwaysAvailable();
     neverDone.initializeProcessEngine();
     neverDone.initializeServices();
     int waitTime = processEngineConfiguration.getJobExecutor().getWaitTimeInMillis();
@@ -336,53 +325,10 @@ public class AbstractProcessEngineTestCaseTest extends PluggableProcessEngineTes
 
   // -- runBare life cycle -----------------------------------------------------------------------
 
-  /** Test cases executed programmatically so the failure branches of runBare can be observed. */
-  public static class Probe extends PluggableProcessEngineTestCase {
-    static boolean bodyRan;
-
-    public Probe(String name) {
-      super();
-      setName(name);
-    }
-
-    public void testPasses() {
-      bodyRan = true;
-    }
-
-    public void testAssertionFails() {
-      throw new AssertionFailedError("deliberate assertion failure");
-    }
-
-    public void testErrors() {
-      throw new IllegalStateException("deliberate error");
-    }
-
-    public void testLeavesIdentityAndTenantCheckDirty() {
-      identityService.setAuthenticatedUserId("someone");
-      processEngineConfiguration.setTenantCheckEnabled(false);
-      bodyRan = true;
-    }
-
-    public void testDeploysWithoutCleaning() {
-      deployment(userTaskProcess("probeProcess"));
-      bodyRan = true;
-    }
-
-    @RequiredHistoryLevel("none")
-    public void testWithSatisfiedHistoryLevel() {
-      bodyRan = true;
-    }
-
-    @RequiredDatabase(includes = "no-such-database")
-    public void testWithUnsatisfiedDatabase() {
-      bodyRan = true;
-    }
-  }
-
   private TestResult runProbe(String name) {
-    Probe.bodyRan = false;
+    EngineCaseProbes.Probe.bodyRan = false;
     TestResult result = new TestResult();
-    new Probe(name).run(result);
+    new EngineCaseProbes.Probe(name).run(result);
     return result;
   }
 
@@ -392,7 +338,7 @@ public class AbstractProcessEngineTestCaseTest extends PluggableProcessEngineTes
     assertEquals(1, result.runCount());
     assertEquals(0, result.failureCount());
     assertEquals(0, result.errorCount());
-    assertTrue(Probe.bodyRan);
+    assertTrue(EngineCaseProbes.Probe.bodyRan);
   }
 
   public void testRunBareReportsAssertionFailure() {
@@ -415,7 +361,7 @@ public class AbstractProcessEngineTestCaseTest extends PluggableProcessEngineTes
     TestResult result = runProbe("testLeavesIdentityAndTenantCheckDirty");
 
     assertEquals(0, result.errorCount() + result.failureCount());
-    assertTrue(Probe.bodyRan);
+    assertTrue(EngineCaseProbes.Probe.bodyRan);
     assertTrue(identityService.getCurrentAuthentication() == null || identityService.getCurrentAuthentication().getUserId() == null);
     assertTrue(processEngineConfiguration.isTenantCheckEnabled());
   }
@@ -433,7 +379,7 @@ public class AbstractProcessEngineTestCaseTest extends PluggableProcessEngineTes
     TestResult result = runProbe("testWithSatisfiedHistoryLevel");
 
     assertEquals(0, result.errorCount() + result.failureCount());
-    assertTrue(Probe.bodyRan);
+    assertTrue(EngineCaseProbes.Probe.bodyRan);
   }
 
   public void testRunBareSkipsTestWhenRequiredDatabaseDiffers() {
@@ -441,11 +387,11 @@ public class AbstractProcessEngineTestCaseTest extends PluggableProcessEngineTes
 
     assertEquals(1, result.runCount());
     assertEquals(0, result.errorCount() + result.failureCount());
-    assertFalse(Probe.bodyRan);
+    assertFalse(EngineCaseProbes.Probe.bodyRan);
   }
 
   public void testHistoryCleanupJobsAreRemovedAfterTest() {
-    Probe probe = new Probe("testPasses");
+    EngineCaseProbes.Probe probe = new EngineCaseProbes.Probe("testPasses");
     probe.initializeProcessEngine();
     probe.initializeServices();
     historyService.cleanUpHistoryAsync(true);
@@ -459,7 +405,7 @@ public class AbstractProcessEngineTestCaseTest extends PluggableProcessEngineTes
   }
 
   public void testServiceReferencesAreClearable() {
-    Probe probe = new Probe("testPasses");
+    EngineCaseProbes.Probe probe = new EngineCaseProbes.Probe("testPasses");
     probe.initializeProcessEngine();
     probe.initializeServices();
     assertNotNull(probe.runtimeService);
