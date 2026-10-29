@@ -19,21 +19,33 @@ package org.camunda.bpm.engine.impl.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.spi.ILoggingEvent;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.camunda.bpm.engine.ClassLoadingException;
 import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.bpmn.parser.FieldDeclaration;
 import org.camunda.bpm.engine.impl.util.io.StringStreamSource;
+import org.camunda.commons.testing.ProcessEngineLoggingRule;
+import org.junit.Rule;
 import org.junit.Test;
 
 public class EngineUtilLoggerTest {
+
+  private static final String UTIL_LOGGER_NAME = "org.camunda.bpm.engine.util";
+
+  @Rule
+  public ProcessEngineLoggingRule loggingRule = new ProcessEngineLoggingRule()
+      .watch(UTIL_LOGGER_NAME, Level.DEBUG);
 
   private final EngineUtilLogger log = ProcessEngineLogger.UTIL_LOGGER;
   private final Exception cause = new IllegalStateException("boom");
@@ -104,7 +116,7 @@ public class EngineUtilLoggerTest {
   }
 
   @Test
-  public void shouldLogWithoutThrowing() {
+  public void shouldEmitLogEventsWithExpectedCodesAndLevels() {
     log.logParseWarnings("warn");
     log.unableToSetSchemaResource(cause);
     log.debugCloseException(new IOException("io"));
@@ -114,6 +126,22 @@ public class EngineUtilLoggerTest {
     log.logAccessExternalSchemaNotSupported(cause);
     log.logMissingPropertiesFile("camunda.properties");
     log.debugCouldNotResolveCallableElement("def", "act", cause);
+
+    List<ILoggingEvent> events = loggingRule.getLog(UTIL_LOGGER_NAME);
+    List<String> messages = events.stream().map(ILoggingEvent::getFormattedMessage).collect(Collectors.toList());
+    assertThat(messages).hasSize(9);
+    assertThat(messages.get(0)).contains("ENGINE-09004", "warn");
+    assertThat(messages.get(1)).contains("ENGINE-09006", "boom");
+    assertThat(messages.get(2)).contains("ENGINE-09015");
+    assertThat(messages.get(3)).contains("ENGINE-09016", "a.B", "desc");
+    assertThat(messages.get(4)).contains("ENGINE-09029", "R/PT1M");
+    assertThat(messages.get(5)).contains("ENGINE-09030", "boom");
+    assertThat(messages.get(6)).contains("ENGINE-09031");
+    assertThat(messages.get(7)).contains("ENGINE-09032", "camunda.properties");
+    assertThat(messages.get(8)).contains("ENGINE-09046", "act", "def", "boom");
+    assertThat(events).extracting(ILoggingEvent::getLevel).containsExactly(
+        Level.WARN, Level.WARN, Level.DEBUG, Level.DEBUG, Level.WARN,
+        Level.DEBUG, Level.DEBUG, Level.WARN, Level.DEBUG);
   }
 
   private void assertException(ProcessEngineException e, String code, String fragment, Throwable expectedCause) {
