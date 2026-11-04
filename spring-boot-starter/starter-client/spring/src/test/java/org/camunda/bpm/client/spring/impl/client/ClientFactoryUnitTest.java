@@ -163,4 +163,41 @@ public class ClientFactoryUnitTest {
     assertThat(missing).isNull();
   }
 
+
+  @Test
+  public void shouldBuildClientWithoutFetchingWhenAutoFetchingAndBackoffAreDisabled() {
+    configuration.setBaseUrl("http://localhost:1/engine-rest");
+    configuration.setUsePriority(false);
+    configuration.setDisableAutoFetching(true);
+    configuration.setDisableBackoffStrategy(true);
+
+    ExternalTaskClient built = mock(ExternalTaskClient.class);
+    org.mockito.Mockito.when(builder.build()).thenReturn(built);
+
+    try (var statics = org.mockito.Mockito.mockStatic(ExternalTaskClient.class)) {
+      statics.when(ExternalTaskClient::create).thenReturn(builder);
+
+      assertThat(factory.getObject()).isSameAs(built);
+      assertThat(factory.getObject()).isSameAs(built);
+      statics.verify(ExternalTaskClient::create, org.mockito.Mockito.times(1));
+    }
+
+    verify(builder).baseUrl("http://localhost:1/engine-rest");
+    verify(builder).usePriority(false);
+    verify(builder).disableAutoFetching();
+    verify(builder).disableBackoffStrategy();
+    verify(builder, never()).maxTasks(org.mockito.ArgumentMatchers.anyInt());
+  }
+
+  @Test
+  public void shouldCollectInterceptorsOnlyWhenAnyAreProvided() {
+    factory.setRequestInterceptors(null);
+    assertThat(factory.getRequestInterceptors()).isEmpty();
+
+    ClientRequestInterceptor interceptor = context -> { };
+    factory.setRequestInterceptors(java.util.List.of(interceptor));
+
+    assertThat(factory.getRequestInterceptors()).containsExactly(interceptor);
+    assertThat(factory.getClientConfiguration()).isSameAs(configuration);
+  }
 }
