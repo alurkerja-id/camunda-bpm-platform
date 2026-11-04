@@ -17,6 +17,7 @@
 package org.camunda.bpm.engine.rest.filter;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -34,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 
 /**
  * Covers {@link AbstractEmptyBodyFilter}: requests with a JSON content type get their body peeked;
@@ -64,14 +66,20 @@ public class AbstractEmptyBodyFilterTest {
 
   private static ServletInputStream streamOf(String content) {
     final ByteArrayInputStream in = new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
-    return new ServletInputStream() {
-      @Override public int read() { return in.read(); }
-    };
+    // mocked (real methods) so the same source compiles against the javax (3.0) and jakarta (6.0) ServletInputStream
+    ServletInputStream stream = mock(ServletInputStream.class, Mockito.CALLS_REAL_METHODS);
+    try {
+      doAnswer(invocation -> in.read()).when(stream).read();
+    } catch (IOException e) {
+      throw new IllegalStateException(e);
+    }
+    return stream;
   }
 
   private void post(String contentType, String body) throws IOException {
+    ServletInputStream stream = streamOf(body);
     when(request.getContentType()).thenReturn(contentType);
-    when(request.getInputStream()).thenReturn(streamOf(body));
+    when(request.getInputStream()).thenReturn(stream);
   }
 
   private static byte[] readAll(InputStream in) throws IOException {
