@@ -300,6 +300,27 @@ public class BpmnParseErrorPathsTest {
         diagram(S, "<bpmndi:BPMNPlane bpmnElement=\"p\"><bpmndi:BPMNEdge/></bpmndi:BPMNPlane>"),
         "'bpmnElement' attribute is required on BPMNEdge"));
 
+    // additional semantic checks
+    cases.add(c("ad hoc subprocess is ignored", proc(S + "<adHocSubProcess id=\"ah\"/>"),
+        "Ignoring unsupported activity type"));
+    cases.add(c("complex gateway is ignored", proc(S + "<complexGateway id=\"cg\"/>"),
+        "Ignoring unsupported activity type"));
+    cases.add(c("variable events with expression and invalid entry",
+        proc("<startEvent id=\"s\"/><intermediateCatchEvent id=\"ice\"><conditionalEventDefinition camunda:variableEvents=\"${a,b},bogus\"><condition>${true}</condition></conditionalEventDefinition></intermediateCatchEvent>"
+            + "<sequenceFlow id=\"f\" sourceRef=\"s\" targetRef=\"ice\"/>"),
+        "Variable event: bogus is not valid."));
+    cases.add(c("boundary signal event without id",
+        defs("<signal id=\"sig\" name=\"sig\"/>", "<process id=\"p\">" + S + "<userTask id=\"t\"/><boundaryEvent attachedToRef=\"t\"><signalEventDefinition signalRef=\"sig\"/></boundaryEvent></process>"),
+        "boundary event has no id"));
+    cases.add(c("boundary message event without id",
+        defs("<message id=\"msg\" name=\"msg\"/>", "<process id=\"p\">" + S + "<userTask id=\"t\"/><boundaryEvent attachedToRef=\"t\"><messageEventDefinition messageRef=\"msg\"/></boundaryEvent></process>"),
+        "boundary event has no id"));
+    cases.add(c("boundary timer event without id",
+        proc(S + "<userTask id=\"t\"/><boundaryEvent attachedToRef=\"t\"><timerEventDefinition><timeDuration>PT1H</timeDuration></timerEventDefinition></boundaryEvent>"),
+        "Attribute \"id\" is required!"));
+    cases.add(c("valid property with link expression next to an invalid one",
+        proc(S + "<userTask id=\"t\"><property id=\"ok\" name=\"n\" camunda:link=\"l\" camunda:linkExpr=\"${a}\"/><property/></userTask>"),
+        "Invalid property usage on line"));
     return cases;
   }
 
