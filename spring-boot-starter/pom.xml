@@ -21,6 +21,25 @@
 
   <dependencyManagement>
     <dependencies>
+      <!-- Trivy: Spring Boot 4.1.1's BOM pins jackson 2.21.5 (com.fasterxml) and 3.1.5
+           (tools.jackson) — HIGH CVE-2026-68497, 89407, 89425, 91776, 91777. Setting the
+           jackson property has no effect for the same reason as tomcat below (import scope).
+           Maven keeps the FIRST import that manages an artifact, so these BOMs must stay
+           above spring-boot-dependencies. Fixed in 2.22.3 / 3.1.7. -->
+      <dependency>
+        <groupId>com.fasterxml.jackson</groupId>
+        <artifactId>jackson-bom</artifactId>
+        <version>${version.jackson}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>tools.jackson</groupId>
+        <artifactId>jackson-bom</artifactId>
+        <version>3.1.7</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
       <dependency>
         <!-- Import dependency management from Spring Boot -->
         <groupId>org.springframework.boot</groupId>

@@ -21,6 +21,23 @@
   <dependencyManagement>
     <dependencies>
 
+      <!-- Trivy: Spring Boot's BOM pins jackson 2.21.5 / 3.1.5 (HIGH CVEs, fixed in 2.22.3 /
+           3.1.7). The first import wins, so these BOMs must stay above spring-boot-dependencies. -->
+      <dependency>
+        <groupId>com.fasterxml.jackson</groupId>
+        <artifactId>jackson-bom</artifactId>
+        <version>${version.jackson}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>tools.jackson</groupId>
+        <artifactId>jackson-bom</artifactId>
+        <version>3.1.7</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
